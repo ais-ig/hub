@@ -240,6 +240,37 @@ header {
   font-weight: 500;
 }
 
+/* --- hero: coming up --- */
+
+.hero {
+  margin: 18px var(--pad) 0;
+  background: var(--navy-deep);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+}
+.hero[hidden] { display: none; }
+.hero .eyebrow { color: var(--gold); }
+.hero .rule { width: 36px; margin: 11px 0 4px; }
+.hero .item {
+  padding: 11px 0;
+  border-top: 1px solid rgba(255, 255, 255, .13);
+}
+.hero .item:first-of-type { border-top: 0; }
+.hero .item:last-of-type { padding-bottom: 0; }
+.hero .lbl {
+  font-size: 14.5px;
+  font-weight: 500;
+  color: #fff;
+  line-height: 1.4;
+}
+.hero .when {
+  font-size: 12px;
+  font-weight: 300;
+  color: rgba(255, 255, 255, .72);
+  margin-top: 3px;
+}
+.hero .dist { font-weight: 500; color: var(--gold); font-style: normal; }
+
 /* --- section navigation --- */
 
 .navgrid {
@@ -691,6 +722,19 @@ footer .meta { font-size: 11px; color: var(--muted); margin-top: 4px; }
 
 <div class="wrap">
 
+<!-- hero · next dated items, hydrates from the Key_Dates sheet tab -->
+<div class="hero" id="hero">
+  <span class="eyebrow" data-en="Coming up" data-ar="القادم">Coming up</span>
+  <div class="rule"></div>
+  <div id="upcoming">
+    <!-- PLACEHOLDER · replaced by Key_Dates rows falling in the next three weeks -->
+    <div class="item" data-date="2026-08-23">
+      <div class="lbl" data-en="First day of school" data-ar="اليوم الأول من الدراسة">First day of school</div>
+      <div class="when"><span data-en="Sunday 23 August 2026" data-ar="الأحد ٢٣ أغسطس ٢٠٢٦">Sunday 23 August 2026</span> <i class="dist"></i></div>
+    </div>
+  </div>
+</div>
+
 <nav class="navgrid" aria-label="Sections" data-en-aria="Sections" data-ar-aria="الأقسام">
   <a href="#s1"><span class="n">01</span><span data-en="Welcome" data-ar="ترحيب">Welcome</span></a>
   <a href="#s2"><span class="n">02</span><span data-en="Hours" data-ar="الدوام">Hours</span></a>
@@ -711,12 +755,6 @@ footer .meta { font-size: 11px; color: var(--muted); margin-top: 4px; }
 
   <!-- PLACEHOLDER · welcome wording pending Mr. Farhan (Boys) and Ms. Shamsiya's office (Girls) -->
   <p data-en="This hub is your single reference for the British Section, Grades 9 to 12, for the whole year. It gathers the school day, arrival and dismissal, the systems you will use, how to follow your child's progress, our services, and who to contact." data-ar="هذا الدليل هو مرجعكم الوحيد للقسم البريطاني، من الصف التاسع إلى الثاني عشر، طوال العام. يجمع لكم اليوم الدراسي، والحضور والانصراف، والأنظمة التي ستستخدمونها، وكيفية متابعة تقدم أبنائكم، وخدماتنا، ومع من تتواصلون.">This hub is your single reference for the British Section, Grades 9 to 12, for the whole year. It gathers the school day, arrival and dismissal, the systems you will use, how to follow your child's progress, our services, and who to contact.</p>
-
-  <div class="card navy">
-    <span class="eyebrow" data-en="First day of school" data-ar="اليوم الأول من الدراسة">First day of school</span>
-    <div class="big" data-en="Sunday 23 August 2026" data-ar="الأحد ٢٣ أغسطس ٢٠٢٦">Sunday 23 August 2026</div>
-    <p id="countdown" class="small" style="margin-top:3px"></p>
-  </div>
 
   <!-- PLACEHOLDER · Day 1 vs staggered start still to be confirmed by Mr. Farhan / HoS group -->
   <div class="card tint">
@@ -1207,8 +1245,9 @@ footer .meta { font-size: 11px; color: var(--muted); margin-top: 4px; }
     announcement: ""
   };
 
-  var FIRST_DAY = "2026-08-23";
   var TIMEOUT = 5000;
+  var UPCOMING_DAYS = 21;   /* how far ahead the hero looks */
+  var UPCOMING_MAX = 3;     /* most items the hero will show */
 
   /* state lives in memory only, never in storage */
   var state = {
@@ -1246,7 +1285,7 @@ footer .meta { font-size: 11px; color: var(--muted); margin-top: 4px; }
     }
   }
 
-  function setLang(l) { state.lang = l; paint(document); renderCountdown(); renderChecklist(); }
+  function setLang(l) { state.lang = l; paint(document); renderChecklist(); renderUpcoming(); }
 
   /* ---------------- campus ---------------- */
 
@@ -1255,19 +1294,92 @@ footer .meta { font-size: 11px; color: var(--muted); margin-top: 4px; }
     document.body.setAttribute("data-campus", c);
     $("#btnBoys").setAttribute("aria-pressed", String(c === "boys"));
     $("#btnGirls").setAttribute("aria-pressed", String(c === "girls"));
+    renderUpcoming();
   }
 
-  /* ---------------- countdown ---------------- */
+  /* ---------------- hero: coming up ---------------- */
 
-  function renderCountdown() {
+  /* Parsed Key_Dates rows, kept so language and campus toggles can
+     re-render without going back to the network. */
+  var cachedDates = null;
+
+  function daysUntil(iso) {
+    var d = new Date(iso + "T00:00:00");
+    if (isNaN(d)) return null;
+    var today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return Math.round((d - today) / 86400000);
+  }
+
+  /* Arabic-Indic digits, so a number never sits in Arabic copy in Latin form */
+  function arNum(n) {
+    return String(n).replace(/[0-9]/g, function (d) {
+      return "٠١٢٣٤٥٦٧٨٩".charAt(Number(d));
+    });
+  }
+
+  /* Arabic counts take three different forms: dual for two, plural for
+     three to ten, and singular accusative from eleven up. */
+  function distanceText(days) {
     var ar = state.lang === "ar";
-    var days = Math.ceil((new Date(FIRST_DAY + "T00:00:00") - new Date()) / 86400000);
-    var t;
-    if (days > 1) t = ar ? "بعد " + days + " يوماً" : days + " days away";
-    else if (days === 1) t = ar ? "غداً بإذن الله" : "Tomorrow";
-    else if (days === 0) t = ar ? "اليوم" : "Today";
-    else t = ar ? "العام الدراسي جارٍ" : "The year is under way";
-    $("#countdown").textContent = t;
+    if (days === 0) return ar ? "· اليوم" : "· today";
+    if (days === 1) return ar ? "· غداً" : "· tomorrow";
+    if (!ar) return "· in " + days + " days";
+    if (days === 2) return "· بعد يومين";
+    if (days <= 10) return "· بعد " + arNum(days) + " أيام";
+    return "· بعد " + arNum(days) + " يوماً";
+  }
+
+  /* Builds the hero from the sheet when it has arrived, otherwise leaves
+     the baked-in fallback in place. Either way, past items are dropped and
+     the hero hides itself when nothing is left. */
+  function renderUpcoming() {
+    var box = $("#upcoming");
+    if (!box) return;
+
+    if (cachedDates) {
+      var rows = cachedDates.filter(function (r) {
+        if ((r.Show || "").toLowerCase() === "no") return false;
+        var c = (r.Campus || "Both").toLowerCase();
+        if (c !== "both" && c !== state.campus) return false;
+        var d = daysUntil(r.Date);
+        return d !== null && d >= 0 && d <= UPCOMING_DAYS;
+      }).sort(function (a, b) {
+        return a.Date < b.Date ? -1 : 1;
+      }).slice(0, UPCOMING_MAX);
+
+      box.textContent = "";
+      rows.forEach(function (r) {
+        var item = document.createElement("div");
+        item.className = "item";
+        item.setAttribute("data-date", r.Date);
+        var lbl = document.createElement("div");
+        lbl.className = "lbl";
+        bi(lbl, r.Label_EN, r.Label_AR);
+        var when = document.createElement("div");
+        when.className = "when";
+        var dt = document.createElement("span");
+        bi(dt, fmtDate(r.Date, false, true), fmtDate(r.Date, true, true));
+        var dist = document.createElement("i");
+        dist.className = "dist";
+        when.appendChild(dt);
+        when.appendChild(document.createTextNode(" "));
+        when.appendChild(dist);
+        item.appendChild(lbl);
+        item.appendChild(when);
+        box.appendChild(item);
+      });
+    }
+
+    var live = 0;
+    $$("#upcoming .item").forEach(function (item) {
+      var days = daysUntil(item.getAttribute("data-date"));
+      if (days === null || days < 0) { item.parentNode.removeChild(item); return; }
+      live++;
+      var dist = $(".dist", item);
+      if (dist) dist.textContent = distanceText(days);
+    });
+    $("#hero").hidden = live === 0;
   }
 
   /* ---------------- checklist (resets on reload, by design) ---------------- */
@@ -1394,18 +1506,25 @@ footer .meta { font-size: 11px; color: var(--muted); margin-top: 4px; }
     });
   }
 
-  function fmtDate(iso, ar) {
+  function fmtDate(iso, ar, withDay) {
     var d = new Date(iso + "T00:00:00");
     if (isNaN(d)) return iso;
+    var opt = { day: "numeric", month: "long", year: "numeric" };
+    if (withDay) opt.weekday = "long";
     try {
-      return d.toLocaleDateString(ar ? "ar" : "en-GB",
-        { day: "numeric", month: "long", year: "numeric" });
+      var out = d.toLocaleDateString(ar ? "ar" : "en-GB", opt).replace(/،|,/g, "");
+      /* Some engines hand back Latin digits for the ar locale. Normalise, so
+         Arabic copy never mixes the two numeral systems. */
+      return ar ? arNum(out) : out;
     } catch (e) { return iso; }
   }
 
   function hydrateDates(rows) {
     var ul = $('[data-hydrate="dates"]');
-    if (!ul || !rows) return;
+    if (!rows) return;
+    cachedDates = rows;
+    renderUpcoming();
+    if (!ul) return;
     var today = new Date(); today.setHours(0, 0, 0, 0);
     var keep = rows.filter(function (r) {
       if ((r.Show || "").toLowerCase() === "no") return false;
@@ -1538,6 +1657,7 @@ footer .meta { font-size: 11px; color: var(--muted); margin-top: 4px; }
 
   setCampus(state.campus);
   setLang(state.lang);
+  renderUpcoming();
 
   /* Fetch all five feeds in parallel. Any failure is silent and the
      baked-in fallback simply stays on screen. */
