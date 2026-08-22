@@ -1232,20 +1232,33 @@ footer .meta { font-size: 11px; color: var(--muted); margin-top: 4px; }
   "use strict";
 
   /* -----------------------------------------------------------------
-     Published Google Sheet CSV endpoints.
-     Leave a value empty to skip that feed entirely: the baked-in
-     fallback in the HTML stands and no request is made.
-     File -> Share -> Publish to web -> select the tab -> CSV.
+     Published Google Sheet CSV endpoints, one per tab.
+
+     Each gid below is a tab in the hub data workbook:
+       1144839320  Bell_Schedule     481320114   Key_Dates
+       2051876206  Contacts          1436737971  Services
+       715163369   Announcement
+
+     To repoint at a different workbook: File -> Share -> Publish to web,
+     pick the tab, pick CSV, then take the gid out of the URL it gives you.
+     Setting any value to an empty string skips that feed entirely: the
+     baked-in fallback in the HTML stands and no request is made.
      ----------------------------------------------------------------- */
+  var SHEET = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSFofYEcAMPqcfjVBBi7zA1AVScwY2SBD151VLdeozC1ADSh4jyrPQaqEkQbXABLf0farzV2gpE30VA/pub";
+
   var CSV = {
-    bell: "",
-    dates: "",
-    contacts: "",
-    services: "",
-    announcement: ""
+    bell        : SHEET + "?gid=1144839320&single=true&output=csv",
+    dates       : SHEET + "?gid=481320114&single=true&output=csv",
+    contacts    : SHEET + "?gid=2051876206&single=true&output=csv",
+    services    : SHEET + "?gid=1436737971&single=true&output=csv",
+    announcement: SHEET + "?gid=715163369&single=true&output=csv"
   };
 
-  var TIMEOUT = 5000;
+  /* Google's published-CSV endpoint measures 1.2s to 4.5s in practice,
+     so 5s was cutting it fine on mobile. The page is already fully
+     rendered from fallbacks by this point, and hydration is a silent
+     in-place swap, so a longer wait costs the reader nothing. */
+  var TIMEOUT = 10000;
   var UPCOMING_DAYS = 21;   /* how far ahead the hero looks */
   var UPCOMING_MAX = 3;     /* most items the hero will show */
 
@@ -1477,10 +1490,21 @@ footer .meta { font-size: 11px; color: var(--muted); margin-top: 4px; }
 
   /* ---------------- hydration renderers ---------------- */
 
+  /* Arabic copy from the sheet may arrive with Latin digits, e.g.
+     "الأحد–الخميس 7:30–14:00", which the bidi algorithm then reorders so a
+     range reads backwards. Convert digits in any token that carries no Latin
+     letters, which catches times and dates while leaving emails and URLs be. */
+  function arDigits(t) {
+    return String(t).replace(/\S+/g, function (tok) {
+      return /[A-Za-z]/.test(tok) ? tok : arNum(tok);
+    });
+  }
+
   function bi(el, en, ar) {
+    var a = arDigits(ar || en);
     el.setAttribute("data-en", en);
-    el.setAttribute("data-ar", ar || en);
-    el.textContent = state.lang === "ar" ? (ar || en) : en;
+    el.setAttribute("data-ar", a);
+    el.textContent = state.lang === "ar" ? a : en;
   }
 
   function hydrateBell(rows) {

@@ -75,7 +75,8 @@ Single data row (row 2). Only one announcement at a time.
 ## Hydration behavior (implementation contract)
 
 1. Page renders fully from static fallbacks immediately.
-2. JS fetches all five published CSVs in parallel, 5s timeout each.
+2. JS fetches all five published CSVs in parallel, 10s timeout each. Google's published-CSV endpoint measures 1.2s to 4.5s in practice, so a shorter budget drops hydration on mobile.
 3. On success, parse (handle quoted commas), replace matching `data-hydrate` content, respecting the current language and campus toggles.
 4. On any failure: silent, fallbacks stand, no error UI.
 5. Language or campus toggle re-renders hydrated content from the cached parse, no refetch.
+6. Latin digits inside any `_AR` value are converted to Arabic-Indic on render, so `الأحد–الخميس 7:30–14:00` displays as `الأحد–الخميس ٧:٣٠–١٤:٠٠` and bidi cannot reverse the range. Emails and URLs are left alone. Editors do not need to think about this.
