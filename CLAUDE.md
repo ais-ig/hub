@@ -16,7 +16,7 @@ Live at `https://ais-ig.github.io/hub/`, repository `ais-ig/hub`. This folder is
 - **No campus toggle.** Grades 9 and 10 curriculum, options, assessment and policies are identical across campuses. Only venues and contacts differ. The page currently carries the boys campus only.
 - **No Google Sheets hydration.** All content is static. The old hub's CSV layer was deliberately dropped: nothing on this page is volatile enough to justify the failure surface.
 - **PDFs live in `assets/`** and are linked relatively. Never link to Google Drive. Root-level PDFs are git-ignored.
-- Documents not yet produced render as a muted, dashed "Available soon" card rather than a link that 404s.
+- Documents announced before they exist render as a muted, dashed "Available soon" card rather than a link that 404s. Do not announce a document nobody has committed to producing; the agenda card was removed for that reason.
 - **The hero carries a countdown.** It reads `data-doors` and `data-end` off the hero element rather than a JS constant, so the machine-readable date sits beside the human-readable one in the banner. Three self-switching states: counting, "under way", "thank you". Hidden until JS validates both dates, so it never flashes empty cells. Do not move these dates into a constant, and do not let the attributes drift from the banner. Between events, delete the attributes and the block hides itself.
 
 ## Design direction
@@ -62,7 +62,7 @@ The page-specific patterns kept from the first version: the options tables and t
 
 | Section | Source |
 |---|---|
-| Tonight's programme, results, pathway, support, activities, behaviour | `Parents Meet and Greet 2026-2027 (AIS template).pdf`, the 2026/27 deck, in `~/Downloads`. This is the primary source and supersedes the 2025 deck. |
+| Tonight's programme, results, pathway, support, activities, behaviour | `Parents Meet and Greet 2026-2027.pptx.pdf`, the final 31-page 2026/27 deck, published as `assets/presentation-g9-g10.pdf`. This is the primary source and supersedes the 2025 deck and the earlier "(AIS template)" drafts. |
 | Gates, stall map, boys campus staff contacts | `AIS_Meet_and_Greet_Parent_Guide_Grades_7-12_Boys_09Sep2026.pdf`, the printed parent guide. Pages 1 and 12 to 16 are republished as `assets/meet-and-greet-parent-guide-boys-2026-27.pdf`. |
 | Subject options | `assets/g9-igcse-options-2026-27.pdf` and `assets/g10-igcse-options-2026-27.pdf` |
 | Syllabus pages | `~/Downloads/AIS_Syllabus_Links_2026-2027.xlsx`, Confirmed rows only. Its Notes tab is internal; never publish it. |
@@ -82,7 +82,7 @@ The deck's agenda is three steps, 6:30 arrival, 6:45 presentation, 7:15 stalls w
 
 ## Workflow expectations
 
-- Placeholders are marked `<!-- PLACEHOLDER -->` and must read as plausible finished content, never "TBC". `README.md` lists it: the mentor list.
+- Placeholders, when any exist, are marked `<!-- PLACEHOLDER -->` and must read as plausible finished content, never "TBC". None remain as of 9 September 2026.
 - Verify at ~380px width before considering any change done. The page must never scroll sideways; wide content scrolls inside its own container. Headless Chrome's `--window-size` does not go below the macOS minimum window width, so use device emulation over the DevTools protocol, or a real phone, to check.
 - Every internal anchor must resolve and every asset path must exist. Both are quick to check with grep.
 - Pushing needs the `Mohamad-Dabbagh` gh account; `madabbagh` is read-only on the org. See `README.md`.

@@ -22,15 +22,13 @@ Root-level PDFs are ignored by `.gitignore`. The Grade 11 and 12 options forms s
 
 ## Open items
 
-Everything marked `<!-- PLACEHOLDER -->` in `index.html` must be replaced or confirmed. Search the file for that string. There is one:
-
-| Where | What to confirm |
-|---|---|
-| Support | Homeroom mentor list for 2026/27. The deck still shows the 2025/26 list. |
+There are no `<!-- PLACEHOLDER -->` comments left in `index.html`. The 2026/27 homeroom mentors come from slide 19 of the final deck.
 
 **Girls campus content was removed on 9 September 2026** at the user's request, because the evening was boys only. The two girls contact cards (Ms. Shamsiya Alkalbani, Head of School, Girls, and the Deputy Head, who appears as *Ms. Malak Rajeh* in the old hub package and *Ms. Malak Alkhasawna* in last year's presentation, both `m.alkhasawna@ais.sch.sa`) are in git history before commit `0f6b883` if the page is widened to both campuses again. The banner carries the boys campus gates from the printed guide.
 
-**The presentation deck** is not yet published. Slides 16, 17 and 19 of `Parents Meet and Greet 2026-2027 (AIS template).pdf` are screenshots of student-level records (mock results with staff comments, a results email, a mentor appointment sheet). Names are blanked but the comments are personal. Decide whether to publish the deck as-is, or a version without those three slides, before flipping the "Tonight's Presentation" card.
+**The presentation deck** is published as `assets/presentation-g9-g10.pdf`, the final 31-page `Parents Meet and Greet 2026-2027.pptx.pdf`, at the user's decision on 9 September 2026. Slides 17, 18 and 20 are screenshots of student-level records with names blanked. If that ever needs revisiting, regenerate the file without those pages with `pypdf`.
+
+**The agenda card was removed** on 9 September 2026: no printed agenda document is being produced, and the programme lives on the page itself.
 
 ## The countdown
 
@@ -70,13 +68,7 @@ Everything from "IGCSE results" down is reference material and stays as it is un
 
 Files live in `assets/`. Every document appears once in **Everything in one place**; tonight's items also appear in the band under the hero, and forms and policies also appear in their own sections.
 
-To publish a document that currently shows "Available soon":
-
-1. Drop the PDF into `assets/` using the exact filename listed in the `DOCUMENT PATHS` comment at the top of `index.html`.
-2. Find its `<span class="mcard soon">` (band) and `<span class="doc soon">` (library) blocks.
-3. Change each opening tag to an `<a class="mcard" href="assets/FILENAME.pdf" download>` or `<a class="doc" ...>`, change the closing `</span>` to `</a>`, and replace "Available soon" with `Open PDF →` (band) or the `→` arrow span (library).
-
-Copy a live card or row to get the markup exactly right.
+Nothing currently shows "Available soon". To announce a document before it exists, copy a live card or row, change the opening tag to `<span class="mcard soon">` or `<span class="doc soon">`, drop the `href`, and replace the arrow with "Available soon"; reverse that once the file lands in `assets/`. Add every new file to the `DOCUMENT PATHS` comment at the top of `index.html` and to the table above.
 
 | File | Status | Appears in |
 |---|---|---|
@@ -90,8 +82,7 @@ Copy a live card or row to get the markup exactly right.
 | `parents-calendar-2026-27.pdf` | live | library |
 | `no-mobile-phone-policy.pdf` | live | Policies, library |
 | `phone-policy-commitment-form.pdf` | live | Policies, library |
-| `agenda-g9-g10.pdf` | soon | band, library |
-| `presentation-g9-g10.pdf` | soon | band, library |
+| `presentation-g9-g10.pdf` | live | band, library |
 
 External links, the school's own pages: the Grade 9 and 10 IG weekly plans and the Parent Assessment Guide on `ict001001.github.io`, reached through the school-wide Linktree `linktr.ee/rowad.curriculum2627`, and the examination boards' syllabus pages for the confirmed IGCSE subjects.
 
