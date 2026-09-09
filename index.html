@@ -4,19 +4,43 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0C2E54">
-<title>AIS British Section Parent Hub</title>
-<meta name="description" content="Al-Rowad International Schools, British Section. Parent Information Hub for Grades 9 to 12, academic year 2026/27.">
+<title>Parents’ Meet &amp; Greet · Grades 9 &amp; 10 · AIS British Section</title>
+<meta name="description" content="Al-Rowad International Schools, British Section. Parents’ Meet &amp; Greet for Grades 9 and 10 IG, academic year 2026/27. Agenda, IGCSE subject options, assessment, support and school policies.">
 <link rel="icon" href="assets/emblem.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&family=Almarai:wght@300;400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+<!-- ===================================================================
+     DOCUMENT PATHS · single reference list
+     Every PDF linked from this page. Files marked SOON render as a muted
+     "Available soon" row instead of a live link. To publish one: drop the
+     file in assets/, then change its <span class="doc soon"> to an
+     <a class="doc" href="..." download> and delete the "Available soon"
+     label. Each appears in the "All documents" section, and the options
+     forms and policy files also appear in their own sections.
+
+       assets/g9-igcse-options-2026-27.pdf     LIVE   sections 03, 08
+       assets/g10-igcse-options-2026-27.pdf    LIVE   sections 03, 08
+       assets/no-mobile-phone-policy.pdf       LIVE   sections 07, 08
+       assets/phone-policy-commitment-form.pdf LIVE   sections 07, 08
+       assets/parents-calendar-2026-27.pdf     LIVE   section  08
+       assets/agenda-g9-g10.pdf                SOON   section  08
+       assets/presentation-g9-g10.pdf          SOON   section  08
+
+     The two phone policy files are last year's, carried forward. The policy
+     itself is undated and standing, so it needs no reissue. The commitment
+     form has two problems noted in README: a pre-filled date of 30/2/2025,
+     and a Middle Section header rather than British Section.
+     =================================================================== -->
+
 <style>
 /* ---------------------------------------------------------------
-   AIS British Section · Parent Information Hub
+   AIS British Section · Parents' Meet & Greet, Grades 9 and 10
+   Visual sibling of the AIS Parent Information Hub. Same brand
+   tokens and card vocabulary, re-pointed at a single evening.
    Brand: navy #1D5394 · deep navy #0C2E54 · yellow #EDBA1D
-   Warm neutrals inherited from the Grade 8 Pathway Hub.
-   Poppins 300/400/500/700 only. Almarai carries Arabic glyphs,
-   which Poppins does not provide.
+   Poppins 300/400/500/700 only.
    --------------------------------------------------------------- */
 
 :root {
@@ -50,16 +74,13 @@ body {
   margin: 0;
   background: var(--cream);
   color: var(--ink);
-  font-family: 'Poppins', 'Almarai', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-weight: 300;
   font-size: 14px;
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
   -webkit-text-size-adjust: 100%;
 }
-
-[dir="rtl"] body,
-[dir="rtl"] { font-family: 'Almarai', 'Poppins', sans-serif; }
 
 .wrap {
   max-width: 480px;
@@ -93,45 +114,6 @@ button {
   clip: rect(0 0 0 0);
   white-space: nowrap;
   border: 0;
-}
-
-/* --- announcement banner --- */
-
-#announce {
-  display: none;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 11px 14px;
-  background: var(--gold-tint-2);
-  border-bottom: 1px solid #EFE2BE;
-}
-#announce.on { display: flex; }
-#announce .dot {
-  flex: none;
-  width: 7px; height: 7px;
-  border-radius: 50%;
-  background: var(--gold);
-  margin-top: 8px;
-}
-#announce .txt {
-  flex: 1;
-  min-width: 0;
-  font-size: 12.5px;
-  font-weight: 400;
-  line-height: 1.5;
-  color: var(--navy-deep);
-}
-#announce .txt a { text-decoration: underline; }
-#announce .x {
-  flex: none;
-  background: transparent;
-  border: 0;
-  color: var(--muted);
-  font-size: 17px;
-  line-height: 1;
-  padding: 6px;
-  min-width: 32px;
-  min-height: 32px;
 }
 
 /* --- header --- */
@@ -177,99 +159,134 @@ header {
   color: #fff;
   line-height: 1.25;
 }
-#langBtn {
-  flex: none;
-  background: transparent;
-  border: 1px solid rgba(237, 186, 29, .55);
-  color: var(--gold);
-  border-radius: 999px;
-  padding: 7px 14px;
-  font-size: 12px;
-  font-weight: 500;
-  min-height: 40px;
-}
-#langBtn:hover { background: rgba(237, 186, 29, .1); }
 
-/* --- campus toggle --- */
-
-.campusbar {
-  position: sticky;
-  top: 63px;
-  z-index: 15;
-  background: var(--cream);
-  border-bottom: 1px solid var(--border-soft);
-}
-.campusbar .inner {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 9px var(--pad);
-  max-width: 480px;
-  margin-inline: auto;
-}
-.campusbar .lbl {
-  font-size: 10.5px;
-  font-weight: 500;
-  letter-spacing: .07em;
-  text-transform: uppercase;
-  color: var(--muted);
-  flex: none;
-}
-.seg {
-  display: flex;
-  gap: 4px;
-  background: var(--border-soft);
-  border-radius: var(--radius-sm);
-  padding: 3px;
-  flex: 1;
-}
-.seg button {
-  flex: 1;
-  border: 0;
-  background: transparent;
-  color: var(--navy);
-  font-size: 13px;
-  font-weight: 400;
-  border-radius: 7px;
-  min-height: 40px;
-  padding-inline: 8px;
-}
-.seg button[aria-pressed="true"] {
-  background: var(--navy-deep);
-  color: #fff;
-  font-weight: 500;
-}
-
-/* --- hero: coming up --- */
+/* --- hero: the event --- */
 
 .hero {
   margin: 18px var(--pad) 0;
   background: var(--navy-deep);
   border-radius: var(--radius);
-  padding: 16px 18px;
+  padding: 20px 18px 18px;
 }
-.hero[hidden] { display: none; }
 .hero .eyebrow { color: var(--gold); }
-.hero .rule { width: 36px; margin: 11px 0 4px; }
-.hero .item {
-  padding: 11px 0;
+.hero h1 { color: #fff; margin-top: 4px; }
+.hero .sub {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--gold);
+  line-height: 1.4;
+  margin-top: 2px;
+}
+.hero .rule { margin: 14px 0 4px; }
+.hero .row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 10px 0;
   border-top: 1px solid rgba(255, 255, 255, .13);
 }
-.hero .item:first-of-type { border-top: 0; }
-.hero .item:last-of-type { padding-bottom: 0; }
-.hero .lbl {
+.hero .row:first-of-type { border-top: 0; }
+.hero .row:last-of-type { padding-bottom: 0; }
+.hero .k {
+  flex: none;
+  width: 66px;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, .55);
+  line-height: 1.5;
+}
+.hero .v {
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 400;
+  color: #fff;
+  line-height: 1.5;
+}
+.hero .v .n {
+  display: block;
+  font-size: 11.5px;
+  font-weight: 300;
+  color: rgba(255, 255, 255, .62);
+  margin-top: 1px;
+}
+.hero .v .lt {
+  direction: ltr;
+  unicode-bidi: isolate;
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- countdown ---
+   Pattern borrowed from the Grade 9 Pathway hub: four cells, days through
+   seconds, with "under way" and "thank you" states either side of the event.
+   Hidden until JS confirms a valid date, so it never renders as empty boxes.
+   Its label sits in gold on navy (7.9:1); the cell labels stay navy-muted on
+   white, because gold on white would not be readable at 9px. */
+
+.cd {
+  margin-top: 16px;
+  padding-top: 15px;
+  border-top: 1px solid rgba(255, 255, 255, .13);
+  text-align: center;
+}
+.cd[hidden] { display: none; }
+.cd .cdlbl {
+  display: block;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 10px;
+}
+.cd .cdlbl[hidden] { display: none; }
+.cdcells { display: flex; gap: 7px; justify-content: center; }
+.cdcells[hidden] { display: none; }
+.cdcells .cell {
+  flex: 1;
+  min-width: 0;
+  max-width: 92px;
+  background: #fff;
+  border-radius: 10px;
+  padding: 11px 4px 9px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, .18);
+}
+.cdcells .num {
+  display: block;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--navy-deep);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+.cdcells .lbl {
+  display: block;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 5px;
+}
+.cdmsg {
+  margin: 0;
   font-size: 14.5px;
   font-weight: 500;
   color: #fff;
-  line-height: 1.4;
+  line-height: 1.45;
 }
-.hero .when {
+.cdmsg[hidden] { display: none; }
+.cdmsg .n {
+  display: block;
   font-size: 12px;
   font-weight: 300;
-  color: rgba(255, 255, 255, .72);
+  color: rgba(255, 255, 255, .62);
   margin-top: 3px;
 }
-.hero .dist { font-weight: 500; color: var(--gold); font-style: normal; }
 
 /* --- section navigation --- */
 
@@ -309,7 +326,7 @@ header {
 
 section.sec {
   padding: 26px var(--pad) 0;
-  scroll-margin-top: 108px;
+  scroll-margin-top: 76px;
 }
 .eyebrow {
   display: block;
@@ -342,6 +359,14 @@ h3 {
   line-height: 1.4;
   color: var(--navy-deep);
 }
+h4 {
+  margin: 0 0 8px;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
 .rule {
   width: 44px; height: 3px;
   background: var(--gold);
@@ -363,97 +388,313 @@ p:last-child { margin-bottom: 0; }
   margin-bottom: 10px;
 }
 .card > h3 + .rule { margin: 10px 0 10px; width: 32px; }
+.card.tint {
+  background: var(--gold-tint);
+  border-color: #EFE2BE;
+}
 .card.navy {
   background: var(--navy-deep);
   border-color: var(--navy-deep);
   color: #fff;
 }
-.card.navy .eyebrow { color: var(--gold); }
+.card.navy h3, .card.navy h4 { color: #fff; }
 .card.navy p { color: rgba(255, 255, 255, .78); }
-.card.navy .big {
-  font-size: 18px;
-  font-weight: 700;
-  color: #fff;
-  margin-top: 4px;
-}
-.card.tint {
-  background: var(--gold-tint);
-  border-color: #EFE2BE;
-}
 
 .stack { display: grid; gap: 10px; }
+.stack > .card { margin-bottom: 0; }
 
-/* --- key/value rows --- */
+/* --- agenda timeline · echoes the printed Meet & Greet poster --- */
 
-.kv {
+.tl { display: grid; gap: 8px; }
+.tl .step {
   display: flex;
-  align-items: baseline;
-  gap: 12px;
-  padding: 10px 0;
-  border-top: 1px solid var(--border-soft);
+  align-items: stretch;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  box-shadow: var(--shadow);
 }
-.kv:first-child { border-top: 0; padding-top: 0; }
-.kv .k {
+.tl .when {
   flex: none;
-  width: 96px;
+  width: 78px;
+  background: var(--navy-deep);
+  padding: 12px 6px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.tl .when .hh {
   font-size: 10.5px;
-  font-weight: 500;
-  letter-spacing: .05em;
-  text-transform: uppercase;
-  color: var(--muted);
-  line-height: 1.45;
-}
-.kv .v {
-  flex: 1;
-  min-width: 0;
-  font-size: 13.5px;
   font-weight: 400;
-  color: var(--navy-deep);
-  line-height: 1.5;
+  color: rgba(255, 255, 255, .72);
+  line-height: 1.3;
+  direction: ltr;
+  unicode-bidi: isolate;
+  white-space: nowrap;
+}
+.tl .when .n {
+  font-size: 23px;
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 1.05;
+  margin-top: 3px;
+  font-variant-numeric: tabular-nums;
+}
+.tl .what { flex: 1; min-width: 0; padding: 12px 14px; align-self: center; }
+.tl .what h3 { font-size: 13.5px; }
+.tl .what p { font-size: 12.5px; line-height: 1.55; margin: 3px 0 0; }
+
+/* --- grade switcher --- */
+
+.seg {
+  display: flex;
+  gap: 4px;
+  background: var(--border-soft);
+  border-radius: var(--radius-sm);
+  padding: 3px;
+  margin-bottom: 12px;
+}
+.seg button {
+  flex: 1;
+  border: 0;
+  background: transparent;
+  color: var(--navy);
+  font-size: 13px;
+  font-weight: 400;
+  border-radius: 7px;
+  min-height: 40px;
+  padding-inline: 8px;
+}
+.seg button[aria-selected="true"] {
+  background: var(--navy-deep);
+  color: #fff;
+  font-weight: 500;
 }
 
-/* --- bell schedule table --- */
+/* --- data tables --- */
 
-table.bell {
+.scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+table.data {
   width: 100%;
+  min-width: 260px;
   border-collapse: collapse;
+  font-size: 12.5px;
+}
+table.data thead th {
+  text-align: start;
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--navy);
+  padding: 8px 10px;
+  white-space: nowrap;
+}
+table.data thead th:first-child { border-start-start-radius: 6px; }
+table.data thead th:last-child { border-start-end-radius: 6px; }
+table.data td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border-soft);
+  vertical-align: baseline;
+  color: var(--ink-soft);
+  font-weight: 300;
+}
+table.data tbody tr:last-child td { border-bottom: 0; }
+table.data td.s { color: var(--navy-deep); font-weight: 400; }
+table.data td.cur { font-size: 11px; color: var(--muted); white-space: nowrap; }
+table.data td.num {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  color: var(--navy-deep);
+  font-weight: 400;
+}
+table.data tr.grp td {
+  background: var(--gold-tint);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--navy);
+  padding-block: 6px;
+}
+table.data tr.tot td {
+  border-bottom: 0;
+  border-top: 2px solid var(--border);
+  font-weight: 500;
+  color: var(--navy-deep);
   font-size: 13px;
 }
-table.bell th {
-  text-align: start;
+table.data tr.semtot td {
+  border-bottom: 0;
+  background: var(--gold-tint);
+  font-weight: 500;
+  color: var(--navy-deep);
+  font-size: 13px;
+  padding-block: 9px;
+}
+table.data td.none { color: var(--muted); }
+
+/* --- choose-one pairs (Grade 9, Table B) --- */
+
+.pairs { display: grid; gap: 8px; }
+.pair {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+  padding: 11px 12px;
+}
+.pair .hd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 9px;
+}
+.pair .hd .lb {
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.pair .hd .pw {
   font-size: 10.5px;
+  font-weight: 500;
+  color: var(--navy);
+  background: var(--gold-tint);
+  border: 1px solid #EFE2BE;
+  border-radius: 999px;
+  padding: 2px 9px;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.pair .opts {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 8px;
+}
+.pair .o {
+  border: 1px solid var(--border-soft);
+  background: var(--cream);
+  border-radius: 7px;
+  padding: 10px;
+  font-size: 12.5px;
+  font-weight: 400;
+  color: var(--navy-deep);
+  text-align: center;
+  line-height: 1.35;
+}
+.pair .or {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* --- subject chips (Grade 10, Table B) --- */
+
+.chips { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+.chip {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  border: 1px solid var(--border-soft);
+  background: var(--cream);
+  border-radius: 7px;
+  padding: 9px 10px;
+}
+.chip .s { font-size: 12.5px; font-weight: 400; color: var(--navy-deep); line-height: 1.35; }
+.chip .p {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--muted);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- comparison columns --- */
+
+.cmp { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.cmp .col {
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--cream);
+}
+.cmp .col > .h {
+  background: var(--navy-deep);
+  color: #fff;
+  font-size: 11.5px;
+  font-weight: 500;
+  padding: 8px 10px;
+  text-align: center;
+  line-height: 1.35;
+}
+.cmp .col ul { margin: 0; padding: 10px; list-style: none; display: grid; gap: 9px; }
+.cmp .col li { font-size: 11.5px; line-height: 1.5; color: var(--ink-soft); }
+
+/* --- documents --- */
+
+.docs { display: grid; gap: 8px; }
+.doc {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 11px 13px;
+  min-height: var(--tap);
+}
+a.doc:hover { border-color: var(--gold); }
+.doc .ic {
+  flex: none;
+  width: 30px; height: 30px;
+  border-radius: 7px;
+  background: var(--gold-tint);
+  border: 1px solid #EFE2BE;
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  color: var(--navy);
+}
+.doc .tx { flex: 1; min-width: 0; }
+.doc .tt { display: block; font-size: 13px; font-weight: 500; color: var(--navy-deep); line-height: 1.35; }
+.doc .sb { display: block; font-size: 11px; color: var(--muted); margin-top: 1px; line-height: 1.4; }
+.doc .ar { flex: none; color: var(--gold); font-size: 14px; font-weight: 700; }
+.doc.soon { background: transparent; border-style: dashed; box-shadow: none; }
+.doc.soon .ic { background: transparent; border-color: var(--border); color: var(--muted); }
+.doc.soon .tt { color: var(--muted); font-weight: 400; }
+.doc.soon .ar {
+  color: var(--muted);
+  font-size: 9.5px;
   font-weight: 500;
   letter-spacing: .06em;
   text-transform: uppercase;
-  color: var(--muted);
-  padding: 0 0 8px;
-  border-bottom: 1px solid var(--border);
-}
-table.bell td {
-  padding: 9px 0;
-  border-bottom: 1px solid var(--border-soft);
-  vertical-align: baseline;
-}
-table.bell tr:last-child td { border-bottom: 0; }
-table.bell td.item {
-  font-weight: 400;
-  color: var(--navy-deep);
-  padding-inline-end: 10px;
-}
-/* Times are an LTR run. Isolate them so the bidi algorithm does not
-   reverse a range like 7:00 - 7:15 when the page is mirrored. */
-table.bell td.time {
-  direction: ltr;
-  unicode-bidi: isolate;
-  text-align: right;
   white-space: nowrap;
-  font-variant-numeric: tabular-nums;
-  color: var(--ink-soft);
-  font-weight: 400;
 }
-[dir="rtl"] table.bell td.time { text-align: left; }
-table.bell tr.hi td { background: var(--gold-tint); }
-table.bell tr.hi td.item { font-weight: 500; }
+
+/* --- behaviour levels --- */
+
+.lvl { display: grid; gap: 12px; }
+.lvl .l { border-inline-start: 3px solid var(--gold); padding-inline-start: 12px; }
+.lvl .l .n {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--navy);
+}
+.lvl .l .d { font-size: 12.5px; line-height: 1.55; color: var(--ink-soft); margin-top: 2px; }
+.lvl .l .a { font-size: 12px; line-height: 1.5; color: var(--navy-deep); margin-top: 5px; }
+.lvl .l .a b { font-weight: 500; }
 
 /* --- lists --- */
 
@@ -477,6 +718,7 @@ ul.ticks li::before {
   border-radius: 50%;
   background: var(--gold);
 }
+ul.ticks li b { font-weight: 500; color: var(--navy-deep); }
 
 ol.steps { margin: 0; padding: 0; list-style: none; counter-reset: s; }
 ol.steps li {
@@ -490,6 +732,7 @@ ol.steps li {
   border-top: 1px solid var(--border-soft);
 }
 ol.steps li:first-child { border-top: 0; }
+ol.steps li b { font-weight: 500; color: var(--navy-deep); }
 ol.steps li::before {
   content: counter(s);
   position: absolute;
@@ -503,51 +746,6 @@ ol.steps li::before {
   font-weight: 700;
   display: grid;
   place-items: center;
-}
-
-/* --- checklist --- */
-
-.check {
-  display: flex;
-  align-items: flex-start;
-  gap: 11px;
-  width: 100%;
-  text-align: start;
-  background: transparent;
-  border: 0;
-  border-top: 1px solid var(--border-soft);
-  padding: 12px 2px;
-  min-height: var(--tap);
-}
-.check:first-of-type { border-top: 0; }
-.check .box {
-  flex: none;
-  width: 22px; height: 22px;
-  border-radius: 6px;
-  border: 1.5px solid #DDD2B8;
-  background: #fff;
-  margin-top: 1px;
-  display: grid;
-  place-items: center;
-  font-size: 13px;
-  font-weight: 700;
-  color: transparent;
-}
-.check[aria-pressed="true"] .box {
-  background: var(--navy-deep);
-  border-color: var(--navy-deep);
-  color: var(--gold);
-}
-.check .t {
-  font-size: 13.5px;
-  line-height: 1.55;
-  color: var(--ink);
-  font-weight: 400;
-}
-.check[aria-pressed="true"] .t {
-  color: #A9A392;
-  font-weight: 300;
-  text-decoration: line-through;
 }
 
 /* --- contacts --- */
@@ -626,8 +824,6 @@ ol.steps li::before {
   padding-top: 3px;
 }
 .acc > button[aria-expanded="true"] .chev { transform: rotate(90deg); }
-[dir="rtl"] .acc > button .chev { transform: rotate(180deg); }
-[dir="rtl"] .acc > button[aria-expanded="true"] .chev { transform: rotate(90deg); }
 .acc .body {
   display: none;
   padding: 0 2px 14px;
@@ -645,11 +841,7 @@ footer {
   border-top: 1px solid var(--border);
   text-align: center;
 }
-footer .sig {
-  font-size: 12.5px;
-  font-weight: 500;
-  color: var(--navy-deep);
-}
+footer .sig { font-size: 12.5px; font-weight: 500; color: var(--navy-deep); }
 footer .meta { font-size: 11px; color: var(--muted); margin-top: 4px; }
 
 .toplink {
@@ -664,24 +856,19 @@ footer .meta { font-size: 11px; color: var(--muted); margin-top: 4px; }
   min-height: var(--tap);
 }
 
-/* --- language and campus visibility --- */
-
-[data-campus="boys"] [data-for="girls"],
-[data-campus="girls"] [data-for="boys"] { display: none !important; }
-
-.ar-only { display: none; }
-[dir="rtl"] .ar-only { display: revert; }
-[dir="rtl"] .en-only { display: none; }
-
 /* --- desktop enhancement --- */
 
 @media (min-width: 720px) {
   .wrap { max-width: 720px; }
-  .hbar, .campusbar .inner { max-width: 720px; }
-  .navgrid { grid-template-columns: repeat(3, 1fr); }
+  .hbar { max-width: 720px; }
+  .navgrid { grid-template-columns: repeat(4, 1fr); }
   section.sec { padding-inline: 24px; }
+  .hero { margin-inline: 24px; }
+  .navgrid { padding-inline: 24px; }
+  footer { padding-inline: 24px; }
   .two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: start; }
-  .two .card { margin-bottom: 0; }
+  .two > .card { margin-bottom: 0; }
+  .chips { grid-template-columns: repeat(3, 1fr); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -690,1012 +877,755 @@ footer .meta { font-size: 11px; color: var(--muted); margin-top: 4px; }
 }
 </style>
 </head>
-<body data-campus="boys">
+<body>
 
-<!-- announcement · hydrates from the Announcement sheet tab, hidden until an active one exists -->
-<div id="announce" role="status" data-hydrate="announcement">
-  <span class="dot"></span>
-  <span class="txt" id="announceText"></span>
-  <button class="x" id="announceX" aria-label="Dismiss announcement" data-en-aria="Dismiss announcement" data-ar-aria="إغلاق الإعلان">&times;</button>
-</div>
-
-<header>
+<header id="top">
   <div class="hbar">
-    <span class="emblem"><img src="assets/emblem.png" alt="Al-Rowad International Schools"></span>
+    <span class="emblem"><img src="assets/emblem.png" alt="" width="33" height="33"></span>
     <span class="hid">
-      <span class="school" data-en="Al-Rowad International Schools" data-ar="مدارس الرواد العالمية">Al-Rowad International Schools</span>
-      <span class="name" data-en="British Section" data-ar="القسم البريطاني">British Section</span>
+      <span class="school">Al-Rowad International Schools</span>
+      <span class="name">British Section</span>
     </span>
-    <button id="langBtn" lang="ar">العربية</button>
   </div>
 </header>
 
-<div class="campusbar">
-  <div class="inner">
-    <span class="lbl" data-en="Campus" data-ar="المقر">Campus</span>
-    <div class="seg" role="group" aria-label="Select campus" data-en-aria="Select campus" data-ar-aria="اختر المقر">
-      <button id="btnBoys" aria-pressed="true" data-en="Boys" data-ar="بنين">Boys</button>
-      <button id="btnGirls" aria-pressed="false" data-en="Girls" data-ar="بنات">Girls</button>
-    </div>
-  </div>
-</div>
+<main class="wrap">
 
-<div class="wrap">
+<!-- ============ HERO · THE EVENT ============ -->
+<!-- Date confirmed 9 September 2026: Wednesday 9 September 2026, registration
+     from 6:30 PM Riyadh time. Venues are last year's, carried forward.
 
-<!-- hero · next dated items, hydrates from the Key_Dates sheet tab -->
-<div class="hero" id="hero">
-  <span class="eyebrow" data-en="Coming up" data-ar="القادم">Coming up</span>
+     The countdown reads data-doors and data-end off this element, so those
+     two attributes and the human-readable Date and Time rows below must be
+     changed together. data-doors is when registration opens, not when the
+     presentation starts. Both are Riyadh time, hence the +03:00 offset. -->
+<div class="hero" id="hero"
+     data-doors="2026-09-09T18:30:00+03:00"
+     data-end="2026-09-09T20:30:00+03:00">
+  <span class="eyebrow">Grades 9 &amp; 10 IG · 2026/27</span>
+  <h1>Parents’ Meet &amp; Greet</h1>
+  <div class="sub">An evening on the IGCSE programme</div>
   <div class="rule"></div>
-  <div id="upcoming">
-    <!-- PLACEHOLDER · replaced by Key_Dates rows falling in the next three weeks -->
-    <div class="item" data-date="2026-08-23">
-      <div class="lbl" data-en="First day of school" data-ar="اليوم الأول من الدراسة">First day of school</div>
-      <div class="when"><span data-en="Sunday 23 August 2026" data-ar="الأحد ٢٣ أغسطس ٢٠٢٦">Sunday 23 August 2026</span> <i class="dist"></i></div>
+
+  <div class="row">
+    <span class="k">Date</span>
+    <span class="v">Wednesday 9 September 2026</span>
+  </div>
+  <div class="row">
+    <span class="k">Time</span>
+    <span class="v"><span class="lt">7:00 PM – 8:30 PM</span><span class="n">Registration opens <span class="lt">6:30 PM</span></span></span>
+  </div>
+  <div class="row">
+    <span class="k">Boys</span>
+    <span class="v">Main Hall<span class="n">Boys campus</span></span>
+  </div>
+  <div class="row">
+    <span class="k">Girls</span>
+    <span class="v">Auditorium<span class="n">Girls campus</span></span>
+  </div>
+
+  <div class="cd" id="cd" hidden>
+    <span class="cdlbl" id="cdLabel">Doors open in</span>
+    <div class="cdcells" id="cdCells" aria-hidden="true">
+      <span class="cell"><span class="num" id="cdD">0</span><span class="lbl">Days</span></span>
+      <span class="cell"><span class="num" id="cdH">00</span><span class="lbl">Hours</span></span>
+      <span class="cell"><span class="num" id="cdM">00</span><span class="lbl">Min</span></span>
+      <span class="cell"><span class="num" id="cdS">00</span><span class="lbl">Sec</span></span>
     </div>
+    <p class="cdmsg" id="cdMsg" role="status" hidden></p>
   </div>
 </div>
 
-<nav class="navgrid" aria-label="Sections" data-en-aria="Sections" data-ar-aria="الأقسام">
-  <a href="#s1"><span class="n">01</span><span data-en="Welcome" data-ar="ترحيب">Welcome</span></a>
-  <a href="#s2"><span class="n">02</span><span data-en="Hours" data-ar="الدوام">Hours</span></a>
-  <a href="#s3"><span class="n">03</span><span data-en="Arrival" data-ar="الحضور">Arrival</span></a>
-  <a href="#s4"><span class="n">04</span><span data-en="Platforms" data-ar="المنصات">Platforms</span></a>
-  <a href="#s5"><span class="n">05</span><span data-en="Academics" data-ar="المتابعة">Academics</span></a>
-  <a href="#s6"><span class="n">06</span><span data-en="Services" data-ar="الخدمات">Services</span></a>
-  <a href="#s7"><span class="n">07</span><span data-en="Expectations" data-ar="التوقعات">Expectations</span></a>
-  <a href="#s8"><span class="n">08</span><span data-en="Contacts" data-ar="التواصل">Contacts</span></a>
-  <a href="#s9"><span class="n">09</span><span data-en="FAQ" data-ar="أسئلة شائعة">FAQ</span></a>
+<!-- ============ SECTION NAVIGATION ============ -->
+<nav class="navgrid" aria-label="Sections">
+  <a href="#s1"><span class="n">01</span> The evening</a>
+  <a href="#s2"><span class="n">02</span> Your IG pathway</a>
+  <a href="#s3"><span class="n">03</span> Subject options</a>
+  <a href="#s4"><span class="n">04</span> Assessment</a>
+  <a href="#s5"><span class="n">05</span> Support</a>
+  <a href="#s6"><span class="n">06</span> Beyond the books</a>
+  <a href="#s7"><span class="n">07</span> Policies</a>
+  <a href="#s8"><span class="n">08</span> All documents</a>
 </nav>
 
-<!-- ============ 01 · WELCOME ============ -->
+<!-- ============ 01 · THE EVENING ============ -->
 <section class="sec" id="s1">
-  <span class="eyebrow" data-en="01 · Welcome" data-ar="٠١ · ترحيب">01 · Welcome</span>
-  <h1 data-en="Assalaamu Alaykum, and welcome to the 2026/27 school year" data-ar="السلام عليكم، ومرحباً بكم في العام الدراسي ٢٠٢٦/٢٧">Assalaamu Alaykum, and welcome to the 2026/27 school year</h1>
+  <span class="eyebrow">01 · The evening</span>
+  <h2>How the evening runs</h2>
   <div class="rule"></div>
 
-  <!-- PLACEHOLDER · welcome wording pending Mr. Farhan (Boys) and Ms. Shamsiya's office (Girls) -->
-  <p data-en="This hub is your single reference for the British Section, Grades 9 to 12, for the whole year. It gathers the school day, arrival and dismissal, the systems you will use, how to follow your child's progress, our services, and who to contact." data-ar="هذا الدليل هو مرجعكم الوحيد للقسم البريطاني، من الصف التاسع إلى الثاني عشر، طوال العام. يجمع لكم اليوم الدراسي، والحضور والانصراف، والأنظمة التي ستستخدمونها، وكيفية متابعة تقدم أبنائكم، وخدماتنا، ومع من تتواصلون.">This hub is your single reference for the British Section, Grades 9 to 12, for the whole year. It gathers the school day, arrival and dismissal, the systems you will use, how to follow your child's progress, our services, and who to contact.</p>
-
-  <!-- PLACEHOLDER · Day 1 vs staggered start still to be confirmed by Mr. Farhan / HoS group -->
-  <div class="card tint">
-    <h3 data-en="Do all grades attend on Day 1?" data-ar="هل تحضر جميع الصفوف في اليوم الأول؟">Do all grades attend on Day 1?</h3>
-    <div class="rule"></div>
-    <p data-en="The first-day arrangement for Grades 9 to 12 is confirmed on this page, and sent by WhatsApp, before school starts. Please check here in the week before the first day." data-ar="يُؤكَّد ترتيب اليوم الأول للصفوف من التاسع إلى الثاني عشر في هذه الصفحة، ويُرسل عبر واتساب، قبل بداية الدراسة. يُرجى مراجعة الصفحة في الأسبوع السابق لليوم الأول.">The first-day arrangement for Grades 9 to 12 is confirmed on this page, and sent by WhatsApp, before school starts. Please check here in the week before the first day.</p>
+  <!-- PLACEHOLDER · timings follow last year's running order. Confirm
+       before publishing, and keep in step with the printed agenda. -->
+  <div class="tl">
+    <div class="step">
+      <div class="when"><span class="hh">6:30 PM</span><span class="n">01</span></div>
+      <div class="what">
+        <h3>Registration and welcome</h3>
+        <p>Refreshments will be served.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="when"><span class="hh">7:00 PM</span><span class="n">02</span></div>
+      <div class="what">
+        <h3>Presentation</h3>
+        <p>The IGCSE programme for Grades 9 and 10, from subject options through to assessment and support.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="when"><span class="hh">7:30 PM</span><span class="n">03</span></div>
+      <div class="what">
+        <h3>Question and answer</h3>
+        <p>Open session with senior staff on curriculum, transition and activities.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="when"><span class="hh">7:45 PM</span><span class="n">04</span></div>
+      <div class="what">
+        <h3>Subject teacher stalls</h3>
+        <p>Visit the subject booths and meet the teachers to talk through IGCSE choices and where they lead at A-Level.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="when"><span class="hh">8:30 PM</span><span class="n">05</span></div>
+      <div class="what">
+        <h3>Prayer</h3>
+      </div>
+    </div>
   </div>
 
-  <div class="card">
-    <h3 data-en="New to AIS? Start here" data-ar="جديد في الرواد؟ ابدأ من هنا">New to AIS? Start here</h3>
+  <div class="card tint" style="margin-top:10px">
+    <h3>Before you come</h3>
     <div class="rule"></div>
-    <div id="checklist"></div>
-    <p class="small" style="margin-top:10px" data-en="This list is a personal reminder. It is not saved and resets when you reopen the page." data-ar="هذه القائمة تذكير شخصي فقط. لا تُحفظ وتُعاد عند فتح الصفحة من جديد.">This list is a personal reminder. It is not saved and resets when you reopen the page.</p>
-  </div>
-
-  <div class="card">
-    <h3 data-en="Key dates" data-ar="تواريخ مهمة">Key dates</h3>
-    <div class="rule"></div>
-    <ul class="ticks" data-hydrate="dates">
-      <!-- PLACEHOLDER · hydrates from the Key_Dates sheet tab -->
-      <li data-en="23 August 2026 · First day of school" data-ar="٢٣ أغسطس ٢٠٢٦ · اليوم الأول من الدراسة">23 August 2026 · First day of school</li>
-      <li data-en="10 September 2026 · Parent orientation evening" data-ar="١٠ سبتمبر ٢٠٢٦ · اللقاء التعريفي لأولياء الأمور">10 September 2026 · Parent orientation evening</li>
-      <li data-en="November 2026 · First term report cards" data-ar="نوفمبر ٢٠٢٦ · تقارير الفصل الأول">November 2026 · First term report cards</li>
-      <li data-en="Dates for Grade 12 A2 examinations are published once the external timetable is confirmed." data-ar="تُنشر مواعيد امتحانات A2 للصف الثاني عشر فور اعتماد الجدول الخارجي.">Dates for Grade 12 A2 examinations are published once the external timetable is confirmed.</li>
+    <ul class="ticks">
+      <li>Read <a href="#s3">section 03, Subject options</a>, so the choices are familiar before you speak to the subject teachers.</li>
+      <li>Bring your questions for the Q&amp;A. The stalls afterwards are the best place for subject-specific ones.</li>
+      <li>Options forms can be downloaded, printed and brought along, or collected on the night.</li>
     </ul>
   </div>
 </section>
 
-<!-- ============ 02 · SCHOOL HOURS ============ -->
+<!-- ============ 02 · YOUR IG PATHWAY ============ -->
 <section class="sec" id="s2">
-  <span class="eyebrow" data-en="02 · School hours" data-ar="٠٢ · الدوام المدرسي">02 · School hours</span>
-  <h2 data-en="The school day" data-ar="اليوم الدراسي">The school day</h2>
+  <span class="eyebrow">02 · Your IG pathway</span>
+  <h2>Two years, one programme</h2>
   <div class="rule"></div>
-  <p data-en="The school week runs Sunday to Thursday. Timings below are for the campus selected at the top of this page." data-ar="الأسبوع الدراسي من الأحد إلى الخميس. المواعيد أدناه تخص المقر المحدد أعلى الصفحة.">The school week runs Sunday to Thursday. Timings below are for the campus selected at the top of this page.</p>
 
-  <div class="card" data-for="boys">
-    <h3 data-en="Boys campus · Grades 9 to 12" data-ar="مقر البنين · الصفوف ٩ إلى ١٢">Boys campus · Grades 9 to 12</h3>
-    <div class="rule"></div>
-    <table class="bell">
-      <thead>
-        <tr>
-          <th data-en="Period" data-ar="الفترة">Period</th>
-          <th class="time" style="text-align:end" data-en="Time" data-ar="الوقت">Time</th>
-        </tr>
-      </thead>
-      <!-- PLACEHOLDER · hydrates from the Bell_Schedule sheet tab, Campus = Boys -->
-      <tbody data-hydrate="bell.boys">
-        <tr class="hi"><td class="item" data-en="Gates open" data-ar="فتح البوابات">Gates open</td><td class="time">6:45</td></tr>
-        <tr class="hi"><td class="item" data-en="Assembly" data-ar="الطابور الصباحي">Assembly</td><td class="time">7:00 – 7:15</td></tr>
-        <tr><td class="item" data-en="Lesson 1" data-ar="الحصة الأولى">Lesson 1</td><td class="time">7:15 – 8:00</td></tr>
-        <tr><td class="item" data-en="Lesson 2" data-ar="الحصة الثانية">Lesson 2</td><td class="time">8:00 – 8:45</td></tr>
-        <tr><td class="item" data-en="Lesson 3" data-ar="الحصة الثالثة">Lesson 3</td><td class="time">8:45 – 9:30</td></tr>
-        <tr><td class="item" data-en="Break" data-ar="الفسحة الأولى">Break</td><td class="time">9:30 – 9:50</td></tr>
-        <tr><td class="item" data-en="Lesson 4" data-ar="الحصة الرابعة">Lesson 4</td><td class="time">9:50 – 10:35</td></tr>
-        <tr><td class="item" data-en="Lesson 5" data-ar="الحصة الخامسة">Lesson 5</td><td class="time">10:35 – 11:20</td></tr>
-        <tr><td class="item" data-en="Prayer and lunch" data-ar="الصلاة والغداء">Prayer and lunch</td><td class="time">11:20 – 11:50</td></tr>
-        <tr><td class="item" data-en="Lesson 6" data-ar="الحصة السادسة">Lesson 6</td><td class="time">11:50 – 12:35</td></tr>
-        <tr><td class="item" data-en="Lesson 7" data-ar="الحصة السابعة">Lesson 7</td><td class="time">12:35 – 13:20</td></tr>
-        <tr class="hi"><td class="item" data-en="Dismissal" data-ar="الانصراف">Dismissal</td><td class="time">13:20 – 13:45</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="card" data-for="girls">
-    <h3 data-en="Girls campus · Grades 9 to 12" data-ar="مقر البنات · الصفوف ٩ إلى ١٢">Girls campus · Grades 9 to 12</h3>
-    <div class="rule"></div>
-    <table class="bell">
-      <thead>
-        <tr>
-          <th data-en="Period" data-ar="الفترة">Period</th>
-          <th class="time" style="text-align:end" data-en="Time" data-ar="الوقت">Time</th>
-        </tr>
-      </thead>
-      <!-- PLACEHOLDER · hydrates from the Bell_Schedule sheet tab, Campus = Girls -->
-      <tbody data-hydrate="bell.girls">
-        <tr class="hi"><td class="item" data-en="Gates open" data-ar="فتح البوابات">Gates open</td><td class="time">6:50</td></tr>
-        <tr class="hi"><td class="item" data-en="Assembly" data-ar="الطابور الصباحي">Assembly</td><td class="time">7:05 – 7:20</td></tr>
-        <tr><td class="item" data-en="Lesson 1" data-ar="الحصة الأولى">Lesson 1</td><td class="time">7:20 – 8:05</td></tr>
-        <tr><td class="item" data-en="Lesson 2" data-ar="الحصة الثانية">Lesson 2</td><td class="time">8:05 – 8:50</td></tr>
-        <tr><td class="item" data-en="Lesson 3" data-ar="الحصة الثالثة">Lesson 3</td><td class="time">8:50 – 9:35</td></tr>
-        <tr><td class="item" data-en="Break" data-ar="الفسحة الأولى">Break</td><td class="time">9:35 – 9:55</td></tr>
-        <tr><td class="item" data-en="Lesson 4" data-ar="الحصة الرابعة">Lesson 4</td><td class="time">9:55 – 10:40</td></tr>
-        <tr><td class="item" data-en="Lesson 5" data-ar="الحصة الخامسة">Lesson 5</td><td class="time">10:40 – 11:25</td></tr>
-        <tr><td class="item" data-en="Prayer and lunch" data-ar="الصلاة والغداء">Prayer and lunch</td><td class="time">11:25 – 11:55</td></tr>
-        <tr><td class="item" data-en="Lesson 6" data-ar="الحصة السادسة">Lesson 6</td><td class="time">11:55 – 12:40</td></tr>
-        <tr><td class="item" data-en="Lesson 7" data-ar="الحصة السابعة">Lesson 7</td><td class="time">12:40 – 13:25</td></tr>
-        <tr class="hi"><td class="item" data-en="Dismissal" data-ar="الانصراف">Dismissal</td><td class="time">13:25 – 13:50</td></tr>
-      </tbody>
-    </table>
-  </div>
+  <p>Grades 9 and 10 are not two separate years. They form a single continuous IGCSE programme, and the subjects chosen at the start of Grade 9 carry all the way through to the external examinations at the end of Grade 10.</p>
 
   <div class="card">
-    <h3 data-en="Punctuality" data-ar="الالتزام بالوقت">Punctuality</h3>
+    <h3>The route</h3>
     <div class="rule"></div>
-    <p data-en="Students should be on site before assembly begins. Arrivals after the assembly bell are recorded as late and are logged on the portal. Three late marks in a term prompt a call from the section office." data-ar="على الطلاب التواجد داخل المدرسة قبل بدء الطابور. ويُسجَّل الحضور بعد جرس الطابور تأخراً ويُدوَّن في البوابة الإلكترونية. وثلاث حالات تأخر في الفصل الواحد تستدعي اتصالاً من مكتب القسم.">Students should be on site before assembly begins. Arrivals after the assembly bell are recorded as late and are logged on the portal. Three late marks in a term prompt a call from the section office.</p>
+    <ol class="steps">
+      <li><b>Grade 9:</b> IGCSE begins, subject options are selected and the two-year syllabus starts.</li>
+      <li><b>Grade 10:</b> the programme completes and students sit their external IGCSE examinations.</li>
+      <li><b>Grades 11 and 12:</b> A-Levels, AS then A2, built directly on the IGCSE subjects taken.</li>
+    </ol>
   </div>
-
 </section>
 
-<!-- ============ 03 · ARRIVAL AND DISMISSAL ============ -->
+<!-- ============ 03 · SUBJECT OPTIONS ============ -->
 <section class="sec" id="s3">
-  <span class="eyebrow" data-en="03 · Arrival and dismissal" data-ar="٠٣ · الحضور والانصراف">03 · Arrival and dismissal</span>
-  <h2 data-en="Getting to school and home again" data-ar="الوصول إلى المدرسة والعودة">Getting to school and home again</h2>
+  <span class="eyebrow">03 · Subject options</span>
+  <h2>Choosing subjects</h2>
   <div class="rule"></div>
-  <p data-en="New traffic lanes are in place for 2026/27. Please follow the lane for your campus and stay in your vehicle throughout." data-ar="طُبِّقت مسارات مرورية جديدة للعام ٢٠٢٦/٢٧. يُرجى الالتزام بمسار مقركم والبقاء داخل المركبة طوال الوقت.">New traffic lanes are in place for 2026/27. Please follow the lane for your campus and stay in your vehicle throughout.</p>
 
-  <!-- PLACEHOLDER · gate assignments and lane layout pending Student Affairs / Operations -->
-  <div class="card" data-for="boys">
-    <h3 data-en="Boys campus gates" data-ar="بوابات مقر البنين">Boys campus gates</h3>
-    <div class="rule"></div>
-    <div class="kv"><span class="k" data-en="Morning" data-ar="صباحاً">Morning</span><span class="v" data-en="Gate A, north side. Open 6:45 to 7:00." data-ar="البوابة أ، الجهة الشمالية. تُفتح من ٦:٤٥ إلى ٧:٠٠.">Gate A, north side. Open 6:45 to 7:00.</span></div>
-    <div class="kv"><span class="k" data-en="Dismissal" data-ar="الانصراف">Dismissal</span><span class="v" data-en="Gate B, east side. Lanes 1 to 3 by grade group." data-ar="البوابة ب، الجهة الشرقية. المسارات ١ إلى ٣ بحسب المجموعة الصفية.">Gate B, east side. Lanes 1 to 3 by grade group.</span></div>
-    <div class="kv"><span class="k" data-en="Buses" data-ar="الحافلات">Buses</span><span class="v" data-en="Separate bay at Gate C. Buses depart 10 minutes after the dismissal bell." data-ar="ساحة منفصلة عند البوابة ج. تغادر الحافلات بعد عشر دقائق من جرس الانصراف.">Separate bay at Gate C. Buses depart 10 minutes after the dismissal bell.</span></div>
+  <p>Both grades take a set of compulsory subjects and then make choices around them. Select your child’s grade to see the tables that apply.</p>
+
+  <div class="seg" role="tablist" aria-label="Grade">
+    <button role="tab" id="tab9" aria-controls="panel9" aria-selected="true">Grade 9</button>
+    <button role="tab" id="tab10" aria-controls="panel10" aria-selected="false" tabindex="-1">Grade 10</button>
   </div>
 
-  <div class="card" data-for="girls">
-    <h3 data-en="Girls campus gates" data-ar="بوابات مقر البنات">Girls campus gates</h3>
+  <!-- ---------- GRADE 9 ---------- -->
+  <div id="panel9" role="tabpanel" aria-labelledby="tab9" tabindex="0">
+
+    <div class="card">
+      <h3>Compulsory subjects</h3>
+      <div class="rule"></div>
+      <div class="scroll">
+        <table class="data">
+          <thead>
+            <tr><th scope="col">Subject</th><th scope="col">Curriculum</th><th scope="col">Periods</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="s">Arabic</td><td class="cur">MoE</td><td class="num">1</td></tr>
+            <tr><td class="s">Islamic Studies</td><td class="cur">MoE</td><td class="num">2</td></tr>
+            <tr><td class="s">Quran</td><td class="cur">MoE</td><td class="num">3</td></tr>
+            <tr><td class="s">Social Studies (KSAH)</td><td class="cur">MoE</td><td class="num">2</td></tr>
+            <tr><td class="s">PE</td><td class="cur">MoE</td><td class="num">1</td></tr>
+            <tr><td class="s">English</td><td class="cur">IGCSE</td><td class="num">4</td></tr>
+            <tr><td class="s">Physics</td><td class="cur">IGCSE</td><td class="num">4</td></tr>
+            <tr><td class="s">Chemistry</td><td class="cur">IGCSE</td><td class="num">4</td></tr>
+            <tr><td class="s">Biology</td><td class="cur">IGCSE</td><td class="num">4</td></tr>
+            <tr><td class="s">Business Studies</td><td class="cur">IGCSE</td><td class="num">3</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="small" style="margin-top:10px">Periods are per week. These ten subjects are taken by every Grade 9 student and cannot be changed.</p>
+    </div>
+
+    <div class="card">
+      <h3>Optional subjects</h3>
+      <div class="rule"></div>
+      <p style="font-size:13px">Three choices, one subject from each pair.</p>
+      <div class="pairs">
+        <div class="pair">
+          <div class="hd"><span class="lb">Choose one</span><span class="pw">5 periods</span></div>
+          <div class="opts">
+            <span class="o">Mathematics<br>(Cambridge)</span>
+            <span class="or">or</span>
+            <span class="o">Mathematics<br>(Edexcel)</span>
+          </div>
+        </div>
+        <div class="pair">
+          <div class="hd"><span class="lb">Choose one</span><span class="pw">3 periods</span></div>
+          <div class="opts">
+            <span class="o">Accounting</span>
+            <span class="or">or</span>
+            <span class="o">Arabic</span>
+          </div>
+        </div>
+        <div class="pair">
+          <div class="hd"><span class="lb">Choose one</span><span class="pw">4 periods</span></div>
+          <div class="opts">
+            <span class="o">Computer Science</span>
+            <span class="or">or</span>
+            <span class="o">ICT</span>
+          </div>
+        </div>
+      </div>
+      <p class="small" style="margin-top:10px">All three optional subjects follow the IGCSE curriculum.</p>
+    </div>
+
+    <div class="card">
+      <h3>Hifdh Programme</h3>
+      <div class="rule"></div>
+      <p>Optional, and ticked separately on the Grade 9 form. It runs <b>inside the three Quran periods already on the timetable</b>, so it adds nothing to the week and replaces no other subject.</p>
+      <p>The programme itself runs from Grade 1 and carries no entry conditions.</p>
+    </div>
+  </div>
+
+  <!-- ---------- GRADE 10 ---------- -->
+  <div id="panel10" role="tabpanel" aria-labelledby="tab10" tabindex="0" hidden>
+
+    <div class="card">
+      <h3>Compulsory subjects</h3>
+      <div class="rule"></div>
+      <div class="scroll">
+        <table class="data">
+          <thead>
+            <tr><th scope="col">Subject</th><th scope="col">Curriculum</th><th scope="col">Periods</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="s">English</td><td class="cur">IGCSE</td><td class="num">4</td></tr>
+            <tr><td class="s">Arabic</td><td class="cur">MoE</td><td class="num">1</td></tr>
+            <tr><td class="s">Islamic Studies</td><td class="cur">MoE</td><td class="num">2</td></tr>
+            <tr><td class="s">Quran</td><td class="cur">MoE</td><td class="num">1</td></tr>
+            <tr><td class="s">Social Studies (KSAH)</td><td class="cur">MoE</td><td class="num">2</td></tr>
+            <tr><td class="s">PE</td><td class="cur">MoE</td><td class="num">1</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="small" style="margin-top:10px">Periods are per week. These six subjects are taken by every Grade 10 student and cannot be changed.</p>
+    </div>
+
+    <div class="card">
+      <h3>Optional subjects</h3>
+      <div class="rule"></div>
+      <p style="font-size:13px">Selected individually on the options form. All follow the IGCSE curriculum.</p>
+      <div class="chips">
+        <span class="chip"><span class="s">Arabic</span><span class="p">3</span></span>
+        <span class="chip"><span class="s">Accounting</span><span class="p">3</span></span>
+        <span class="chip"><span class="s">Maths Cambridge</span><span class="p">6</span></span>
+        <span class="chip"><span class="s">Maths Edexcel</span><span class="p">6</span></span>
+        <span class="chip"><span class="s">Biology</span><span class="p">4</span></span>
+        <span class="chip"><span class="s">Chemistry</span><span class="p">4</span></span>
+        <span class="chip"><span class="s">Physics</span><span class="p">4</span></span>
+        <span class="chip"><span class="s">Business Studies</span><span class="p">4</span></span>
+        <span class="chip"><span class="s">Computer Science</span><span class="p">4</span></span>
+        <span class="chip"><span class="s">ICT</span><span class="p">4</span></span>
+      </div>
+      <p class="small" style="margin-top:10px">Numbers are periods per week.</p>
+    </div>
+  </div>
+
+  <!-- ---------- SHARED: MATHS, WARNING, FORMS ---------- -->
+  <div class="card">
+    <h3>Cambridge or Edexcel Mathematics</h3>
     <div class="rule"></div>
-    <div class="kv"><span class="k" data-en="Morning" data-ar="صباحاً">Morning</span><span class="v" data-en="Gate 1, main entrance. Open 6:50 to 7:05." data-ar="البوابة ١، المدخل الرئيسي. تُفتح من ٦:٥٠ إلى ٧:٠٥.">Gate 1, main entrance. Open 6:50 to 7:05.</span></div>
-    <div class="kv"><span class="k" data-en="Dismissal" data-ar="الانصراف">Dismissal</span><span class="v" data-en="Gate 2, west side. Lanes 1 and 2 by grade group." data-ar="البوابة ٢، الجهة الغربية. المساران ١ و٢ بحسب المجموعة الصفية.">Gate 2, west side. Lanes 1 and 2 by grade group.</span></div>
-    <div class="kv"><span class="k" data-en="Buses" data-ar="الحافلات">Buses</span><span class="v" data-en="Bus bay at Gate 3. Buses depart 10 minutes after the dismissal bell." data-ar="ساحة الحافلات عند البوابة ٣. تغادر الحافلات بعد عشر دقائق من جرس الانصراف.">Bus bay at Gate 3. Buses depart 10 minutes after the dismissal bell.</span></div>
+    <p style="font-size:13px">Both are internationally recognised, both prepare students for advanced level study, and both examine over two papers of two hours, 200 marks in total. The difference is in how the papers are sat.</p>
+    <div class="cmp">
+      <div class="col">
+        <div class="h">Cambridge</div>
+        <ul>
+          <li>Both papers must be taken in the <b>same session</b>.</li>
+          <li>Calculator allowed in <b>one</b> paper only.</li>
+        </ul>
+      </div>
+      <div class="col">
+        <div class="h">Edexcel</div>
+        <ul>
+          <li><b>Modular.</b> One paper can be sat in one session and the other in a separate session.</li>
+          <li>Calculator allowed in <b>both</b> papers.</li>
+        </ul>
+      </div>
+    </div>
+    <h4 style="margin-top:14px">Edexcel grade equivalence</h4>
+    <div class="scroll">
+      <table class="data">
+        <thead>
+          <tr><th scope="col">IGCSE grade</th><th scope="col">Equivalent</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="s">8 and 9</td><td class="num">A*</td></tr>
+          <tr><td class="s">7</td><td class="num">A</td></tr>
+          <tr><td class="s">6</td><td class="num">B</td></tr>
+          <tr><td class="s">5</td><td class="num">C</td></tr>
+          <tr><td class="s">4</td><td class="num">D</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small" style="margin-top:10px">Each Edexcel paper carries 100 marks. Forty per cent of the marks target grades 4 and 5; sixty per cent target grades 6 to 9.</p>
+  </div>
+
+  <div class="docs">
+    <a class="doc" href="assets/g9-igcse-options-2026-27.pdf" download>
+      <span class="ic" aria-hidden="true">↓</span>
+      <span class="tx">
+        <span class="tt">Grade 9 IGCSE Options Form</span>
+        <span class="sb">PDF · Academic Year 2026-2027 · print and sign</span>
+      </span>
+      <span class="ar" aria-hidden="true">→</span>
+    </a>
+    <a class="doc" href="assets/g10-igcse-options-2026-27.pdf" download>
+      <span class="ic" aria-hidden="true">↓</span>
+      <span class="tx">
+        <span class="tt">Grade 10 IGCSE Options Form</span>
+        <span class="sb">PDF · Academic Year 2026-2027 · print and sign</span>
+      </span>
+      <span class="ar" aria-hidden="true">→</span>
+    </a>
+  </div>
+</section>
+
+<!-- ============ 04 · ASSESSMENT ============ -->
+<section class="sec" id="s4">
+  <span class="eyebrow">04 · Assessment</span>
+  <h2>How marks are built</h2>
+  <div class="rule"></div>
+
+  <p>Each semester is worth fifty per cent of the year. Within a semester, marks come from continuous assessment gathered through both quarters and from summative assessments at fixed points.</p>
+
+  <div class="card">
+    <h3>Semester One</h3>
+    <div class="rule"></div>
+    <div class="scroll">
+      <table class="data">
+        <thead>
+          <tr><th scope="col">Assessment</th><th scope="col">Quarter 1</th><th scope="col">Quarter 2</th></tr>
+        </thead>
+        <tbody>
+          <tr class="grp"><td colspan="3">Continuous assessment</td></tr>
+          <tr><td class="s">Classwork</td><td class="num">6</td><td class="num">6</td></tr>
+          <tr><td class="s">Homework</td><td class="num">4</td><td class="num">4</td></tr>
+          <tr class="grp"><td colspan="3">Summative assessment</td></tr>
+          <tr><td class="s">Mid-Term Test</td><td class="num">10</td><td class="num">10</td></tr>
+          <tr><td class="s">Final Examination</td><td class="num none">–</td><td class="num">10</td></tr>
+          <tr class="tot"><td class="s">Quarter total</td><td class="num">20</td><td class="num">30</td></tr>
+          <tr class="semtot"><td class="s">Semester One total</td><td class="num" colspan="2">50%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small" style="margin-top:10px">Semester Two repeats this pattern exactly, across Quarters 3 and 4. The two semesters together make the year.</p>
   </div>
 
   <div class="card">
-    <h3 data-en="Pick-up, step by step" data-ar="خطوات الاستلام">Pick-up, step by step</h3>
+    <h3>How progress reaches you</h3>
     <div class="rule"></div>
-    <ol class="steps">
-      <li data-en="Arrive no earlier than 10 minutes before the dismissal bell so the lane stays clear." data-ar="احضروا قبل جرس الانصراف بعشر دقائق على الأكثر حتى يبقى المسار سالكاً.">Arrive no earlier than 10 minutes before the dismissal bell so the lane stays clear.</li>
-      <li data-en="Display your student pick-up card on the dashboard so staff can read it from the lane." data-ar="ضعوا بطاقة استلام الطالب على لوحة القيادة ليتمكن الموظفون من قراءتها من المسار.">Display your student pick-up card on the dashboard so staff can read it from the lane.</li>
-      <li data-en="Stay in the vehicle. Staff walk your child to the car once the card is matched." data-ar="ابقوا داخل المركبة. يرافق الموظفون ابنكم إلى السيارة فور مطابقة البطاقة.">Stay in the vehicle. Staff walk your child to the car once the card is matched.</li>
-      <li data-en="If someone else is collecting your child, notify Student Affairs in writing on the same day." data-ar="إذا كان الاستلام بواسطة شخص آخر، أبلغوا شؤون الطلاب كتابياً في اليوم نفسه.">If someone else is collecting your child, notify Student Affairs in writing on the same day.</li>
-    </ol>
-  </div>
-
-  <div class="card tint">
-    <h3 data-en="Late pick-up" data-ar="التأخر في الاستلام">Late pick-up</h3>
-    <div class="rule"></div>
-    <p data-en="Students not collected 20 minutes after dismissal wait in the supervised area at reception. Please call the campus office if you are delayed." data-ar="ينتظر الطلاب الذين لم يُستلموا بعد عشرين دقيقة من الانصراف في المنطقة المشرَف عليها بالاستقبال. يُرجى الاتصال بمكتب المقر عند التأخر.">Students not collected 20 minutes after dismissal wait in the supervised area at reception. Please call the campus office if you are delayed.</p>
+    <ul class="ticks">
+      <li><b>Reports</b> are issued at the end of each quarter and at the end of each semester.</li>
+      <li>An overall score <b>below sixty per cent</b> in any subject triggers the intervention process described in <a href="#s5">section 05</a>.</li>
+    </ul>
   </div>
 </section>
 
-<!-- ============ 04 · SYSTEMS AND PLATFORMS ============ -->
-<section class="sec" id="s4">
-  <span class="eyebrow" data-en="04 · Systems and platforms" data-ar="٠٤ · الأنظمة والمنصات">04 · Systems and platforms</span>
-  <h2 data-en="Where to find what" data-ar="أين تجدون ما تحتاجون">Where to find what</h2>
-  <div class="rule"></div>
-  <p data-en="Login details for every platform are issued by the section office in the first week. If anything is missing, contact IT support in section 06." data-ar="تُصدر بيانات الدخول لكل منصة من مكتب القسم في الأسبوع الأول. وإذا نقص شيء، تواصلوا مع الدعم الفني في القسم ٠٦.">Login details for every platform are issued by the section office in the first week. If anything is missing, contact IT support in section 06.</p>
-
-  <!-- PLACEHOLDER · definitive parent-facing platform list pending IT support + Mr. Tariq -->
-  <div class="stack">
-    <div class="card">
-      <h3>MyAIS</h3>
-      <div class="rule"></div>
-      <div class="kv"><span class="k" data-en="Used for" data-ar="يُستخدم لـ">Used for</span><span class="v" data-en="Attendance, assessment results, report cards, fee statements." data-ar="الحضور، ونتائج التقييمات، وبطاقات التقارير، وكشوف الرسوم.">Attendance, assessment results, report cards, fee statements.</span></div>
-      <div class="kv"><span class="k" data-en="Access" data-ar="الدخول">Access</span><span class="v" data-en="Parent account, one per family. Credentials from the section office." data-ar="حساب ولي أمر واحد لكل أسرة. بيانات الدخول من مكتب القسم.">Parent account, one per family. Credentials from the section office.</span></div>
-    </div>
-
-    <div class="card">
-      <h3>Schoology</h3>
-      <div class="rule"></div>
-      <div class="kv"><span class="k" data-en="Used for" data-ar="يُستخدم لـ">Used for</span><span class="v" data-en="Lessons, homework, assignment submission, teacher feedback." data-ar="الدروس، والواجبات، وتسليم المهام، وملاحظات المعلمين.">Lessons, homework, assignment submission, teacher feedback.</span></div>
-      <div class="kv"><span class="k" data-en="Access" data-ar="الدخول">Access</span><span class="v"><a href="https://lms.ais.sch.sa" target="_blank" rel="noopener">lms.ais.sch.sa</a></span></div>
-    </div>
-
-    <div class="card">
-      <h3>EduPage</h3>
-      <div class="rule"></div>
-      <div class="kv"><span class="k" data-en="Used for" data-ar="يُستخدم لـ">Used for</span><span class="v" data-en="Class timetables and any change to the daily schedule." data-ar="الجداول الدراسية وأي تغيير في جدول اليوم.">Class timetables and any change to the daily schedule.</span></div>
-      <div class="kv"><span class="k" data-en="Access" data-ar="الدخول">Access</span><span class="v" data-en="Student account. Parents may use the same login." data-ar="حساب الطالب. ويمكن لأولياء الأمور استخدام بيانات الدخول نفسها.">Student account. Parents may use the same login.</span></div>
-    </div>
-
-    <div class="card">
-      <h3 data-en="WhatsApp broadcast" data-ar="قائمة واتساب">WhatsApp broadcast</h3>
-      <div class="rule"></div>
-      <div class="kv"><span class="k" data-en="Used for" data-ar="يُستخدم لـ">Used for</span><span class="v" data-en="Short, urgent notices only: closures, timing changes, reminders." data-ar="الإشعارات العاجلة القصيرة فقط: الإغلاق، وتغيير المواعيد، والتذكيرات.">Short, urgent notices only: closures, timing changes, reminders.</span></div>
-      <div class="kv"><span class="k" data-en="Access" data-ar="الدخول">Access</span><span class="v" data-en="Save the section number in your contacts, otherwise broadcasts will not reach you." data-ar="احفظوا رقم القسم في جهات الاتصال، وإلا فلن تصلكم الرسائل.">Save the section number in your contacts, otherwise broadcasts will not reach you.</span></div>
-    </div>
-
-    <div class="card">
-      <h3 data-en="School email" data-ar="البريد المدرسي">School email</h3>
-      <div class="rule"></div>
-      <div class="kv"><span class="k" data-en="Used for" data-ar="يُستخدم لـ">Used for</span><span class="v" data-en="Anything that needs a written record: absence notes, formal requests, meeting bookings." data-ar="كل ما يحتاج إلى سجل مكتوب: إشعارات الغياب، والطلبات الرسمية، وحجز المواعيد.">Anything that needs a written record: absence notes, formal requests, meeting bookings.</span></div>
-      <div class="kv"><span class="k" data-en="Access" data-ar="الدخول">Access</span><span class="v" data-en="Write from the address the school holds on file so we can identify your child." data-ar="راسلونا من العنوان المسجل لدى المدرسة حتى نتمكن من تحديد هوية ابنكم.">Write from the address the school holds on file so we can identify your child.</span></div>
-    </div>
-  </div>
-
-  <p class="small" style="margin-top:10px" data-en="Never share portal passwords with anyone, including staff. The school will not ask you for a password." data-ar="لا تشاركوا كلمات مرور البوابة مع أي شخص، بمن فيهم الموظفون. لن تطلب المدرسة منكم كلمة المرور.">Never share portal passwords with anyone, including staff. The school will not ask you for a password.</p>
-</section>
-
-<!-- ============ 05 · ACADEMIC FOLLOW-UP ============ -->
+<!-- ============ 05 · SUPPORT ============ -->
 <section class="sec" id="s5">
-  <span class="eyebrow" data-en="05 · Academic follow-up" data-ar="٠٥ · المتابعة الأكاديمية">05 · Academic follow-up</span>
-  <h2 data-en="Following your child's progress" data-ar="متابعة تقدم ابنكم">Following your child's progress</h2>
+  <span class="eyebrow">05 · Support</span>
+  <h2>Support and intervention</h2>
   <div class="rule"></div>
-  <p data-en="Grades 9 and 10 follow the IGCSE programme. Grades 11 and 12 follow A-Levels, and Grade 12 sits external A2 examinations." data-ar="يتبع الصفان التاسع والعاشر برنامج IGCSE، ويتبع الصفان الحادي عشر والثاني عشر برنامج A-Level، ويؤدي طلاب الصف الثاني عشر امتحانات A2 الخارجية.">Grades 9 and 10 follow the IGCSE programme. Grades 11 and 12 follow A-Levels, and Grade 12 sits external A2 examinations.</p>
 
-  <!-- PLACEHOLDER · weekly plan channel, report card dates, assessment policy pending academic leadership -->
+  <p>When a subject slips there is a defined response, rather than a wait for the next report.</p>
+
   <div class="stack">
     <div class="card">
-      <h3 data-en="Weekly plans" data-ar="الخطط الأسبوعية">Weekly plans</h3>
+      <h3>Mock examinations</h3>
       <div class="rule"></div>
-      <p data-en="Published every Thursday for the week ahead, on Schoology under each subject. They list topics, homework, and any assessment falling that week." data-ar="تُنشر كل خميس للأسبوع التالي على منصة Schoology تحت كل مادة، وتتضمن الموضوعات والواجبات وأي تقييم يقع في ذلك الأسبوع.">Published every Thursday for the week ahead, on Schoology under each subject. They list topics, homework, and any assessment falling that week.</p>
+      <p>Full examination simulations, run to build preparedness and confidence before the real thing.</p>
     </div>
-
     <div class="card">
-      <h3 data-en="Homework" data-ar="الواجبات المنزلية">Homework</h3>
+      <h3>Identifying students below level</h3>
       <div class="rule"></div>
-      <p data-en="Set on Schoology with a due date. Expect roughly 60 to 90 minutes per evening across subjects in Grades 9 and 10, and more in Grades 11 and 12 as examinations approach." data-ar="تُرصد على Schoology بموعد تسليم محدد. ويُتوقع نحو ٦٠ إلى ٩٠ دقيقة يومياً موزعة على المواد في الصفين التاسع والعاشر، وأكثر من ذلك في الصفين الحادي عشر والثاني عشر مع اقتراب الامتحانات.">Set on Schoology with a due date. Expect roughly 60 to 90 minutes per evening across subjects in Grades 9 and 10, and more in Grades 11 and 12 as examinations approach.</p>
-    </div>
-
-    <div class="card">
-      <h3 data-en="Assessments" data-ar="التقييمات">Assessments</h3>
-      <div class="rule"></div>
-      <ul class="ticks">
-        <li data-en="Short subject quizzes throughout each term, announced a week ahead." data-ar="اختبارات قصيرة لكل مادة طوال الفصل، يُعلن عنها قبل أسبوع.">Short subject quizzes throughout each term, announced a week ahead.</li>
-        <li data-en="Mid-term examinations in the middle of each term." data-ar="امتحانات منتصف الفصل في منتصف كل فصل دراسي.">Mid-term examinations in the middle of each term.</li>
-        <li data-en="End-of-term examinations, with a published revision timetable." data-ar="امتحانات نهاية الفصل، مع جدول مراجعة معلن.">End-of-term examinations, with a published revision timetable.</li>
-        <li data-en="Grade 12 external A2 examinations follow the awarding body calendar." data-ar="امتحانات A2 الخارجية للصف الثاني عشر تتبع تقويم جهة المنح.">Grade 12 external A2 examinations follow the awarding body calendar.</li>
-      </ul>
-    </div>
-
-    <div class="card">
-      <h3 data-en="Report cards" data-ar="بطاقات التقارير">Report cards</h3>
-      <div class="rule"></div>
-      <p data-en="Three per year, released on MyAIS at the end of each term. A parent meeting follows each release. Exact dates appear under Key dates in section 01 once confirmed." data-ar="ثلاث بطاقات سنوياً تُصدر عبر MyAIS في نهاية كل فصل، ويعقبها لقاء لأولياء الأمور. وتظهر المواعيد الدقيقة ضمن التواريخ المهمة في القسم ٠١ فور اعتمادها.">Three per year, released on MyAIS at the end of each term. A parent meeting follows each release. Exact dates appear under Key dates in section 01 once confirmed.</p>
-    </div>
-
-    <div class="card">
-      <h3 data-en="Attendance" data-ar="الحضور">Attendance</h3>
-      <div class="rule"></div>
-      <p data-en="Marked every lesson and visible to you on MyAIS the same day. Report an absence before 7:30 through Student Affairs, and send a medical note on return." data-ar="يُرصد الحضور في كل حصة ويظهر لكم على MyAIS في اليوم نفسه. أبلغوا عن الغياب قبل الساعة ٧:٣٠ عبر شؤون الطلاب، وأرسلوا تقريراً طبياً عند العودة.">Marked every lesson and visible to you on MyAIS the same day. Report an absence before 7:30 through Student Affairs, and send a medical note on return.</p>
+      <p>Any student scoring below sixty per cent in a subject is flagged. Parents receive a written summary of the affected subjects, individual interviews are held with the student to understand what is going wrong, and a tailored support plan follows.</p>
     </div>
   </div>
-</section>
 
-<!-- ============ 06 · PARENT SERVICES ============ -->
-<section class="sec" id="s6">
-  <span class="eyebrow" data-en="06 · Parent services" data-ar="٠٦ · خدمات أولياء الأمور">06 · Parent services</span>
-  <h2 data-en="Departments and how to reach them" data-ar="الأقسام وكيفية التواصل معها">Departments and how to reach them</h2>
-  <div class="rule"></div>
-  <p data-en="Offices are open Sunday to Thursday. Please email where possible so your request is logged and tracked." data-ar="الأقسام مفتوحة من الأحد إلى الخميس. يُفضَّل التواصل بالبريد الإلكتروني ليُسجَّل طلبكم ويُتابَع.">Offices are open Sunday to Thursday. Please email where possible so your request is logged and tracked.</p>
-
-  <!-- PLACEHOLDER · channels and hours hydrate from the Services sheet tab; descriptions stay static -->
-  <div class="stack">
-    <div class="card" data-hydrate="service.admissions">
-      <h3 data-en="Admissions" data-ar="القبول والتسجيل">Admissions</h3>
-      <div class="rule"></div>
-      <p data-en="New applications, transfers between sections, sibling registration, and school leaving certificates." data-ar="الطلبات الجديدة، والتحويل بين الأقسام، وتسجيل الإخوة، وشهادات إخلاء الطرف.">New applications, transfers between sections, sibling registration, and school leaving certificates.</p>
-      <div class="kv"><span class="k" data-en="Contact" data-ar="التواصل">Contact</span><span class="v" data-field="channel">admissions@ais.sch.sa</span></div>
-      <div class="kv"><span class="k" data-en="Hours" data-ar="ساعات العمل">Hours</span><span class="v" data-field="hours" data-en="Sun–Thu 7:30–14:00" data-ar="الأحد–الخميس ٧:٣٠–١٤:٠٠">Sun–Thu 7:30–14:00</span></div>
-    </div>
-
-    <div class="card" data-hydrate="service.finance">
-      <h3 data-en="Finance" data-ar="الشؤون المالية">Finance</h3>
-      <div class="rule"></div>
-      <p data-en="Fee statements, payment plans, receipts, and refunds. Statements are also visible on MyAIS." data-ar="كشوف الرسوم، وخطط السداد، والإيصالات، والمبالغ المستردة. وتظهر الكشوف أيضاً على MyAIS.">Fee statements, payment plans, receipts, and refunds. Statements are also visible on MyAIS.</p>
-      <div class="kv"><span class="k" data-en="Contact" data-ar="التواصل">Contact</span><span class="v" data-field="channel">finance@ais.sch.sa</span></div>
-      <div class="kv"><span class="k" data-en="Hours" data-ar="ساعات العمل">Hours</span><span class="v" data-field="hours" data-en="Sun–Thu 7:30–14:00" data-ar="الأحد–الخميس ٧:٣٠–١٤:٠٠">Sun–Thu 7:30–14:00</span></div>
-    </div>
-
-    <div class="card" data-hydrate="service.books">
-      <h3 data-en="Books" data-ar="الكتب">Books</h3>
-      <div class="rule"></div>
-      <p data-en="Textbook sets per grade, collection dates, and replacements for lost or damaged books." data-ar="مجموعات الكتب لكل صف، ومواعيد الاستلام، واستبدال الكتب المفقودة أو التالفة.">Textbook sets per grade, collection dates, and replacements for lost or damaged books.</p>
-      <div class="kv"><span class="k" data-en="Contact" data-ar="التواصل">Contact</span><span class="v" data-field="channel">books@ais.sch.sa</span></div>
-      <div class="kv"><span class="k" data-en="Hours" data-ar="ساعات العمل">Hours</span><span class="v" data-field="hours" data-en="Sun–Thu 8:00–13:00" data-ar="الأحد–الخميس ٨:٠٠–١٣:٠٠">Sun–Thu 8:00–13:00</span></div>
-    </div>
-
-    <div class="card" data-hydrate="service.transportation">
-      <h3 data-en="Transportation" data-ar="النقل">Transportation</h3>
-      <div class="rule"></div>
-      <p data-en="Bus registration, route and stop changes, driver and supervisor details, and delay notifications." data-ar="تسجيل الحافلات، وتغيير المسارات والمحطات، وبيانات السائق والمشرف، وإشعارات التأخير.">Bus registration, route and stop changes, driver and supervisor details, and delay notifications.</p>
-      <div class="kv"><span class="k" data-en="Contact" data-ar="التواصل">Contact</span><span class="v" data-field="channel">transport@ais.sch.sa</span></div>
-      <div class="kv"><span class="k" data-en="Hours" data-ar="ساعات العمل">Hours</span><span class="v" data-field="hours" data-en="Sun–Thu 6:30–15:00" data-ar="الأحد–الخميس ٦:٣٠–١٥:٠٠">Sun–Thu 6:30–15:00</span></div>
-    </div>
-
-    <div class="card" data-hydrate="service.studentaffairs">
-      <h3 data-en="Student Affairs" data-ar="شؤون الطلاب">Student Affairs</h3>
-      <div class="rule"></div>
-      <p data-en="Absence reporting, early collection, pick-up cards, uniform queries, and conduct matters." data-ar="الإبلاغ عن الغياب، والاستلام المبكر، وبطاقات الاستلام، واستفسارات الزي المدرسي، وشؤون السلوك.">Absence reporting, early collection, pick-up cards, uniform queries, and conduct matters.</p>
-      <div class="kv"><span class="k" data-en="Contact" data-ar="التواصل">Contact</span><span class="v" data-field="channel">studentaffairs@ais.sch.sa</span></div>
-      <div class="kv"><span class="k" data-en="Hours" data-ar="ساعات العمل">Hours</span><span class="v" data-field="hours" data-en="Sun–Thu 6:45–14:30" data-ar="الأحد–الخميس ٦:٤٥–١٤:٣٠">Sun–Thu 6:45–14:30</span></div>
-    </div>
-
-    <div class="card" data-hydrate="service.it">
-      <h3 data-en="IT support" data-ar="الدعم الفني">IT support</h3>
-      <div class="rule"></div>
-      <p data-en="Portal and Schoology logins, password resets, and access problems on any school platform." data-ar="بيانات الدخول للبوابة وSchoology، وإعادة تعيين كلمات المرور، ومشكلات الوصول إلى أي منصة مدرسية.">Portal and Schoology logins, password resets, and access problems on any school platform.</p>
-      <div class="kv"><span class="k" data-en="Contact" data-ar="التواصل">Contact</span><span class="v" data-field="channel">itsupport@ais.sch.sa</span></div>
-      <div class="kv"><span class="k" data-en="Hours" data-ar="ساعات العمل">Hours</span><span class="v" data-field="hours" data-en="Sun–Thu 7:30–15:00" data-ar="الأحد–الخميس ٧:٣٠–١٥:٠٠">Sun–Thu 7:30–15:00</span></div>
-    </div>
+  <div class="card" style="margin-top:10px">
+    <h3>Homeroom Mentorship Programme</h3>
+    <div class="rule"></div>
+    <p style="font-size:13px">Every student has a homeroom mentor who follows their academic progress, well-being and development across the year.</p>
+    <ul class="ticks">
+      <li><b>Weekly class check-ins.</b> Ten to fifteen minutes in homeroom time, covering group well-being, academic updates, behaviour expectations, shared concerns and achievements.</li>
+      <li><b>Monthly one-to-one sessions.</b> At least once a month, ten to fifteen minutes per student, reviewing academic performance, emotional and social well-being, and goals for the term ahead.</li>
+      <li><b>Private conversations</b> whenever a student needs one.</li>
+    </ul>
+    <!-- PLACEHOLDER · 2026/27 mentor assignments pending. Last confirmed
+         list was 2025/26: 9A-9D and 10A-10C. Replace names and emails
+         once homerooms are set, or delete this card if it is not wanted
+         on a public page. -->
+    <h4 style="margin-top:14px">Homeroom mentors 2026/27</h4>
+    <p class="small">Mentor assignments are confirmed in the first week of term and shared directly with families. Your child’s mentor is your first point of contact for anything academic or pastoral.</p>
   </div>
-</section>
-
-<!-- ============ 07 · SCHOOL EXPECTATIONS ============ -->
-<section class="sec" id="s7">
-  <span class="eyebrow" data-en="07 · School expectations" data-ar="٠٧ · توقعات المدرسة">07 · School expectations</span>
-  <h2 data-en="What we ask of students and families" data-ar="ما نطلبه من الطلاب والأسر">What we ask of students and families</h2>
-  <div class="rule"></div>
-
-  <!-- PLACEHOLDER · official policy texts and uniform spec pending Mr. Farhan / Ms. Shamsiya's office and Student Affairs -->
-  <div class="stack">
-    <div class="card">
-      <h3 data-en="Attendance and punctuality" data-ar="الحضور والالتزام بالوقت">Attendance and punctuality</h3>
-      <div class="rule"></div>
-      <p data-en="A minimum of 90 percent attendance is expected across the year. Below that, external examination entry can be affected in Grades 11 and 12. Please plan family travel around term dates." data-ar="يُتوقع حضور لا يقل عن ٩٠ بالمئة على مدار العام. وأقل من ذلك قد يؤثر على التسجيل في الامتحانات الخارجية للصفين الحادي عشر والثاني عشر. يُرجى تنظيم سفر الأسرة وفق مواعيد الفصول الدراسية.">A minimum of 90 percent attendance is expected across the year. Below that, external examination entry can be affected in Grades 11 and 12. Please plan family travel around term dates.</p>
-    </div>
-
-    <div class="card">
-      <h3 data-en="Uniform" data-ar="الزي المدرسي">Uniform</h3>
-      <div class="rule"></div>
-      <p data-for="boys" data-en="Boys: school polo shirt with the emblem, navy trousers, plain black shoes. Sports kit on PE days only." data-ar="البنين: قميص المدرسة بالشعار، وبنطال كحلي، وحذاء أسود سادة. والزي الرياضي في أيام التربية البدنية فقط.">Boys: school polo shirt with the emblem, navy trousers, plain black shoes. Sports kit on PE days only.</p>
-      <p data-for="girls" data-en="Girls: school blouse with the emblem, school pinafore or skirt, plain black shoes. Sports kit on PE days only." data-ar="البنات: بلوزة المدرسة بالشعار، وتنورة المدرسة، وحذاء أسود سادة. والزي الرياضي في أيام التربية البدنية فقط.">Girls: school blouse with the emblem, school pinafore or skirt, plain black shoes. Sports kit on PE days only.</p>
-      <p class="small" data-en="Uniform is available from the school shop. A photographic guide is added here once the 2026/27 specification is issued." data-ar="يتوفر الزي في متجر المدرسة. وسيُضاف دليل مصوَّر هنا فور اعتماد مواصفات العام ٢٠٢٦/٢٧.">Uniform is available from the school shop. A photographic guide is added here once the 2026/27 specification is issued.</p>
-    </div>
-
-    <div class="card">
-      <h3 data-en="Phones and devices" data-ar="الهواتف والأجهزة">Phones and devices</h3>
-      <div class="rule"></div>
-      <p data-en="Phones stay switched off and in bags during the school day. To reach your child urgently, call the campus office and we will pass the message on." data-ar="تبقى الهواتف مغلقة وداخل الحقائب طوال اليوم الدراسي. وللتواصل العاجل مع ابنكم، اتصلوا بمكتب المقر وسنوصل الرسالة.">Phones stay switched off and in bags during the school day. To reach your child urgently, call the campus office and we will pass the message on.</p>
-    </div>
-
-    <div class="card">
-      <h3 data-en="Conduct" data-ar="السلوك">Conduct</h3>
-      <div class="rule"></div>
-      <p data-en="Students are expected to be respectful, prepared, and honest in their work. Plagiarism and misuse of AI tools in assessed work are treated as academic dishonesty." data-ar="يُتوقع من الطلاب الاحترام والاستعداد والأمانة في أعمالهم. ويُعامل الانتحال وإساءة استخدام أدوات الذكاء الاصطناعي في الأعمال المقيَّمة على أنه إخلال بالأمانة الأكاديمية.">Students are expected to be respectful, prepared, and honest in their work. Plagiarism and misuse of AI tools in assessed work are treated as academic dishonesty.</p>
-    </div>
-
-    <div class="card">
-      <h3 data-en="Safeguarding" data-ar="حماية الطلاب">Safeguarding</h3>
-      <div class="rule"></div>
-      <p data-en="The safety and wellbeing of every student comes before all else. Any concern about a child's safety is acted on the same day. Raise concerns directly with the Head of Section, who is the designated safeguarding contact." data-ar="سلامة كل طالب ورفاهه تسبق كل شيء. ويُتخذ الإجراء في اليوم نفسه بشأن أي مخاوف تتعلق بسلامة الطفل. أثيروا مخاوفكم مباشرة مع رئيس القسم، وهو جهة التواصل المعتمدة لحماية الطلاب.">The safety and wellbeing of every student comes before all else. Any concern about a child's safety is acted on the same day. Raise concerns directly with the Head of Section, who is the designated safeguarding contact.</p>
-    </div>
-
-    <div class="card">
-      <h3 data-en="What we ask of parents" data-ar="ما نطلبه من أولياء الأمور">What we ask of parents</h3>
-      <div class="rule"></div>
-      <ul class="ticks">
-        <li data-en="Check MyAIS and Schoology weekly." data-ar="تصفحوا MyAIS وSchoology أسبوعياً.">Check MyAIS and Schoology weekly.</li>
-        <li data-en="Report absence before 7:30 on the day." data-ar="أبلغوا عن الغياب قبل الساعة ٧:٣٠ في اليوم نفسه.">Report absence before 7:30 on the day.</li>
-        <li data-en="Keep your phone number and email current with the section office." data-ar="حافظوا على تحديث رقم هاتفكم وبريدكم لدى مكتب القسم.">Keep your phone number and email current with the section office.</li>
-        <li data-en="Attend parent meetings after each report card." data-ar="احضروا لقاءات أولياء الأمور بعد كل بطاقة تقرير.">Attend parent meetings after each report card.</li>
-        <li data-en="Raise concerns early, and start with the subject teacher." data-ar="أثيروا المخاوف مبكراً، وابدأوا بمعلم المادة.">Raise concerns early, and start with the subject teacher.</li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 08 · KEY CONTACTS ============ -->
-<section class="sec" id="s8">
-  <span class="eyebrow" data-en="08 · Key contacts" data-ar="٠٨ · جهات التواصل">08 · Key contacts</span>
-  <h2 data-en="Who to speak to" data-ar="مع من تتحدثون">Who to speak to</h2>
-  <div class="rule"></div>
-  <p data-en="Always begin with the subject teacher. If the matter is unresolved, move up one step at a time." data-ar="ابدأوا دائماً بمعلم المادة، وإذا لم تُحل المسألة فانتقلوا خطوة واحدة إلى الأعلى.">Always begin with the subject teacher. If the matter is unresolved, move up one step at a time.</p>
 
   <div class="card tint">
-    <h3 data-en="Escalation path" data-ar="مسار التصعيد">Escalation path</h3>
+    <h3>The partnership</h3>
     <div class="rule"></div>
-    <ol class="steps">
-      <li data-en="Subject teacher · through Schoology or school email" data-ar="معلم المادة · عبر Schoology أو البريد المدرسي">Subject teacher · through Schoology or school email</li>
-      <li data-en="Subject coordinator or Deputy Head" data-ar="منسق المادة أو نائب رئيس القسم">Subject coordinator or Deputy Head</li>
-      <li data-en="Head of British Section" data-ar="رئيس القسم البريطاني">Head of British Section</li>
-    </ol>
+    <p>School, parents and students each hold one corner of the same triangle. The monitoring above only works when what we see in the classroom meets what you see at home. Contact the homeroom mentor early rather than late.</p>
+  </div>
+</section>
+
+<!-- ============ 06 · BEYOND THE BOOKS ============ -->
+<section class="sec" id="s6">
+  <span class="eyebrow">06 · Beyond the books</span>
+  <h2>Beyond the books</h2>
+  <div class="rule"></div>
+
+  <p>Grades and certificates open the door. What students do alongside them is what fills a university application and, later, a first interview.</p>
+
+  <div class="card">
+    <h3>What is on offer</h3>
+    <div class="rule"></div>
+    <ul class="ticks">
+      <li><b>Creative thinking and problem solving</b> built into subject teaching rather than bolted on.</li>
+      <li><b>Student leadership</b>, including the Student Council.</li>
+      <li><b>Industry trips.</b> Recent years have included Almarai and MACTECH.</li>
+      <li><b>Community service</b> as a standing expectation, not an occasional event.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 07 · POLICIES ============ -->
+<section class="sec" id="s7">
+  <span class="eyebrow">07 · Policies</span>
+  <h2>What we ask of students and families</h2>
+  <div class="rule"></div>
+
+  <div class="card">
+    <h3>Attendance</h3>
+    <div class="rule"></div>
+    <ul class="ticks">
+      <li>Daily attendance is essential to academic success, and absence shows up in results faster than most families expect.</li>
+      <li>Absence and early dismissal requests must be made <b>through MyAIS only</b>. Requests by phone, WhatsApp or in person cannot be processed.</li>
+    </ul>
   </div>
 
-  <!-- PLACEHOLDER · hydrates from the Contacts sheet tab; named coordinators pending for 2026/27 -->
-  <div class="stack" data-hydrate="contacts.boys" data-for="boys">
+  <div class="card">
+    <h3>Mobile phones</h3>
+    <div class="rule"></div>
+    <ul class="ticks">
+      <li>Phones are <b>not permitted during the school day</b>, lessons, breaks and lunchtimes included, and must be stored in lockers.</li>
+      <li>A confiscated phone is returned <b>to a parent or guardian in person</b>, not to a driver or any other representative, and only once the commitment form is signed.</li>
+      <li>Confiscation periods increase with each repeat.</li>
+      <li>Where violations continue, the student is referred to the counsellor and parents are asked to come in.</li>
+    </ul>
+    <div class="scroll" style="margin-top:12px">
+      <table class="data">
+        <thead>
+          <tr><th scope="col">Incident</th><th scope="col">Phone held for</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="s">First</td><td class="num">24 hours</td></tr>
+          <tr><td class="s">Second</td><td class="num">48 hours</td></tr>
+          <tr><td class="s">Third</td><td class="num">72 hours</td></tr>
+          <tr><td class="s">Fourth</td><td class="num">1 week</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Behaviour and community</h3>
+    <div class="rule"></div>
+    <p style="font-size:13px">Respect, responsibility and Islamic values are the foundation. Where behaviour falls short, three levels guide the response, so students and families always know what happens next.</p>
+    <div class="lvl">
+      <div class="l">
+        <span class="n">Level A · Minor</span>
+        <div class="d">Uniform, low-level disruption.</div>
+        <div class="a"><b>Response:</b> teacher redirection and reflection time, with parent contact if it persists.</div>
+      </div>
+      <div class="l">
+        <span class="n">Level B · Repeated or disruptive</span>
+        <div class="d">Inappropriate language, misuse of property.</div>
+        <div class="a"><b>Response:</b> counsellor referral and a behavioural contract, escalating to the Head of School if repeated.</div>
+      </div>
+      <div class="l">
+        <span class="n">Level C · Serious safety concern</span>
+        <div class="d">Violence, bullying, leaving school grounds.</div>
+        <div class="a"><b>Response:</b> Deputy Head referral, safeguarding log, parent meetings, and possible suspension or alternative placement.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="docs">
+    <a class="doc" href="assets/no-mobile-phone-policy.pdf" download>
+      <span class="ic" aria-hidden="true">↓</span>
+      <span class="tx">
+        <span class="tt">No Mobile Phone Policy</span>
+        <span class="sb">PDF · full policy text</span>
+      </span>
+      <span class="ar" aria-hidden="true">→</span>
+    </a>
+    <a class="doc" href="assets/phone-policy-commitment-form.pdf" download>
+      <span class="ic" aria-hidden="true">↓</span>
+      <span class="tx">
+        <span class="tt">Phone Policy Commitment Form</span>
+        <span class="sb">PDF · signed when a phone is collected</span>
+      </span>
+      <span class="ar" aria-hidden="true">→</span>
+    </a>
+  </div>
+</section>
+
+<!-- ============ 08 · ALL DOCUMENTS ============ -->
+<section class="sec" id="s8">
+  <span class="eyebrow">08 · All documents</span>
+  <h2>Everything in one place</h2>
+  <div class="rule"></div>
+
+  <p>Every document for Grades 9 and 10, gathered here so you do not have to hunt through the page for it.</p>
+
+  <div class="docs">
+    <a class="doc" href="assets/g9-igcse-options-2026-27.pdf" download>
+      <span class="ic" aria-hidden="true">↓</span>
+      <span class="tx">
+        <span class="tt">Grade 9 IGCSE Options Form</span>
+        <span class="sb">PDF · Academic Year 2026-2027</span>
+      </span>
+      <span class="ar" aria-hidden="true">→</span>
+    </a>
+    <a class="doc" href="assets/g10-igcse-options-2026-27.pdf" download>
+      <span class="ic" aria-hidden="true">↓</span>
+      <span class="tx">
+        <span class="tt">Grade 10 IGCSE Options Form</span>
+        <span class="sb">PDF · Academic Year 2026-2027</span>
+      </span>
+      <span class="ar" aria-hidden="true">→</span>
+    </a>
+    <span class="doc soon">
+      <span class="ic" aria-hidden="true">↓</span>
+      <span class="tx">
+        <span class="tt">Meet &amp; Greet Agenda</span>
+        <span class="sb">PDF · Grades 9 and 10</span>
+      </span>
+      <span class="ar">Available soon</span>
+    </span>
+    <span class="doc soon">
+      <span class="ic" aria-hidden="true">↓</span>
+      <span class="tx">
+        <span class="tt">Presentation</span>
+        <span class="sb">PDF · the slides from the evening</span>
+      </span>
+      <span class="ar">Available soon</span>
+    </span>
+    <a class="doc" href="assets/parents-calendar-2026-27.pdf" download>
+      <span class="ic" aria-hidden="true">↓</span>
+      <span class="tx">
+        <span class="tt">Parent Calendar 2026/27</span>
+        <span class="sb">PDF · First Semester · Boys and Girls</span>
+      </span>
+      <span class="ar" aria-hidden="true">→</span>
+    </a>
+    <a class="doc" href="assets/no-mobile-phone-policy.pdf" download>
+      <span class="ic" aria-hidden="true">↓</span>
+      <span class="tx">
+        <span class="tt">No Mobile Phone Policy</span>
+        <span class="sb">PDF · full policy text</span>
+      </span>
+      <span class="ar" aria-hidden="true">→</span>
+    </a>
+    <a class="doc" href="assets/phone-policy-commitment-form.pdf" download>
+      <span class="ic" aria-hidden="true">↓</span>
+      <span class="tx">
+        <span class="tt">Phone Policy Commitment Form</span>
+        <span class="sb">PDF · signed when a phone is collected</span>
+      </span>
+      <span class="ar" aria-hidden="true">→</span>
+    </a>
+  </div>
+</section>
+
+<!-- ============ CONTACTS ============ -->
+<section class="sec" id="contacts">
+  <span class="eyebrow">Contacts</span>
+  <h2>Who to speak to</h2>
+  <div class="rule"></div>
+
+  <p>Your child’s homeroom mentor and subject teachers come first. For anything beyond them, the section leadership is here.</p>
+
+  <h4>Boys campus</h4>
+  <div class="stack" style="margin-bottom:16px">
     <div class="contact">
-      <span class="av">FH</span>
+      <span class="av" aria-hidden="true">FH</span>
       <span class="who">
-        <span class="role" data-en="Head of British Section (Boys)" data-ar="رئيس القسم البريطاني (بنين)">Head of British Section (Boys)</span>
-        <span class="nm" data-en="Mr. Farhan Hussein" data-ar="أ. فرحان حسين">Mr. Farhan Hussein</span>
-        <span class="ln" data-en="Through the section office" data-ar="عبر مكتب القسم">Through the section office</span>
+        <span class="role">Head of School, British Section</span>
+        <span class="nm">Mr. Farhan Hussein</span>
+        <a class="ln" href="mailto:f.hussein@ais.sch.sa">f.hussein@ais.sch.sa</a>
       </span>
     </div>
     <div class="contact">
-      <span class="av">TS</span>
+      <span class="av" aria-hidden="true">TS</span>
       <span class="who">
-        <span class="role" data-en="Deputy Head" data-ar="نائب رئيس القسم">Deputy Head</span>
-        <span class="nm" data-en="Mr. Tariq Saeed" data-ar="أ. طارق سعيد">Mr. Tariq Saeed</span>
+        <span class="role">Deputy Head of School</span>
+        <span class="nm">Mr. Tariq Saeed</span>
         <a class="ln" href="mailto:t.saeed@ais.sch.sa">t.saeed@ais.sch.sa</a>
       </span>
     </div>
   </div>
 
-  <div class="stack" data-hydrate="contacts.girls" data-for="girls">
+  <!-- PLACEHOLDER · confirm the girls campus names and titles for this
+       event before publishing. See README for the naming discrepancy. -->
+  <h4>Girls campus</h4>
+  <div class="stack">
     <div class="contact">
-      <span class="av">SA</span>
+      <span class="av" aria-hidden="true">SA</span>
       <span class="who">
-        <span class="role" data-en="Head of School, Girls" data-ar="رئيسة المدرسة، بنات">Head of School, Girls</span>
-        <span class="nm" data-en="Ms. Shamsiya Alkalbani" data-ar="أ. شمسية الكلباني">Ms. Shamsiya Alkalbani</span>
+        <span class="role">Head of School, Girls</span>
+        <span class="nm">Ms. Shamsiya Alkalbani</span>
         <a class="ln" href="mailto:s.alkalbani@ais.sch.sa">s.alkalbani@ais.sch.sa</a>
       </span>
     </div>
     <div class="contact">
-      <span class="av">MR</span>
+      <span class="av" aria-hidden="true">MA</span>
       <span class="who">
-        <span class="role" data-en="British Girls Deputy" data-ar="نائبة القسم البريطاني، بنات">British Girls Deputy</span>
-        <span class="nm" data-en="Ms. Malak Rajeh" data-ar="أ. ملك راجح">Ms. Malak Rajeh</span>
+        <span class="role">Deputy Head of School</span>
+        <span class="nm">Ms. Malak Alkhasawna</span>
         <a class="ln" href="mailto:m.alkhasawna@ais.sch.sa">m.alkhasawna@ais.sch.sa</a>
       </span>
-    </div>
-  </div>
-
-  <div class="card" style="margin-top:10px">
-    <h3 data-en="Who to contact about..." data-ar="مع من تتواصلون بشأن...">Who to contact about...</h3>
-    <div class="rule"></div>
-    <div class="kv"><span class="k" data-en="Absence" data-ar="الغياب">Absence</span><span class="v" data-en="Student Affairs, before 7:30 on the day" data-ar="شؤون الطلاب، قبل الساعة ٧:٣٠ في اليوم نفسه">Student Affairs, before 7:30 on the day</span></div>
-    <div class="kv"><span class="k" data-en="Academic concern" data-ar="مسألة أكاديمية">Academic concern</span><span class="v" data-en="Subject teacher first, then the Deputy Head" data-ar="معلم المادة أولاً، ثم نائب رئيس القسم">Subject teacher first, then the Deputy Head</span></div>
-    <div class="kv"><span class="k" data-en="Fees" data-ar="الرسوم">Fees</span><span class="v" data-en="Finance, see section 06" data-ar="الشؤون المالية، انظروا القسم ٠٦">Finance, see section 06</span></div>
-    <div class="kv"><span class="k" data-en="Transport" data-ar="النقل">Transport</span><span class="v" data-en="Transportation, see section 06" data-ar="النقل، انظروا القسم ٠٦">Transportation, see section 06</span></div>
-    <div class="kv"><span class="k" data-en="Portal access" data-ar="الدخول للبوابة">Portal access</span><span class="v" data-en="IT support, see section 06" data-ar="الدعم الفني، انظروا القسم ٠٦">IT support, see section 06</span></div>
-    <div class="kv"><span class="k" data-en="Safeguarding" data-ar="حماية الطلاب">Safeguarding</span><span class="v" data-en="Head of Section directly, same day" data-ar="رئيس القسم مباشرة، في اليوم نفسه">Head of Section directly, same day</span></div>
-  </div>
-</section>
-
-<!-- ============ 09 · FAQ ============ -->
-<section class="sec" id="s9">
-  <span class="eyebrow" data-en="09 · FAQ" data-ar="٠٩ · أسئلة شائعة">09 · FAQ</span>
-  <h2 data-en="Common questions" data-ar="أسئلة متكررة">Common questions</h2>
-  <div class="rule"></div>
-
-  <!-- PLACEHOLDER · grows as real parent questions arrive after launch -->
-  <div class="card" id="faq">
-    <div class="acc">
-      <button type="button" aria-expanded="false"><span data-en="When is the first day of school?" data-ar="متى اليوم الأول من الدراسة؟">When is the first day of school?</span><span class="chev">&#8250;</span></button>
-      <div class="body" data-en="Sunday 23 August 2026. The arrangement for Grades 9 to 12 on the first day is confirmed on this page before school starts." data-ar="الأحد ٢٣ أغسطس ٢٠٢٦. ويُؤكَّد ترتيب اليوم الأول للصفوف من التاسع إلى الثاني عشر في هذه الصفحة قبل بداية الدراسة.">Sunday 23 August 2026. The arrangement for Grades 9 to 12 on the first day is confirmed on this page before school starts.</div>
-    </div>
-    <div class="acc">
-      <button type="button" aria-expanded="false"><span data-en="How do I report an absence?" data-ar="كيف أبلغ عن الغياب؟">How do I report an absence?</span><span class="chev">&#8250;</span></button>
-      <div class="body" data-en="Email Student Affairs before 7:30 on the day of absence, and send a medical note when your child returns." data-ar="راسلوا شؤون الطلاب قبل الساعة ٧:٣٠ في يوم الغياب، وأرسلوا تقريراً طبياً عند عودة ابنكم.">Email Student Affairs before 7:30 on the day of absence, and send a medical note when your child returns.</div>
-    </div>
-    <div class="acc">
-      <button type="button" aria-expanded="false"><span data-en="I have not received portal login details. What now?" data-ar="لم تصلني بيانات الدخول للبوابة. ماذا أفعل؟">I have not received portal login details. What now?</span><span class="chev">&#8250;</span></button>
-      <div class="body" data-en="Contact IT support in section 06. Write from the email address the school holds on file so we can identify your child." data-ar="تواصلوا مع الدعم الفني في القسم ٠٦، وراسلونا من البريد المسجل لدى المدرسة حتى نتمكن من تحديد هوية ابنكم.">Contact IT support in section 06. Write from the email address the school holds on file so we can identify your child.</div>
-    </div>
-    <div class="acc">
-      <button type="button" aria-expanded="false"><span data-en="When do report cards come out?" data-ar="متى تصدر بطاقات التقارير؟">When do report cards come out?</span><span class="chev">&#8250;</span></button>
-      <div class="body" data-en="Three times a year, at the end of each term, released on MyAIS. Exact dates appear under Key dates once confirmed." data-ar="ثلاث مرات سنوياً في نهاية كل فصل، وتصدر عبر MyAIS. وتظهر المواعيد الدقيقة ضمن التواريخ المهمة فور اعتمادها.">Three times a year, at the end of each term, released on MyAIS. Exact dates appear under Key dates once confirmed.</div>
-    </div>
-    <div class="acc">
-      <button type="button" aria-expanded="false"><span data-en="Where do I find the weekly plan?" data-ar="أين أجد الخطة الأسبوعية؟">Where do I find the weekly plan?</span><span class="chev">&#8250;</span></button>
-      <div class="body" data-en="On Schoology, under each subject, published every Thursday for the week ahead." data-ar="على منصة Schoology تحت كل مادة، وتُنشر كل خميس للأسبوع التالي.">On Schoology, under each subject, published every Thursday for the week ahead.</div>
-    </div>
-    <div class="acc">
-      <button type="button" aria-expanded="false"><span data-en="How do I pay fees?" data-ar="كيف أسدد الرسوم؟">How do I pay fees?</span><span class="chev">&#8250;</span></button>
-      <div class="body" data-en="Statements are on MyAIS. For payment plans, receipts, or any question about a balance, contact Finance in section 06." data-ar="تظهر الكشوف على MyAIS. ولخطط السداد أو الإيصالات أو أي استفسار عن الرصيد، تواصلوا مع الشؤون المالية في القسم ٠٦.">Statements are on MyAIS. For payment plans, receipts, or any question about a balance, contact Finance in section 06.</div>
-    </div>
-    <div class="acc">
-      <button type="button" aria-expanded="false"><span data-en="Who do I contact about the bus?" data-ar="مع من أتواصل بشأن الحافلة؟">Who do I contact about the bus?</span><span class="chev">&#8250;</span></button>
-      <div class="body" data-en="Transportation, in section 06, for registration, route changes, stops, and delays." data-ar="النقل في القسم ٠٦، للتسجيل وتغيير المسارات والمحطات وحالات التأخير.">Transportation, in section 06, for registration, route changes, stops, and delays.</div>
-    </div>
-    <div class="acc">
-      <button type="button" aria-expanded="false"><span data-en="Can someone else collect my child?" data-ar="هل يمكن لشخص آخر استلام ابني؟">Can someone else collect my child?</span><span class="chev">&#8250;</span></button>
-      <div class="body" data-en="Yes, if you notify Student Affairs in writing on the same day. The person collecting must carry identification and the pick-up card." data-ar="نعم، بشرط إبلاغ شؤون الطلاب كتابياً في اليوم نفسه. وعلى المستلم إحضار إثبات هوية وبطاقة الاستلام.">Yes, if you notify Student Affairs in writing on the same day. The person collecting must carry identification and the pick-up card.</div>
-    </div>
-    <div class="acc">
-      <button type="button" aria-expanded="false"><span data-en="My question is not here." data-ar="سؤالي غير موجود هنا.">My question is not here.</span><span class="chev">&#8250;</span></button>
-      <div class="body" data-en="Contact the section office and we will answer you directly. Questions asked often are added to this list." data-ar="تواصلوا مع مكتب القسم وسنجيبكم مباشرة. وتُضاف الأسئلة المتكررة إلى هذه القائمة.">Contact the section office and we will answer you directly. Questions asked often are added to this list.</div>
     </div>
   </div>
 </section>
 
 <footer>
-  <div class="sig" data-en="British Section" data-ar="القسم البريطاني">British Section</div>
-  <div class="meta" data-en="Al-Rowad International Schools · Riyadh · Academic year 2026/27" data-ar="مدارس الرواد العالمية · الرياض · العام الدراسي ٢٠٢٦/٢٧">Al-Rowad International Schools · Riyadh · Academic year 2026/27</div>
-  <div class="meta" data-en="Last updated 22 August 2026" data-ar="آخر تحديث ٢٢ أغسطس ٢٠٢٦">Last updated 22 August 2026</div>
-  <a class="toplink" href="#s1" data-en="Back to top" data-ar="العودة إلى الأعلى">Back to top</a>
+  <div class="sig">British Section</div>
+  <div class="meta">Al-Rowad International Schools · Riyadh · Academic Year 2026/27</div>
+  <a class="toplink" href="#top">Back to top</a>
 </footer>
 
-</div><!-- /wrap -->
+</main>
 
 <script>
 (function () {
-  "use strict";
+  'use strict';
 
-  /* -----------------------------------------------------------------
-     Published Google Sheet CSV endpoints, one per tab.
+  /* --- grade tabs in section 03 --- */
+  var tabs = [document.getElementById('tab9'), document.getElementById('tab10')];
+  var panels = [document.getElementById('panel9'), document.getElementById('panel10')];
 
-     Each gid below is a tab in the hub data workbook:
-       1144839320  Bell_Schedule     481320114   Key_Dates
-       2051876206  Contacts          1436737971  Services
-       715163369   Announcement
-
-     To repoint at a different workbook: File -> Share -> Publish to web,
-     pick the tab, pick CSV, then take the gid out of the URL it gives you.
-     Setting any value to an empty string skips that feed entirely: the
-     baked-in fallback in the HTML stands and no request is made.
-     ----------------------------------------------------------------- */
-  var SHEET = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSFofYEcAMPqcfjVBBi7zA1AVScwY2SBD151VLdeozC1ADSh4jyrPQaqEkQbXABLf0farzV2gpE30VA/pub";
-
-  var CSV = {
-    bell        : SHEET + "?gid=1144839320&single=true&output=csv",
-    dates       : SHEET + "?gid=481320114&single=true&output=csv",
-    contacts    : SHEET + "?gid=2051876206&single=true&output=csv",
-    services    : SHEET + "?gid=1436737971&single=true&output=csv",
-    announcement: SHEET + "?gid=715163369&single=true&output=csv"
-  };
-
-  /* Google's published-CSV endpoint measures 1.2s to 4.5s in practice,
-     so 5s was cutting it fine on mobile. The page is already fully
-     rendered from fallbacks by this point, and hydration is a silent
-     in-place swap, so a longer wait costs the reader nothing. */
-  var TIMEOUT = 10000;
-  var UPCOMING_DAYS = 21;   /* how far ahead the hero looks */
-  var UPCOMING_MAX = 3;     /* most items the hero will show */
-
-  /* state lives in memory only, never in storage */
-  var state = {
-    lang: "en",
-    campus: "boys",
-    checked: {},
-    announceDismissed: false
-  };
-
-  var $ = function (s, r) { return (r || document).querySelector(s); };
-  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
-
-  /* ---------------- language ---------------- */
-
-  function paint(root) {
-    var ar = state.lang === "ar";
-    $$("[data-en]", root).forEach(function (el) {
-      var v = ar ? el.getAttribute("data-ar") : el.getAttribute("data-en");
-      if (v !== null && v !== undefined) el.textContent = v;
+  function select(i, focus) {
+    tabs.forEach(function (t, n) {
+      var on = n === i;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+      panels[n].hidden = !on;
     });
-    $$("[data-en-aria]", root).forEach(function (el) {
-      var v = ar ? el.getAttribute("data-ar-aria") : el.getAttribute("data-en-aria");
-      if (v) el.setAttribute("aria-label", v);
-    });
-    if (root === document) {
-      var el = document.documentElement;
-      el.setAttribute("lang", ar ? "ar" : "en");
-      el.setAttribute("dir", ar ? "rtl" : "ltr");
-      var b = $("#langBtn");
-      b.textContent = ar ? "English" : "العربية";
-      b.setAttribute("lang", ar ? "en" : "ar");
-      document.title = ar
-        ? "القسم البريطاني لأولياء الأمور"
-        : "AIS British Section Parent Hub";
-    }
+    if (focus) tabs[i].focus();
   }
 
-  function setLang(l) { state.lang = l; paint(document); renderChecklist(); renderUpcoming(); }
-
-  /* ---------------- campus ---------------- */
-
-  function setCampus(c) {
-    state.campus = c;
-    document.body.setAttribute("data-campus", c);
-    $("#btnBoys").setAttribute("aria-pressed", String(c === "boys"));
-    $("#btnGirls").setAttribute("aria-pressed", String(c === "girls"));
-    renderUpcoming();
-  }
-
-  /* ---------------- hero: coming up ---------------- */
-
-  /* Parsed Key_Dates rows, kept so language and campus toggles can
-     re-render without going back to the network. */
-  var cachedDates = null;
-
-  function daysUntil(iso) {
-    var d = new Date(iso + "T00:00:00");
-    if (isNaN(d)) return null;
-    var today = new Date();
-    today.setHours(0, 0, 0, 0);
-    return Math.round((d - today) / 86400000);
-  }
-
-  /* Arabic-Indic digits, so a number never sits in Arabic copy in Latin form */
-  function arNum(n) {
-    return String(n).replace(/[0-9]/g, function (d) {
-      return "٠١٢٣٤٥٦٧٨٩".charAt(Number(d));
-    });
-  }
-
-  /* Arabic counts take three different forms: dual for two, plural for
-     three to ten, and singular accusative from eleven up. */
-  function distanceText(days) {
-    var ar = state.lang === "ar";
-    if (days === 0) return ar ? "· اليوم" : "· today";
-    if (days === 1) return ar ? "· غداً" : "· tomorrow";
-    if (!ar) return "· in " + days + " days";
-    if (days === 2) return "· بعد يومين";
-    if (days <= 10) return "· بعد " + arNum(days) + " أيام";
-    return "· بعد " + arNum(days) + " يوماً";
-  }
-
-  /* Builds the hero from the sheet when it has arrived, otherwise leaves
-     the baked-in fallback in place. Either way, past items are dropped and
-     the hero hides itself when nothing is left. */
-  function renderUpcoming() {
-    var box = $("#upcoming");
-    if (!box) return;
-
-    if (cachedDates) {
-      var rows = cachedDates.filter(function (r) {
-        if ((r.Show || "").toLowerCase() === "no") return false;
-        var c = (r.Campus || "Both").toLowerCase();
-        if (c !== "both" && c !== state.campus) return false;
-        var d = daysUntil(r.Date);
-        return d !== null && d >= 0 && d <= UPCOMING_DAYS;
-      }).sort(function (a, b) {
-        return a.Date < b.Date ? -1 : 1;
-      }).slice(0, UPCOMING_MAX);
-
-      box.textContent = "";
-      rows.forEach(function (r) {
-        var item = document.createElement("div");
-        item.className = "item";
-        item.setAttribute("data-date", r.Date);
-        var lbl = document.createElement("div");
-        lbl.className = "lbl";
-        bi(lbl, r.Label_EN, r.Label_AR);
-        var when = document.createElement("div");
-        when.className = "when";
-        var dt = document.createElement("span");
-        bi(dt, fmtDate(r.Date, false, true), fmtDate(r.Date, true, true));
-        var dist = document.createElement("i");
-        dist.className = "dist";
-        when.appendChild(dt);
-        when.appendChild(document.createTextNode(" "));
-        when.appendChild(dist);
-        item.appendChild(lbl);
-        item.appendChild(when);
-        box.appendChild(item);
-      });
-    }
-
-    var live = 0;
-    $$("#upcoming .item").forEach(function (item) {
-      var days = daysUntil(item.getAttribute("data-date"));
-      if (days === null || days < 0) { item.parentNode.removeChild(item); return; }
-      live++;
-      var dist = $(".dist", item);
-      if (dist) dist.textContent = distanceText(days);
-    });
-    $("#hero").hidden = live === 0;
-  }
-
-  /* ---------------- checklist (resets on reload, by design) ---------------- */
-
-  var CHECKS = [
-    ["Portal login received from the section office", "استلام بيانات الدخول للبوابة من مكتب القسم"],
-    ["WhatsApp broadcast list joined", "الانضمام إلى قائمة واتساب"],
-    ["Uniform purchased", "شراء الزي المدرسي"],
-    ["Transport registered, if you need the bus", "تسجيل النقل، إن كنتم بحاجة إلى الحافلة"],
-    ["Books collected", "استلام الكتب"]
-  ];
-
-  function renderChecklist() {
-    var ar = state.lang === "ar";
-    var box = $("#checklist");
-    box.textContent = "";
-    CHECKS.forEach(function (c, i) {
-      var b = document.createElement("button");
-      b.type = "button";
-      b.className = "check";
-      b.setAttribute("aria-pressed", String(!!state.checked[i]));
-      var box2 = document.createElement("span");
-      box2.className = "box";
-      box2.textContent = "✓";
-      var t = document.createElement("span");
-      t.className = "t";
-      t.textContent = ar ? c[1] : c[0];
-      b.appendChild(box2);
-      b.appendChild(t);
-      b.addEventListener("click", function () {
-        state.checked[i] = !state.checked[i];
-        b.setAttribute("aria-pressed", String(!!state.checked[i]));
-      });
-      box.appendChild(b);
-    });
-  }
-
-  /* ---------------- FAQ accordion ---------------- */
-
-  $$("#faq .acc > button").forEach(function (btn) {
-    btn.addEventListener("click", function () {
-      var open = btn.getAttribute("aria-expanded") === "true";
-      $$("#faq .acc > button").forEach(function (o) {
-        o.setAttribute("aria-expanded", "false");
-        o.parentNode.querySelector(".body").classList.remove("on");
-      });
-      if (!open) {
-        btn.setAttribute("aria-expanded", "true");
-        btn.parentNode.querySelector(".body").classList.add("on");
-      }
+  tabs.forEach(function (t, i) {
+    t.addEventListener('click', function () { select(i); });
+    t.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); select((i + 1) % tabs.length, true); }
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); select((i + tabs.length - 1) % tabs.length, true); }
+      if (e.key === 'Home') { e.preventDefault(); select(0, true); }
+      if (e.key === 'End') { e.preventDefault(); select(tabs.length - 1, true); }
     });
   });
 
-  /* ---------------- CSV ---------------- */
+  /* --- countdown to the evening ---
+     Counts to data-doors, flips to an "under way" message once the doors
+     open, then to a closing message after data-end, when the timer stops.
+     The ticking cells are aria-hidden because the date is already stated
+     above them in full; only the two messages are announced. */
+  var hero = document.getElementById('hero');
+  var cd = document.getElementById('cd');
 
-  function parseCSV(text) {
-    var rows = [], row = [], f = "", q = false, i, c;
-    for (i = 0; i < text.length; i++) {
-      c = text.charAt(i);
-      if (q) {
-        if (c === '"') {
-          if (text.charAt(i + 1) === '"') { f += '"'; i++; } else { q = false; }
-        } else { f += c; }
-      } else if (c === '"') { q = true; }
-      else if (c === ",") { row.push(f); f = ""; }
-      else if (c === "\n") { row.push(f); rows.push(row); row = []; f = ""; }
-      else if (c !== "\r") { f += c; }
-    }
-    if (f !== "" || row.length) { row.push(f); rows.push(row); }
-    return rows;
-  }
+  if (hero && cd) {
+    var doors = new Date(hero.getAttribute('data-doors'));
+    var ends = new Date(hero.getAttribute('data-end'));
 
-  function toObjects(rows) {
-    if (!rows.length) return [];
-    var head = rows[0].map(function (h) { return h.trim(); });
-    return rows.slice(1).map(function (r) {
-      var o = {};
-      head.forEach(function (h, i) { o[h] = (r[i] || "").trim(); });
-      return o;
-    }).filter(function (o) {
-      return Object.keys(o).some(function (k) { return o[k] !== ""; });
-    });
-  }
+    if (!isNaN(doors.getTime()) && !isNaN(ends.getTime())) {
+      var label = document.getElementById('cdLabel');
+      var cells = document.getElementById('cdCells');
+      var msg = document.getElementById('cdMsg');
+      var out = {
+        d: document.getElementById('cdD'),
+        h: document.getElementById('cdH'),
+        m: document.getElementById('cdM'),
+        s: document.getElementById('cdS')
+      };
+      var timer = null;
 
-  function get(url) {
-    if (!url) return Promise.resolve(null);
-    if (typeof fetch !== "function") return Promise.resolve(null);
-    var ctl = typeof AbortController === "function" ? new AbortController() : null;
-    var timer = setTimeout(function () { if (ctl) ctl.abort(); }, TIMEOUT);
-    return fetch(url, ctl ? { signal: ctl.signal } : undefined)
-      .then(function (r) { return r.ok ? r.text() : null; })
-      .then(function (t) { clearTimeout(timer); return t ? toObjects(parseCSV(t)) : null; })
-      .catch(function () { clearTimeout(timer); return null; });
-  }
+      var pad = function (n) { return n < 10 ? '0' + n : String(n); };
 
-  /* ---------------- hydration renderers ---------------- */
-
-  /* Arabic copy from the sheet may arrive with Latin digits, e.g.
-     "الأحد–الخميس 7:30–14:00", which the bidi algorithm then reorders so a
-     range reads backwards. Convert digits in any token that carries no Latin
-     letters, which catches times and dates while leaving emails and URLs be. */
-  function arDigits(t) {
-    return String(t).replace(/\S+/g, function (tok) {
-      return /[A-Za-z]/.test(tok) ? tok : arNum(tok);
-    });
-  }
-
-  function bi(el, en, ar) {
-    var a = arDigits(ar || en);
-    el.setAttribute("data-en", en);
-    el.setAttribute("data-ar", a);
-    el.textContent = state.lang === "ar" ? a : en;
-  }
-
-  function hydrateBell(rows) {
-    if (!rows || !rows.length) return;
-    ["Boys", "Girls"].forEach(function (campus) {
-      var body = $('[data-hydrate="bell.' + campus.toLowerCase() + '"]');
-      if (!body) return;
-      var mine = rows.filter(function (r) { return r.Campus === campus; });
-      if (!mine.length) return;
-      body.textContent = "";
-      mine.forEach(function (r) {
-        var tr = document.createElement("tr");
-        var td1 = document.createElement("td");
-        td1.className = "item";
-        bi(td1, r.Item_EN, r.Item_AR);
-        var td2 = document.createElement("td");
-        td2.className = "time";
-        td2.textContent = r.End ? r.Start + " – " + r.End : r.Start;
-        tr.appendChild(td1);
-        tr.appendChild(td2);
-        body.appendChild(tr);
-      });
-    });
-  }
-
-  function fmtDate(iso, ar, withDay) {
-    var d = new Date(iso + "T00:00:00");
-    if (isNaN(d)) return iso;
-    var opt = { day: "numeric", month: "long", year: "numeric" };
-    if (withDay) opt.weekday = "long";
-    try {
-      var out = d.toLocaleDateString(ar ? "ar" : "en-GB", opt).replace(/،|,/g, "");
-      /* Some engines hand back Latin digits for the ar locale. Normalise, so
-         Arabic copy never mixes the two numeral systems. */
-      return ar ? arNum(out) : out;
-    } catch (e) { return iso; }
-  }
-
-  function hydrateDates(rows) {
-    var ul = $('[data-hydrate="dates"]');
-    if (!rows) return;
-    cachedDates = rows;
-    renderUpcoming();
-    if (!ul) return;
-    var today = new Date(); today.setHours(0, 0, 0, 0);
-    var keep = rows.filter(function (r) {
-      if ((r.Show || "").toLowerCase() === "no") return false;
-      var d = new Date(r.Date + "T00:00:00");
-      return !isNaN(d) && d >= today;
-    }).sort(function (a, b) { return a.Date < b.Date ? -1 : 1; });
-    if (!keep.length) return;
-    ul.textContent = "";
-    keep.forEach(function (r) {
-      var li = document.createElement("li");
-      var c = (r.Campus || "Both").toLowerCase();
-      if (c === "boys" || c === "girls") li.setAttribute("data-for", c);
-      bi(li,
-        fmtDate(r.Date, false) + " · " + r.Label_EN,
-        fmtDate(r.Date, true) + " · " + (r.Label_AR || r.Label_EN));
-      ul.appendChild(li);
-    });
-  }
-
-  function initials(name) {
-    return (name || "").replace(/^(Mr\.|Ms\.|Mrs\.|Dr\.)\s*/i, "")
-      .split(/\s+/).slice(0, 2)
-      .map(function (w) { return w.charAt(0).toUpperCase(); }).join("");
-  }
-
-  function hydrateContacts(rows) {
-    if (!rows || !rows.length) return;
-    ["boys", "girls"].forEach(function (campus) {
-      var box = $('[data-hydrate="contacts.' + campus + '"]');
-      if (!box) return;
-      var mine = rows.filter(function (r) {
-        var c = (r.Campus || "").toLowerCase();
-        return c === campus || c === "both";
-      }).sort(function (a, b) {
-        return (parseInt(a.Order, 10) || 99) - (parseInt(b.Order, 10) || 99);
-      });
-      if (!mine.length) return;
-      box.textContent = "";
-      mine.forEach(function (r) {
-        var card = document.createElement("div");
-        card.className = "contact";
-        var av = document.createElement("span");
-        av.className = "av";
-        av.textContent = initials(r.Name_EN);
-        var who = document.createElement("span");
-        who.className = "who";
-        var role = document.createElement("span");
-        role.className = "role";
-        bi(role, r.Role_EN, r.Role_AR);
-        var nm = document.createElement("span");
-        nm.className = "nm";
-        bi(nm, r.Name_EN, r.Name_AR);
-        who.appendChild(role);
-        who.appendChild(nm);
-        if (r.Email) {
-          var a = document.createElement("a");
-          a.className = "ln";
-          a.href = "mailto:" + r.Email;
-          a.textContent = r.Email;
-          who.appendChild(a);
+      var say = function (head, note) {
+        label.hidden = true;
+        cells.hidden = true;
+        msg.hidden = false;
+        msg.textContent = head;
+        if (note) {
+          var n = document.createElement('span');
+          n.className = 'n';
+          n.textContent = note;
+          msg.appendChild(n);
         }
-        if (r.Phone) {
-          var p = document.createElement("a");
-          p.className = "ln";
-          p.href = "tel:" + r.Phone.replace(/\s+/g, "");
-          p.textContent = r.Phone;
-          who.appendChild(p);
+      };
+
+      var tick = function () {
+        var now = Date.now();
+
+        if (now >= ends.getTime()) {
+          say('Thank you for joining us', 'We hope the evening was useful.');
+          if (timer) clearInterval(timer);
+          return;
         }
-        card.appendChild(av);
-        card.appendChild(who);
-        box.appendChild(card);
-      });
-    });
-  }
+        if (now >= doors.getTime()) {
+          say('The evening is under way', 'Please make your way in.');
+          return;
+        }
 
-  function slug(s) {
-    return (s || "").toLowerCase().replace(/[^a-z]/g, "");
-  }
+        var diff = doors.getTime() - now;
+        out.d.textContent = String(Math.floor(diff / 86400000));
+        out.h.textContent = pad(Math.floor(diff / 3600000) % 24);
+        out.m.textContent = pad(Math.floor(diff / 60000) % 60);
+        out.s.textContent = pad(Math.floor(diff / 1000) % 60);
+      };
 
-  function hydrateServices(rows) {
-    if (!rows) return;
-    rows.forEach(function (r) {
-      var card = $('[data-hydrate="service.' + slug(r.Department_EN) + '"]');
-      if (!card) return;
-      var ch = $('[data-field="channel"]', card);
-      var hr = $('[data-field="hours"]', card);
-      if (ch && r.Channel_EN) bi(ch, r.Channel_EN, r.Channel_AR);
-      if (hr && r.Hours_EN) bi(hr, r.Hours_EN, r.Hours_AR);
-    });
-  }
-
-  function hydrateAnnouncement(rows) {
-    if (!rows || !rows.length || state.announceDismissed) return;
-    var r = rows[0];
-    if ((r.Show || "").toLowerCase() !== "yes") return;
-    if (!r.Text_EN && !r.Text_AR) return;
-    if (r.Expires) {
-      var exp = new Date(r.Expires + "T23:59:59");
-      if (!isNaN(exp) && exp < new Date()) return;
+      cd.hidden = false;
+      tick();
+      timer = setInterval(tick, 1000);
     }
-    var box = $("#announce");
-    var txt = $("#announceText");
-    txt.textContent = "";
-    var inner = document.createElement("span");
-    bi(inner, r.Text_EN || r.Text_AR, r.Text_AR || r.Text_EN);
-    if (r.Link) {
-      var a = document.createElement("a");
-      a.href = r.Link;
-      a.target = "_blank";
-      a.rel = "noopener";
-      a.appendChild(inner);
-      txt.appendChild(a);
-    } else {
-      txt.appendChild(inner);
-    }
-    box.classList.add("on");
   }
 
-  /* ---------------- boot ---------------- */
-
-  $("#langBtn").addEventListener("click", function () {
-    setLang(state.lang === "ar" ? "en" : "ar");
-  });
-  $("#btnBoys").addEventListener("click", function () { setCampus("boys"); });
-  $("#btnGirls").addEventListener("click", function () { setCampus("girls"); });
-  $("#announceX").addEventListener("click", function () {
-    state.announceDismissed = true;
-    $("#announce").classList.remove("on");
-  });
-
-  setCampus(state.campus);
-  setLang(state.lang);
-  renderUpcoming();
-
-  /* Fetch all five feeds in parallel. Any failure is silent and the
-     baked-in fallback simply stays on screen. */
-  Promise.all([
-    get(CSV.bell), get(CSV.dates), get(CSV.contacts),
-    get(CSV.services), get(CSV.announcement)
-  ]).then(function (res) {
-    try { hydrateBell(res[0]); } catch (e) {}
-    try { hydrateDates(res[1]); } catch (e) {}
-    try { hydrateContacts(res[2]); } catch (e) {}
-    try { hydrateServices(res[3]); } catch (e) {}
-    try { hydrateAnnouncement(res[4]); } catch (e) {}
+  /* --- accordions, if any are added later --- */
+  document.querySelectorAll('.acc > button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var open = b.getAttribute('aria-expanded') === 'true';
+      b.setAttribute('aria-expanded', open ? 'false' : 'true');
+      b.nextElementSibling.classList.toggle('on', !open);
+    });
   });
 })();
 </script>
+
 </body>
 </html>

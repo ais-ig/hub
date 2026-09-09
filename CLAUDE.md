@@ -1,60 +1,63 @@
-# AIS British Section · Parent Information Hub
+# AIS British Section · Parents' Meet & Greet, Grades 9 and 10
 
 ## What this project is
 
-A single-link Parent Information Hub for Al-Rowad International Schools (AIS), Riyadh, covering the **British Section only, Boys and Girls, Grades 9 to 12**, for academic year 2026/27. Parents receive the link by WhatsApp before the first day of school and return to it all year. It is a practical reference, not a marketing page.
+A single-page hub for the Parents' Meet & Greet evening at Al-Rowad International Schools, Riyadh, British Section, **Grades 9 and 10 only**, boys and girls, academic year 2026/27. It replaces `linktr.ee/ais.orientation`, which served the same purpose in 2025 as an undifferentiated list of PDF buttons.
 
-Commissioned by the Boys Principal (Mr. Fawaz) via email to all Heads of School. Scope was later narrowed to the British Section by Mr. Farhan Hussein, Head of British Section (Boys). Original requirements from the commissioning email, all still in force:
-
-1. School systems and platforms: parent/student portals, communication channels, how to contact teachers and administration
-2. Academic follow-up: weekly plans, student progress, homework/assignments, assessments, attendance, report cards
-3. School timetable and hours: arrival, assembly, lesson timings, breaks, dismissal
-4. Whether all grades attend from Day 1 or a staggered start applies
-5. Arrival and dismissal procedures: gates, new traffic lanes, pick-up procedures
-6. Parent services: Admissions, Finance, Books, Transportation, Student Affairs, IT support
-7. School expectations: attendance, punctuality, uniform, conduct, safeguarding, parent responsibilities
-8. Key contacts: departments and escalation channels per inquiry type
+Parents open it on a phone, from a WhatsApp link or a QR code on the printed agenda. It is a practical reference for one evening and the weeks around it, not a marketing page and not a year-round hub.
 
 ## Architecture (locked decisions, do not revisit)
 
-- **One self-contained `index.html`** hosted on GitHub Pages (ais-ig org). All CSS and JS inline or in adjacent files in this repo. No build step, no framework, no external dependencies beyond Google Fonts.
-- **Mobile-first.** Primary context is a WhatsApp link opened on a phone. Design at mobile width first; desktop is an enhancement.
-- **Bilingual English/Arabic** with a visible language toggle. Full RTL mirroring in Arabic mode (`dir="rtl"`). Every user-facing string exists in both languages. Layout must survive mirroring; avoid left-anchored asymmetry.
-- **Boys/Girls toggle.** The hub serves both campuses. Gates, traffic lanes, bell schedule, and contacts differ by campus and filter on this toggle. Academic content (curriculum, assessment, expectations) is shared. Persist the choice in a JS variable only, never localStorage.
-- **Hybrid content model.** Structural prose is static in the HTML. Volatile fields hydrate from a published Google Sheet after page load: bell schedule, key dates, contacts, service hours, and one announcement banner. Every hydrated field has a baked-in fallback value in the HTML so the page is complete even if the fetch fails or is slow. See `SHEET-SCHEMA.md` for the exact schema. Fetch the published-to-web CSV endpoints, parse, replace field contents in place. No loading spinners for hydration; the static values simply update.
-- **Announcement banner**: dismissible, homepage top, driven by the `Announcement` sheet tab (show flag + expiry date). Hidden entirely when no active announcement.
-
-## Content structure
-
-Nine sections, in this order: 1 Welcome + quick-start, 2 School hours and timetable, 3 Arrival and dismissal, 4 Systems and platforms, 5 Academic follow-up, 6 Parent services, 7 School expectations, 8 Key contacts and escalation, 9 FAQ. Details, placeholders, and pending items per section are in `CONTENT.md`.
+- **One self-contained `index.html`** on GitHub Pages. All CSS and JS inline. No build step, no framework, no dependency beyond Google Fonts.
+- **Mobile-first**, 480px column, widening to 720px above that breakpoint.
+- **English only.** No language toggle, no RTL. Every document the school produces for this evening is English.
+- **No campus toggle.** Grades 9 and 10 curriculum, options, assessment and policies are identical across campuses. Only event venue and contacts differ, and both appear side by side.
+- **No Google Sheets hydration.** All content is static. The parent hub's CSV layer was deliberately dropped: this page describes a fixed event, so there is nothing volatile enough to justify the failure surface.
+- **PDFs live in `assets/`** and are linked relatively. Never link to Google Drive.
+- Documents not yet produced render as a muted `.doc.soon` row reading "Available soon" rather than a link that 404s.
+- **The hero carries a countdown**, in the pattern of the Grade 9 Pathway hub (`ais-ig/g9-pathway-26`). It reads `data-doors` and `data-end` off the hero element rather than a JS constant, so the machine-readable date sits beside the human-readable one. Three self-switching states: counting, "under way", "thank you". Hidden until JS validates both dates, so it never flashes empty cells. Do not move these dates into a constant, and do not let the attributes drift from the Date and Time rows.
 
 ## Design direction
 
-Visual sibling of the existing Grade 8 Pathway Hub: https://ais-ig.github.io/grade-8-pathway/ · same school, same design language, evolved not cloned. Read its live CSS for reference. Card-based sections, section navigation, contact cards, FAQ accordion are established patterns to reuse.
+Visual sibling of the AIS Parent Information Hub, evolved not cloned. It shares that hub's brand tokens, card vocabulary, section rhythm and nav grid. Two patterns are specific to this page:
+
+- **The agenda timeline** in section 01, a gold numeral on deep navy beside a white detail panel. It is a deliberate echo of the printed Meet & Greet poster and is the page's visual signature.
+- **The options tables and choice pairs** in section 03. Grade 9's either/or rows render as choice-pair cards rather than a four-column table, because "choose one from each pair" reads far better that way on a phone than a table does.
+
+The printed material is yellow-dominant. This page is cream-dominant with gold as accent, matching the parent hub. Let the gold timeline numerals carry the callback rather than flooding the page with yellow.
 
 ## Brand rules (never violate)
 
-- Navy `#1D5394`, deep navy `#0C2E54`, yellow `#EDBA1D`. No other accent colors.
+- Navy `#1D5394`, deep navy `#0C2E54`, yellow `#EDBA1D`. No other accent colours.
 - Poppins only, weights 300 / 400 / 500 / 700. Never 600 or 800.
-- Emblem: `assets/emblem.png`, transparent, use as-is. Never recolor, never place on clashing backgrounds.
-- No stock photography of people. Emblem, color, typography, and simple iconography carry the identity.
+- Emblem: `assets/emblem.png`, transparent, use as-is. Never recolour.
+- No stock photography of people.
 - Institutional, warm, trustworthy tone. A school, not a startup.
 
 ## Writing rules (never violate)
 
-- **"Grade", never "Year".** Grade 9, Grade 12, IG classes, A-Levels. Parents never see "Year 10".
-- **No em dashes anywhere**, in any language, in code comments, in content, in commit messages. Use en dashes for ranges (Grades 9–12) and middots (·) as dividers.
-- English parent-facing tone: clear, concise, warm. Address the reader as "you". Arabic renders formal-respectful (فصحى), not colloquial.
-- Islamic greeting conventions where used: parent-facing greeting is transliterated "Assalaamu Alaykum" in English contexts.
-- Section head sign-off convention: personal messages sign "Farhan Hussein, Head of British Section (Boys)"; institutional content signs "British Section".
+- **"Grade", never "Year".** Grade 9, Grade 10, IGCSE, A-Levels. "Academic Year 2026-2027" is the one permitted use of the word.
+- **No em dashes anywhere**, in content, code comments or commit messages. Use en dashes for ranges (Grades 9–10) and middots (·) as dividers.
+- Clear, concise, warm. Address the reader as "you".
+- Institutional content signs "British Section".
 
-## Key people (for contacts content)
+## Content sources
 
-- Boys: Mr. Farhan Hussein, Head of British Section (Boys) · Mr. Tariq Saeed, Deputy (t.saeed@ais.sch.sa)
-- Girls: Ms. Shamsiya Alkalbani, Head of School, Girls (s.alkalbani@ais.sch.sa) · Ms. Malak Rajeh, British Girls Deputy (m.alkhasawna@ais.sch.sa)
+| Section | Source |
+|---|---|
+| 03 Subject options | `assets/g9-igcse-options-2026-27.pdf` and `assets/g10-igcse-options-2026-27.pdf` |
+| 04 Assessment | Teachers' Guide, British Section, Assessment breakdown for 2026/2027. **Not a parent-facing document, so it is a source only and is deliberately not linked as a download.** |
+| 05, 06 | 2025 Meet & Greet presentation, pending the 2026/27 update |
+| 07 Policies | `assets/no-mobile-phone-policy.pdf`, plus the behaviour levels from the 2025 presentation |
+
+**When a source PDF changes, the prose must change with it.** The subject tables, the assessment breakdown and the phone policy tiers are all duplicated from documents. Do not update one without the other.
+
+Changes already carried in for 2026/27, worth knowing: Grade 9 Islamic Studies moved 3 to 2 periods and Quran 2 to 3; several optional loads changed in both grades; Grade 9 gained an optional Hifdh Programme, which sits inside the existing three Quran periods and neither adds to the forty-period week nor replaces a subject.
+
+Assessment changed too, and the numbers on the page are the 2026/27 ones, not the 2025 deck's: classwork moved 5 to 6 and homework 5 to 4, so continuous assessment still totals 10 per quarter but is weighted towards classwork. "Mid-semester Test" is now "Mid-Term Test" and "End of Semester Exam" is now "Final Examination". The old "rubric 0 to 5" line is gone, because a 0 to 5 rubric no longer maps onto a 6 mark classwork component.
 
 ## Workflow expectations
 
-- Skeleton first: full structure, real navigation, bilingual toggle working, hydration layer wired, placeholder content clearly plausible (not lorem ipsum, not "TBC"). A shareable link matters more than complete content.
-- Commit in small, described steps. Verify mobile layout at ~380px width and RTL mode before considering any section done.
-- When real content arrives, it replaces placeholders section by section; update `CONTENT.md` checkboxes as sections go live.
+- Placeholders are marked `<!-- PLACEHOLDER -->` and must read as plausible finished content, never "TBC". `README.md` lists all four.
+- Verify at ~380px width before considering any change done. The page must never scroll sideways; wide content scrolls inside its own container.
+- Every internal anchor must resolve and every asset path must exist. Both are quick to check with grep.
