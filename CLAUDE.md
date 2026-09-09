@@ -2,7 +2,7 @@
 
 ## What this project is
 
-A single-page Parent Hub for Al-Rowad International Schools, Riyadh, British Section, academic year 2026/27. The content is written for **Grades 9 and 10**, boys and girls; the document library also carries the Grade 11 and 12 options forms and guide pages, because the printed QR sheets label the hub "Grades 9 to 12". It went live on 9 September 2026 as the Parents' Meet & Greet page and is the one link parents keep for the year. It replaces both `linktr.ee/ais.orientation`, last year's list of PDF buttons, and an earlier Grades 9 to 12 Parent Information Hub that was never sent out.
+A single-page Parent Hub for Al-Rowad International Schools, Riyadh, British Section, academic year 2026/27. The content is written for **Grades 9 and 10** on the **boys campus**; girls campus content was removed on 9 September 2026 because the evening was boys only, and sits in git history if needed. The document library also carries the Grade 11 and 12 options forms and guide pages, because the printed QR sheets label the hub "Grades 9 to 12". It went live on 9 September 2026 as the Parents' Meet & Greet page and is the one link parents keep for the year. It replaces both `linktr.ee/ais.orientation`, last year's list of PDF buttons, and an earlier Grades 9 to 12 Parent Information Hub that was never sent out.
 
 Parents open it on a phone, from a WhatsApp link or a QR code. It is a practical reference, not a marketing page. The hero and the banner describe the current event and are swapped as the year goes on; everything below them is reference material that changes only when a source document changes.
 
@@ -13,7 +13,7 @@ Live at `https://ais-ig.github.io/hub/`, repository `ais-ig/hub`. This folder is
 - **One self-contained `index.html`** on GitHub Pages. All CSS and JS inline. No build step, no framework, no dependency beyond Google Fonts. The design reference is a React page; this is not, and must not become one.
 - **Mobile-first**, an 800px content column, the same width as the pathway hub. The documents band and the contact grid go multi-column above roughly 520px; nothing else changes shape on desktop.
 - **English only.** No language toggle, no RTL. Every document the school produces for these grades is English.
-- **No campus toggle.** Grades 9 and 10 curriculum, options, assessment and policies are identical across campuses. Only venues and contacts differ, and both appear side by side.
+- **No campus toggle.** Grades 9 and 10 curriculum, options, assessment and policies are identical across campuses. Only venues and contacts differ. The page currently carries the boys campus only.
 - **No Google Sheets hydration.** All content is static. The old hub's CSV layer was deliberately dropped: nothing on this page is volatile enough to justify the failure surface.
 - **PDFs live in `assets/`** and are linked relatively. Never link to Google Drive. Root-level PDFs are git-ignored.
 - Documents not yet produced render as a muted, dashed "Available soon" card rather than a link that 404s.
@@ -82,7 +82,7 @@ The deck's agenda is three steps, 6:30 arrival, 6:45 presentation, 7:15 stalls w
 
 ## Workflow expectations
 
-- Placeholders are marked `<!-- PLACEHOLDER -->` and must read as plausible finished content, never "TBC". `README.md` lists both: the mentor list and the girls campus names.
+- Placeholders are marked `<!-- PLACEHOLDER -->` and must read as plausible finished content, never "TBC". `README.md` lists it: the mentor list.
 - Verify at ~380px width before considering any change done. The page must never scroll sideways; wide content scrolls inside its own container. Headless Chrome's `--window-size` does not go below the macOS minimum window width, so use device emulation over the DevTools protocol, or a real phone, to check.
 - Every internal anchor must resolve and every asset path must exist. Both are quick to check with grep.
 - Pushing needs the `Mohamad-Dabbagh` gh account; `madabbagh` is read-only on the org. See `README.md`.

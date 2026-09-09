@@ -22,16 +22,13 @@ Root-level PDFs are ignored by `.gitignore`. The Grade 11 and 12 options forms s
 
 ## Open items
 
-Everything marked `<!-- PLACEHOLDER -->` in `index.html` must be replaced or confirmed. Search the file for that string. There are two:
+Everything marked `<!-- PLACEHOLDER -->` in `index.html` must be replaced or confirmed. Search the file for that string. There is one:
 
 | Where | What to confirm |
 |---|---|
 | Support | Homeroom mentor list for 2026/27. The deck still shows the 2025/26 list. |
-| Who to speak to | Girls campus names and titles. The boys list comes from the printed parent guide of 9 September 2026. |
 
-**Name to check:** the Deputy Head of School on the girls campus appears as *Ms. Malak Rajeh* in the old parent hub package and as *Ms. Malak Alkhasawna* in last year's presentation. Both give the address `m.alkhasawna@ais.sch.sa`. The page currently uses Alkhasawna.
-
-**Girls campus venue and gates** are not stated anywhere on the page, because no 2026/27 source gives them. The banner carries the boys campus gates from the printed guide.
+**Girls campus content was removed on 9 September 2026** at the user's request, because the evening was boys only. The two girls contact cards (Ms. Shamsiya Alkalbani, Head of School, Girls, and the Deputy Head, who appears as *Ms. Malak Rajeh* in the old hub package and *Ms. Malak Alkhasawna* in last year's presentation, both `m.alkhasawna@ais.sch.sa`) are in git history before commit `0f6b883` if the page is widened to both campuses again. The banner carries the boys campus gates from the printed guide.
 
 **The presentation deck** is not yet published. Slides 16, 17 and 19 of `Parents Meet and Greet 2026-2027 (AIS template).pdf` are screenshots of student-level records (mock results with staff comments, a results email, a mentor appointment sheet). Names are blanked but the comments are personal. Decide whether to publish the deck as-is, or a version without those three slides, before flipping the "Tonight's Presentation" card.
 
