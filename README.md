@@ -1,8 +1,8 @@
-# AIS Parent Hub · Grades 9 and 10
+# AIS Parent Hub · British Section
 
-Single-page Parent Hub for the AIS British Section, Grades 9 and 10 IG, academic year 2026/27. It opened as the Parents' Meet & Greet page on Wednesday 9 September 2026 and stays live through the year as the one link parents keep. Parents open it on a phone from a WhatsApp link or a QR code.
+Single-page Parent Hub for the AIS British Section, academic year 2026/27. It opened as the Parents' Meet & Greet page for Grades 9 and 10 on Wednesday 9 September 2026 and stays live through the year as the one link parents keep. The printed QR sheets label it "British Section, Grades 9 to 12"; the content is IGCSE-focused, with the A-Level options forms and the Grade 11 and 12 pages of the parent guide carried in the document library.
 
-**Live at `https://ais-ig.github.io/hub/`**, repository `ais-ig/hub`. The earlier link, `ais-ig.github.io/meet-n-greet-26/`, now redirects here.
+**Live at `https://ais-ig.github.io/hub/`**, repository `ais-ig/hub`. The earlier link, `ais-ig.github.io/meet-n-greet-26/`, redirects here.
 
 The design follows the Grade 9 Pathway Hub, `https://ais-ig.github.io/g9-pathway-26/`, rebuilt in plain HTML and CSS. See `CLAUDE.md` for what was carried over and what was deliberately changed.
 
@@ -18,21 +18,23 @@ The `gh` CLI on this Mac has two accounts. `madabbagh` is active by default and 
 gh auth switch --user Mohamad-Dabbagh && git push origin main && gh auth switch --user madabbagh
 ```
 
-Root-level PDFs are ignored by `.gitignore`, so the Grade 11 and 12 options forms sitting in this folder are not published.
+Root-level PDFs are ignored by `.gitignore`. The Grade 11 and 12 options forms sitting in this folder are published from their copies in `assets/`.
 
-## Placeholders still open
+## Open items
 
 Everything marked `<!-- PLACEHOLDER -->` in `index.html` must be replaced or confirmed. Search the file for that string. There are three:
 
 | Where | What to confirm |
 |---|---|
-| The evening | The running order and its timings, kept in step with the printed agenda |
-| Support | Homeroom mentor list for 2026/27, or delete the block if it should not be public |
-| Who to speak to | Girls campus names and titles |
+| Ask a question | The deck tells parents to use "the form in the hub". No form exists yet, so the button opens an email to the Head of School with the subject filled in. Swap in the form URL when there is one. |
+| Support | Homeroom mentor list for 2026/27. The deck still shows the 2025/26 list. |
+| Who to speak to | Girls campus names and titles. The boys list comes from the printed parent guide of 9 September 2026. |
 
-**Name to check:** the Deputy Head of School on the girls campus appears as *Ms. Malak Rajeh* in the old parent hub package and as *Ms. Malak Alkhasawna* in last year's presentation. Both give the address `m.alkhasawna@ais.sch.sa`. The page currently uses Alkhasawna. Confirm which is correct.
+**Name to check:** the Deputy Head of School on the girls campus appears as *Ms. Malak Rajeh* in the old parent hub package and as *Ms. Malak Alkhasawna* in last year's presentation. Both give the address `m.alkhasawna@ais.sch.sa`. The page currently uses Alkhasawna.
 
-The event date was confirmed on 9 September 2026: Wednesday 9 September, registration from 6:30 PM. The times of the individual agenda steps and both venues are last year's, carried forward.
+**Girls campus venue and gates** are not stated anywhere on the page, because no 2026/27 source gives them. The banner carries the boys campus gates from the printed guide.
+
+**The presentation deck** is not yet published. Slides 16, 17 and 19 of `Parents Meet and Greet 2026-2027 (AIS template).pdf` are screenshots of student-level records (mock results with staff comments, a results email, a mentor appointment sheet). Names are blanked but the comments are personal. Decide whether to publish the deck as-is, or a version without those three slides, before flipping the "Tonight's Presentation" card.
 
 ## The countdown
 
@@ -44,11 +46,9 @@ The hero counts down to the evening. It is driven by two attributes on the hero 
      data-end="2026-09-09T20:30:00+03:00">
 ```
 
-`data-doors` is **when registration opens**, not when the presentation starts, because that is when parents should arrive. `data-end` is when the evening finishes. Both are Riyadh time, which is what the `+03:00` says. Keep the offset.
+`data-doors` is when doors open. `data-end` is when the evening finishes. Both are Riyadh time, which is what the `+03:00` says. Keep the offset.
 
-**Changing the date means changing three things:** these two attributes and the date and time in the navy banner directly under the hero. They are within thirty lines of each other.
-
-The countdown has three states and switches between them on its own:
+**Changing the date means changing three things:** these two attributes and the date and time in the navy banner directly under the hero.
 
 | When | Shows |
 |---|---|
@@ -56,41 +56,54 @@ The countdown has three states and switches between them on its own:
 | Between `data-doors` and `data-end` | "The evening is under way · Please make your way in." |
 | After `data-end` | "Thank you for joining us · We hope the evening was useful." |
 
-So the page does not need touching on the night, or the morning after. If the attributes are missing or unparseable the whole block stays hidden, and it never renders as empty boxes before JavaScript runs.
+If the attributes are missing or unparseable the whole block stays hidden. To retire the countdown between events, delete the two attributes.
 
 ## Keeping the hub current through the year
 
-The hero and the banner describe the *current* event. When the next parent-facing event comes round:
+The hero, the banner, the "Tonight's materials" band and the "Tonight's programme" section describe the *current* event. When the next parent-facing event comes round:
 
-1. Change the hero `h1`, subtitle and description.
+1. Change the hero `h1`, subtitle and description, and the two hero buttons.
 2. Change `data-doors`, `data-end` and the banner line together.
-3. Replace the agenda cards in "How the evening runs", or retitle that section.
+3. Replace the cards in the band and the agenda in "Tonight's programme", or retitle that section.
 
-To retire the countdown between events, delete the two `data-` attributes and the block hides itself. Everything below the banner is reference material and stays as it is unless a source document changes.
+Everything from "IGCSE results" down is reference material and stays as it is unless a source document changes.
 
 ## Adding a document
 
-Files live in `assets/`. Every document appears once in the **Documents band** under the hero. The options forms and the two phone policy files also appear as rows in their own sections.
+Files live in `assets/`. Every document appears once in **Everything in one place**; tonight's items also appear in the band under the hero, and forms and policies also appear in their own sections.
 
 To publish a document that currently shows "Available soon":
 
 1. Drop the PDF into `assets/` using the exact filename listed in the `DOCUMENT PATHS` comment at the top of `index.html`.
-2. Find its `<span class="mcard soon">` block in the Documents band.
-3. Change the opening tag to `<a class="mcard" href="assets/FILENAME.pdf" download>`, change the closing `</span>` to `</a>`, and replace `<span class="cta">Available soon</span>` with `<span class="cta">Open PDF →</span>`.
+2. Find its `<span class="mcard soon">` (band) and `<span class="doc soon">` (library) blocks.
+3. Change each opening tag to an `<a class="mcard" href="assets/FILENAME.pdf" download>` or `<a class="doc" ...>`, change the closing `</span>` to `</a>`, and replace "Available soon" with `Open PDF →` (band) or the `→` arrow span (library).
 
-Copy a live card, such as either options form, to get the markup exactly right. To add a brand-new document, copy a live card and give it a new title, description and filename.
+Copy a live card or row to get the markup exactly right.
 
 | File | Status | Appears in |
 |---|---|---|
-| `g9-igcse-options-2026-27.pdf` | live | band, Subject options |
-| `g10-igcse-options-2026-27.pdf` | live | band, Subject options |
-| `parents-calendar-2026-27.pdf` | live | band |
-| `no-mobile-phone-policy.pdf` | live | band, Policies |
-| `phone-policy-commitment-form.pdf` | live | band, Policies |
-| `agenda-g9-g10.pdf` | soon | band |
-| `presentation-g9-g10.pdf` | soon | band |
+| `meet-and-greet-parent-guide-boys-2026-27.pdf` | live | band, Tonight's programme, library |
+| `g9-igcse-options-2026-27.pdf` | live | band, Subject options, library |
+| `g10-igcse-options-2026-27.pdf` | live | band, Subject options, library |
+| `g11-as-options-2026-27.pdf` | live | library |
+| `g12-a2-options-2026-27.pdf` | live | library |
+| `british-curriculum-pathway-booklet.pdf` | live | library |
+| `parent-letter-semester-1-2026-27.pdf` | live | library |
+| `parents-calendar-2026-27.pdf` | live | library |
+| `no-mobile-phone-policy.pdf` | live | Policies, library |
+| `phone-policy-commitment-form.pdf` | live | Policies, library |
+| `agenda-g9-g10.pdf` | soon | band, library |
+| `presentation-g9-g10.pdf` | soon | band, library |
 
-**Known problems with the commitment form**, carried over from last year: it has a pre-filled date of 30/2/2025 and a Middle Section header rather than British Section. Reissue it when convenient.
+External links, the school's own pages: the Grade 9 and 10 IG weekly plans and the Parent Assessment Guide on `ict001001.github.io`, reached through the school-wide Linktree `linktr.ee/rowad.curriculum2627`, and the examination boards' syllabus pages for the confirmed IGCSE subjects.
+
+**The parent guide** is pages 1 and 12 to 16 of the school's `AIS_Meet_and_Greet_Parent_Guide_Grades_7-12_Boys_09Sep2026.pdf`: the event map, the UK High School class lists for Grades 9 to 12, and the staff contacts. Regenerate it from the source with `pypdf` if the school reissues the guide.
+
+**Known problems with the commitment form**, carried over from last year: it has a pre-filled date of 30/2/2025 and a Middle Section header rather than British Section.
+
+## Syllabus links
+
+`~/Downloads/AIS_Syllabus_Links_2026-2027.xlsx` lists the board and syllabus code per examined subject, with a Status column. Only rows marked Confirmed are on the page: Physics, Chemistry, Biology, Mathematics (Cambridge), Accounting, Computer Science and ICT, each linking the Cambridge A*-G qualification page. English (board and speaking variant open), Edexcel Mathematics (Specification A or B open), Business Studies (code changes for 2027 entries), Arabic (two boards both confirmed) and the Edexcel Biology entries are left out until settled. The sheet's Notes tab is internal and must not be published.
 
 ## The previous Parent Information Hub
 

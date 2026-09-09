@@ -2,7 +2,7 @@
 
 ## What this project is
 
-A single-page Parent Hub for Al-Rowad International Schools, Riyadh, British Section, **Grades 9 and 10 only**, boys and girls, academic year 2026/27. It went live on 9 September 2026 as the Parents' Meet & Greet page and is the one link parents keep for the year. It replaces both `linktr.ee/ais.orientation`, last year's list of PDF buttons, and an earlier Grades 9 to 12 Parent Information Hub that was never sent out.
+A single-page Parent Hub for Al-Rowad International Schools, Riyadh, British Section, academic year 2026/27. The content is written for **Grades 9 and 10**, boys and girls; the document library also carries the Grade 11 and 12 options forms and guide pages, because the printed QR sheets label the hub "Grades 9 to 12". It went live on 9 September 2026 as the Parents' Meet & Greet page and is the one link parents keep for the year. It replaces both `linktr.ee/ais.orientation`, last year's list of PDF buttons, and an earlier Grades 9 to 12 Parent Information Hub that was never sent out.
 
 Parents open it on a phone, from a WhatsApp link or a QR code. It is a practical reference, not a marketing page. The hero and the banner describe the current event and are swapped as the year goes on; everything below them is reference material that changes only when a source document changes.
 
@@ -62,20 +62,27 @@ The page-specific patterns kept from the first version: the options tables and t
 
 | Section | Source |
 |---|---|
+| Tonight's programme, results, pathway, support, activities, behaviour | `Parents Meet and Greet 2026-2027 (AIS template).pdf`, the 2026/27 deck, in `~/Downloads`. This is the primary source and supersedes the 2025 deck. |
+| Gates, stall map, boys campus staff contacts | `AIS_Meet_and_Greet_Parent_Guide_Grades_7-12_Boys_09Sep2026.pdf`, the printed parent guide. Pages 1 and 12 to 16 are republished as `assets/meet-and-greet-parent-guide-boys-2026-27.pdf`. |
 | Subject options | `assets/g9-igcse-options-2026-27.pdf` and `assets/g10-igcse-options-2026-27.pdf` |
-| Assessment | Teachers' Guide, British Section, Assessment breakdown for 2026/2027. **Not a parent-facing document, so it is a source only and is deliberately not linked as a download.** |
-| Support, Beyond the books | 2025 Meet & Greet presentation, pending the 2026/27 update |
-| Policies | `assets/no-mobile-phone-policy.pdf`, plus the behaviour levels from the 2025 presentation |
+| Syllabus pages | `~/Downloads/AIS_Syllabus_Links_2026-2027.xlsx`, Confirmed rows only. Its Notes tab is internal; never publish it. |
+| Assessment | Teachers' Guide, British Section, Assessment breakdown for 2026/2027, confirmed by slide 13 of the deck. **Not a parent-facing document, so it is a source only and is deliberately not linked as a download.** |
+| Policies | `assets/no-mobile-phone-policy.pdf`, plus the behaviour levels from the deck |
+| Guides and links | The school-wide Linktree `linktr.ee/rowad.curriculum2627`, whose Grade 9 and 10 pages link the IG weekly plans, the Parent Assessment Guide and the Semester 1 parent letter. Only the British-track items are carried; the SAT and CCP items are American Section. |
 
-**When a source PDF changes, the prose must change with it.** The subject tables, the assessment breakdown and the phone policy tiers are all duplicated from documents. Do not update one without the other.
+**When a source changes, the prose must change with it.** The agenda, the results figures, the subject tables, the assessment breakdown, the activity lists, the phone policy tiers and the contact cards are all duplicated from documents. Do not update one without the other.
 
 Changes already carried in for 2026/27, worth knowing: Grade 9 Islamic Studies moved 3 to 2 periods and Quran 2 to 3; several optional loads changed in both grades; Grade 9 gained an optional Hifdh Programme, which sits inside the existing three Quran periods and neither adds to the forty-period week nor replaces a subject.
 
 Assessment changed too, and the numbers on the page are the 2026/27 ones, not the 2025 deck's: classwork moved 5 to 6 and homework 5 to 4, so continuous assessment still totals 10 per quarter but is weighted towards classwork. "Mid-semester Test" is now "Mid-Term Test" and "End of Semester Exam" is now "Final Examination". The old "rubric 0 to 5" line is gone, because a 0 to 5 rubric no longer maps onto a 6 mark classwork component.
 
+The deck's agenda is three steps, 6:30 arrival, 6:45 presentation, 7:15 stalls with no fixed close. An earlier draft agenda in `~/Downloads` dated 1 September with different timings is superseded.
+
+"Ask a question" is a mailto to the Head of School until a form link exists. The deck promises parents "the form in the hub", so this is the first thing to replace.
+
 ## Workflow expectations
 
-- Placeholders are marked `<!-- PLACEHOLDER -->` and must read as plausible finished content, never "TBC". `README.md` lists all three.
+- Placeholders are marked `<!-- PLACEHOLDER -->` and must read as plausible finished content, never "TBC". `README.md` lists all three: the question form, the mentor list, the girls campus names.
 - Verify at ~380px width before considering any change done. The page must never scroll sideways; wide content scrolls inside its own container. Headless Chrome's `--window-size` does not go below the macOS minimum window width, so use device emulation over the DevTools protocol, or a real phone, to check.
 - Every internal anchor must resolve and every asset path must exist. Both are quick to check with grep.
 - Pushing needs the `Mohamad-Dabbagh` gh account; `madabbagh` is read-only on the org. See `README.md`.
