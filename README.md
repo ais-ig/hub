@@ -84,7 +84,7 @@ Nothing currently shows "Available soon". To announce a document before it exist
 | `phone-policy-commitment-form.pdf` | live | Policies, library |
 | `presentation-g9-g10.pdf` | live | band, library |
 
-External links, the school's own pages: the Grade 9 and 10 IG weekly plans and the Parent Assessment Guide on `ict001001.github.io`, reached through the school-wide Linktree `linktr.ee/rowad.curriculum2627`, and the examination boards' syllabus pages for the confirmed IGCSE subjects.
+External links, the school's own pages: the Grade 9 and 10 IG weekly plans and the Parent Assessment Guide on `ict001001.github.io`, reached through the school-wide Linktree `linktr.ee/rowad.curriculum2627`.
 
 **The parent guide** is pages 1 and 12 to 16 of the school's `AIS_Meet_and_Greet_Parent_Guide_Grades_7-12_Boys_09Sep2026.pdf`: the event map, the UK High School class lists for Grades 9 to 12, and the staff contacts. Regenerate it from the source with `pypdf` if the school reissues the guide.
 
@@ -92,7 +92,7 @@ External links, the school's own pages: the Grade 9 and 10 IG weekly plans and t
 
 ## Syllabus links
 
-`~/Downloads/AIS_Syllabus_Links_2026-2027.xlsx` lists the board and syllabus code per examined subject, with a Status column. Only rows marked Confirmed are on the page: Physics, Chemistry, Biology, Mathematics (Cambridge), Accounting, Computer Science and ICT, each linking the Cambridge A*-G qualification page. English (board and speaking variant open), Edexcel Mathematics (Specification A or B open), Business Studies (code changes for 2027 entries), Arabic (two boards both confirmed) and the Edexcel Biology entries are left out until settled. The sheet's Notes tab is internal and must not be published.
+Removed from the page on 9 September 2026 pending manual verification with Mr. Farhan. `~/Downloads/AIS_Syllabus_Links_2026-2027.xlsx` lists the board and syllabus code per examined subject with a Status column, and the seven rows marked Confirmed (Physics, Chemistry, Biology, Mathematics (Cambridge), Accounting, Computer Science, ICT) were briefly linked from Subject options. The card is in git history at commit `e513b38` and can be restored once each row is checked against the entry file. The sheet's Notes tab is internal and must not be published.
 
 ## The previous Parent Information Hub
 

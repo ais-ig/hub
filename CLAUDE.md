@@ -65,7 +65,7 @@ The page-specific patterns kept from the first version: the options tables and t
 | Tonight's programme, results, pathway, support, activities, behaviour | `Parents Meet and Greet 2026-2027.pptx.pdf`, the final 31-page 2026/27 deck, published as `assets/presentation-g9-g10.pdf`. This is the primary source and supersedes the 2025 deck and the earlier "(AIS template)" drafts. |
 | Gates, stall map, boys campus staff contacts | `AIS_Meet_and_Greet_Parent_Guide_Grades_7-12_Boys_09Sep2026.pdf`, the printed parent guide. Pages 1 and 12 to 16 are republished as `assets/meet-and-greet-parent-guide-boys-2026-27.pdf`. |
 | Subject options | `assets/g9-igcse-options-2026-27.pdf` and `assets/g10-igcse-options-2026-27.pdf` |
-| Syllabus pages | `~/Downloads/AIS_Syllabus_Links_2026-2027.xlsx`, Confirmed rows only. Its Notes tab is internal; never publish it. |
+| Syllabus pages | Not on the page. `~/Downloads/AIS_Syllabus_Links_2026-2027.xlsx` holds the board and code per subject, awaiting manual verification before any of it is linked. Its Notes tab is internal; never publish it. |
 | Assessment | Teachers' Guide, British Section, Assessment breakdown for 2026/2027, confirmed by slide 13 of the deck. **Not a parent-facing document, so it is a source only and is deliberately not linked as a download.** |
 | Policies | `assets/no-mobile-phone-policy.pdf`, plus the behaviour levels from the deck |
 | Guides and links | The school-wide Linktree `linktr.ee/rowad.curriculum2627`, whose Grade 9 and 10 pages link the IG weekly plans, the Parent Assessment Guide and the Semester 1 parent letter. Only the British-track items are carried; the SAT and CCP items are American Section. |
