@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0C2E54">
-<title>AIS Parent Hub · Grades 9 &amp; 10 · British Section</title>
-<meta name="description" content="Al-Rowad International Schools, British Section. Parent Hub for Grades 9 and 10 IG, academic year 2026/27. The Parents’ Meet &amp; Greet agenda, IGCSE subject options, assessment, support, policies and every document in one place.">
+<title>AIS Parent Hub · British Section</title>
+<meta name="description" content="Al-Rowad International Schools, British Section Parent Hub, academic year 2026/27. Tonight’s Parents’ Meet &amp; Greet programme, IGCSE results, subject options, assessment, support, policies, and every document and link in one place.">
 <link rel="icon" href="assets/emblem.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,31 +13,42 @@
 
 <!-- ===================================================================
      DOCUMENT PATHS · single reference list
-     Every PDF linked from this page. Files marked SOON render as a muted,
-     dashed "Available soon" card or row instead of a live link. To publish
-     one: drop the file in assets/, then change its <span class="mcard soon">
+     Every file linked from this page. Files marked SOON render as a muted,
+     dashed "Available soon" card or row instead of a link. To publish one:
+     drop the file in assets/, then change its <span class="mcard soon">
      (or <span class="doc soon">) to an <a ... href="..." download> and
-     replace the "Available soon" label with the arrow. Every document
-     appears in the Documents band under the hero; the options forms and
-     the policy files also appear in their own sections.
+     replace the "Available soon" label with the arrow. Tonight's materials
+     sit in the band under the hero; the full library is the section
+     "Everything in one place"; forms and policies also appear in their
+     own sections.
 
-       assets/g9-igcse-options-2026-27.pdf     LIVE   band, section 03
-       assets/g10-igcse-options-2026-27.pdf    LIVE   band, section 03
-       assets/no-mobile-phone-policy.pdf       LIVE   band, section 07
-       assets/phone-policy-commitment-form.pdf LIVE   band, section 07
-       assets/parents-calendar-2026-27.pdf     LIVE   band
-       assets/agenda-g9-g10.pdf                SOON   band
-       assets/presentation-g9-g10.pdf          SOON   band
+       assets/meet-and-greet-parent-guide-boys-2026-27.pdf  LIVE  band, library
+       assets/g9-igcse-options-2026-27.pdf                  LIVE  band, options, library
+       assets/g10-igcse-options-2026-27.pdf                 LIVE  band, options, library
+       assets/g11-as-options-2026-27.pdf                    LIVE  library
+       assets/g12-a2-options-2026-27.pdf                    LIVE  library
+       assets/british-curriculum-pathway-booklet.pdf        LIVE  library
+       assets/parent-letter-semester-1-2026-27.pdf          LIVE  library
+       assets/parents-calendar-2026-27.pdf                  LIVE  library
+       assets/no-mobile-phone-policy.pdf                    LIVE  policies, library
+       assets/phone-policy-commitment-form.pdf              LIVE  policies, library
+       assets/agenda-g9-g10.pdf                             SOON  band, library
+       assets/presentation-g9-g10.pdf                       SOON  band, library
 
-     The two phone policy files are last year's, carried forward. The policy
-     itself is undated and standing, so it needs no reissue. The commitment
-     form has two problems noted in README: a pre-filled date of 30/2/2025,
-     and a Middle Section header rather than British Section.
+     External links (the school's own pages, not copied here):
+       https://ict001001.github.io/AIS_G9_IG/            Grade 9 IG weekly plans
+       https://ict001001.github.io/AIS_G10_IG/           Grade 10 IG weekly plans
+       https://ict001001.github.io/Assessment_Grades_IG/ Parent Assessment Guide
+
+     The parent guide is pages 1 and 12 to 16 of the school's Grades 7 to 12
+     Boys guide for 9 September 2026: the event map, the UK High School class
+     lists and the staff contacts. The two phone policy files are last year's,
+     carried forward. The commitment form has two problems noted in README.
      =================================================================== -->
 
 <style>
 /* ---------------------------------------------------------------
-   AIS British Section · Parent Hub, Grades 9 and 10
+   AIS British Section · Parent Hub
    Design follows the Grade 9 Pathway Hub (ais-ig/g9-pathway-26),
    rebuilt in plain CSS: fixed navy bar, navy hero with watermark
    emblem, gold-underlined section titles, numbered agenda cards,
@@ -105,16 +116,6 @@ button {
   border-radius: 4px;
 }
 
-.sr {
-  position: absolute;
-  width: 1px; height: 1px;
-  padding: 0; margin: -1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
-  border: 0;
-}
-
 .in { max-width: var(--wrap); margin-inline: auto; }
 
 /* --- fixed top bar with menu --- */
@@ -172,6 +173,8 @@ button {
   display: none;
   background: var(--navy-deep);
   border-top: 1px solid rgba(255, 255, 255, .1);
+  max-height: calc(100vh - var(--bar) - 3px);
+  overflow-y: auto;
 }
 .topbar.open .menu { display: block; }
 .menu .in { max-width: 900px; padding: 8px var(--pad) 16px; }
@@ -192,6 +195,16 @@ button {
   border-radius: 8px;
   text-align: center;
   border-bottom: 0;
+}
+.menu a.go2 {
+  margin-top: 6px;
+  padding: 10px 16px;
+  color: #fff;
+  font-weight: 500;
+  border: 1px solid rgba(255, 255, 255, .3);
+  border-radius: 8px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, .3);
 }
 
 /* --- hero: navy field, watermark emblem, gold title --- */
@@ -255,8 +268,6 @@ button {
 .btn.gold:hover { background: #F2C63A; color: var(--navy-deep); }
 .btn.line { background: transparent; color: var(--gold); border: 2px solid var(--gold); font-weight: 500; padding-block: 10px; }
 .btn.line:hover { background: rgba(237, 186, 29, .12); color: var(--gold); }
-.btn.navy { background: var(--navy-deep); color: #fff; }
-.btn.navy:hover { background: var(--navy); color: #fff; }
 
 /* --- countdown ---
    Pattern from the Grade 9 Pathway hub: four white cells, days through
@@ -333,9 +344,9 @@ button {
   font-weight: 700;
   line-height: 1.5;
 }
-.banner span { display: inline-block; margin: 2px 8px; white-space: nowrap; }
+.banner span { display: inline-block; margin: 2px 8px; }
 
-/* --- documents band --- */
+/* --- tonight's materials band --- */
 
 .materials {
   background: var(--gold-tint-2);
@@ -440,8 +451,19 @@ p:last-child { margin-bottom: 0; }
 }
 .card:last-child { margin-bottom: 0; }
 .card.tint { background: var(--gold-tint-2); border-color: #EFE2BE; }
-.stack { display: grid; gap: 12px; margin-bottom: 12px; }
-.stack > .card { margin-bottom: 0; }
+
+/* navy strip, the deck's "In short" line */
+.strip {
+  background: var(--navy-deep);
+  color: #fff;
+  border-radius: 999px;
+  padding: 11px 18px;
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0 0 12px;
+  text-align: center;
+}
+.strip b { color: var(--gold); font-weight: 700; margin-right: 6px; }
 
 /* --- agenda: numbered cards --- */
 
@@ -472,8 +494,27 @@ p:last-child { margin-bottom: 0; }
 .ag h3 { margin: 0; font-size: 14px; }
 .ag p { margin: 0; font-size: 13px; line-height: 1.5; }
 
-/* --- divider bands: navy with a faint emblem, in place of the
-       pathway hub's photo bands --- */
+/* --- results: hero numbers --- */
+
+.stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+.stat {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px 14px 16px;
+  text-align: center;
+}
+.stat .v {
+  display: block;
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--navy-deep);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.stat .l { display: block; font-size: 12px; line-height: 1.45; color: var(--ink-soft); margin-top: 10px; }
+
+/* --- divider bands: navy with a faint emblem --- */
 
 .band {
   position: relative;
@@ -707,9 +748,10 @@ table.data td.none { color: var(--muted); }
 .cmp .col li { font-size: 12px; line-height: 1.5; color: var(--ink-soft); }
 .cmp .col li b { font-weight: 700; color: var(--navy-deep); }
 
-/* --- document rows inside sections --- */
+/* --- document rows --- */
 
 .docs { display: grid; gap: 8px; margin-top: 12px; }
+.docs + h4 { margin-top: 20px; }
 .doc {
   display: flex;
   align-items: center;
@@ -736,6 +778,17 @@ a.doc:hover { border-color: var(--gold); }
 .doc .tt { display: block; font-size: 13px; font-weight: 700; color: var(--navy-deep); line-height: 1.35; }
 .doc .sb { display: block; font-size: 11px; color: var(--muted); margin-top: 1px; line-height: 1.4; }
 .doc .ar { flex: none; color: var(--gold); font-size: 14px; font-weight: 700; }
+.doc.soon { background: transparent; border-style: dashed; }
+.doc.soon .ic { background: transparent; border-color: var(--border); color: var(--muted); }
+.doc.soon .tt { color: var(--muted); font-weight: 500; }
+.doc.soon .ar {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
 
 /* --- behaviour levels --- */
 
@@ -780,7 +833,7 @@ ul.ticks li b { font-weight: 700; color: var(--navy-deep); }
 
 /* --- contact cards --- */
 
-.cgrid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.cgrid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); margin-bottom: 16px; }
 .ccard {
   background: #fff;
   border-radius: 10px;
@@ -801,7 +854,7 @@ ul.ticks li b { font-weight: 700; color: var(--navy-deep); }
 .ccard .nm { margin: 0 0 2px; font-size: 15px; font-weight: 700; color: var(--navy-deep); }
 .ccard .rl { margin: 0 0 8px; font-size: 12px; color: #888; }
 .ccard a {
-  display: inline-block;
+  display: block;
   font-size: 13px;
   font-weight: 500;
   color: var(--navy-deep);
@@ -813,7 +866,7 @@ ul.ticks li b { font-weight: 700; color: var(--navy-deep); }
 
 .sec.navy .in { max-width: 640px; }
 .sec.navy .lead { color: rgba(255, 255, 255, .75); font-size: 15px; margin: 0 0 24px; }
-.sec.navy .note { color: rgba(255, 255, 255, .55); font-size: 12px; margin: 20px auto 0; max-width: 420px; line-height: 1.6; }
+.sec.navy .note { color: rgba(255, 255, 255, .55); font-size: 12px; margin: 20px auto 0; max-width: 460px; line-height: 1.6; }
 .sec.navy .btn.gold { padding: 16px 40px; border-radius: 12px; font-size: 16px; box-shadow: 0 4px 16px rgba(237, 186, 29, .35); }
 
 /* --- footer --- */
@@ -845,8 +898,11 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
 
 @media (min-width: 720px) {
   .chips { grid-template-columns: repeat(3, 1fr); }
+  .stats { grid-template-columns: repeat(4, 1fr); }
   .two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: start; margin-bottom: 12px; }
   .two > .card { margin-bottom: 0; }
+  .three { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; align-items: start; margin-bottom: 12px; }
+  .three > .card { margin-bottom: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -862,7 +918,7 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
   <div class="row">
     <a class="brand" href="#top">
       <img src="assets/emblem.png" alt="" width="36" height="36">
-      <span>AIS Parent Hub<small>British Section · Grades 9 &amp; 10</small></span>
+      <span>AIS Parent Hub<small>British Section · 2026/27</small></span>
     </a>
     <button class="menubtn" id="menubtn" type="button" aria-expanded="false" aria-controls="menu" aria-label="Menu">
       <span class="bars" aria-hidden="true">☰</span><span class="x" aria-hidden="true">✕</span>
@@ -870,27 +926,29 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
   </div>
   <nav class="menu" id="menu" aria-label="Sections">
     <div class="in">
-      <a href="#s1">The evening</a>
+      <a href="#s1">Tonight’s programme</a>
+      <a href="#results">IGCSE results</a>
       <a href="#s2">Your IG pathway</a>
       <a href="#s3">Subject options</a>
       <a href="#s4">Assessment</a>
       <a href="#s5">Support</a>
       <a href="#s6">Beyond the books</a>
       <a href="#s7">Policies</a>
+      <a href="#s8">All documents</a>
       <a href="#contacts">Who to speak to</a>
-      <a class="go" href="#materials">Documents</a>
+      <a class="go" href="#ask">Ask a question</a>
+      <a class="go2" href="#materials">Tonight’s materials</a>
     </div>
   </nav>
 </div>
 
 <!-- ============ HERO · THE EVENT ============ -->
-<!-- Date confirmed 9 September 2026: Wednesday 9 September 2026, registration
-     from 6:30 PM Riyadh time. Venues are last year's, carried forward.
+<!-- Date confirmed 9 September 2026: Wednesday 9 September 2026, doors at
+     6:30 PM Riyadh time, per the 2026/27 deck and the printed parent guide.
 
      The countdown reads data-doors and data-end off this element, so those
      two attributes and the human-readable date and time in the banner below
-     must be changed together. data-doors is when registration opens, not
-     when the presentation starts. Both are Riyadh time, hence the +03:00. -->
+     must be changed together. Both are Riyadh time, hence the +03:00. -->
 <header class="hero" id="hero"
      data-doors="2026-09-09T18:30:00+03:00"
      data-end="2026-09-09T20:30:00+03:00">
@@ -898,8 +956,8 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
   <div class="in">
     <img class="em" src="assets/emblem.png" alt="Al-Rowad International Schools" width="104" height="104">
     <h1>Parents’ Meet &amp; Greet</h1>
-    <p class="sub">Grades 9 and 10 · IGCSE programme · 2026/27</p>
-    <p class="desc">Your one place for tonight’s agenda, the IGCSE subject options, how marks are built, the support in place, and every document, kept up to date through the year.</p>
+    <p class="sub">British Section IGCSE · Grades 9 and 10 · 2026/27</p>
+    <p class="desc">Your one place for tonight’s programme, last year’s IGCSE results, the subject options, how marks are built, the support in place, and every document and link, kept up to date through the year.</p>
 
     <div class="cd" id="cd" hidden>
       <span class="cdlbl" id="cdLabel">Doors open in</span>
@@ -913,8 +971,8 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
     </div>
 
     <div class="ctas">
-      <a class="btn gold" href="#s1">How the evening runs</a>
-      <a class="btn line" href="#s3">Subject options</a>
+      <a class="btn gold" href="#s1">Tonight’s programme</a>
+      <a class="btn line" href="#ask">Ask a question</a>
     </div>
   </div>
 </header>
@@ -923,17 +981,27 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
 <div class="banner">
   <span>📅 Wednesday 9 September 2026</span>
   <span>⏰ 6:30 – 8:30 PM</span>
-  <span>📍 Boys: Main Hall · Girls: Auditorium</span>
+  <span>📍 Boys campus · Grade 9 via Gate 8 · Grade 10 via Gate 10</span>
 </div>
 
-<!-- ============ DOCUMENTS BAND ============ -->
+<!-- ============ TONIGHT'S MATERIALS ============ -->
 <div class="materials" id="materials">
   <div class="in">
     <div class="hd">
-      <p class="lb">Documents</p>
-      <p class="sb">Download or open in your browser · more added through the year</p>
+      <p class="lb">Tonight’s materials</p>
+      <p class="sb">Download or open in your browser · the full library is further down the page</p>
     </div>
     <div class="mgrid">
+      <a class="mcard" href="assets/meet-and-greet-parent-guide-boys-2026-27.pdf" download>
+        <span class="t"><span class="ic" aria-hidden="true">🗺️</span>Parent Guide · Boys campus</span>
+        <p>The event map, your child’s teachers by class with their stall numbers, and staff contacts. Grades 9 to 12.</p>
+        <span class="cta">Open PDF →</span>
+      </a>
+      <a class="mcard" href="#ask">
+        <span class="t"><span class="ic" aria-hidden="true">💬</span>Ask a question</span>
+        <p>Send us a question about tonight, during the presentation or afterwards.</p>
+        <span class="cta">Ask now →</span>
+      </a>
       <a class="mcard" href="assets/g9-igcse-options-2026-27.pdf" download>
         <span class="t"><span class="ic" aria-hidden="true">📝</span>Grade 9 IGCSE Options Form</span>
         <p>Academic Year 2026-2027. Print, complete and sign.</p>
@@ -944,102 +1012,95 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
         <p>Academic Year 2026-2027. Print, complete and sign.</p>
         <span class="cta">Open PDF →</span>
       </a>
-      <a class="mcard" href="assets/parents-calendar-2026-27.pdf" download>
-        <span class="t"><span class="ic" aria-hidden="true">📅</span>Parent Calendar 2026/27</span>
-        <p>First Semester, Boys and Girls.</p>
-        <span class="cta">Open PDF →</span>
-      </a>
-      <a class="mcard" href="assets/no-mobile-phone-policy.pdf" download>
-        <span class="t"><span class="ic" aria-hidden="true">📵</span>No Mobile Phone Policy</span>
-        <p>The full policy text.</p>
-        <span class="cta">Open PDF →</span>
-      </a>
-      <a class="mcard" href="assets/phone-policy-commitment-form.pdf" download>
-        <span class="t"><span class="ic" aria-hidden="true">✍️</span>Phone Policy Commitment Form</span>
-        <p>Signed when a confiscated phone is collected.</p>
-        <span class="cta">Open PDF →</span>
-      </a>
       <span class="mcard soon">
         <span class="t"><span class="ic" aria-hidden="true">🗓️</span>Meet &amp; Greet Agenda</span>
-        <p>The printed running order for Grades 9 and 10.</p>
+        <p>The printed running order, British Section IGCSE.</p>
         <span class="cta">Available soon</span>
       </span>
       <span class="mcard soon">
-        <span class="t"><span class="ic" aria-hidden="true">📊</span>Presentation</span>
-        <p>The slides from the evening.</p>
+        <span class="t"><span class="ic" aria-hidden="true">📊</span>Tonight’s Presentation</span>
+        <p>The slides from this evening.</p>
         <span class="cta">Available soon</span>
       </span>
     </div>
   </div>
 </div>
 
-<!-- ============ 01 · THE EVENING ============ -->
+<!-- ============ 01 · TONIGHT'S PROGRAMME ============ -->
 <section class="sec" id="s1">
   <div class="in">
     <div class="st">
-      <h2>How the evening runs</h2>
-      <p>What to expect, from registration to prayer</p>
+      <h2>Tonight’s programme</h2>
+      <p>How the evening runs</p>
       <div class="bar"></div>
     </div>
 
-    <!-- PLACEHOLDER · timings follow last year's running order. Confirm
-         before publishing, and keep in step with the printed agenda. -->
     <div class="agenda">
       <div class="ag">
         <div class="n">01</div>
         <div class="b">
-          <div class="hd"><span class="hh">6:30 PM</span><h3>Registration and welcome</h3></div>
-          <p>Refreshments will be served.</p>
+          <div class="hd"><span class="hh">6:30 PM</span><h3>Welcome and arrival</h3></div>
+          <p>Doors open. Please come in and find a seat.</p>
         </div>
       </div>
       <div class="ag">
         <div class="n">02</div>
         <div class="b">
-          <div class="hd"><span class="hh">7:00 PM</span><h3>Presentation</h3></div>
-          <p>The IGCSE programme for Grades 9 and 10, from subject options through to assessment and support.</p>
+          <div class="hd"><span class="hh">6:45 PM</span><h3>Presentation begins</h3></div>
+          <p>The IGCSE programme, how we assess, and how we track progress through the year.</p>
         </div>
       </div>
       <div class="ag">
         <div class="n">03</div>
         <div class="b">
-          <div class="hd"><span class="hh">7:30 PM</span><h3>Question and answer</h3></div>
-          <p>Open session with senior staff on curriculum, transition and activities.</p>
-        </div>
-      </div>
-      <div class="ag">
-        <div class="n">04</div>
-        <div class="b">
-          <div class="hd"><span class="hh">7:45 PM</span><h3>Subject teacher stalls</h3></div>
-          <p>Visit the subject booths and meet the teachers to talk through IGCSE choices and where they lead at A-Level.</p>
-        </div>
-      </div>
-      <div class="ag">
-        <div class="n">05</div>
-        <div class="b">
-          <div class="hd"><span class="hh">8:30 PM</span><h3>Prayer</h3></div>
+          <div class="hd"><span class="hh">7:15 PM</span><h3>Subject teacher stalls open</h3></div>
+          <p>Meet your child’s teachers subject by subject. No fixed close, so stay as long as you need.</p>
         </div>
       </div>
     </div>
 
+    <p class="strip"><b>Questions</b> Send yours through <a href="#ask" style="color:#fff;text-decoration:underline">the form in the hub</a>, during the presentation or afterwards.</p>
+
     <div class="card tint">
-      <h3>Before you come</h3>
+      <h3>Finding your way</h3>
       <ul class="ticks">
-        <li>Read <a href="#s3">Subject options</a>, so the choices are familiar before you speak to the subject teachers.</li>
-        <li>Bring your questions for the Q&amp;A. The stalls afterwards are the best place for subject-specific ones.</li>
-        <li>Options forms can be downloaded, printed and brought along, or collected on the night.</li>
+        <li><b>Gates, boys campus.</b> Grade 9 families enter by Gate 8, Grade 10 families by Gate 10.</li>
+        <li><b>The stalls are numbered.</b> Most British Section teachers are on the basketball court, with a few in the lower and higher courtyards. Your child’s class list and the map are in the <a href="assets/meet-and-greet-parent-guide-boys-2026-27.pdf" download>Parent Guide</a>.</li>
+        <li><b>Options forms</b> can be downloaded, printed and brought along, or collected on the night.</li>
+        <li>Read <a href="#s3">Subject options</a> before you reach the stalls, so the choices are familiar.</li>
       </ul>
     </div>
+  </div>
+</section>
+
+<!-- ============ RESULTS ============ -->
+<section class="sec alt" id="results">
+  <div class="in">
+    <div class="st">
+      <h2>IGCSE results 2025/26</h2>
+      <p>718 subject results from 192 candidates across 20 subjects, all boards combined</p>
+      <div class="bar"></div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><span class="v">40.0%</span><span class="l">of results at the top grades, 9, 8 or A*</span></div>
+      <div class="stat"><span class="v">58.4%</span><span class="l">at grades 9 to 7, or A* to A</span></div>
+      <div class="stat"><span class="v">90.8%</span><span class="l">at grades 9 to 4, or A* to C</span></div>
+      <div class="stat"><span class="v">6</span><span class="l">subjects at 100% grades 9 to 4</span></div>
+    </div>
+
+    <p class="strip"><b>Students</b> 24 with five or more top grades, 11 with seven or more, and 3 with full marks in Edexcel IGCSE Mathematics.</p>
   </div>
 </section>
 
 <div class="band" aria-hidden="true"><img src="assets/emblem.png" alt=""></div>
 
 <!-- ============ 02 · YOUR IG PATHWAY ============ -->
-<section class="sec alt" id="s2">
+<section class="sec" id="s2">
   <div class="in">
     <div class="st">
       <h2>Two years, one programme</h2>
-      <p>The route from Grade 9 through to A-Level</p>
+      <p>The big picture, from Grade 9 through to A-Level</p>
       <div class="bar"></div>
     </div>
 
@@ -1049,7 +1110,7 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
       <div class="it now">
         <span class="dot" aria-hidden="true"></span>
         <div class="bx">
-          <span class="g">Grade 9</span>
+          <span class="g">Start · Grade 9</span>
           <h3>IGCSE begins</h3>
           <p>Subject options are selected and the two-year syllabus starts.</p>
         </div>
@@ -1057,17 +1118,17 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
       <div class="it">
         <span class="dot" aria-hidden="true"></span>
         <div class="bx">
-          <span class="g">Grade 10</span>
+          <span class="g">Journey · Grade 10</span>
           <h3>The programme completes</h3>
-          <p>Students sit their external IGCSE examinations.</p>
+          <p>Students sit their external IGCSE examinations, carrying the critical thinking, creativity and collaboration that matter beyond the exam hall.</p>
         </div>
       </div>
       <div class="it later">
         <span class="dot" aria-hidden="true"></span>
         <div class="bx">
-          <span class="g">Grades 11 and 12</span>
-          <h3>A-Levels</h3>
-          <p>AS then A2, built directly on the IGCSE subjects taken.</p>
+          <span class="g">Goal · Grades 11 and 12</span>
+          <h3>A-Levels and beyond</h3>
+          <p>AS then A2, built directly on the IGCSE subjects taken, and recognised by universities worldwide.</p>
         </div>
       </div>
     </div>
@@ -1075,7 +1136,7 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
 </section>
 
 <!-- ============ 03 · SUBJECT OPTIONS ============ -->
-<section class="sec" id="s3">
+<section class="sec alt" id="s3">
   <div class="in">
     <div class="st">
       <h2>Choosing subjects</h2>
@@ -1198,10 +1259,18 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
       </div>
     </div>
 
-    <!-- ---------- SHARED: MATHS, FORMS ---------- -->
+    <!-- ---------- SHARED: MATHS, SYLLABUS LINKS, FORMS ---------- -->
     <div class="card" style="margin-top:12px">
       <h3>Cambridge or Edexcel Mathematics</h3>
-      <p style="font-size:13px">Both are internationally recognised, both prepare students for advanced level study, and both examine over two papers of two hours, 200 marks in total. The difference is in how the papers are sat.</p>
+      <p style="font-size:13px">Same content, same standard. The difference is timing and calculators.</p>
+      <h4>What the two boards share</h4>
+      <ul class="ticks" style="margin-bottom:14px">
+        <li>Both prepare students for advanced level study.</li>
+        <li>Designed by subject experts and based on the latest educational research.</li>
+        <li>Extensive teaching and learning resources, and internationally recognised qualifications.</li>
+        <li><b>The exam:</b> two papers, two hours each, 200 marks in total.</li>
+      </ul>
+      <h4>Where they differ</h4>
       <div class="cmp">
         <div class="col">
           <div class="h">Cambridge</div>
@@ -1214,7 +1283,7 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
           <div class="h">Edexcel</div>
           <ul>
             <li><b>Modular.</b> One paper can be sat in one session and the other in a separate session.</li>
-            <li>Calculator allowed in <b>both</b> papers.</li>
+            <li>Calculator allowed in <b>both</b> papers: Paper 1H and Paper 2H, 100 marks each.</li>
           </ul>
         </div>
       </div>
@@ -1233,10 +1302,53 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
           </tbody>
         </table>
       </div>
-      <p class="small" style="margin-top:10px">Each Edexcel paper carries 100 marks. Forty per cent of the marks target grades 4 and 5; sixty per cent target grades 6 to 9.</p>
+      <p class="small" style="margin-top:10px">Forty per cent of the marks target grades 4 and 5; sixty per cent target grades 6 to 9.</p>
     </div>
 
-    <div class="docs">
+    <div class="card">
+      <h3>Syllabus pages</h3>
+      <p style="font-size:13px">Each link opens the examination board’s own page for the subject, which always carries the current syllabus. English, Edexcel Mathematics and Business Studies will be added once the 2026/27 entries are confirmed.</p>
+      <div class="docs">
+        <a class="doc" href="https://www.cambridgeinternational.org/programmes-and-qualifications/cambridge-igcse-physics-0625/" target="_blank" rel="noopener">
+          <span class="ic" aria-hidden="true">↗</span>
+          <span class="tx"><span class="tt">Physics</span><span class="sb">Cambridge IGCSE 0625</span></span>
+          <span class="ar" aria-hidden="true">→</span>
+        </a>
+        <a class="doc" href="https://www.cambridgeinternational.org/programmes-and-qualifications/cambridge-igcse-chemistry-0620/" target="_blank" rel="noopener">
+          <span class="ic" aria-hidden="true">↗</span>
+          <span class="tx"><span class="tt">Chemistry</span><span class="sb">Cambridge IGCSE 0620</span></span>
+          <span class="ar" aria-hidden="true">→</span>
+        </a>
+        <a class="doc" href="https://www.cambridgeinternational.org/programmes-and-qualifications/cambridge-igcse-biology-0610/" target="_blank" rel="noopener">
+          <span class="ic" aria-hidden="true">↗</span>
+          <span class="tx"><span class="tt">Biology</span><span class="sb">Cambridge IGCSE 0610</span></span>
+          <span class="ar" aria-hidden="true">→</span>
+        </a>
+        <a class="doc" href="https://www.cambridgeinternational.org/programmes-and-qualifications/cambridge-igcse-mathematics-0580/" target="_blank" rel="noopener">
+          <span class="ic" aria-hidden="true">↗</span>
+          <span class="tx"><span class="tt">Mathematics (Cambridge)</span><span class="sb">Cambridge IGCSE 0580</span></span>
+          <span class="ar" aria-hidden="true">→</span>
+        </a>
+        <a class="doc" href="https://www.cambridgeinternational.org/programmes-and-qualifications/cambridge-igcse-accounting-0452/" target="_blank" rel="noopener">
+          <span class="ic" aria-hidden="true">↗</span>
+          <span class="tx"><span class="tt">Accounting</span><span class="sb">Cambridge IGCSE 0452</span></span>
+          <span class="ar" aria-hidden="true">→</span>
+        </a>
+        <a class="doc" href="https://www.cambridgeinternational.org/programmes-and-qualifications/cambridge-igcse-computer-science-0478/" target="_blank" rel="noopener">
+          <span class="ic" aria-hidden="true">↗</span>
+          <span class="tx"><span class="tt">Computer Science</span><span class="sb">Cambridge IGCSE 0478</span></span>
+          <span class="ar" aria-hidden="true">→</span>
+        </a>
+        <a class="doc" href="https://www.cambridgeinternational.org/programmes-and-qualifications/cambridge-igcse-information-and-communication-technology-0417/" target="_blank" rel="noopener">
+          <span class="ic" aria-hidden="true">↗</span>
+          <span class="tx"><span class="tt">ICT</span><span class="sb">Cambridge IGCSE 0417</span></span>
+          <span class="ar" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+
+    <h4 style="margin-top:20px">Options forms</h4>
+    <div class="docs" style="margin-top:0">
       <a class="doc" href="assets/g9-igcse-options-2026-27.pdf" download>
         <span class="ic" aria-hidden="true">↓</span>
         <span class="tx">
@@ -1258,7 +1370,7 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
 </section>
 
 <!-- ============ 04 · ASSESSMENT ============ -->
-<section class="sec alt" id="s4">
+<section class="sec" id="s4">
   <div class="in">
     <div class="st">
       <h2>How marks are built</h2>
@@ -1294,33 +1406,49 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
       <h3>How progress reaches you</h3>
       <ul class="ticks">
         <li><b>Reports</b> are issued at the end of each quarter and at the end of each semester.</li>
-        <li>An overall score <b>below sixty per cent</b> in any subject triggers the intervention process described under <a href="#s5">Support</a>.</li>
+        <li><b>Twice a semester</b> you receive a results and support plan by email, subject by subject, with what we are doing next.</li>
+        <li>An overall score <b>below sixty per cent</b> in any subject triggers the intervention described under <a href="#s5">Support</a>.</li>
       </ul>
+    </div>
+
+    <div class="docs">
+      <a class="doc" href="https://ict001001.github.io/Assessment_Grades_IG/" target="_blank" rel="noopener">
+        <span class="ic" aria-hidden="true">↗</span>
+        <span class="tx">
+          <span class="tt">Parent Assessment Guide · Grades 9 to 12, British stream</span>
+          <span class="sb">The 2026/27 academic calendar, assessment breakdown, formative assessment counts, and homework and classwork policies</span>
+        </span>
+        <span class="ar" aria-hidden="true">→</span>
+      </a>
     </div>
   </div>
 </section>
 
 <!-- ============ 05 · SUPPORT ============ -->
-<section class="sec" id="s5">
+<section class="sec alt" id="s5">
   <div class="in">
     <div class="st">
-      <h2>Support and intervention</h2>
-      <p>What happens when a subject slips</p>
+      <h2>How we keep track of your child</h2>
+      <p>Support and intervention</p>
       <div class="bar"></div>
     </div>
 
-    <p class="lead">When a subject slips there is a defined response, rather than a wait for the next report.</p>
-
-    <div class="two">
+    <div class="three">
       <div class="card">
-        <h3>Mock examinations</h3>
-        <p>Full examination simulations, run to build preparedness and confidence before the real thing.</p>
+        <h3>Mock exams</h3>
+        <p>Full exam simulations under real conditions, so the summer session is not the first time it feels real.</p>
       </div>
       <div class="card">
-        <h3>Identifying students below level</h3>
-        <p>Any student scoring below sixty per cent in a subject is flagged. Parents receive a written summary of the affected subjects, individual interviews are held with the student to understand what is going wrong, and a tailored support plan follows.</p>
+        <h3>Progress sheets</h3>
+        <p>Every subject keeps a Student Academic Progress Sheet, tracking individual growth through the year.</p>
+      </div>
+      <div class="card">
+        <h3>Early support</h3>
+        <p>Anyone slipping below 60% is picked up during the term and given a named intervention plan. You receive a written summary of the affected subjects, individual interviews are held with the student, and a tailored support plan follows.</p>
       </div>
     </div>
+
+    <p class="strip"><b>In short</b> You will hear from us before the grade drops, not after.</p>
 
     <div class="card">
       <h3>Homeroom Mentorship Programme</h3>
@@ -1329,18 +1457,18 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
         <li><b>Weekly class check-ins.</b> Ten to fifteen minutes in homeroom time, covering group well-being, academic updates, behaviour expectations, shared concerns and achievements.</li>
         <li><b>Monthly one-to-one sessions.</b> At least once a month, ten to fifteen minutes per student, reviewing academic performance, emotional and social well-being, and goals for the term ahead.</li>
         <li><b>Private conversations</b> whenever a student needs one.</li>
+        <li><b>Mentor appointments with parents.</b> Short scheduled meetings through the semester to talk through progress and next steps.</li>
       </ul>
-      <!-- PLACEHOLDER · 2026/27 mentor assignments pending. Last confirmed
-           list was 2025/26: 9A-9D and 10A-10C. Replace names and emails
-           once homerooms are set, or delete this block if it is not wanted
-           on a public page. -->
+      <!-- PLACEHOLDER · 2026/27 mentor assignments pending. The deck still
+           shows the 2025/26 list. Replace names and emails once homerooms
+           are set, or delete this block if it is not wanted on a public page. -->
       <h4 style="margin-top:14px">Homeroom mentors 2026/27</h4>
-      <p class="small">Mentor assignments are confirmed in the first week of term and shared directly with families. Your child’s mentor is your first point of contact for anything academic or pastoral.</p>
+      <p class="small">Mentor assignments are confirmed in the first weeks of term and shared directly with families. Your child’s mentor is your first point of contact for anything academic or pastoral.</p>
     </div>
 
     <div class="card tint">
       <h3>The partnership</h3>
-      <p>School, parents and students each hold one corner of the same triangle. The monitoring above only works when what we see in the classroom meets what you see at home. Contact the homeroom mentor early rather than late.</p>
+      <p>School, parents and students, together for student success. The monitoring above only works when what we see in the classroom meets what you see at home. Contact the homeroom mentor early rather than late.</p>
     </div>
   </div>
 </section>
@@ -1348,11 +1476,11 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
 <div class="band" aria-hidden="true"><img src="assets/emblem.png" alt=""></div>
 
 <!-- ============ 06 · BEYOND THE BOOKS ============ -->
-<section class="sec alt" id="s6">
+<section class="sec" id="s6">
   <div class="in">
     <div class="st">
       <h2>Beyond the books</h2>
-      <p>What students do alongside their grades</p>
+      <p>Building a profile for university and life</p>
       <div class="bar"></div>
     </div>
 
@@ -1361,21 +1489,50 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
     <div class="card">
       <h3>What is on offer</h3>
       <ul class="ticks">
-        <li><b>Creative thinking and problem solving</b> built into subject teaching rather than bolted on.</li>
-        <li><b>Student leadership</b>, including the Student Council.</li>
-        <li><b>Industry trips.</b> Recent years have included Almarai and MACTECH.</li>
-        <li><b>Community service</b> as a standing expectation, not an occasional event.</li>
+        <li><b>Creative thinking</b> and problem-solving, built into subject teaching rather than bolted on.</li>
+        <li><b>Student leadership.</b> The Student Council and more.</li>
+        <li><b>Industry trips.</b> Almarai and MACTECH among recent visits.</li>
+        <li><b>Community service.</b> Giving time locally, as a standing expectation.</li>
       </ul>
     </div>
+
+    <div class="two">
+      <div class="card">
+        <h3>Activities: first semester</h3>
+        <ul class="ticks">
+          <li><b>Excellence Awards.</b> Recognising top achievers and IGCSE distinctions.</li>
+          <li><b>Inter-School Cricket Match.</b> Friendly against Pakistan International School.</li>
+          <li><b>Makkah Trip.</b> Five-day educational and spiritual trip.</li>
+          <li><b>Global Health Exhibition.</b> Off-site: healthcare innovation and careers.</li>
+          <li><b>Cityscape Global.</b> Off-site: urban development and design careers.</li>
+          <li><b>Black Hat MEA.</b> Off-site: cybersecurity conference.</li>
+          <li><b>Dodgeball Competition.</b> Riyadh schools competition.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Activities: second semester</h3>
+        <ul class="ticks">
+          <li><b>Desert Trip.</b> Remah Camp, ahead of Ramadan.</li>
+          <li><b>Communal Iftar and Taraweeh.</b> Evening gathering during Ramadan.</li>
+          <li><b>AIS Chess Tournament.</b> In-school tournament.</li>
+          <li><b>Cultural Day</b> and <b>Sports Day</b>, held on the basketball court.</li>
+          <li><b>SPARK Entrepreneurship Competition.</b> Student business ideas.</li>
+          <li><b>STEM Fair.</b> Science and innovation showcase.</li>
+          <li><b>Fun Day.</b> End-of-year celebration.</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="strip"><b>All year</b> Student Council and Leadership, the Mentorship Programme, the Grade 9 Prayer Assembly Competition and Qur’an Memorisation run throughout.</p>
   </div>
 </section>
 
 <!-- ============ 07 · POLICIES ============ -->
-<section class="sec" id="s7">
+<section class="sec alt" id="s7">
   <div class="in">
     <div class="st">
       <h2>What we ask of students and families</h2>
-      <p>Attendance, mobile phones, and behaviour</p>
+      <p>A positive and safe learning environment</p>
       <div class="bar"></div>
     </div>
 
@@ -1412,7 +1569,7 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
 
     <div class="card">
       <h3>Behaviour and community</h3>
-      <p style="font-size:13px">Respect, responsibility and Islamic values are the foundation. Where behaviour falls short, three levels guide the response, so students and families always know what happens next.</p>
+      <p style="font-size:13px">Respect for teachers, classmates and the school. Responsibility for the work, the deadline and the outcome. Islamic values as the foundation of our community. Where behaviour falls short, three levels guide the response, so students and families always know what happens next.</p>
       <div class="lvl">
         <div class="l">
           <span class="n">Level A · Minor</span>
@@ -1422,7 +1579,7 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
         <div class="l">
           <span class="n">Level B · Repeated or disruptive</span>
           <div class="d">Inappropriate language, misuse of property.</div>
-          <div class="a"><b>Response:</b> counsellor referral and a behavioural contract, escalating to the Head of School if repeated.</div>
+          <div class="a"><b>Response:</b> counsellor referral and a behavioural contract, with Head of School involvement if repeated.</div>
         </div>
         <div class="l">
           <span class="n">Level C · Serious safety concern</span>
@@ -1453,16 +1610,122 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
   </div>
 </section>
 
-<!-- ============ ALL DOCUMENTS · CALL-OUT ============ -->
-<section class="sec navy" id="s8">
+<!-- ============ 08 · ALL DOCUMENTS ============ -->
+<section class="sec" id="s8">
   <div class="in">
     <div class="st">
       <h2>Everything in one place</h2>
+      <p>Every document and link for the British Section, gathered here. More is added through the year.</p>
       <div class="bar"></div>
     </div>
-    <p class="lead">Every document for Grades 9 and 10 sits in the Documents band at the top of this page. The agenda and the slides from the evening will be added there once they are ready.</p>
-    <a class="btn gold" href="#materials">Go to documents</a>
-    <p class="note">This page stays live through the year. Save the link, and check back as new documents and dates are added.</p>
+
+    <h4>Tonight</h4>
+    <div class="docs" style="margin-top:0">
+      <a class="doc" href="assets/meet-and-greet-parent-guide-boys-2026-27.pdf" download>
+        <span class="ic" aria-hidden="true">↓</span>
+        <span class="tx"><span class="tt">Meet &amp; Greet Parent Guide · Boys campus</span><span class="sb">PDF · event map, teachers by class, staff contacts · Grades 9 to 12</span></span>
+        <span class="ar" aria-hidden="true">→</span>
+      </a>
+      <span class="doc soon">
+        <span class="ic" aria-hidden="true">↓</span>
+        <span class="tx"><span class="tt">Meet &amp; Greet Agenda</span><span class="sb">PDF · British Section IGCSE</span></span>
+        <span class="ar">Available soon</span>
+      </span>
+      <span class="doc soon">
+        <span class="ic" aria-hidden="true">↓</span>
+        <span class="tx"><span class="tt">Tonight’s Presentation</span><span class="sb">PDF · the slides from this evening</span></span>
+        <span class="ar">Available soon</span>
+      </span>
+    </div>
+
+    <h4>Options forms</h4>
+    <div class="docs" style="margin-top:0">
+      <a class="doc" href="assets/g9-igcse-options-2026-27.pdf" download>
+        <span class="ic" aria-hidden="true">↓</span>
+        <span class="tx"><span class="tt">Grade 9 IGCSE Options Form</span><span class="sb">PDF · Academic Year 2026-2027</span></span>
+        <span class="ar" aria-hidden="true">→</span>
+      </a>
+      <a class="doc" href="assets/g10-igcse-options-2026-27.pdf" download>
+        <span class="ic" aria-hidden="true">↓</span>
+        <span class="tx"><span class="tt">Grade 10 IGCSE Options Form</span><span class="sb">PDF · Academic Year 2026-2027</span></span>
+        <span class="ar" aria-hidden="true">→</span>
+      </a>
+      <a class="doc" href="assets/g11-as-options-2026-27.pdf" download>
+        <span class="ic" aria-hidden="true">↓</span>
+        <span class="tx"><span class="tt">Grade 11 AS Options Form</span><span class="sb">PDF · A-Levels · Academic Year 2026-2027</span></span>
+        <span class="ar" aria-hidden="true">→</span>
+      </a>
+      <a class="doc" href="assets/g12-a2-options-2026-27.pdf" download>
+        <span class="ic" aria-hidden="true">↓</span>
+        <span class="tx"><span class="tt">Grade 12 A2 Options Form</span><span class="sb">PDF · A-Levels · Academic Year 2026-2027</span></span>
+        <span class="ar" aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <h4>Guides and links</h4>
+    <div class="docs" style="margin-top:0">
+      <a class="doc" href="assets/british-curriculum-pathway-booklet.pdf" download>
+        <span class="ic" aria-hidden="true">↓</span>
+        <span class="tx"><span class="tt">The British Curriculum Pathway</span><span class="sb">PDF · the IGCSE and A-Levels booklet</span></span>
+        <span class="ar" aria-hidden="true">→</span>
+      </a>
+      <a class="doc" href="assets/parent-letter-semester-1-2026-27.pdf" download>
+        <span class="ic" aria-hidden="true">↓</span>
+        <span class="tx"><span class="tt">Curriculum and Classroom Expectations</span><span class="sb">PDF · the school’s Semester 1 letter to parents · Arabic and English</span></span>
+        <span class="ar" aria-hidden="true">→</span>
+      </a>
+      <a class="doc" href="https://ict001001.github.io/AIS_G9_IG/" target="_blank" rel="noopener">
+        <span class="ic" aria-hidden="true">↗</span>
+        <span class="tx"><span class="tt">Grade 9 IG weekly plans</span><span class="sb">Semester 1 plans by subject: English, Biology, Chemistry, Physics, Mathematics, Arabic</span></span>
+        <span class="ar" aria-hidden="true">→</span>
+      </a>
+      <a class="doc" href="https://ict001001.github.io/AIS_G10_IG/" target="_blank" rel="noopener">
+        <span class="ic" aria-hidden="true">↗</span>
+        <span class="tx"><span class="tt">Grade 10 IG weekly plans</span><span class="sb">Semester 1 plans by subject: English, Biology, Chemistry, Physics, Mathematics, Arabic</span></span>
+        <span class="ar" aria-hidden="true">→</span>
+      </a>
+      <a class="doc" href="https://ict001001.github.io/Assessment_Grades_IG/" target="_blank" rel="noopener">
+        <span class="ic" aria-hidden="true">↗</span>
+        <span class="tx"><span class="tt">Parent Assessment Guide · Grades 9 to 12</span><span class="sb">Academic calendar, assessment breakdown, homework and classwork policies</span></span>
+        <span class="ar" aria-hidden="true">→</span>
+      </a>
+      <a class="doc" href="assets/parents-calendar-2026-27.pdf" download>
+        <span class="ic" aria-hidden="true">↓</span>
+        <span class="tx"><span class="tt">Parent Calendar 2026/27</span><span class="sb">PDF · First Semester · Boys and Girls</span></span>
+        <span class="ar" aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <h4>Policies</h4>
+    <div class="docs" style="margin-top:0">
+      <a class="doc" href="assets/no-mobile-phone-policy.pdf" download>
+        <span class="ic" aria-hidden="true">↓</span>
+        <span class="tx"><span class="tt">No Mobile Phone Policy</span><span class="sb">PDF · full policy text</span></span>
+        <span class="ar" aria-hidden="true">→</span>
+      </a>
+      <a class="doc" href="assets/phone-policy-commitment-form.pdf" download>
+        <span class="ic" aria-hidden="true">↓</span>
+        <span class="tx"><span class="tt">Phone Policy Commitment Form</span><span class="sb">PDF · signed when a phone is collected</span></span>
+        <span class="ar" aria-hidden="true">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ASK A QUESTION ============ -->
+<!-- PLACEHOLDER · the deck points parents to "the form in the hub". Until a
+     form link exists, the button opens an email to the Head of School with
+     the subject filled in. Swap the href for the form URL when it is ready
+     and drop the "opens your email app" note. -->
+<section class="sec navy" id="ask">
+  <div class="in">
+    <div class="st">
+      <h2>Have a question about tonight?</h2>
+      <div class="bar"></div>
+    </div>
+    <p class="lead">Send it during the presentation or afterwards. Questions are answered in the Q&amp;A where possible, and by email after the evening.</p>
+    <a class="btn gold" href="mailto:f.hussein@ais.sch.sa?subject=Question%20%C2%B7%20Parents%E2%80%99%20Meet%20%26%20Greet%2C%20Grades%209%20and%2010&amp;body=Child%E2%80%99s%20grade%20and%20class%3A%20%0A%0AMy%20question%3A%20">Ask a question</a>
+    <p class="note">This opens your email app with a message to the Head of School, British Section. Please include your child’s grade and class.</p>
   </div>
 </section>
 
@@ -1471,35 +1734,77 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
   <div class="in">
     <div class="st">
       <h2>Who to speak to</h2>
-      <p>Your child’s homeroom mentor and subject teachers come first. For anything beyond them, the section leadership is here.</p>
+      <p>Your child’s homeroom mentor and subject teachers come first. For anything beyond them, the section team is here.</p>
       <div class="bar"></div>
     </div>
 
-    <!-- PLACEHOLDER · confirm the girls campus names and titles before
-         publishing. See README for the naming discrepancy. -->
+    <h4>Boys campus · UK High School</h4>
     <div class="cgrid">
       <div class="ccard">
-        <p class="cs">Boys campus</p>
+        <p class="cs">Head of School</p>
         <p class="nm">Mr. Farhan Hussein</p>
-        <p class="rl">Head of School, British Section</p>
+        <p class="rl">British Section</p>
         <a href="mailto:f.hussein@ais.sch.sa">📧 f.hussein@ais.sch.sa</a>
+        <a href="tel:+966549874933">📞 054 987 4933 · ext. 236</a>
       </div>
       <div class="ccard">
-        <p class="cs">Boys campus</p>
+        <p class="cs">Deputy Head of School</p>
         <p class="nm">Mr. Tariq Saeed</p>
-        <p class="rl">Deputy Head of School</p>
+        <p class="rl">British Section</p>
         <a href="mailto:t.saeed@ais.sch.sa">📧 t.saeed@ais.sch.sa</a>
+        <a href="tel:+966500431494">📞 050 043 1494 · ext. 213</a>
       </div>
+      <div class="ccard">
+        <p class="cs">Student Affairs</p>
+        <p class="nm">Mr. AbdulAziz Nasrai</p>
+        <p class="rl">Absence, dismissal and student affairs</p>
+        <a href="mailto:a.nasrai@ais.sch.sa">📧 a.nasrai@ais.sch.sa</a>
+        <a href="tel:+966509020350">📞 050 902 0350 · ext. 220</a>
+      </div>
+      <div class="ccard">
+        <p class="cs">Student Counsellor</p>
+        <p class="nm">Mr. Mahmoud Al Ameen</p>
+        <p class="rl">Well-being and behaviour support</p>
+        <a href="mailto:m.mohammed@ais.sch.sa">📧 m.mohammed@ais.sch.sa</a>
+        <a href="tel:+966533990488">📞 053 399 0488 · ext. 237</a>
+      </div>
+      <div class="ccard">
+        <p class="cs">Activity Supervisor</p>
+        <p class="nm">Mr. Mohamed Noor</p>
+        <p class="rl">Trips, competitions and activities</p>
+        <a href="mailto:m.noor@ais.sch.sa">📧 m.noor@ais.sch.sa</a>
+        <a href="tel:+966508551006">📞 050 855 1006</a>
+      </div>
+      <div class="ccard">
+        <p class="cs">Floor Supervisor · Second floor</p>
+        <p class="nm">Mr. Yousef Alhulwah</p>
+        <p class="rl">Day-to-day supervision</p>
+        <a href="mailto:y.alhulwa@ais.sch.sa">📧 y.alhulwa@ais.sch.sa</a>
+        <a href="tel:+966507923461">📞 050 792 3461 · ext. 243</a>
+      </div>
+      <div class="ccard">
+        <p class="cs">Floor Supervisor · First floor</p>
+        <p class="nm">Mr. Saber Alhajj</p>
+        <p class="rl">Day-to-day supervision</p>
+        <a href="mailto:s.alhajj@ais.sch.sa">📧 s.alhajj@ais.sch.sa</a>
+        <a href="tel:+966551890854">📞 055 189 0854 · ext. 220</a>
+      </div>
+    </div>
+
+    <!-- PLACEHOLDER · confirm the girls campus names and titles. See README
+         for the naming discrepancy. -->
+    <h4>Girls campus</h4>
+    <div class="cgrid" style="margin-bottom:0">
       <div class="ccard gold">
-        <p class="cs">Girls campus</p>
+        <p class="cs">Head of School, Girls</p>
         <p class="nm">Ms. Shamsiya Alkalbani</p>
-        <p class="rl">Head of School, Girls</p>
+        <p class="rl">Girls campus</p>
         <a href="mailto:s.alkalbani@ais.sch.sa">📧 s.alkalbani@ais.sch.sa</a>
       </div>
       <div class="ccard gold">
-        <p class="cs">Girls campus</p>
+        <p class="cs">Deputy Head of School</p>
         <p class="nm">Ms. Malak Alkhasawna</p>
-        <p class="rl">Deputy Head of School</p>
+        <p class="rl">British Section, Girls</p>
         <a href="mailto:m.alkhasawna@ais.sch.sa">📧 m.alkhasawna@ais.sch.sa</a>
       </div>
     </div>
@@ -1508,9 +1813,9 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
 
 <footer>
   <img src="assets/emblem.png" alt="" width="44" height="44">
-  <p class="tag">British Section · Grades 9 and 10</p>
+  <p class="tag">British Section</p>
   <p class="l1">Al-Rowad International Schools · Riyadh</p>
-  <p class="l2">Academic Year 2026/27</p>
+  <p class="l2">Academic Year 2026/27 · ais.sch.sa · +966 50 519 9115</p>
   <a class="top" href="#top">Back to top</a>
 </footer>
 
@@ -1538,7 +1843,7 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
   });
 
   /* --- highlight the section in view --- */
-  var links = Array.prototype.slice.call(menu.querySelectorAll('a[href^="#"]:not(.go)'));
+  var links = Array.prototype.slice.call(menu.querySelectorAll('a[href^="#"]:not(.go):not(.go2)'));
   if ('IntersectionObserver' in window) {
     var ob = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
