@@ -78,11 +78,11 @@ Assessment changed too, and the numbers on the page are the 2026/27 ones, not th
 
 The deck's agenda is three steps, 6:30 arrival, 6:45 presentation, 7:15 stalls with no fixed close. An earlier draft agenda in `~/Downloads` dated 1 September with different timings is superseded.
 
-"Ask a question" is a mailto to the Head of School until a form link exists. The deck promises parents "the form in the hub", so this is the first thing to replace.
+"Ask a question" is the school's Google Form, linked from four places on the page; README lists them.
 
 ## Workflow expectations
 
-- Placeholders are marked `<!-- PLACEHOLDER -->` and must read as plausible finished content, never "TBC". `README.md` lists all three: the question form, the mentor list, the girls campus names.
+- Placeholders are marked `<!-- PLACEHOLDER -->` and must read as plausible finished content, never "TBC". `README.md` lists both: the mentor list and the girls campus names.
 - Verify at ~380px width before considering any change done. The page must never scroll sideways; wide content scrolls inside its own container. Headless Chrome's `--window-size` does not go below the macOS minimum window width, so use device emulation over the DevTools protocol, or a real phone, to check.
 - Every internal anchor must resolve and every asset path must exist. Both are quick to check with grep.
 - Pushing needs the `Mohamad-Dabbagh` gh account; `madabbagh` is read-only on the org. See `README.md`.

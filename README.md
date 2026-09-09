@@ -22,11 +22,10 @@ Root-level PDFs are ignored by `.gitignore`. The Grade 11 and 12 options forms s
 
 ## Open items
 
-Everything marked `<!-- PLACEHOLDER -->` in `index.html` must be replaced or confirmed. Search the file for that string. There are three:
+Everything marked `<!-- PLACEHOLDER -->` in `index.html` must be replaced or confirmed. Search the file for that string. There are two:
 
 | Where | What to confirm |
 |---|---|
-| Ask a question | The deck tells parents to use "the form in the hub". No form exists yet, so the button opens an email to the Head of School with the subject filled in. Swap in the form URL when there is one. |
 | Support | Homeroom mentor list for 2026/27. The deck still shows the 2025/26 list. |
 | Who to speak to | Girls campus names and titles. The boys list comes from the printed parent guide of 9 September 2026. |
 
@@ -57,6 +56,8 @@ The hero counts down to the evening. It is driven by two attributes on the hero 
 | After `data-end` | "Thank you for joining us · We hope the evening was useful." |
 
 If the attributes are missing or unparseable the whole block stays hidden. To retire the countdown between events, delete the two attributes.
+
+**Ask a question** is a Google Form owned by the school, `https://docs.google.com/forms/d/e/1FAIpQLSe5bU8ruZOil2hbbXmYcrQNrXJu1IDsOPLj1kQ1FtgIGw69Ow/viewform`. It is linked from the hero, the Tonight's materials card, the Questions strip and the Ask a question block. Change all four together.
 
 ## Keeping the hub current through the year
 
