@@ -1,30 +1,47 @@
-# AIS British Section · Parents' Meet & Greet, Grades 9 and 10
+# AIS British Section · Parent Hub, Grades 9 and 10
 
 ## What this project is
 
-A single-page hub for the Parents' Meet & Greet evening at Al-Rowad International Schools, Riyadh, British Section, **Grades 9 and 10 only**, boys and girls, academic year 2026/27. It replaces `linktr.ee/ais.orientation`, which served the same purpose in 2025 as an undifferentiated list of PDF buttons.
+A single-page Parent Hub for Al-Rowad International Schools, Riyadh, British Section, **Grades 9 and 10 only**, boys and girls, academic year 2026/27. It went live on 9 September 2026 as the Parents' Meet & Greet page and is the one link parents keep for the year. It replaces both `linktr.ee/ais.orientation`, last year's list of PDF buttons, and an earlier Grades 9 to 12 Parent Information Hub that was never sent out.
 
-Parents open it on a phone, from a WhatsApp link or a QR code on the printed agenda. It is a practical reference for one evening and the weeks around it, not a marketing page and not a year-round hub.
+Parents open it on a phone, from a WhatsApp link or a QR code. It is a practical reference, not a marketing page. The hero and the banner describe the current event and are swapped as the year goes on; everything below them is reference material that changes only when a source document changes.
+
+Live at `https://ais-ig.github.io/hub/`, repository `ais-ig/hub`. This folder is a clone of that repository.
 
 ## Architecture (locked decisions, do not revisit)
 
-- **One self-contained `index.html`** on GitHub Pages. All CSS and JS inline. No build step, no framework, no dependency beyond Google Fonts.
-- **Mobile-first**, 480px column, widening to 720px above that breakpoint.
-- **English only.** No language toggle, no RTL. Every document the school produces for this evening is English.
-- **No campus toggle.** Grades 9 and 10 curriculum, options, assessment and policies are identical across campuses. Only event venue and contacts differ, and both appear side by side.
-- **No Google Sheets hydration.** All content is static. The parent hub's CSV layer was deliberately dropped: this page describes a fixed event, so there is nothing volatile enough to justify the failure surface.
-- **PDFs live in `assets/`** and are linked relatively. Never link to Google Drive.
-- Documents not yet produced render as a muted `.doc.soon` row reading "Available soon" rather than a link that 404s.
-- **The hero carries a countdown**, in the pattern of the Grade 9 Pathway hub (`ais-ig/g9-pathway-26`). It reads `data-doors` and `data-end` off the hero element rather than a JS constant, so the machine-readable date sits beside the human-readable one. Three self-switching states: counting, "under way", "thank you". Hidden until JS validates both dates, so it never flashes empty cells. Do not move these dates into a constant, and do not let the attributes drift from the Date and Time rows.
+- **One self-contained `index.html`** on GitHub Pages. All CSS and JS inline. No build step, no framework, no dependency beyond Google Fonts. The design reference is a React page; this is not, and must not become one.
+- **Mobile-first**, an 800px content column, the same width as the pathway hub. The documents band and the contact grid go multi-column above roughly 520px; nothing else changes shape on desktop.
+- **English only.** No language toggle, no RTL. Every document the school produces for these grades is English.
+- **No campus toggle.** Grades 9 and 10 curriculum, options, assessment and policies are identical across campuses. Only venues and contacts differ, and both appear side by side.
+- **No Google Sheets hydration.** All content is static. The old hub's CSV layer was deliberately dropped: nothing on this page is volatile enough to justify the failure surface.
+- **PDFs live in `assets/`** and are linked relatively. Never link to Google Drive. Root-level PDFs are git-ignored.
+- Documents not yet produced render as a muted, dashed "Available soon" card rather than a link that 404s.
+- **The hero carries a countdown.** It reads `data-doors` and `data-end` off the hero element rather than a JS constant, so the machine-readable date sits beside the human-readable one in the banner. Three self-switching states: counting, "under way", "thank you". Hidden until JS validates both dates, so it never flashes empty cells. Do not move these dates into a constant, and do not let the attributes drift from the banner. Between events, delete the attributes and the block hides itself.
 
 ## Design direction
 
-Visual sibling of the AIS Parent Information Hub, evolved not cloned. It shares that hub's brand tokens, card vocabulary, section rhythm and nav grid. Two patterns are specific to this page:
+The page copies the Grade 9 Pathway Hub, `https://ais-ig.github.io/g9-pathway-26/`, rebuilt in plain CSS. Its source is React with inline styles; the live page is the reference, not its code. Carried over as-is:
 
-- **The agenda timeline** in section 01, a gold numeral on deep navy beside a white detail panel. It is a deliberate echo of the printed Meet & Greet poster and is the page's visual signature.
-- **The options tables and choice pairs** in section 03. Grade 9's either/or rows render as choice-pair cards rather than a four-column table, because "choose one from each pair" reads far better that way on a phone than a table does.
+- Fixed deep navy top bar, 56px, 3px gold bottom border, emblem and gold title, hamburger menu that drops a list of sections and a gold button.
+- Navy hero: vertical gradient to `#08203D`, watermark emblem at 7% opacity, 104px emblem, gold h1, white subtitle, pale description, gold filled and gold outline buttons.
+- Navy event banner strip with emoji date, time and venue.
+- Light gold documents band with white cards, 3px gold top border, emoji icon, gold "Open PDF →".
+- Section titles: 24px deep navy h2, grey subtitle, 48px by 3px gold bar. Sections alternate cream and white.
+- Numbered agenda cards: 48px tinted square with the number, gold time, navy heading.
+- Journey map: vertical gold-to-navy line, dots, cards with a coloured left border.
+- Pill tabs for Grade 9 / Grade 10, deep navy when active.
+- Contact cards with a coloured top border and an uppercase campus label.
+- Navy full-width call-to-action block, and a navy footer with emblem, gold tagline and gold top border.
 
-The printed material is yellow-dominant. This page is cream-dominant with gold as accent, matching the parent hub. Let the gold timeline numerals carry the callback rather than flooding the page with yellow.
+Deliberate departures, all for brand or content reasons:
+
+- **Poppins 700 is the heaviest weight**, where the pathway uses 800. The brand rules forbid 600 and 800.
+- **Navy emblem bands instead of stock skyline photos** between sections. The pathway's New York and London photographs say "choose a pathway"; this page has no such story to tell, and campus photographs were not supplied.
+- **No floating action pill.** The pathway's pill submits an application form. This page has no such action.
+- **The countdown lives in the hero.** The pathway defines a countdown component but never renders it.
+
+The page-specific patterns kept from the first version: the options tables and the choice pairs in Subject options. Grade 9's either/or rows render as choice-pair cards rather than a four-column table, because "choose one from each pair" reads far better that way on a phone.
 
 ## Brand rules (never violate)
 
@@ -45,10 +62,10 @@ The printed material is yellow-dominant. This page is cream-dominant with gold a
 
 | Section | Source |
 |---|---|
-| 03 Subject options | `assets/g9-igcse-options-2026-27.pdf` and `assets/g10-igcse-options-2026-27.pdf` |
-| 04 Assessment | Teachers' Guide, British Section, Assessment breakdown for 2026/2027. **Not a parent-facing document, so it is a source only and is deliberately not linked as a download.** |
-| 05, 06 | 2025 Meet & Greet presentation, pending the 2026/27 update |
-| 07 Policies | `assets/no-mobile-phone-policy.pdf`, plus the behaviour levels from the 2025 presentation |
+| Subject options | `assets/g9-igcse-options-2026-27.pdf` and `assets/g10-igcse-options-2026-27.pdf` |
+| Assessment | Teachers' Guide, British Section, Assessment breakdown for 2026/2027. **Not a parent-facing document, so it is a source only and is deliberately not linked as a download.** |
+| Support, Beyond the books | 2025 Meet & Greet presentation, pending the 2026/27 update |
+| Policies | `assets/no-mobile-phone-policy.pdf`, plus the behaviour levels from the 2025 presentation |
 
 **When a source PDF changes, the prose must change with it.** The subject tables, the assessment breakdown and the phone policy tiers are all duplicated from documents. Do not update one without the other.
 
@@ -58,6 +75,8 @@ Assessment changed too, and the numbers on the page are the 2026/27 ones, not th
 
 ## Workflow expectations
 
-- Placeholders are marked `<!-- PLACEHOLDER -->` and must read as plausible finished content, never "TBC". `README.md` lists all four.
-- Verify at ~380px width before considering any change done. The page must never scroll sideways; wide content scrolls inside its own container.
+- Placeholders are marked `<!-- PLACEHOLDER -->` and must read as plausible finished content, never "TBC". `README.md` lists all three.
+- Verify at ~380px width before considering any change done. The page must never scroll sideways; wide content scrolls inside its own container. Headless Chrome's `--window-size` does not go below the macOS minimum window width, so use device emulation over the DevTools protocol, or a real phone, to check.
 - Every internal anchor must resolve and every asset path must exist. Both are quick to check with grep.
+- Pushing needs the `Mohamad-Dabbagh` gh account; `madabbagh` is read-only on the org. See `README.md`.
+- The previous hub's content is archived at `~/Cooking/Rowad/parent-hub-archive-2026-08`. Do not resurrect it into this page without being asked.

@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0C2E54">
-<title>Parents’ Meet &amp; Greet · Grades 9 &amp; 10 · AIS British Section</title>
-<meta name="description" content="Al-Rowad International Schools, British Section. Parents’ Meet &amp; Greet for Grades 9 and 10 IG, academic year 2026/27. Agenda, IGCSE subject options, assessment, support and school policies.">
+<title>AIS Parent Hub · Grades 9 &amp; 10 · British Section</title>
+<meta name="description" content="Al-Rowad International Schools, British Section. Parent Hub for Grades 9 and 10 IG, academic year 2026/27. The Parents’ Meet &amp; Greet agenda, IGCSE subject options, assessment, support, policies and every document in one place.">
 <link rel="icon" href="assets/emblem.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,20 +13,21 @@
 
 <!-- ===================================================================
      DOCUMENT PATHS · single reference list
-     Every PDF linked from this page. Files marked SOON render as a muted
-     "Available soon" row instead of a live link. To publish one: drop the
-     file in assets/, then change its <span class="doc soon"> to an
-     <a class="doc" href="..." download> and delete the "Available soon"
-     label. Each appears in the "All documents" section, and the options
-     forms and policy files also appear in their own sections.
+     Every PDF linked from this page. Files marked SOON render as a muted,
+     dashed "Available soon" card or row instead of a live link. To publish
+     one: drop the file in assets/, then change its <span class="mcard soon">
+     (or <span class="doc soon">) to an <a ... href="..." download> and
+     replace the "Available soon" label with the arrow. Every document
+     appears in the Documents band under the hero; the options forms and
+     the policy files also appear in their own sections.
 
-       assets/g9-igcse-options-2026-27.pdf     LIVE   sections 03, 08
-       assets/g10-igcse-options-2026-27.pdf    LIVE   sections 03, 08
-       assets/no-mobile-phone-policy.pdf       LIVE   sections 07, 08
-       assets/phone-policy-commitment-form.pdf LIVE   sections 07, 08
-       assets/parents-calendar-2026-27.pdf     LIVE   section  08
-       assets/agenda-g9-g10.pdf                SOON   section  08
-       assets/presentation-g9-g10.pdf          SOON   section  08
+       assets/g9-igcse-options-2026-27.pdf     LIVE   band, section 03
+       assets/g10-igcse-options-2026-27.pdf    LIVE   band, section 03
+       assets/no-mobile-phone-policy.pdf       LIVE   band, section 07
+       assets/phone-policy-commitment-form.pdf LIVE   band, section 07
+       assets/parents-calendar-2026-27.pdf     LIVE   band
+       assets/agenda-g9-g10.pdf                SOON   band
+       assets/presentation-g9-g10.pdf          SOON   band
 
      The two phone policy files are last year's, carried forward. The policy
      itself is undated and standing, so it needs no reissue. The commitment
@@ -36,9 +37,11 @@
 
 <style>
 /* ---------------------------------------------------------------
-   AIS British Section · Parents' Meet & Greet, Grades 9 and 10
-   Visual sibling of the AIS Parent Information Hub. Same brand
-   tokens and card vocabulary, re-pointed at a single evening.
+   AIS British Section · Parent Hub, Grades 9 and 10
+   Design follows the Grade 9 Pathway Hub (ais-ig/g9-pathway-26),
+   rebuilt in plain CSS: fixed navy bar, navy hero with watermark
+   emblem, gold-underlined section titles, numbered agenda cards,
+   navy divider bands, navy footer.
    Brand: navy #1D5394 · deep navy #0C2E54 · yellow #EDBA1D
    Poppins 300/400/500/700 only.
    --------------------------------------------------------------- */
@@ -46,6 +49,7 @@
 :root {
   --navy: #1D5394;
   --navy-deep: #0C2E54;
+  --navy-ink: #08203D;
   --gold: #EDBA1D;
 
   --cream: #FEFCF4;
@@ -55,14 +59,15 @@
   --gold-tint: #FFF8EB;
   --gold-tint-2: #FDF3D4;
 
-  --ink: #3C4249;
-  --ink-soft: #5A6068;
+  --ink: #333333;
+  --ink-soft: #666666;
   --muted: #8A8375;
 
   --pad: 16px;
+  --wrap: 800px;
+  --bar: 56px;
   --radius: 12px;
-  --radius-sm: 9px;
-  --shadow: 0 1px 3px rgba(12, 46, 84, .05);
+  --radius-sm: 10px;
   --tap: 44px;
 }
 
@@ -75,17 +80,11 @@ body {
   background: var(--cream);
   color: var(--ink);
   font-family: 'Poppins', sans-serif;
-  font-weight: 300;
+  font-weight: 400;
   font-size: 14px;
-  line-height: 1.7;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -webkit-text-size-adjust: 100%;
-}
-
-.wrap {
-  max-width: 480px;
-  margin-inline: auto;
-  padding-bottom: 48px;
 }
 
 a { color: var(--navy); text-decoration: none; }
@@ -116,362 +115,432 @@ button {
   border: 0;
 }
 
-/* --- header --- */
+.in { max-width: var(--wrap); margin-inline: auto; }
 
-header {
-  position: sticky;
-  top: 0;
-  z-index: 20;
+/* --- fixed top bar with menu --- */
+
+.topbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
   background: var(--navy-deep);
   border-bottom: 3px solid var(--gold);
 }
-.hbar {
+.topbar .row {
+  max-width: 900px;
+  margin-inline: auto;
+  padding: 0 var(--pad);
+  height: var(--bar);
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px var(--pad);
-  max-width: 480px;
-  margin-inline: auto;
+  justify-content: space-between;
 }
-.emblem {
-  flex: none;
-  width: 40px; height: 40px;
-  border-radius: 50%;
-  background: var(--cream);
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--gold);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.brand:hover { color: var(--gold); }
+.brand img { width: 36px; height: 36px; display: block; }
+.brand small {
+  display: block;
+  font-size: 10px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, .7);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.menubtn {
+  background: none;
+  border: 0;
+  color: #fff;
+  font-size: 24px;
+  line-height: 1;
+  width: var(--tap); height: var(--tap);
   display: grid;
   place-items: center;
 }
-.emblem img { width: 33px; height: 33px; display: block; }
-.hid { flex: 1; min-width: 0; }
-.hid .school {
-  display: block;
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: .09em;
-  text-transform: uppercase;
-  color: var(--gold);
-  line-height: 1.4;
+.menubtn .x { display: none; }
+.topbar.open .menubtn .x { display: inline; }
+.topbar.open .menubtn .bars { display: none; }
+
+.menu {
+  display: none;
+  background: var(--navy-deep);
+  border-top: 1px solid rgba(255, 255, 255, .1);
 }
-.hid .name {
+.topbar.open .menu { display: block; }
+.menu .in { max-width: 900px; padding: 8px var(--pad) 16px; }
+.menu a {
   display: block;
-  font-size: 15px;
+  padding: 10px 8px;
+  color: #ccc;
+  font-size: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, .05);
+}
+.menu a:hover, .menu a.on { color: var(--gold); }
+.menu a.go {
+  margin-top: 8px;
+  padding: 10px 16px;
+  background: var(--gold);
+  color: var(--navy-deep);
   font-weight: 700;
-  color: #fff;
-  line-height: 1.25;
+  border-radius: 8px;
+  text-align: center;
+  border-bottom: 0;
 }
 
-/* --- hero: the event --- */
+/* --- hero: navy field, watermark emblem, gold title --- */
 
 .hero {
-  margin: 18px var(--pad) 0;
-  background: var(--navy-deep);
-  border-radius: var(--radius);
-  padding: 20px 18px 18px;
+  position: relative;
+  background: linear-gradient(180deg, var(--navy-deep) 0%, var(--navy-ink) 100%);
+  padding: 88px var(--pad) 56px;
+  text-align: center;
+  overflow: hidden;
 }
-.hero .eyebrow { color: var(--gold); }
-.hero h1 { color: #fff; margin-top: 4px; }
-.hero .sub {
-  font-size: 15px;
-  font-weight: 500;
+.hero .wm {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 520px; height: 520px;
+  max-width: none;
+  transform: translate(-50%, -50%);
+  opacity: .07;
+  pointer-events: none;
+}
+.hero .in { position: relative; max-width: 560px; }
+.hero .em {
+  width: 104px; height: 104px;
+  margin-bottom: 18px;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, .35));
+}
+.hero h1 {
   color: var(--gold);
-  line-height: 1.4;
-  margin-top: 2px;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: .4px;
+  margin: 0 0 6px;
+  text-wrap: pretty;
 }
-.hero .rule { margin: 14px 0 4px; }
-.hero .row {
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
-  padding: 10px 0;
-  border-top: 1px solid rgba(255, 255, 255, .13);
-}
-.hero .row:first-of-type { border-top: 0; }
-.hero .row:last-of-type { padding-bottom: 0; }
-.hero .k {
-  flex: none;
-  width: 66px;
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: .07em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, .55);
-  line-height: 1.5;
-}
-.hero .v {
-  flex: 1;
-  min-width: 0;
-  font-size: 14px;
-  font-weight: 400;
+.hero .sub {
   color: #fff;
-  line-height: 1.5;
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0 0 22px;
+  opacity: .92;
 }
-.hero .v .n {
-  display: block;
-  font-size: 11.5px;
-  font-weight: 300;
-  color: rgba(255, 255, 255, .62);
-  margin-top: 1px;
+.hero .desc {
+  color: #E9EEF5;
+  font-size: 14px;
+  line-height: 1.6;
+  max-width: 480px;
+  margin: 0 auto 28px;
+  opacity: .88;
 }
-.hero .v .lt {
-  direction: ltr;
-  unicode-bidi: isolate;
-  font-variant-numeric: tabular-nums;
+.ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  min-height: var(--tap);
 }
+.btn.gold { background: var(--gold); color: var(--navy-deep); }
+.btn.gold:hover { background: #F2C63A; color: var(--navy-deep); }
+.btn.line { background: transparent; color: var(--gold); border: 2px solid var(--gold); font-weight: 500; padding-block: 10px; }
+.btn.line:hover { background: rgba(237, 186, 29, .12); color: var(--gold); }
+.btn.navy { background: var(--navy-deep); color: #fff; }
+.btn.navy:hover { background: var(--navy); color: #fff; }
 
 /* --- countdown ---
-   Pattern borrowed from the Grade 9 Pathway hub: four cells, days through
-   seconds, with "under way" and "thank you" states either side of the event.
-   Hidden until JS confirms a valid date, so it never renders as empty boxes.
-   Its label sits in gold on navy (7.9:1); the cell labels stay navy-muted on
-   white, because gold on white would not be readable at 9px. */
+   Pattern from the Grade 9 Pathway hub: four white cells, days through
+   seconds, with "under way" and "thank you" states either side of the
+   event. Hidden until JS confirms a valid date, so it never renders as
+   empty boxes. The cells are aria-hidden because the date is stated in
+   full in the banner below; only the two messages are announced. */
 
-.cd {
-  margin-top: 16px;
-  padding-top: 15px;
-  border-top: 1px solid rgba(255, 255, 255, .13);
-  text-align: center;
-}
+.cd { margin: 0 auto 28px; }
 .cd[hidden] { display: none; }
 .cd .cdlbl {
   display: block;
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: .09em;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
   color: var(--gold);
   margin-bottom: 10px;
 }
 .cd .cdlbl[hidden] { display: none; }
-.cdcells { display: flex; gap: 7px; justify-content: center; }
+.cdcells { display: flex; gap: 8px; justify-content: center; max-width: 480px; margin-inline: auto; }
 .cdcells[hidden] { display: none; }
 .cdcells .cell {
   flex: 1;
   min-width: 0;
-  max-width: 92px;
+  max-width: 100px;
   background: #fff;
   border-radius: 10px;
-  padding: 11px 4px 9px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, .18);
+  padding: 14px 8px;
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 6px rgba(12, 46, 84, .06);
 }
 .cdcells .num {
   display: block;
-  font-size: 26px;
+  font-size: 32px;
   font-weight: 700;
   color: var(--navy-deep);
   line-height: 1;
   font-variant-numeric: tabular-nums;
-  direction: ltr;
-  unicode-bidi: isolate;
 }
 .cdcells .lbl {
   display: block;
-  font-size: 9px;
-  font-weight: 500;
-  letter-spacing: .08em;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--gold);
   text-transform: uppercase;
-  color: var(--muted);
-  margin-top: 5px;
+  letter-spacing: .5px;
+  margin-top: 6px;
 }
 .cdmsg {
   margin: 0;
-  font-size: 14.5px;
-  font-weight: 500;
+  font-size: 18px;
+  font-weight: 700;
   color: #fff;
-  line-height: 1.45;
+  line-height: 1.4;
 }
 .cdmsg[hidden] { display: none; }
 .cdmsg .n {
   display: block;
-  font-size: 12px;
-  font-weight: 300;
-  color: rgba(255, 255, 255, .62);
-  margin-top: 3px;
-}
-
-/* --- section navigation --- */
-
-.navgrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  padding: 18px var(--pad) 4px;
-}
-.navgrid a {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 11px 12px;
-  min-height: var(--tap);
-  font-size: 12.5px;
+  font-size: 13px;
   font-weight: 400;
-  color: var(--navy-deep);
-  line-height: 1.3;
+  color: rgba(255, 255, 255, .7);
+  margin-top: 4px;
 }
-.navgrid a:hover { border-color: var(--gold); }
-.navgrid .n {
-  flex: none;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: .04em;
-  color: var(--gold);
+
+/* --- event banner --- */
+
+.banner {
   background: var(--navy-deep);
-  border-radius: 5px;
-  padding: 3px 5px;
+  padding: 14px var(--pad);
+  text-align: center;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+.banner span { display: inline-block; margin: 2px 8px; white-space: nowrap; }
+
+/* --- documents band --- */
+
+.materials {
+  background: var(--gold-tint-2);
+  padding: 36px var(--pad) 32px;
+  border-bottom: 1px solid #E8E0D0;
+  scroll-margin-top: calc(var(--bar) + 8px);
+}
+.materials .in { max-width: 900px; }
+.materials .hd { text-align: center; margin-bottom: 22px; }
+.materials .lb {
+  margin: 0 0 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+.materials .sb { margin: 0; font-size: 13px; color: var(--navy-deep); opacity: .7; }
+.mgrid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.mcard {
+  background: #fff;
+  border-radius: 10px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--gold);
+  color: var(--navy-deep);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+a.mcard:hover { border-color: var(--gold); color: var(--navy-deep); }
+.mcard .t { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 15px; line-height: 1.3; }
+.mcard .t .ic { font-size: 22px; line-height: 1; flex: none; }
+.mcard p { margin: 2px 0 8px; font-size: 12px; color: #555; line-height: 1.5; }
+.mcard .cta { font-size: 12px; font-weight: 700; color: var(--gold); margin-top: auto; }
+.mcard.soon { background: transparent; border-style: dashed; border-top-color: var(--border); }
+.mcard.soon .t { color: var(--muted); font-weight: 500; }
+.mcard.soon .cta {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .06em;
+  text-transform: uppercase;
 }
 
 /* --- sections --- */
 
-section.sec {
-  padding: 26px var(--pad) 0;
-  scroll-margin-top: 76px;
+.sec {
+  padding: 48px var(--pad) 24px;
+  scroll-margin-top: calc(var(--bar) + 8px);
 }
-.eyebrow {
-  display: block;
-  font-size: 10.5px;
-  font-weight: 500;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  color: var(--muted);
+.sec.alt { background: #fff; padding-bottom: 48px; }
+.sec.navy {
+  background: var(--navy-deep);
+  padding: 56px var(--pad);
+  text-align: center;
 }
-h1 {
+
+.st { margin-bottom: 24px; }
+.st h2 {
   margin: 0;
   font-size: 24px;
   font-weight: 700;
-  line-height: 1.28;
+  line-height: 1.2;
   color: var(--navy-deep);
   text-wrap: pretty;
 }
-h2 {
-  margin: 6px 0 0;
-  font-size: 19px;
-  font-weight: 700;
-  line-height: 1.32;
-  color: var(--navy-deep);
-  text-wrap: pretty;
-}
+.st p { margin: 6px 0 0; font-size: 14px; line-height: 1.5; color: var(--ink-soft); }
+.st .bar { width: 48px; height: 3px; background: var(--gold); margin-top: 10px; border-radius: 2px; }
+.sec.navy .st h2 { color: #fff; }
+.sec.navy .st p { color: rgba(255, 255, 255, .75); }
+.sec.navy .st .bar { margin-inline: auto; }
+
 h3 {
-  margin: 0;
-  font-size: 14.5px;
+  margin: 0 0 8px;
+  font-size: 15px;
   font-weight: 700;
   line-height: 1.4;
   color: var(--navy-deep);
 }
 h4 {
   margin: 0 0 8px;
-  font-size: 10.5px;
-  font-weight: 500;
+  font-size: 11px;
+  font-weight: 700;
   letter-spacing: .07em;
   text-transform: uppercase;
   color: var(--muted);
 }
-.rule {
-  width: 44px; height: 3px;
-  background: var(--gold);
-  border-radius: 2px;
-  margin: 12px 0 14px;
-}
 p { margin: 0 0 12px; color: var(--ink-soft); }
 p:last-child { margin-bottom: 0; }
-.small { font-size: 11.5px; line-height: 1.55; color: var(--muted); }
+.lead { font-size: 14px; line-height: 1.6; margin-bottom: 16px; }
+.small { font-size: 12px; line-height: 1.55; color: var(--muted); }
 
 /* --- cards --- */
 
 .card {
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 15px;
-  box-shadow: var(--shadow);
-  margin-bottom: 10px;
-}
-.card > h3 + .rule { margin: 10px 0 10px; width: 32px; }
-.card.tint {
-  background: var(--gold-tint);
-  border-color: #EFE2BE;
-}
-.card.navy {
-  background: var(--navy-deep);
-  border-color: var(--navy-deep);
-  color: #fff;
-}
-.card.navy h3, .card.navy h4 { color: #fff; }
-.card.navy p { color: rgba(255, 255, 255, .78); }
-
-.stack { display: grid; gap: 10px; }
-.stack > .card { margin-bottom: 0; }
-
-/* --- agenda timeline · echoes the printed Meet & Greet poster --- */
-
-.tl { display: grid; gap: 8px; }
-.tl .step {
-  display: flex;
-  align-items: stretch;
-  background: var(--card);
-  border: 1px solid var(--border);
   border-radius: var(--radius-sm);
-  overflow: hidden;
-  box-shadow: var(--shadow);
-}
-.tl .when {
-  flex: none;
-  width: 78px;
-  background: var(--navy-deep);
-  padding: 12px 6px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-.tl .when .hh {
-  font-size: 10.5px;
-  font-weight: 400;
-  color: rgba(255, 255, 255, .72);
-  line-height: 1.3;
-  direction: ltr;
-  unicode-bidi: isolate;
-  white-space: nowrap;
-}
-.tl .when .n {
-  font-size: 23px;
-  font-weight: 700;
-  color: var(--gold);
-  line-height: 1.05;
-  margin-top: 3px;
-  font-variant-numeric: tabular-nums;
-}
-.tl .what { flex: 1; min-width: 0; padding: 12px 14px; align-self: center; }
-.tl .what h3 { font-size: 13.5px; }
-.tl .what p { font-size: 12.5px; line-height: 1.55; margin: 3px 0 0; }
-
-/* --- grade switcher --- */
-
-.seg {
-  display: flex;
-  gap: 4px;
-  background: var(--border-soft);
-  border-radius: var(--radius-sm);
-  padding: 3px;
+  padding: 16px;
   margin-bottom: 12px;
 }
-.seg button {
-  flex: 1;
+.card:last-child { margin-bottom: 0; }
+.card.tint { background: var(--gold-tint-2); border-color: #EFE2BE; }
+.stack { display: grid; gap: 12px; margin-bottom: 12px; }
+.stack > .card { margin-bottom: 0; }
+
+/* --- agenda: numbered cards --- */
+
+.agenda { display: grid; gap: 12px; margin-bottom: 12px; }
+.ag {
+  display: flex;
+  gap: 14px;
+  background: #fff;
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+.ag .n {
+  flex: none;
+  width: 48px; height: 48px;
+  border-radius: 8px;
+  background: rgba(12, 46, 84, .06);
+  display: grid;
+  place-items: center;
+  color: var(--navy-deep);
+  font-size: 16px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.ag .b { flex: 1; min-width: 0; }
+.ag .hd { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 4px; }
+.ag .hh { font-size: 12px; font-weight: 700; color: var(--gold); white-space: nowrap; }
+.ag h3 { margin: 0; font-size: 14px; }
+.ag p { margin: 0; font-size: 13px; line-height: 1.5; }
+
+/* --- divider bands: navy with a faint emblem, in place of the
+       pathway hub's photo bands --- */
+
+.band {
+  position: relative;
+  height: 110px;
+  background: linear-gradient(90deg, var(--navy-deep) 0%, var(--navy) 50%, var(--navy-deep) 100%);
+  border-top: 3px solid var(--gold);
+  border-bottom: 3px solid var(--gold);
+  overflow: hidden;
+}
+.band img {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 240px; height: 240px;
+  max-width: none;
+  transform: translate(-50%, -50%);
+  opacity: .12;
+}
+
+/* --- journey map --- */
+
+.jm { position: relative; padding-left: 28px; }
+.jm::before {
+  content: "";
+  position: absolute;
+  left: 10px; top: 8px; bottom: 8px;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--gold), var(--navy-deep));
+}
+.jm .it { position: relative; margin-bottom: 16px; }
+.jm .it:last-child { margin-bottom: 0; }
+.jm .dot {
+  position: absolute;
+  left: -22px; top: 14px;
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: var(--navy-deep);
+  border: 2px solid var(--gold);
+}
+.jm .it.now .dot { background: var(--gold); border-color: var(--navy-deep); }
+.jm .bx {
+  background: #fff;
+  border-radius: 10px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--gold);
+}
+.jm .it.later .bx { border-left-color: var(--navy-deep); }
+.jm .g { font-size: 12px; font-weight: 700; color: var(--gold); }
+.jm .it.later .g { color: var(--navy-deep); }
+.jm h3 { margin: 4px 0; font-size: 14px; }
+.jm p { margin: 0; font-size: 13px; line-height: 1.5; }
+
+/* --- grade pills --- */
+
+.pills { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+.pills button {
   border: 0;
   background: transparent;
-  color: var(--navy);
+  color: var(--navy-deep);
   font-size: 13px;
-  font-weight: 400;
-  border-radius: 7px;
+  font-weight: 700;
+  padding: 10px 20px;
+  border-radius: 999px;
   min-height: 40px;
-  padding-inline: 8px;
 }
-.seg button[aria-selected="true"] {
-  background: var(--navy-deep);
-  color: #fff;
-  font-weight: 500;
-}
+.pills button:hover { background: var(--gold-tint-2); }
+.pills button[aria-selected="true"] { background: var(--navy-deep); color: #fff; }
 
 /* --- data tables --- */
 
@@ -480,71 +549,68 @@ table.data {
   width: 100%;
   min-width: 260px;
   border-collapse: collapse;
-  font-size: 12.5px;
+  font-size: 13px;
 }
 table.data thead th {
   text-align: start;
-  font-size: 9.5px;
-  font-weight: 500;
+  font-size: 10px;
+  font-weight: 700;
   letter-spacing: .07em;
   text-transform: uppercase;
   color: #fff;
-  background: var(--navy);
-  padding: 8px 10px;
+  background: var(--navy-deep);
+  padding: 9px 10px;
   white-space: nowrap;
 }
 table.data thead th:first-child { border-start-start-radius: 6px; }
 table.data thead th:last-child { border-start-end-radius: 6px; }
 table.data td {
-  padding: 8px 10px;
+  padding: 9px 10px;
   border-bottom: 1px solid var(--border-soft);
   vertical-align: baseline;
   color: var(--ink-soft);
-  font-weight: 300;
 }
 table.data tbody tr:last-child td { border-bottom: 0; }
-table.data td.s { color: var(--navy-deep); font-weight: 400; }
+table.data td.s { color: var(--navy-deep); font-weight: 500; }
 table.data td.cur { font-size: 11px; color: var(--muted); white-space: nowrap; }
 table.data td.num {
   text-align: end;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
   color: var(--navy-deep);
-  font-weight: 400;
+  font-weight: 500;
 }
 table.data tr.grp td {
-  background: var(--gold-tint);
+  background: var(--gold-tint-2);
   font-size: 10px;
-  font-weight: 500;
+  font-weight: 700;
   letter-spacing: .07em;
   text-transform: uppercase;
-  color: var(--navy);
+  color: var(--navy-deep);
   padding-block: 6px;
 }
 table.data tr.tot td {
   border-bottom: 0;
   border-top: 2px solid var(--border);
-  font-weight: 500;
+  font-weight: 700;
   color: var(--navy-deep);
-  font-size: 13px;
 }
 table.data tr.semtot td {
   border-bottom: 0;
-  background: var(--gold-tint);
-  font-weight: 500;
+  background: var(--gold-tint-2);
+  font-weight: 700;
   color: var(--navy-deep);
-  font-size: 13px;
-  padding-block: 9px;
+  padding-block: 10px;
 }
 table.data td.none { color: var(--muted); }
 
-/* --- choose-one pairs (Grade 9, Table B) --- */
+/* --- choose-one pairs (Grade 9) --- */
 
 .pairs { display: grid; gap: 8px; }
 .pair {
   border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--card);
+  border-radius: 10px;
+  background: var(--cream);
   padding: 11px 12px;
 }
 .pair .hd {
@@ -555,17 +621,17 @@ table.data td.none { color: var(--muted); }
   margin-bottom: 9px;
 }
 .pair .hd .lb {
-  font-size: 9.5px;
-  font-weight: 500;
+  font-size: 10px;
+  font-weight: 700;
   letter-spacing: .08em;
   text-transform: uppercase;
   color: var(--muted);
 }
 .pair .hd .pw {
-  font-size: 10.5px;
-  font-weight: 500;
-  color: var(--navy);
-  background: var(--gold-tint);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--navy-deep);
+  background: var(--gold-tint-2);
   border: 1px solid #EFE2BE;
   border-radius: 999px;
   padding: 2px 9px;
@@ -579,42 +645,42 @@ table.data td.none { color: var(--muted); }
   gap: 8px;
 }
 .pair .o {
-  border: 1px solid var(--border-soft);
-  background: var(--cream);
-  border-radius: 7px;
+  border: 1px solid var(--border);
+  background: #fff;
+  border-radius: 8px;
   padding: 10px;
-  font-size: 12.5px;
-  font-weight: 400;
+  font-size: 13px;
+  font-weight: 500;
   color: var(--navy-deep);
   text-align: center;
   line-height: 1.35;
 }
 .pair .or {
-  font-size: 9px;
-  font-weight: 500;
+  font-size: 10px;
+  font-weight: 700;
   letter-spacing: .09em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--gold);
 }
 
-/* --- subject chips (Grade 10, Table B) --- */
+/* --- subject chips (Grade 10) --- */
 
-.chips { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+.chips { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .chip {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 8px;
-  border: 1px solid var(--border-soft);
+  border: 1px solid var(--border);
   background: var(--cream);
-  border-radius: 7px;
+  border-radius: 8px;
   padding: 9px 10px;
 }
-.chip .s { font-size: 12.5px; font-weight: 400; color: var(--navy-deep); line-height: 1.35; }
+.chip .s { font-size: 13px; font-weight: 500; color: var(--navy-deep); line-height: 1.35; }
 .chip .p {
-  font-size: 10px;
-  font-weight: 500;
-  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gold);
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
@@ -623,252 +689,164 @@ table.data td.none { color: var(--muted); }
 
 .cmp { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .cmp .col {
-  border: 1px solid var(--border-soft);
-  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  border-radius: 10px;
   overflow: hidden;
   background: var(--cream);
 }
 .cmp .col > .h {
   background: var(--navy-deep);
   color: #fff;
-  font-size: 11.5px;
-  font-weight: 500;
-  padding: 8px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 9px 10px;
   text-align: center;
   line-height: 1.35;
 }
 .cmp .col ul { margin: 0; padding: 10px; list-style: none; display: grid; gap: 9px; }
-.cmp .col li { font-size: 11.5px; line-height: 1.5; color: var(--ink-soft); }
+.cmp .col li { font-size: 12px; line-height: 1.5; color: var(--ink-soft); }
+.cmp .col li b { font-weight: 700; color: var(--navy-deep); }
 
-/* --- documents --- */
+/* --- document rows inside sections --- */
 
-.docs { display: grid; gap: 8px; }
+.docs { display: grid; gap: 8px; margin-top: 12px; }
 .doc {
   display: flex;
   align-items: center;
   gap: 11px;
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
+  border-radius: 10px;
   padding: 11px 13px;
   min-height: var(--tap);
 }
 a.doc:hover { border-color: var(--gold); }
 .doc .ic {
   flex: none;
-  width: 30px; height: 30px;
-  border-radius: 7px;
-  background: var(--gold-tint);
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  background: var(--gold-tint-2);
   border: 1px solid #EFE2BE;
   display: grid;
   place-items: center;
-  font-size: 13px;
-  color: var(--navy);
+  font-size: 14px;
+  color: var(--navy-deep);
 }
 .doc .tx { flex: 1; min-width: 0; }
-.doc .tt { display: block; font-size: 13px; font-weight: 500; color: var(--navy-deep); line-height: 1.35; }
+.doc .tt { display: block; font-size: 13px; font-weight: 700; color: var(--navy-deep); line-height: 1.35; }
 .doc .sb { display: block; font-size: 11px; color: var(--muted); margin-top: 1px; line-height: 1.4; }
 .doc .ar { flex: none; color: var(--gold); font-size: 14px; font-weight: 700; }
-.doc.soon { background: transparent; border-style: dashed; box-shadow: none; }
-.doc.soon .ic { background: transparent; border-color: var(--border); color: var(--muted); }
-.doc.soon .tt { color: var(--muted); font-weight: 400; }
-.doc.soon .ar {
-  color: var(--muted);
-  font-size: 9.5px;
-  font-weight: 500;
-  letter-spacing: .06em;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
 
 /* --- behaviour levels --- */
 
 .lvl { display: grid; gap: 12px; }
-.lvl .l { border-inline-start: 3px solid var(--gold); padding-inline-start: 12px; }
+.lvl .l { border-left: 3px solid var(--gold); padding-left: 12px; }
 .lvl .l .n {
-  font-size: 10.5px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: .07em;
   text-transform: uppercase;
-  color: var(--navy);
+  color: var(--navy-deep);
 }
-.lvl .l .d { font-size: 12.5px; line-height: 1.55; color: var(--ink-soft); margin-top: 2px; }
-.lvl .l .a { font-size: 12px; line-height: 1.5; color: var(--navy-deep); margin-top: 5px; }
-.lvl .l .a b { font-weight: 500; }
+.lvl .l .d { font-size: 13px; line-height: 1.55; color: var(--ink-soft); margin-top: 2px; }
+.lvl .l .a { font-size: 12.5px; line-height: 1.5; color: var(--navy-deep); margin-top: 5px; }
+.lvl .l .a b { font-weight: 700; }
 
 /* --- lists --- */
 
 ul.ticks { margin: 0; padding: 0; list-style: none; }
 ul.ticks li {
   position: relative;
-  padding-inline-start: 22px;
+  padding-left: 22px;
   padding-block: 6px;
-  font-size: 13.5px;
+  font-size: 13px;
   line-height: 1.6;
   color: var(--ink-soft);
   border-top: 1px solid var(--border-soft);
 }
-ul.ticks li:first-child { border-top: 0; }
+ul.ticks li:first-child { border-top: 0; padding-top: 0; }
+ul.ticks li:last-child { padding-bottom: 0; }
 ul.ticks li::before {
   content: "";
   position: absolute;
-  inset-inline-start: 4px;
-  top: 15px;
+  left: 4px;
+  top: 14px;
   width: 6px; height: 6px;
   border-radius: 50%;
   background: var(--gold);
 }
-ul.ticks li b { font-weight: 500; color: var(--navy-deep); }
+ul.ticks li:first-child::before { top: 8px; }
+ul.ticks li b { font-weight: 700; color: var(--navy-deep); }
 
-ol.steps { margin: 0; padding: 0; list-style: none; counter-reset: s; }
-ol.steps li {
-  counter-increment: s;
-  position: relative;
-  padding-inline-start: 34px;
-  padding-block: 9px;
-  font-size: 13.5px;
-  line-height: 1.6;
-  color: var(--ink-soft);
-  border-top: 1px solid var(--border-soft);
+/* --- contact cards --- */
+
+.cgrid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.ccard {
+  background: #fff;
+  border-radius: 10px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--navy-deep);
 }
-ol.steps li:first-child { border-top: 0; }
-ol.steps li b { font-weight: 500; color: var(--navy-deep); }
-ol.steps li::before {
-  content: counter(s);
-  position: absolute;
-  inset-inline-start: 0;
-  top: 10px;
-  width: 22px; height: 22px;
-  border-radius: 6px;
-  background: var(--navy-deep);
-  color: var(--gold);
+.ccard.gold { border-top-color: var(--gold); }
+.ccard .cs {
+  margin: 0 0 8px;
   font-size: 11px;
   font-weight: 700;
-  display: grid;
-  place-items: center;
-}
-
-/* --- contacts --- */
-
-.contact {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 13px 14px;
-}
-.contact .av {
-  flex: none;
-  width: 36px; height: 36px;
-  border-radius: 50%;
-  background: var(--gold-tint);
-  border: 1px solid #EFE2BE;
-  display: grid;
-  place-items: center;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--navy);
-}
-.contact .who { flex: 1; min-width: 0; }
-.contact .role {
-  display: block;
-  font-size: 10.5px;
-  font-weight: 500;
-  letter-spacing: .05em;
+  letter-spacing: .5px;
   text-transform: uppercase;
-  color: var(--muted);
-}
-.contact .nm {
-  display: block;
-  font-size: 14px;
-  font-weight: 500;
   color: var(--navy-deep);
-  line-height: 1.4;
 }
-.contact .ln {
-  display: block;
-  font-size: 12.5px;
-  font-weight: 400;
-  word-break: break-word;
-  margin-top: 2px;
-  padding-block: 5px;
-}
-
-/* --- accordion --- */
-
-.acc { border-top: 1px solid var(--border-soft); }
-.acc:first-of-type { border-top: 0; }
-.acc > button {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  width: 100%;
-  text-align: start;
-  background: transparent;
-  border: 0;
-  padding: 13px 2px;
-  min-height: var(--tap);
-  font-size: 13.5px;
-  font-weight: 500;
-  color: var(--navy-deep);
-  line-height: 1.5;
-}
-.acc > button .chev {
-  flex: none;
-  margin-inline-start: auto;
-  color: var(--gold);
-  font-size: 12px;
-  transition: transform .18s ease;
-  padding-top: 3px;
-}
-.acc > button[aria-expanded="true"] .chev { transform: rotate(90deg); }
-.acc .body {
-  display: none;
-  padding: 0 2px 14px;
+.ccard.gold .cs { color: var(--gold); }
+.ccard .nm { margin: 0 0 2px; font-size: 15px; font-weight: 700; color: var(--navy-deep); }
+.ccard .rl { margin: 0 0 8px; font-size: 12px; color: #888; }
+.ccard a {
+  display: inline-block;
   font-size: 13px;
-  line-height: 1.65;
-  color: var(--ink-soft);
+  font-weight: 500;
+  color: var(--navy-deep);
+  word-break: break-word;
+  padding-block: 4px;
 }
-.acc .body.on { display: block; }
+
+/* --- navy call-to-action block --- */
+
+.sec.navy .in { max-width: 640px; }
+.sec.navy .lead { color: rgba(255, 255, 255, .75); font-size: 15px; margin: 0 0 24px; }
+.sec.navy .note { color: rgba(255, 255, 255, .55); font-size: 12px; margin: 20px auto 0; max-width: 420px; line-height: 1.6; }
+.sec.navy .btn.gold { padding: 16px 40px; border-radius: 12px; font-size: 16px; box-shadow: 0 4px 16px rgba(237, 186, 29, .35); }
 
 /* --- footer --- */
 
 footer {
-  margin-top: 32px;
-  padding: 22px var(--pad) 0;
-  border-top: 1px solid var(--border);
+  background: var(--navy-deep);
+  padding: 28px var(--pad);
   text-align: center;
+  border-top: 3px solid var(--gold);
 }
-footer .sig { font-size: 12.5px; font-weight: 500; color: var(--navy-deep); }
-footer .meta { font-size: 11px; color: var(--muted); margin-top: 4px; }
-
-.toplink {
+footer img { width: 44px; height: 44px; margin-bottom: 10px; }
+footer .tag { margin: 0 0 12px; color: var(--gold); font-size: 12px; font-weight: 700; letter-spacing: .4px; }
+footer .l1 { margin: 0 0 4px; color: rgba(255, 255, 255, .7); font-size: 12px; }
+footer .l2 { margin: 0; color: rgba(255, 255, 255, .45); font-size: 11px; }
+footer .top {
   display: inline-block;
-  margin-top: 14px;
+  margin-top: 16px;
+  color: rgba(255, 255, 255, .7);
   font-size: 12px;
   font-weight: 500;
-  color: var(--navy);
-  border: 1px solid var(--border);
+  border: 1px solid rgba(255, 255, 255, .25);
   border-radius: 999px;
-  padding: 12px 18px;
+  padding: 10px 18px;
   min-height: var(--tap);
 }
+footer .top:hover { color: var(--gold); border-color: var(--gold); }
 
 /* --- desktop enhancement --- */
 
 @media (min-width: 720px) {
-  .wrap { max-width: 720px; }
-  .hbar { max-width: 720px; }
-  .navgrid { grid-template-columns: repeat(4, 1fr); }
-  section.sec { padding-inline: 24px; }
-  .hero { margin-inline: 24px; }
-  .navgrid { padding-inline: 24px; }
-  footer { padding-inline: 24px; }
-  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: start; }
-  .two > .card { margin-bottom: 0; }
   .chips { grid-template-columns: repeat(3, 1fr); }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: start; margin-bottom: 12px; }
+  .two > .card { margin-bottom: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -877,657 +855,706 @@ footer .meta { font-size: 11px; color: var(--muted); margin-top: 4px; }
 }
 </style>
 </head>
-<body>
+<body id="top">
 
-<header id="top">
-  <div class="hbar">
-    <span class="emblem"><img src="assets/emblem.png" alt="" width="33" height="33"></span>
-    <span class="hid">
-      <span class="school">Al-Rowad International Schools</span>
-      <span class="name">British Section</span>
-    </span>
+<!-- ============ FIXED TOP BAR ============ -->
+<div class="topbar" id="topbar">
+  <div class="row">
+    <a class="brand" href="#top">
+      <img src="assets/emblem.png" alt="" width="36" height="36">
+      <span>AIS Parent Hub<small>British Section · Grades 9 &amp; 10</small></span>
+    </a>
+    <button class="menubtn" id="menubtn" type="button" aria-expanded="false" aria-controls="menu" aria-label="Menu">
+      <span class="bars" aria-hidden="true">☰</span><span class="x" aria-hidden="true">✕</span>
+    </button>
   </div>
-</header>
-
-<main class="wrap">
+  <nav class="menu" id="menu" aria-label="Sections">
+    <div class="in">
+      <a href="#s1">The evening</a>
+      <a href="#s2">Your IG pathway</a>
+      <a href="#s3">Subject options</a>
+      <a href="#s4">Assessment</a>
+      <a href="#s5">Support</a>
+      <a href="#s6">Beyond the books</a>
+      <a href="#s7">Policies</a>
+      <a href="#contacts">Who to speak to</a>
+      <a class="go" href="#materials">Documents</a>
+    </div>
+  </nav>
+</div>
 
 <!-- ============ HERO · THE EVENT ============ -->
 <!-- Date confirmed 9 September 2026: Wednesday 9 September 2026, registration
      from 6:30 PM Riyadh time. Venues are last year's, carried forward.
 
      The countdown reads data-doors and data-end off this element, so those
-     two attributes and the human-readable Date and Time rows below must be
-     changed together. data-doors is when registration opens, not when the
-     presentation starts. Both are Riyadh time, hence the +03:00 offset. -->
-<div class="hero" id="hero"
+     two attributes and the human-readable date and time in the banner below
+     must be changed together. data-doors is when registration opens, not
+     when the presentation starts. Both are Riyadh time, hence the +03:00. -->
+<header class="hero" id="hero"
      data-doors="2026-09-09T18:30:00+03:00"
      data-end="2026-09-09T20:30:00+03:00">
-  <span class="eyebrow">Grades 9 &amp; 10 IG · 2026/27</span>
-  <h1>Parents’ Meet &amp; Greet</h1>
-  <div class="sub">An evening on the IGCSE programme</div>
-  <div class="rule"></div>
+  <img class="wm" src="assets/emblem.png" alt="" aria-hidden="true">
+  <div class="in">
+    <img class="em" src="assets/emblem.png" alt="Al-Rowad International Schools" width="104" height="104">
+    <h1>Parents’ Meet &amp; Greet</h1>
+    <p class="sub">Grades 9 and 10 · IGCSE programme · 2026/27</p>
+    <p class="desc">Your one place for tonight’s agenda, the IGCSE subject options, how marks are built, the support in place, and every document, kept up to date through the year.</p>
 
-  <div class="row">
-    <span class="k">Date</span>
-    <span class="v">Wednesday 9 September 2026</span>
-  </div>
-  <div class="row">
-    <span class="k">Time</span>
-    <span class="v"><span class="lt">7:00 PM – 8:30 PM</span><span class="n">Registration opens <span class="lt">6:30 PM</span></span></span>
-  </div>
-  <div class="row">
-    <span class="k">Boys</span>
-    <span class="v">Main Hall<span class="n">Boys campus</span></span>
-  </div>
-  <div class="row">
-    <span class="k">Girls</span>
-    <span class="v">Auditorium<span class="n">Girls campus</span></span>
-  </div>
-
-  <div class="cd" id="cd" hidden>
-    <span class="cdlbl" id="cdLabel">Doors open in</span>
-    <div class="cdcells" id="cdCells" aria-hidden="true">
-      <span class="cell"><span class="num" id="cdD">0</span><span class="lbl">Days</span></span>
-      <span class="cell"><span class="num" id="cdH">00</span><span class="lbl">Hours</span></span>
-      <span class="cell"><span class="num" id="cdM">00</span><span class="lbl">Min</span></span>
-      <span class="cell"><span class="num" id="cdS">00</span><span class="lbl">Sec</span></span>
+    <div class="cd" id="cd" hidden>
+      <span class="cdlbl" id="cdLabel">Doors open in</span>
+      <div class="cdcells" id="cdCells" aria-hidden="true">
+        <span class="cell"><span class="num" id="cdD">0</span><span class="lbl">Days</span></span>
+        <span class="cell"><span class="num" id="cdH">00</span><span class="lbl">Hours</span></span>
+        <span class="cell"><span class="num" id="cdM">00</span><span class="lbl">Min</span></span>
+        <span class="cell"><span class="num" id="cdS">00</span><span class="lbl">Sec</span></span>
+      </div>
+      <p class="cdmsg" id="cdMsg" role="status" hidden></p>
     </div>
-    <p class="cdmsg" id="cdMsg" role="status" hidden></p>
+
+    <div class="ctas">
+      <a class="btn gold" href="#s1">How the evening runs</a>
+      <a class="btn line" href="#s3">Subject options</a>
+    </div>
+  </div>
+</header>
+
+<!-- ============ EVENT BANNER ============ -->
+<div class="banner">
+  <span>📅 Wednesday 9 September 2026</span>
+  <span>⏰ 6:30 – 8:30 PM</span>
+  <span>📍 Boys: Main Hall · Girls: Auditorium</span>
+</div>
+
+<!-- ============ DOCUMENTS BAND ============ -->
+<div class="materials" id="materials">
+  <div class="in">
+    <div class="hd">
+      <p class="lb">Documents</p>
+      <p class="sb">Download or open in your browser · more added through the year</p>
+    </div>
+    <div class="mgrid">
+      <a class="mcard" href="assets/g9-igcse-options-2026-27.pdf" download>
+        <span class="t"><span class="ic" aria-hidden="true">📝</span>Grade 9 IGCSE Options Form</span>
+        <p>Academic Year 2026-2027. Print, complete and sign.</p>
+        <span class="cta">Open PDF →</span>
+      </a>
+      <a class="mcard" href="assets/g10-igcse-options-2026-27.pdf" download>
+        <span class="t"><span class="ic" aria-hidden="true">📝</span>Grade 10 IGCSE Options Form</span>
+        <p>Academic Year 2026-2027. Print, complete and sign.</p>
+        <span class="cta">Open PDF →</span>
+      </a>
+      <a class="mcard" href="assets/parents-calendar-2026-27.pdf" download>
+        <span class="t"><span class="ic" aria-hidden="true">📅</span>Parent Calendar 2026/27</span>
+        <p>First Semester, Boys and Girls.</p>
+        <span class="cta">Open PDF →</span>
+      </a>
+      <a class="mcard" href="assets/no-mobile-phone-policy.pdf" download>
+        <span class="t"><span class="ic" aria-hidden="true">📵</span>No Mobile Phone Policy</span>
+        <p>The full policy text.</p>
+        <span class="cta">Open PDF →</span>
+      </a>
+      <a class="mcard" href="assets/phone-policy-commitment-form.pdf" download>
+        <span class="t"><span class="ic" aria-hidden="true">✍️</span>Phone Policy Commitment Form</span>
+        <p>Signed when a confiscated phone is collected.</p>
+        <span class="cta">Open PDF →</span>
+      </a>
+      <span class="mcard soon">
+        <span class="t"><span class="ic" aria-hidden="true">🗓️</span>Meet &amp; Greet Agenda</span>
+        <p>The printed running order for Grades 9 and 10.</p>
+        <span class="cta">Available soon</span>
+      </span>
+      <span class="mcard soon">
+        <span class="t"><span class="ic" aria-hidden="true">📊</span>Presentation</span>
+        <p>The slides from the evening.</p>
+        <span class="cta">Available soon</span>
+      </span>
+    </div>
   </div>
 </div>
 
-<!-- ============ SECTION NAVIGATION ============ -->
-<nav class="navgrid" aria-label="Sections">
-  <a href="#s1"><span class="n">01</span> The evening</a>
-  <a href="#s2"><span class="n">02</span> Your IG pathway</a>
-  <a href="#s3"><span class="n">03</span> Subject options</a>
-  <a href="#s4"><span class="n">04</span> Assessment</a>
-  <a href="#s5"><span class="n">05</span> Support</a>
-  <a href="#s6"><span class="n">06</span> Beyond the books</a>
-  <a href="#s7"><span class="n">07</span> Policies</a>
-  <a href="#s8"><span class="n">08</span> All documents</a>
-</nav>
-
 <!-- ============ 01 · THE EVENING ============ -->
 <section class="sec" id="s1">
-  <span class="eyebrow">01 · The evening</span>
-  <h2>How the evening runs</h2>
-  <div class="rule"></div>
+  <div class="in">
+    <div class="st">
+      <h2>How the evening runs</h2>
+      <p>What to expect, from registration to prayer</p>
+      <div class="bar"></div>
+    </div>
 
-  <!-- PLACEHOLDER · timings follow last year's running order. Confirm
-       before publishing, and keep in step with the printed agenda. -->
-  <div class="tl">
-    <div class="step">
-      <div class="when"><span class="hh">6:30 PM</span><span class="n">01</span></div>
-      <div class="what">
-        <h3>Registration and welcome</h3>
-        <p>Refreshments will be served.</p>
+    <!-- PLACEHOLDER · timings follow last year's running order. Confirm
+         before publishing, and keep in step with the printed agenda. -->
+    <div class="agenda">
+      <div class="ag">
+        <div class="n">01</div>
+        <div class="b">
+          <div class="hd"><span class="hh">6:30 PM</span><h3>Registration and welcome</h3></div>
+          <p>Refreshments will be served.</p>
+        </div>
+      </div>
+      <div class="ag">
+        <div class="n">02</div>
+        <div class="b">
+          <div class="hd"><span class="hh">7:00 PM</span><h3>Presentation</h3></div>
+          <p>The IGCSE programme for Grades 9 and 10, from subject options through to assessment and support.</p>
+        </div>
+      </div>
+      <div class="ag">
+        <div class="n">03</div>
+        <div class="b">
+          <div class="hd"><span class="hh">7:30 PM</span><h3>Question and answer</h3></div>
+          <p>Open session with senior staff on curriculum, transition and activities.</p>
+        </div>
+      </div>
+      <div class="ag">
+        <div class="n">04</div>
+        <div class="b">
+          <div class="hd"><span class="hh">7:45 PM</span><h3>Subject teacher stalls</h3></div>
+          <p>Visit the subject booths and meet the teachers to talk through IGCSE choices and where they lead at A-Level.</p>
+        </div>
+      </div>
+      <div class="ag">
+        <div class="n">05</div>
+        <div class="b">
+          <div class="hd"><span class="hh">8:30 PM</span><h3>Prayer</h3></div>
+        </div>
       </div>
     </div>
-    <div class="step">
-      <div class="when"><span class="hh">7:00 PM</span><span class="n">02</span></div>
-      <div class="what">
-        <h3>Presentation</h3>
-        <p>The IGCSE programme for Grades 9 and 10, from subject options through to assessment and support.</p>
-      </div>
-    </div>
-    <div class="step">
-      <div class="when"><span class="hh">7:30 PM</span><span class="n">03</span></div>
-      <div class="what">
-        <h3>Question and answer</h3>
-        <p>Open session with senior staff on curriculum, transition and activities.</p>
-      </div>
-    </div>
-    <div class="step">
-      <div class="when"><span class="hh">7:45 PM</span><span class="n">04</span></div>
-      <div class="what">
-        <h3>Subject teacher stalls</h3>
-        <p>Visit the subject booths and meet the teachers to talk through IGCSE choices and where they lead at A-Level.</p>
-      </div>
-    </div>
-    <div class="step">
-      <div class="when"><span class="hh">8:30 PM</span><span class="n">05</span></div>
-      <div class="what">
-        <h3>Prayer</h3>
-      </div>
-    </div>
-  </div>
 
-  <div class="card tint" style="margin-top:10px">
-    <h3>Before you come</h3>
-    <div class="rule"></div>
-    <ul class="ticks">
-      <li>Read <a href="#s3">section 03, Subject options</a>, so the choices are familiar before you speak to the subject teachers.</li>
-      <li>Bring your questions for the Q&amp;A. The stalls afterwards are the best place for subject-specific ones.</li>
-      <li>Options forms can be downloaded, printed and brought along, or collected on the night.</li>
-    </ul>
+    <div class="card tint">
+      <h3>Before you come</h3>
+      <ul class="ticks">
+        <li>Read <a href="#s3">Subject options</a>, so the choices are familiar before you speak to the subject teachers.</li>
+        <li>Bring your questions for the Q&amp;A. The stalls afterwards are the best place for subject-specific ones.</li>
+        <li>Options forms can be downloaded, printed and brought along, or collected on the night.</li>
+      </ul>
+    </div>
   </div>
 </section>
 
+<div class="band" aria-hidden="true"><img src="assets/emblem.png" alt=""></div>
+
 <!-- ============ 02 · YOUR IG PATHWAY ============ -->
-<section class="sec" id="s2">
-  <span class="eyebrow">02 · Your IG pathway</span>
-  <h2>Two years, one programme</h2>
-  <div class="rule"></div>
+<section class="sec alt" id="s2">
+  <div class="in">
+    <div class="st">
+      <h2>Two years, one programme</h2>
+      <p>The route from Grade 9 through to A-Level</p>
+      <div class="bar"></div>
+    </div>
 
-  <p>Grades 9 and 10 are not two separate years. They form a single continuous IGCSE programme, and the subjects chosen at the start of Grade 9 carry all the way through to the external examinations at the end of Grade 10.</p>
+    <p class="lead">Grades 9 and 10 are not two separate years. They form a single continuous IGCSE programme, and the subjects chosen at the start of Grade 9 carry all the way through to the external examinations at the end of Grade 10.</p>
 
-  <div class="card">
-    <h3>The route</h3>
-    <div class="rule"></div>
-    <ol class="steps">
-      <li><b>Grade 9:</b> IGCSE begins, subject options are selected and the two-year syllabus starts.</li>
-      <li><b>Grade 10:</b> the programme completes and students sit their external IGCSE examinations.</li>
-      <li><b>Grades 11 and 12:</b> A-Levels, AS then A2, built directly on the IGCSE subjects taken.</li>
-    </ol>
+    <div class="jm">
+      <div class="it now">
+        <span class="dot" aria-hidden="true"></span>
+        <div class="bx">
+          <span class="g">Grade 9</span>
+          <h3>IGCSE begins</h3>
+          <p>Subject options are selected and the two-year syllabus starts.</p>
+        </div>
+      </div>
+      <div class="it">
+        <span class="dot" aria-hidden="true"></span>
+        <div class="bx">
+          <span class="g">Grade 10</span>
+          <h3>The programme completes</h3>
+          <p>Students sit their external IGCSE examinations.</p>
+        </div>
+      </div>
+      <div class="it later">
+        <span class="dot" aria-hidden="true"></span>
+        <div class="bx">
+          <span class="g">Grades 11 and 12</span>
+          <h3>A-Levels</h3>
+          <p>AS then A2, built directly on the IGCSE subjects taken.</p>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
 <!-- ============ 03 · SUBJECT OPTIONS ============ -->
 <section class="sec" id="s3">
-  <span class="eyebrow">03 · Subject options</span>
-  <h2>Choosing subjects</h2>
-  <div class="rule"></div>
+  <div class="in">
+    <div class="st">
+      <h2>Choosing subjects</h2>
+      <p>Compulsory subjects, the choices around them, and the forms</p>
+      <div class="bar"></div>
+    </div>
 
-  <p>Both grades take a set of compulsory subjects and then make choices around them. Select your child’s grade to see the tables that apply.</p>
+    <p class="lead">Both grades take a set of compulsory subjects and then make choices around them. Select your child’s grade to see the tables that apply.</p>
 
-  <div class="seg" role="tablist" aria-label="Grade">
-    <button role="tab" id="tab9" aria-controls="panel9" aria-selected="true">Grade 9</button>
-    <button role="tab" id="tab10" aria-controls="panel10" aria-selected="false" tabindex="-1">Grade 10</button>
-  </div>
+    <div class="pills" role="tablist" aria-label="Grade">
+      <button role="tab" id="tab9" aria-controls="panel9" aria-selected="true">Grade 9</button>
+      <button role="tab" id="tab10" aria-controls="panel10" aria-selected="false" tabindex="-1">Grade 10</button>
+    </div>
 
-  <!-- ---------- GRADE 9 ---------- -->
-  <div id="panel9" role="tabpanel" aria-labelledby="tab9" tabindex="0">
+    <!-- ---------- GRADE 9 ---------- -->
+    <div id="panel9" role="tabpanel" aria-labelledby="tab9" tabindex="0">
 
-    <div class="card">
-      <h3>Compulsory subjects</h3>
-      <div class="rule"></div>
+      <div class="card">
+        <h3>Compulsory subjects</h3>
+        <div class="scroll">
+          <table class="data">
+            <thead>
+              <tr><th scope="col">Subject</th><th scope="col">Curriculum</th><th scope="col">Periods</th></tr>
+            </thead>
+            <tbody>
+              <tr><td class="s">Arabic</td><td class="cur">MoE</td><td class="num">1</td></tr>
+              <tr><td class="s">Islamic Studies</td><td class="cur">MoE</td><td class="num">2</td></tr>
+              <tr><td class="s">Quran</td><td class="cur">MoE</td><td class="num">3</td></tr>
+              <tr><td class="s">Social Studies (KSAH)</td><td class="cur">MoE</td><td class="num">2</td></tr>
+              <tr><td class="s">PE</td><td class="cur">MoE</td><td class="num">1</td></tr>
+              <tr><td class="s">English</td><td class="cur">IGCSE</td><td class="num">4</td></tr>
+              <tr><td class="s">Physics</td><td class="cur">IGCSE</td><td class="num">4</td></tr>
+              <tr><td class="s">Chemistry</td><td class="cur">IGCSE</td><td class="num">4</td></tr>
+              <tr><td class="s">Biology</td><td class="cur">IGCSE</td><td class="num">4</td></tr>
+              <tr><td class="s">Business Studies</td><td class="cur">IGCSE</td><td class="num">3</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="small" style="margin-top:10px">Periods are per week. These ten subjects are taken by every Grade 9 student and cannot be changed.</p>
+      </div>
+
+      <div class="card">
+        <h3>Optional subjects</h3>
+        <p style="font-size:13px">Three choices, one subject from each pair.</p>
+        <div class="pairs">
+          <div class="pair">
+            <div class="hd"><span class="lb">Choose one</span><span class="pw">5 periods</span></div>
+            <div class="opts">
+              <span class="o">Mathematics<br>(Cambridge)</span>
+              <span class="or">or</span>
+              <span class="o">Mathematics<br>(Edexcel)</span>
+            </div>
+          </div>
+          <div class="pair">
+            <div class="hd"><span class="lb">Choose one</span><span class="pw">3 periods</span></div>
+            <div class="opts">
+              <span class="o">Accounting</span>
+              <span class="or">or</span>
+              <span class="o">Arabic</span>
+            </div>
+          </div>
+          <div class="pair">
+            <div class="hd"><span class="lb">Choose one</span><span class="pw">4 periods</span></div>
+            <div class="opts">
+              <span class="o">Computer Science</span>
+              <span class="or">or</span>
+              <span class="o">ICT</span>
+            </div>
+          </div>
+        </div>
+        <p class="small" style="margin-top:10px">All three optional subjects follow the IGCSE curriculum.</p>
+      </div>
+
+      <div class="card">
+        <h3>Hifdh Programme</h3>
+        <p>Optional, and ticked separately on the Grade 9 form. It runs <b>inside the three Quran periods already on the timetable</b>, so it adds nothing to the week and replaces no other subject.</p>
+        <p>The programme itself runs from Grade 1 and carries no entry conditions.</p>
+      </div>
+    </div>
+
+    <!-- ---------- GRADE 10 ---------- -->
+    <div id="panel10" role="tabpanel" aria-labelledby="tab10" tabindex="0" hidden>
+
+      <div class="card">
+        <h3>Compulsory subjects</h3>
+        <div class="scroll">
+          <table class="data">
+            <thead>
+              <tr><th scope="col">Subject</th><th scope="col">Curriculum</th><th scope="col">Periods</th></tr>
+            </thead>
+            <tbody>
+              <tr><td class="s">English</td><td class="cur">IGCSE</td><td class="num">4</td></tr>
+              <tr><td class="s">Arabic</td><td class="cur">MoE</td><td class="num">1</td></tr>
+              <tr><td class="s">Islamic Studies</td><td class="cur">MoE</td><td class="num">2</td></tr>
+              <tr><td class="s">Quran</td><td class="cur">MoE</td><td class="num">1</td></tr>
+              <tr><td class="s">Social Studies (KSAH)</td><td class="cur">MoE</td><td class="num">2</td></tr>
+              <tr><td class="s">PE</td><td class="cur">MoE</td><td class="num">1</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="small" style="margin-top:10px">Periods are per week. These six subjects are taken by every Grade 10 student and cannot be changed.</p>
+      </div>
+
+      <div class="card">
+        <h3>Optional subjects</h3>
+        <p style="font-size:13px">Selected individually on the options form. All follow the IGCSE curriculum.</p>
+        <div class="chips">
+          <span class="chip"><span class="s">Arabic</span><span class="p">3</span></span>
+          <span class="chip"><span class="s">Accounting</span><span class="p">3</span></span>
+          <span class="chip"><span class="s">Maths Cambridge</span><span class="p">6</span></span>
+          <span class="chip"><span class="s">Maths Edexcel</span><span class="p">6</span></span>
+          <span class="chip"><span class="s">Biology</span><span class="p">4</span></span>
+          <span class="chip"><span class="s">Chemistry</span><span class="p">4</span></span>
+          <span class="chip"><span class="s">Physics</span><span class="p">4</span></span>
+          <span class="chip"><span class="s">Business Studies</span><span class="p">4</span></span>
+          <span class="chip"><span class="s">Computer Science</span><span class="p">4</span></span>
+          <span class="chip"><span class="s">ICT</span><span class="p">4</span></span>
+        </div>
+        <p class="small" style="margin-top:10px">Numbers are periods per week.</p>
+      </div>
+    </div>
+
+    <!-- ---------- SHARED: MATHS, FORMS ---------- -->
+    <div class="card" style="margin-top:12px">
+      <h3>Cambridge or Edexcel Mathematics</h3>
+      <p style="font-size:13px">Both are internationally recognised, both prepare students for advanced level study, and both examine over two papers of two hours, 200 marks in total. The difference is in how the papers are sat.</p>
+      <div class="cmp">
+        <div class="col">
+          <div class="h">Cambridge</div>
+          <ul>
+            <li>Both papers must be taken in the <b>same session</b>.</li>
+            <li>Calculator allowed in <b>one</b> paper only.</li>
+          </ul>
+        </div>
+        <div class="col">
+          <div class="h">Edexcel</div>
+          <ul>
+            <li><b>Modular.</b> One paper can be sat in one session and the other in a separate session.</li>
+            <li>Calculator allowed in <b>both</b> papers.</li>
+          </ul>
+        </div>
+      </div>
+      <h4 style="margin-top:14px">Edexcel grade equivalence</h4>
       <div class="scroll">
         <table class="data">
           <thead>
-            <tr><th scope="col">Subject</th><th scope="col">Curriculum</th><th scope="col">Periods</th></tr>
+            <tr><th scope="col">IGCSE grade</th><th scope="col">Equivalent</th></tr>
           </thead>
           <tbody>
-            <tr><td class="s">Arabic</td><td class="cur">MoE</td><td class="num">1</td></tr>
-            <tr><td class="s">Islamic Studies</td><td class="cur">MoE</td><td class="num">2</td></tr>
-            <tr><td class="s">Quran</td><td class="cur">MoE</td><td class="num">3</td></tr>
-            <tr><td class="s">Social Studies (KSAH)</td><td class="cur">MoE</td><td class="num">2</td></tr>
-            <tr><td class="s">PE</td><td class="cur">MoE</td><td class="num">1</td></tr>
-            <tr><td class="s">English</td><td class="cur">IGCSE</td><td class="num">4</td></tr>
-            <tr><td class="s">Physics</td><td class="cur">IGCSE</td><td class="num">4</td></tr>
-            <tr><td class="s">Chemistry</td><td class="cur">IGCSE</td><td class="num">4</td></tr>
-            <tr><td class="s">Biology</td><td class="cur">IGCSE</td><td class="num">4</td></tr>
-            <tr><td class="s">Business Studies</td><td class="cur">IGCSE</td><td class="num">3</td></tr>
+            <tr><td class="s">8 and 9</td><td class="num">A*</td></tr>
+            <tr><td class="s">7</td><td class="num">A</td></tr>
+            <tr><td class="s">6</td><td class="num">B</td></tr>
+            <tr><td class="s">5</td><td class="num">C</td></tr>
+            <tr><td class="s">4</td><td class="num">D</td></tr>
           </tbody>
         </table>
       </div>
-      <p class="small" style="margin-top:10px">Periods are per week. These ten subjects are taken by every Grade 9 student and cannot be changed.</p>
+      <p class="small" style="margin-top:10px">Each Edexcel paper carries 100 marks. Forty per cent of the marks target grades 4 and 5; sixty per cent target grades 6 to 9.</p>
     </div>
 
-    <div class="card">
-      <h3>Optional subjects</h3>
-      <div class="rule"></div>
-      <p style="font-size:13px">Three choices, one subject from each pair.</p>
-      <div class="pairs">
-        <div class="pair">
-          <div class="hd"><span class="lb">Choose one</span><span class="pw">5 periods</span></div>
-          <div class="opts">
-            <span class="o">Mathematics<br>(Cambridge)</span>
-            <span class="or">or</span>
-            <span class="o">Mathematics<br>(Edexcel)</span>
-          </div>
-        </div>
-        <div class="pair">
-          <div class="hd"><span class="lb">Choose one</span><span class="pw">3 periods</span></div>
-          <div class="opts">
-            <span class="o">Accounting</span>
-            <span class="or">or</span>
-            <span class="o">Arabic</span>
-          </div>
-        </div>
-        <div class="pair">
-          <div class="hd"><span class="lb">Choose one</span><span class="pw">4 periods</span></div>
-          <div class="opts">
-            <span class="o">Computer Science</span>
-            <span class="or">or</span>
-            <span class="o">ICT</span>
-          </div>
-        </div>
-      </div>
-      <p class="small" style="margin-top:10px">All three optional subjects follow the IGCSE curriculum.</p>
+    <div class="docs">
+      <a class="doc" href="assets/g9-igcse-options-2026-27.pdf" download>
+        <span class="ic" aria-hidden="true">↓</span>
+        <span class="tx">
+          <span class="tt">Grade 9 IGCSE Options Form</span>
+          <span class="sb">PDF · Academic Year 2026-2027 · print and sign</span>
+        </span>
+        <span class="ar" aria-hidden="true">→</span>
+      </a>
+      <a class="doc" href="assets/g10-igcse-options-2026-27.pdf" download>
+        <span class="ic" aria-hidden="true">↓</span>
+        <span class="tx">
+          <span class="tt">Grade 10 IGCSE Options Form</span>
+          <span class="sb">PDF · Academic Year 2026-2027 · print and sign</span>
+        </span>
+        <span class="ar" aria-hidden="true">→</span>
+      </a>
     </div>
-
-    <div class="card">
-      <h3>Hifdh Programme</h3>
-      <div class="rule"></div>
-      <p>Optional, and ticked separately on the Grade 9 form. It runs <b>inside the three Quran periods already on the timetable</b>, so it adds nothing to the week and replaces no other subject.</p>
-      <p>The programme itself runs from Grade 1 and carries no entry conditions.</p>
-    </div>
-  </div>
-
-  <!-- ---------- GRADE 10 ---------- -->
-  <div id="panel10" role="tabpanel" aria-labelledby="tab10" tabindex="0" hidden>
-
-    <div class="card">
-      <h3>Compulsory subjects</h3>
-      <div class="rule"></div>
-      <div class="scroll">
-        <table class="data">
-          <thead>
-            <tr><th scope="col">Subject</th><th scope="col">Curriculum</th><th scope="col">Periods</th></tr>
-          </thead>
-          <tbody>
-            <tr><td class="s">English</td><td class="cur">IGCSE</td><td class="num">4</td></tr>
-            <tr><td class="s">Arabic</td><td class="cur">MoE</td><td class="num">1</td></tr>
-            <tr><td class="s">Islamic Studies</td><td class="cur">MoE</td><td class="num">2</td></tr>
-            <tr><td class="s">Quran</td><td class="cur">MoE</td><td class="num">1</td></tr>
-            <tr><td class="s">Social Studies (KSAH)</td><td class="cur">MoE</td><td class="num">2</td></tr>
-            <tr><td class="s">PE</td><td class="cur">MoE</td><td class="num">1</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="small" style="margin-top:10px">Periods are per week. These six subjects are taken by every Grade 10 student and cannot be changed.</p>
-    </div>
-
-    <div class="card">
-      <h3>Optional subjects</h3>
-      <div class="rule"></div>
-      <p style="font-size:13px">Selected individually on the options form. All follow the IGCSE curriculum.</p>
-      <div class="chips">
-        <span class="chip"><span class="s">Arabic</span><span class="p">3</span></span>
-        <span class="chip"><span class="s">Accounting</span><span class="p">3</span></span>
-        <span class="chip"><span class="s">Maths Cambridge</span><span class="p">6</span></span>
-        <span class="chip"><span class="s">Maths Edexcel</span><span class="p">6</span></span>
-        <span class="chip"><span class="s">Biology</span><span class="p">4</span></span>
-        <span class="chip"><span class="s">Chemistry</span><span class="p">4</span></span>
-        <span class="chip"><span class="s">Physics</span><span class="p">4</span></span>
-        <span class="chip"><span class="s">Business Studies</span><span class="p">4</span></span>
-        <span class="chip"><span class="s">Computer Science</span><span class="p">4</span></span>
-        <span class="chip"><span class="s">ICT</span><span class="p">4</span></span>
-      </div>
-      <p class="small" style="margin-top:10px">Numbers are periods per week.</p>
-    </div>
-  </div>
-
-  <!-- ---------- SHARED: MATHS, WARNING, FORMS ---------- -->
-  <div class="card">
-    <h3>Cambridge or Edexcel Mathematics</h3>
-    <div class="rule"></div>
-    <p style="font-size:13px">Both are internationally recognised, both prepare students for advanced level study, and both examine over two papers of two hours, 200 marks in total. The difference is in how the papers are sat.</p>
-    <div class="cmp">
-      <div class="col">
-        <div class="h">Cambridge</div>
-        <ul>
-          <li>Both papers must be taken in the <b>same session</b>.</li>
-          <li>Calculator allowed in <b>one</b> paper only.</li>
-        </ul>
-      </div>
-      <div class="col">
-        <div class="h">Edexcel</div>
-        <ul>
-          <li><b>Modular.</b> One paper can be sat in one session and the other in a separate session.</li>
-          <li>Calculator allowed in <b>both</b> papers.</li>
-        </ul>
-      </div>
-    </div>
-    <h4 style="margin-top:14px">Edexcel grade equivalence</h4>
-    <div class="scroll">
-      <table class="data">
-        <thead>
-          <tr><th scope="col">IGCSE grade</th><th scope="col">Equivalent</th></tr>
-        </thead>
-        <tbody>
-          <tr><td class="s">8 and 9</td><td class="num">A*</td></tr>
-          <tr><td class="s">7</td><td class="num">A</td></tr>
-          <tr><td class="s">6</td><td class="num">B</td></tr>
-          <tr><td class="s">5</td><td class="num">C</td></tr>
-          <tr><td class="s">4</td><td class="num">D</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <p class="small" style="margin-top:10px">Each Edexcel paper carries 100 marks. Forty per cent of the marks target grades 4 and 5; sixty per cent target grades 6 to 9.</p>
-  </div>
-
-  <div class="docs">
-    <a class="doc" href="assets/g9-igcse-options-2026-27.pdf" download>
-      <span class="ic" aria-hidden="true">↓</span>
-      <span class="tx">
-        <span class="tt">Grade 9 IGCSE Options Form</span>
-        <span class="sb">PDF · Academic Year 2026-2027 · print and sign</span>
-      </span>
-      <span class="ar" aria-hidden="true">→</span>
-    </a>
-    <a class="doc" href="assets/g10-igcse-options-2026-27.pdf" download>
-      <span class="ic" aria-hidden="true">↓</span>
-      <span class="tx">
-        <span class="tt">Grade 10 IGCSE Options Form</span>
-        <span class="sb">PDF · Academic Year 2026-2027 · print and sign</span>
-      </span>
-      <span class="ar" aria-hidden="true">→</span>
-    </a>
   </div>
 </section>
 
 <!-- ============ 04 · ASSESSMENT ============ -->
-<section class="sec" id="s4">
-  <span class="eyebrow">04 · Assessment</span>
-  <h2>How marks are built</h2>
-  <div class="rule"></div>
-
-  <p>Each semester is worth fifty per cent of the year. Within a semester, marks come from continuous assessment gathered through both quarters and from summative assessments at fixed points.</p>
-
-  <div class="card">
-    <h3>Semester One</h3>
-    <div class="rule"></div>
-    <div class="scroll">
-      <table class="data">
-        <thead>
-          <tr><th scope="col">Assessment</th><th scope="col">Quarter 1</th><th scope="col">Quarter 2</th></tr>
-        </thead>
-        <tbody>
-          <tr class="grp"><td colspan="3">Continuous assessment</td></tr>
-          <tr><td class="s">Classwork</td><td class="num">6</td><td class="num">6</td></tr>
-          <tr><td class="s">Homework</td><td class="num">4</td><td class="num">4</td></tr>
-          <tr class="grp"><td colspan="3">Summative assessment</td></tr>
-          <tr><td class="s">Mid-Term Test</td><td class="num">10</td><td class="num">10</td></tr>
-          <tr><td class="s">Final Examination</td><td class="num none">–</td><td class="num">10</td></tr>
-          <tr class="tot"><td class="s">Quarter total</td><td class="num">20</td><td class="num">30</td></tr>
-          <tr class="semtot"><td class="s">Semester One total</td><td class="num" colspan="2">50%</td></tr>
-        </tbody>
-      </table>
+<section class="sec alt" id="s4">
+  <div class="in">
+    <div class="st">
+      <h2>How marks are built</h2>
+      <p>Continuous and summative assessment, quarter by quarter</p>
+      <div class="bar"></div>
     </div>
-    <p class="small" style="margin-top:10px">Semester Two repeats this pattern exactly, across Quarters 3 and 4. The two semesters together make the year.</p>
-  </div>
 
-  <div class="card">
-    <h3>How progress reaches you</h3>
-    <div class="rule"></div>
-    <ul class="ticks">
-      <li><b>Reports</b> are issued at the end of each quarter and at the end of each semester.</li>
-      <li>An overall score <b>below sixty per cent</b> in any subject triggers the intervention process described in <a href="#s5">section 05</a>.</li>
-    </ul>
+    <p class="lead">Each semester is worth fifty per cent of the year. Within a semester, marks come from continuous assessment gathered through both quarters and from summative assessments at fixed points.</p>
+
+    <div class="card">
+      <h3>Semester One</h3>
+      <div class="scroll">
+        <table class="data">
+          <thead>
+            <tr><th scope="col">Assessment</th><th scope="col">Quarter 1</th><th scope="col">Quarter 2</th></tr>
+          </thead>
+          <tbody>
+            <tr class="grp"><td colspan="3">Continuous assessment</td></tr>
+            <tr><td class="s">Classwork</td><td class="num">6</td><td class="num">6</td></tr>
+            <tr><td class="s">Homework</td><td class="num">4</td><td class="num">4</td></tr>
+            <tr class="grp"><td colspan="3">Summative assessment</td></tr>
+            <tr><td class="s">Mid-Term Test</td><td class="num">10</td><td class="num">10</td></tr>
+            <tr><td class="s">Final Examination</td><td class="num none">–</td><td class="num">10</td></tr>
+            <tr class="tot"><td class="s">Quarter total</td><td class="num">20</td><td class="num">30</td></tr>
+            <tr class="semtot"><td class="s">Semester One total</td><td class="num" colspan="2">50%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="small" style="margin-top:10px">Semester Two repeats this pattern exactly, across Quarters 3 and 4. The two semesters together make the year.</p>
+    </div>
+
+    <div class="card">
+      <h3>How progress reaches you</h3>
+      <ul class="ticks">
+        <li><b>Reports</b> are issued at the end of each quarter and at the end of each semester.</li>
+        <li>An overall score <b>below sixty per cent</b> in any subject triggers the intervention process described under <a href="#s5">Support</a>.</li>
+      </ul>
+    </div>
   </div>
 </section>
 
 <!-- ============ 05 · SUPPORT ============ -->
 <section class="sec" id="s5">
-  <span class="eyebrow">05 · Support</span>
-  <h2>Support and intervention</h2>
-  <div class="rule"></div>
-
-  <p>When a subject slips there is a defined response, rather than a wait for the next report.</p>
-
-  <div class="stack">
-    <div class="card">
-      <h3>Mock examinations</h3>
-      <div class="rule"></div>
-      <p>Full examination simulations, run to build preparedness and confidence before the real thing.</p>
+  <div class="in">
+    <div class="st">
+      <h2>Support and intervention</h2>
+      <p>What happens when a subject slips</p>
+      <div class="bar"></div>
     </div>
-    <div class="card">
-      <h3>Identifying students below level</h3>
-      <div class="rule"></div>
-      <p>Any student scoring below sixty per cent in a subject is flagged. Parents receive a written summary of the affected subjects, individual interviews are held with the student to understand what is going wrong, and a tailored support plan follows.</p>
+
+    <p class="lead">When a subject slips there is a defined response, rather than a wait for the next report.</p>
+
+    <div class="two">
+      <div class="card">
+        <h3>Mock examinations</h3>
+        <p>Full examination simulations, run to build preparedness and confidence before the real thing.</p>
+      </div>
+      <div class="card">
+        <h3>Identifying students below level</h3>
+        <p>Any student scoring below sixty per cent in a subject is flagged. Parents receive a written summary of the affected subjects, individual interviews are held with the student to understand what is going wrong, and a tailored support plan follows.</p>
+      </div>
     </div>
-  </div>
 
-  <div class="card" style="margin-top:10px">
-    <h3>Homeroom Mentorship Programme</h3>
-    <div class="rule"></div>
-    <p style="font-size:13px">Every student has a homeroom mentor who follows their academic progress, well-being and development across the year.</p>
-    <ul class="ticks">
-      <li><b>Weekly class check-ins.</b> Ten to fifteen minutes in homeroom time, covering group well-being, academic updates, behaviour expectations, shared concerns and achievements.</li>
-      <li><b>Monthly one-to-one sessions.</b> At least once a month, ten to fifteen minutes per student, reviewing academic performance, emotional and social well-being, and goals for the term ahead.</li>
-      <li><b>Private conversations</b> whenever a student needs one.</li>
-    </ul>
-    <!-- PLACEHOLDER · 2026/27 mentor assignments pending. Last confirmed
-         list was 2025/26: 9A-9D and 10A-10C. Replace names and emails
-         once homerooms are set, or delete this card if it is not wanted
-         on a public page. -->
-    <h4 style="margin-top:14px">Homeroom mentors 2026/27</h4>
-    <p class="small">Mentor assignments are confirmed in the first week of term and shared directly with families. Your child’s mentor is your first point of contact for anything academic or pastoral.</p>
-  </div>
+    <div class="card">
+      <h3>Homeroom Mentorship Programme</h3>
+      <p style="font-size:13px">Every student has a homeroom mentor who follows their academic progress, well-being and development across the year.</p>
+      <ul class="ticks">
+        <li><b>Weekly class check-ins.</b> Ten to fifteen minutes in homeroom time, covering group well-being, academic updates, behaviour expectations, shared concerns and achievements.</li>
+        <li><b>Monthly one-to-one sessions.</b> At least once a month, ten to fifteen minutes per student, reviewing academic performance, emotional and social well-being, and goals for the term ahead.</li>
+        <li><b>Private conversations</b> whenever a student needs one.</li>
+      </ul>
+      <!-- PLACEHOLDER · 2026/27 mentor assignments pending. Last confirmed
+           list was 2025/26: 9A-9D and 10A-10C. Replace names and emails
+           once homerooms are set, or delete this block if it is not wanted
+           on a public page. -->
+      <h4 style="margin-top:14px">Homeroom mentors 2026/27</h4>
+      <p class="small">Mentor assignments are confirmed in the first week of term and shared directly with families. Your child’s mentor is your first point of contact for anything academic or pastoral.</p>
+    </div>
 
-  <div class="card tint">
-    <h3>The partnership</h3>
-    <div class="rule"></div>
-    <p>School, parents and students each hold one corner of the same triangle. The monitoring above only works when what we see in the classroom meets what you see at home. Contact the homeroom mentor early rather than late.</p>
+    <div class="card tint">
+      <h3>The partnership</h3>
+      <p>School, parents and students each hold one corner of the same triangle. The monitoring above only works when what we see in the classroom meets what you see at home. Contact the homeroom mentor early rather than late.</p>
+    </div>
   </div>
 </section>
 
+<div class="band" aria-hidden="true"><img src="assets/emblem.png" alt=""></div>
+
 <!-- ============ 06 · BEYOND THE BOOKS ============ -->
-<section class="sec" id="s6">
-  <span class="eyebrow">06 · Beyond the books</span>
-  <h2>Beyond the books</h2>
-  <div class="rule"></div>
+<section class="sec alt" id="s6">
+  <div class="in">
+    <div class="st">
+      <h2>Beyond the books</h2>
+      <p>What students do alongside their grades</p>
+      <div class="bar"></div>
+    </div>
 
-  <p>Grades and certificates open the door. What students do alongside them is what fills a university application and, later, a first interview.</p>
+    <p class="lead">Grades and certificates open the door. What students do alongside them is what fills a university application and, later, a first interview.</p>
 
-  <div class="card">
-    <h3>What is on offer</h3>
-    <div class="rule"></div>
-    <ul class="ticks">
-      <li><b>Creative thinking and problem solving</b> built into subject teaching rather than bolted on.</li>
-      <li><b>Student leadership</b>, including the Student Council.</li>
-      <li><b>Industry trips.</b> Recent years have included Almarai and MACTECH.</li>
-      <li><b>Community service</b> as a standing expectation, not an occasional event.</li>
-    </ul>
+    <div class="card">
+      <h3>What is on offer</h3>
+      <ul class="ticks">
+        <li><b>Creative thinking and problem solving</b> built into subject teaching rather than bolted on.</li>
+        <li><b>Student leadership</b>, including the Student Council.</li>
+        <li><b>Industry trips.</b> Recent years have included Almarai and MACTECH.</li>
+        <li><b>Community service</b> as a standing expectation, not an occasional event.</li>
+      </ul>
+    </div>
   </div>
 </section>
 
 <!-- ============ 07 · POLICIES ============ -->
 <section class="sec" id="s7">
-  <span class="eyebrow">07 · Policies</span>
-  <h2>What we ask of students and families</h2>
-  <div class="rule"></div>
-
-  <div class="card">
-    <h3>Attendance</h3>
-    <div class="rule"></div>
-    <ul class="ticks">
-      <li>Daily attendance is essential to academic success, and absence shows up in results faster than most families expect.</li>
-      <li>Absence and early dismissal requests must be made <b>through MyAIS only</b>. Requests by phone, WhatsApp or in person cannot be processed.</li>
-    </ul>
-  </div>
-
-  <div class="card">
-    <h3>Mobile phones</h3>
-    <div class="rule"></div>
-    <ul class="ticks">
-      <li>Phones are <b>not permitted during the school day</b>, lessons, breaks and lunchtimes included, and must be stored in lockers.</li>
-      <li>A confiscated phone is returned <b>to a parent or guardian in person</b>, not to a driver or any other representative, and only once the commitment form is signed.</li>
-      <li>Confiscation periods increase with each repeat.</li>
-      <li>Where violations continue, the student is referred to the counsellor and parents are asked to come in.</li>
-    </ul>
-    <div class="scroll" style="margin-top:12px">
-      <table class="data">
-        <thead>
-          <tr><th scope="col">Incident</th><th scope="col">Phone held for</th></tr>
-        </thead>
-        <tbody>
-          <tr><td class="s">First</td><td class="num">24 hours</td></tr>
-          <tr><td class="s">Second</td><td class="num">48 hours</td></tr>
-          <tr><td class="s">Third</td><td class="num">72 hours</td></tr>
-          <tr><td class="s">Fourth</td><td class="num">1 week</td></tr>
-        </tbody>
-      </table>
+  <div class="in">
+    <div class="st">
+      <h2>What we ask of students and families</h2>
+      <p>Attendance, mobile phones, and behaviour</p>
+      <div class="bar"></div>
     </div>
-  </div>
 
-  <div class="card">
-    <h3>Behaviour and community</h3>
-    <div class="rule"></div>
-    <p style="font-size:13px">Respect, responsibility and Islamic values are the foundation. Where behaviour falls short, three levels guide the response, so students and families always know what happens next.</p>
-    <div class="lvl">
-      <div class="l">
-        <span class="n">Level A · Minor</span>
-        <div class="d">Uniform, low-level disruption.</div>
-        <div class="a"><b>Response:</b> teacher redirection and reflection time, with parent contact if it persists.</div>
-      </div>
-      <div class="l">
-        <span class="n">Level B · Repeated or disruptive</span>
-        <div class="d">Inappropriate language, misuse of property.</div>
-        <div class="a"><b>Response:</b> counsellor referral and a behavioural contract, escalating to the Head of School if repeated.</div>
-      </div>
-      <div class="l">
-        <span class="n">Level C · Serious safety concern</span>
-        <div class="d">Violence, bullying, leaving school grounds.</div>
-        <div class="a"><b>Response:</b> Deputy Head referral, safeguarding log, parent meetings, and possible suspension or alternative placement.</div>
+    <div class="card">
+      <h3>Attendance</h3>
+      <ul class="ticks">
+        <li>Daily attendance is essential to academic success, and absence shows up in results faster than most families expect.</li>
+        <li>Absence and early dismissal requests must be made <b>through MyAIS only</b>. Requests by phone, WhatsApp or in person cannot be processed.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>Mobile phones</h3>
+      <ul class="ticks">
+        <li>Phones are <b>not permitted during the school day</b>, lessons, breaks and lunchtimes included, and must be stored in lockers.</li>
+        <li>A confiscated phone is returned <b>to a parent or guardian in person</b>, not to a driver or any other representative, and only once the commitment form is signed.</li>
+        <li>Confiscation periods increase with each repeat.</li>
+        <li>Where violations continue, the student is referred to the counsellor and parents are asked to come in.</li>
+      </ul>
+      <div class="scroll" style="margin-top:12px">
+        <table class="data">
+          <thead>
+            <tr><th scope="col">Incident</th><th scope="col">Phone held for</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="s">First</td><td class="num">24 hours</td></tr>
+            <tr><td class="s">Second</td><td class="num">48 hours</td></tr>
+            <tr><td class="s">Third</td><td class="num">72 hours</td></tr>
+            <tr><td class="s">Fourth</td><td class="num">1 week</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
-  </div>
 
-  <div class="docs">
-    <a class="doc" href="assets/no-mobile-phone-policy.pdf" download>
-      <span class="ic" aria-hidden="true">↓</span>
-      <span class="tx">
-        <span class="tt">No Mobile Phone Policy</span>
-        <span class="sb">PDF · full policy text</span>
-      </span>
-      <span class="ar" aria-hidden="true">→</span>
-    </a>
-    <a class="doc" href="assets/phone-policy-commitment-form.pdf" download>
-      <span class="ic" aria-hidden="true">↓</span>
-      <span class="tx">
-        <span class="tt">Phone Policy Commitment Form</span>
-        <span class="sb">PDF · signed when a phone is collected</span>
-      </span>
-      <span class="ar" aria-hidden="true">→</span>
-    </a>
+    <div class="card">
+      <h3>Behaviour and community</h3>
+      <p style="font-size:13px">Respect, responsibility and Islamic values are the foundation. Where behaviour falls short, three levels guide the response, so students and families always know what happens next.</p>
+      <div class="lvl">
+        <div class="l">
+          <span class="n">Level A · Minor</span>
+          <div class="d">Uniform, low-level disruption.</div>
+          <div class="a"><b>Response:</b> teacher redirection and reflection time, with parent contact if it persists.</div>
+        </div>
+        <div class="l">
+          <span class="n">Level B · Repeated or disruptive</span>
+          <div class="d">Inappropriate language, misuse of property.</div>
+          <div class="a"><b>Response:</b> counsellor referral and a behavioural contract, escalating to the Head of School if repeated.</div>
+        </div>
+        <div class="l">
+          <span class="n">Level C · Serious safety concern</span>
+          <div class="d">Violence, bullying, leaving school grounds.</div>
+          <div class="a"><b>Response:</b> Deputy Head referral, safeguarding log, parent meetings, and possible suspension or alternative placement.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="docs">
+      <a class="doc" href="assets/no-mobile-phone-policy.pdf" download>
+        <span class="ic" aria-hidden="true">↓</span>
+        <span class="tx">
+          <span class="tt">No Mobile Phone Policy</span>
+          <span class="sb">PDF · full policy text</span>
+        </span>
+        <span class="ar" aria-hidden="true">→</span>
+      </a>
+      <a class="doc" href="assets/phone-policy-commitment-form.pdf" download>
+        <span class="ic" aria-hidden="true">↓</span>
+        <span class="tx">
+          <span class="tt">Phone Policy Commitment Form</span>
+          <span class="sb">PDF · signed when a phone is collected</span>
+        </span>
+        <span class="ar" aria-hidden="true">→</span>
+      </a>
+    </div>
   </div>
 </section>
 
-<!-- ============ 08 · ALL DOCUMENTS ============ -->
-<section class="sec" id="s8">
-  <span class="eyebrow">08 · All documents</span>
-  <h2>Everything in one place</h2>
-  <div class="rule"></div>
-
-  <p>Every document for Grades 9 and 10, gathered here so you do not have to hunt through the page for it.</p>
-
-  <div class="docs">
-    <a class="doc" href="assets/g9-igcse-options-2026-27.pdf" download>
-      <span class="ic" aria-hidden="true">↓</span>
-      <span class="tx">
-        <span class="tt">Grade 9 IGCSE Options Form</span>
-        <span class="sb">PDF · Academic Year 2026-2027</span>
-      </span>
-      <span class="ar" aria-hidden="true">→</span>
-    </a>
-    <a class="doc" href="assets/g10-igcse-options-2026-27.pdf" download>
-      <span class="ic" aria-hidden="true">↓</span>
-      <span class="tx">
-        <span class="tt">Grade 10 IGCSE Options Form</span>
-        <span class="sb">PDF · Academic Year 2026-2027</span>
-      </span>
-      <span class="ar" aria-hidden="true">→</span>
-    </a>
-    <span class="doc soon">
-      <span class="ic" aria-hidden="true">↓</span>
-      <span class="tx">
-        <span class="tt">Meet &amp; Greet Agenda</span>
-        <span class="sb">PDF · Grades 9 and 10</span>
-      </span>
-      <span class="ar">Available soon</span>
-    </span>
-    <span class="doc soon">
-      <span class="ic" aria-hidden="true">↓</span>
-      <span class="tx">
-        <span class="tt">Presentation</span>
-        <span class="sb">PDF · the slides from the evening</span>
-      </span>
-      <span class="ar">Available soon</span>
-    </span>
-    <a class="doc" href="assets/parents-calendar-2026-27.pdf" download>
-      <span class="ic" aria-hidden="true">↓</span>
-      <span class="tx">
-        <span class="tt">Parent Calendar 2026/27</span>
-        <span class="sb">PDF · First Semester · Boys and Girls</span>
-      </span>
-      <span class="ar" aria-hidden="true">→</span>
-    </a>
-    <a class="doc" href="assets/no-mobile-phone-policy.pdf" download>
-      <span class="ic" aria-hidden="true">↓</span>
-      <span class="tx">
-        <span class="tt">No Mobile Phone Policy</span>
-        <span class="sb">PDF · full policy text</span>
-      </span>
-      <span class="ar" aria-hidden="true">→</span>
-    </a>
-    <a class="doc" href="assets/phone-policy-commitment-form.pdf" download>
-      <span class="ic" aria-hidden="true">↓</span>
-      <span class="tx">
-        <span class="tt">Phone Policy Commitment Form</span>
-        <span class="sb">PDF · signed when a phone is collected</span>
-      </span>
-      <span class="ar" aria-hidden="true">→</span>
-    </a>
+<!-- ============ ALL DOCUMENTS · CALL-OUT ============ -->
+<section class="sec navy" id="s8">
+  <div class="in">
+    <div class="st">
+      <h2>Everything in one place</h2>
+      <div class="bar"></div>
+    </div>
+    <p class="lead">Every document for Grades 9 and 10 sits in the Documents band at the top of this page. The agenda and the slides from the evening will be added there once they are ready.</p>
+    <a class="btn gold" href="#materials">Go to documents</a>
+    <p class="note">This page stays live through the year. Save the link, and check back as new documents and dates are added.</p>
   </div>
 </section>
 
 <!-- ============ CONTACTS ============ -->
-<section class="sec" id="contacts">
-  <span class="eyebrow">Contacts</span>
-  <h2>Who to speak to</h2>
-  <div class="rule"></div>
-
-  <p>Your child’s homeroom mentor and subject teachers come first. For anything beyond them, the section leadership is here.</p>
-
-  <h4>Boys campus</h4>
-  <div class="stack" style="margin-bottom:16px">
-    <div class="contact">
-      <span class="av" aria-hidden="true">FH</span>
-      <span class="who">
-        <span class="role">Head of School, British Section</span>
-        <span class="nm">Mr. Farhan Hussein</span>
-        <a class="ln" href="mailto:f.hussein@ais.sch.sa">f.hussein@ais.sch.sa</a>
-      </span>
+<section class="sec alt" id="contacts">
+  <div class="in">
+    <div class="st">
+      <h2>Who to speak to</h2>
+      <p>Your child’s homeroom mentor and subject teachers come first. For anything beyond them, the section leadership is here.</p>
+      <div class="bar"></div>
     </div>
-    <div class="contact">
-      <span class="av" aria-hidden="true">TS</span>
-      <span class="who">
-        <span class="role">Deputy Head of School</span>
-        <span class="nm">Mr. Tariq Saeed</span>
-        <a class="ln" href="mailto:t.saeed@ais.sch.sa">t.saeed@ais.sch.sa</a>
-      </span>
-    </div>
-  </div>
 
-  <!-- PLACEHOLDER · confirm the girls campus names and titles for this
-       event before publishing. See README for the naming discrepancy. -->
-  <h4>Girls campus</h4>
-  <div class="stack">
-    <div class="contact">
-      <span class="av" aria-hidden="true">SA</span>
-      <span class="who">
-        <span class="role">Head of School, Girls</span>
-        <span class="nm">Ms. Shamsiya Alkalbani</span>
-        <a class="ln" href="mailto:s.alkalbani@ais.sch.sa">s.alkalbani@ais.sch.sa</a>
-      </span>
-    </div>
-    <div class="contact">
-      <span class="av" aria-hidden="true">MA</span>
-      <span class="who">
-        <span class="role">Deputy Head of School</span>
-        <span class="nm">Ms. Malak Alkhasawna</span>
-        <a class="ln" href="mailto:m.alkhasawna@ais.sch.sa">m.alkhasawna@ais.sch.sa</a>
-      </span>
+    <!-- PLACEHOLDER · confirm the girls campus names and titles before
+         publishing. See README for the naming discrepancy. -->
+    <div class="cgrid">
+      <div class="ccard">
+        <p class="cs">Boys campus</p>
+        <p class="nm">Mr. Farhan Hussein</p>
+        <p class="rl">Head of School, British Section</p>
+        <a href="mailto:f.hussein@ais.sch.sa">📧 f.hussein@ais.sch.sa</a>
+      </div>
+      <div class="ccard">
+        <p class="cs">Boys campus</p>
+        <p class="nm">Mr. Tariq Saeed</p>
+        <p class="rl">Deputy Head of School</p>
+        <a href="mailto:t.saeed@ais.sch.sa">📧 t.saeed@ais.sch.sa</a>
+      </div>
+      <div class="ccard gold">
+        <p class="cs">Girls campus</p>
+        <p class="nm">Ms. Shamsiya Alkalbani</p>
+        <p class="rl">Head of School, Girls</p>
+        <a href="mailto:s.alkalbani@ais.sch.sa">📧 s.alkalbani@ais.sch.sa</a>
+      </div>
+      <div class="ccard gold">
+        <p class="cs">Girls campus</p>
+        <p class="nm">Ms. Malak Alkhasawna</p>
+        <p class="rl">Deputy Head of School</p>
+        <a href="mailto:m.alkhasawna@ais.sch.sa">📧 m.alkhasawna@ais.sch.sa</a>
+      </div>
     </div>
   </div>
 </section>
 
 <footer>
-  <div class="sig">British Section</div>
-  <div class="meta">Al-Rowad International Schools · Riyadh · Academic Year 2026/27</div>
-  <a class="toplink" href="#top">Back to top</a>
+  <img src="assets/emblem.png" alt="" width="44" height="44">
+  <p class="tag">British Section · Grades 9 and 10</p>
+  <p class="l1">Al-Rowad International Schools · Riyadh</p>
+  <p class="l2">Academic Year 2026/27</p>
+  <a class="top" href="#top">Back to top</a>
 </footer>
-
-</main>
 
 <script>
 (function () {
   'use strict';
 
-  /* --- grade tabs in section 03 --- */
+  /* --- menu --- */
+  var bar = document.getElementById('topbar');
+  var btn = document.getElementById('menubtn');
+  var menu = document.getElementById('menu');
+
+  function setMenu(open) {
+    bar.classList.toggle('open', open);
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+  btn.addEventListener('click', function () {
+    setMenu(!bar.classList.contains('open'));
+  });
+  menu.addEventListener('click', function (e) {
+    if (e.target.closest('a')) setMenu(false);
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && bar.classList.contains('open')) { setMenu(false); btn.focus(); }
+  });
+
+  /* --- highlight the section in view --- */
+  var links = Array.prototype.slice.call(menu.querySelectorAll('a[href^="#"]:not(.go)'));
+  if ('IntersectionObserver' in window) {
+    var ob = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        links.forEach(function (a) {
+          a.classList.toggle('on', a.getAttribute('href') === '#' + en.target.id);
+        });
+      });
+    }, { rootMargin: '-50% 0px', threshold: 0 });
+    links.forEach(function (a) {
+      var s = document.getElementById(a.getAttribute('href').slice(1));
+      if (s) ob.observe(s);
+    });
+  }
+
+  /* --- grade tabs --- */
   var tabs = [document.getElementById('tab9'), document.getElementById('tab10')];
   var panels = [document.getElementById('panel9'), document.getElementById('panel10')];
 
@@ -1553,9 +1580,7 @@ footer .meta { font-size: 11px; color: var(--muted); margin-top: 4px; }
 
   /* --- countdown to the evening ---
      Counts to data-doors, flips to an "under way" message once the doors
-     open, then to a closing message after data-end, when the timer stops.
-     The ticking cells are aria-hidden because the date is already stated
-     above them in full; only the two messages are announced. */
+     open, then to a closing message after data-end, when the timer stops. */
   var hero = document.getElementById('hero');
   var cd = document.getElementById('cd');
 
@@ -1615,15 +1640,6 @@ footer .meta { font-size: 11px; color: var(--muted); margin-top: 4px; }
       timer = setInterval(tick, 1000);
     }
   }
-
-  /* --- accordions, if any are added later --- */
-  document.querySelectorAll('.acc > button').forEach(function (b) {
-    b.addEventListener('click', function () {
-      var open = b.getAttribute('aria-expanded') === 'true';
-      b.setAttribute('aria-expanded', open ? 'false' : 'true');
-      b.nextElementSibling.classList.toggle('on', !open);
-    });
-  });
 })();
 </script>
 
