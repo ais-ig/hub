@@ -31,7 +31,7 @@ for (const a of assets) {
 notes.push(assets.size + ' asset links exist');
 
 /* 3. No em dashes. The project forbids them everywhere. */
-const em = (html.match(/—/g) || []).length; /* em dash, escaped so
+const em = (html.match(/\u2014/g) || []).length; /* em dash, escaped so
                                                        this file stays free of
                                                        the character itself */
 if (em) fail('writing', em + ' em dash(es) present; use en dashes or middots');
@@ -63,6 +63,10 @@ if (!block) {
   if (data && !Array.isArray(data)) fail('updates', 'updatesData must be an array');
   if (Array.isArray(data)) {
     data.forEach((e, i) => {
+      if (typeof e !== 'object' || e === null) {
+        fail('updates', 'entry ' + i + ' is not an object');
+        return;
+      }
       if (!/^\d{4}-\d{2}-\d{2}$/.test(e.date || '')) {
         fail('updates', 'entry ' + i + ' needs a YYYY-MM-DD date');
       }

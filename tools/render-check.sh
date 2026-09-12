@@ -39,7 +39,8 @@ check "countdown is hidden"        'id="cd" hidden'              yes
 check "no thank-you message shown" 'Thank you for joining us<'   no
 
 # The updates layer must have rendered into both containers.
-check "updates strip rendered"     'id="updatesStrip"[^>]*hidden' no
+check "updates strip present"      'id="updatesStrip"'            yes
+check "updates strip not hidden"   'id="updatesStrip" hidden'     no
 check "change log rendered"        'id="changelogList"'          yes
 
 echo
