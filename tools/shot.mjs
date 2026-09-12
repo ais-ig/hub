@@ -24,6 +24,7 @@ const DEVICE_SCALE_FACTOR = 2;
 const STARTUP_TIMEOUT_MS = 10000;
 const NAV_TIMEOUT_MS = 15000;
 const HARD_TIMEOUT_MS = 30000;
+const CDP_CALL_TIMEOUT_MS = 10000; /* per CDP round trip, so a stuck call fails on its own rather than only via the hard timeout */
 const SETTLE_MS = 500; /* let webfonts and inline JS finish after load */
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -65,15 +66,16 @@ const OVERFLOW_SCRIPT = `
 let chromeProc = null;
 let profileDir = null;
 let ws = null;
-let cleanedUp = false;
+let cleanupPromise = null;
+let syncCleanedUp = false;
 
-/* Kill chrome and remove its profile directory. Waits for chrome to
-   actually be reaped before removing the directory: killing and removing
-   back to back races the OS releasing chrome's file locks and can leave
-   an undeleted profile directory behind. */
-async function cleanup() {
-  if (cleanedUp) return;
-  cleanedUp = true;
+/* Kill chrome and remove its profile directory. Waits for chrome's own
+   process to be reaped before removing the directory, then retries the
+   removal a few times: chrome is multi-process (GPU, renderer, utility),
+   and a helper process that outlives the main one by a few hundred ms can
+   still be holding a file in the profile directory open, which would
+   otherwise make rmSync fail silently and leak the directory. */
+async function doCleanup() {
   try { ws?.close(); } catch { /* already closed */ }
   if (chromeProc && chromeProc.exitCode === null && chromeProc.signalCode === null) {
     const exited = new Promise((resolve) => chromeProc.once('exit', resolve));
@@ -81,20 +83,34 @@ async function cleanup() {
     await Promise.race([exited, sleep(3000)]);
   }
   if (profileDir) {
-    try { rmSync(profileDir, { recursive: true, force: true }); } catch { /* best effort */ }
+    try { rmSync(profileDir, { recursive: true, force: true, maxRetries: 10, retryDelay: 200 }); } catch { /* best effort */ }
   }
+}
+
+/* cleanup() has four call sites: the SIGINT handler, the SIGTERM handler,
+   the main try/finally, and the hard-timeout watchdog. Any two of these
+   can fire close together (for example a SIGINT arriving while the
+   watchdog is already mid-cleanup). Memoising the promise, rather than
+   guarding with a plain boolean, means every caller awaits the SAME
+   completion instead of the second caller seeing "already done" and
+   calling process.exit() while the first caller's rmSync is still
+   in flight. */
+function cleanup() {
+  if (!cleanupPromise) cleanupPromise = doCleanup();
+  return cleanupPromise;
 }
 
 /* Last-resort synchronous net for a true process 'exit' event, which
    cannot await anything. Every normal path (success, error, timeout,
-   signal) goes through the async cleanup() above instead. */
+   signal) goes through the async cleanup() above instead; this only
+   matters if something exits the process without having awaited it. */
 function cleanupSync() {
-  if (cleanedUp) return;
-  cleanedUp = true;
+  if (syncCleanedUp) return;
+  syncCleanedUp = true;
   try { ws?.close(); } catch { /* already closed */ }
   try { chromeProc?.kill('SIGKILL'); } catch { /* already dead */ }
   if (profileDir) {
-    try { rmSync(profileDir, { recursive: true, force: true }); } catch { /* best effort */ }
+    try { rmSync(profileDir, { recursive: true, force: true, maxRetries: 10, retryDelay: 200 }); } catch { /* best effort */ }
   }
 }
 
@@ -224,7 +240,14 @@ async function main() {
   function send(method, params, sessionId) {
     return new Promise((resolve, reject) => {
       const id = ++msgId;
-      pending.set(id, { resolve, reject });
+      const timer = setTimeout(() => {
+        pending.delete(id);
+        reject(new Error('timed out waiting for a CDP response to ' + method));
+      }, CDP_CALL_TIMEOUT_MS);
+      pending.set(id, {
+        resolve: (result) => { clearTimeout(timer); resolve(result); },
+        reject: (err) => { clearTimeout(timer); reject(err); }
+      });
       const payload = { id, method, params: params || {} };
       if (sessionId) payload.sessionId = sessionId;
       ws.send(JSON.stringify(payload));
