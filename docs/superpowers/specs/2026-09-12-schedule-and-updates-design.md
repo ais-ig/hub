@@ -234,3 +234,140 @@ An "Updated 12 Sep" pill on the matching row in the document library, matched
 by `href` against the same updates array. Genuinely nice, entirely additive,
 and easy to add once the array exists. Left out of the first cut to keep the
 change reviewable.
+
+---
+
+# Amendment · 12 September 2026 · retiring the event
+
+Added after the first version was approved. The Meet & Greet took place on
+Wednesday 9 September; the hub is now a year-round reference and the event
+language has to go in the same pass as the timetable, not a later one.
+
+## Why this belongs in the same commit
+
+The page currently says "Thank you for joining us" above a banner dated to a
+past Wednesday, under a band called "Tonight's materials". Publishing a
+timetable into that frame would put the most current thing on the page inside
+the most stale part of it. The two changes are one change.
+
+There are 28 occurrences of event-bound language. All of them are listed
+below; nothing is left to judgement at implementation time.
+
+## What is retired, and what replaces it
+
+### The countdown
+
+Delete `data-doors` and `data-end` from the hero element. The block hides
+itself, which is the documented retirement path in the README. **The markup
+and the JS both stay**, so the next event is two attributes and a banner
+line, exactly as before. Nothing about the countdown's behaviour changes.
+
+### The hero
+
+| | Now | After |
+|---|---|---|
+| `h1` | Parents' Meet & Greet | Parent Hub |
+| `.sub` | British Section IGCSE, Academic Year 2026/27 | unchanged |
+| `.desc` | opens "Your one place for tonight's programme..." | rewritten to lead with the timetable and drop the event |
+| gold button | Tonight's programme → `#s1` | Class timetables → `#schedule` |
+| outline button | Ask a question | unchanged |
+
+### The banner
+
+The navy strip is a carried-over design element and should not simply be
+deleted. It stops describing an evening and starts describing the school
+week, which is the year-round equivalent and is genuinely useful:
+
+```
+📅 Sunday to Thursday   ⏰ 7:00 AM – 12:50 PM   📍 Boys campus · British Section
+```
+
+Those hours are taken from the timetable itself, so the banner and the
+schedule section now share a source. **If period times change, both change.**
+
+### "Tonight's materials" band
+
+Renamed **"Start here"**, subtitle reworded off the evening. It keeps its
+`id="materials"` so no anchor breaks. Card order changes so that **Class
+timetables becomes the first card**. The "Ask a question" card text drops
+"about tonight". The presentation card is re-described as the Meet & Greet
+slides rather than "tonight's".
+
+Nav label "Tonight's materials" becomes "Start here".
+
+### "Tonight's programme" (`#s1`)
+
+**Deleted in full.** The three agenda steps and the "Finding your way" card
+are about gates, stalls and a 6:30 arrival on a night that has happened.
+There is nothing in the section worth carrying forward, and keeping it in the
+past tense would give the page a museum exhibit at the top.
+
+`#s1` is referenced exactly twice, from the nav and the hero gold button, and
+both are rewritten above. Verified by grep; no other anchor points at it.
+`#schedule` becomes the first section on the page.
+
+### The document library
+
+The `<h4>Tonight</h4>` group becomes **"Meet & Greet · 9 September 2026"**.
+Dating it turns a heading that decays into one that stays true, and it gives
+later events an obvious place to sit. Both rows under it stay: the parent
+guide and the deck are still useful documents.
+
+A new `<h4>Timetables</h4>` group is added above it, carrying the timetable
+row.
+
+### "Have a question about tonight?"
+
+Becomes **"Have a question?"**. The lead drops "during the presentation" and
+"after the evening". The email fallback to the Head of School stays exactly
+as it is.
+
+### Meta description
+
+Rewritten to drop "Tonight's Parents' Meet & Greet programme" and lead with
+the timetable. It is the text that shows in a WhatsApp link preview, so it is
+the first thing many parents read.
+
+## One updates entry for the change itself
+
+The de-event-ing gets its own entry in `updatesData`, dated 2026-09-13,
+saying the hub is now the year-round reference and what to find on it. A
+parent who bookmarked a page headed "Parents' Meet & Greet" and returns to
+one headed "Parent Hub" should not have to wonder whether they are in the
+right place. This is the first real justification for the updates layer
+existing, which is a good sign it is the right feature.
+
+## What is deliberately not done here
+
+The hero, the nav order and the section sequence are **not** rethought. That
+is the "full repositioning" option, and it was set aside as its own piece of
+work. This amendment does the minimum that makes the page honest: it removes
+what is false and renames what is misleading. The page's shape is untouched.
+
+## Additional verification
+
+On top of the checks in the first version:
+
+- `grep -in "tonight\|this evening\|doors open" index.html` returns nothing
+  outside the countdown's own JS strings and the dated Meet & Greet heading.
+- Every anchor still resolves after `#s1` is removed.
+- The countdown block is absent from the rendered page, and re-adding the two
+  attributes brings it back correctly.
+
+## Still blocked on the user
+
+Unchanged from the first version and still unanswered:
+
+1. Confirmation that `~/Downloads/sched13sep2026/IG Classes.pdf`, generated
+   10/09/2026, is final.
+2. Confirmation that the class list is still 9A–9D, 10A–10C, 11A–11B, 12A–12B.
+3. Whether the departmental timetables are staff-facing only.
+4. The expected revision cadence.
+5. Whether a girls-campus timetable exists, which decides whether the file is
+   `class-timetables.pdf` or `class-timetables-boys.pdf`.
+
+Items 1 and 2 block publication. Item 5 blocks the filename, which is the one
+thing in this design that is expensive to change later, because the whole
+point is that the address is permanent. **Everything in this amendment can be
+built and reviewed before any of them are answered**, since none of it
+touches the timetable file itself.
