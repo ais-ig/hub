@@ -584,6 +584,39 @@ p:last-child { margin-bottom: 0; }
 .pills button:hover { background: var(--gold-tint-2); }
 .pills button[aria-selected="true"] { background: var(--navy-deep); color: #fff; }
 
+/* --- class timetable links --- */
+
+.tt-note { font-size: 13px; color: var(--ink-soft); margin: 0 0 18px; line-height: 1.6; }
+.tt-grp { margin-bottom: 14px; }
+.tt-grp .lb {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 7px;
+}
+.classlinks { display: flex; gap: 8px; flex-wrap: wrap; }
+.classlinks a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 58px;
+  min-height: var(--tap);
+  padding: 10px 16px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--navy-deep);
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+}
+.classlinks a:hover { background: var(--navy-deep); border-color: var(--navy-deep); color: #fff; }
+.tt-foot { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.tt-stamp { font-size: 12px; color: var(--muted); margin: 0; }
+
 /* --- data tables --- */
 
 .scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
@@ -989,6 +1022,11 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
       <p class="sb">Download or open in your browser · the full library is further down the page</p>
     </div>
     <div class="mgrid">
+      <a class="mcard" href="assets/class-timetables-boys.pdf?v=2026-09-13" download>
+        <span class="t"><span class="ic" aria-hidden="true">🗓️</span>Class Timetables</span>
+        <p>Grades 9 to 12, boys campus. In effect from Sunday 13 September 2026.</p>
+        <span class="cta">Open PDF →</span>
+      </a>
       <a class="mcard" href="assets/meet-and-greet-parent-guide-boys-2026-27.pdf" download>
         <span class="t"><span class="ic" aria-hidden="true">🗺️</span>Parent Guide · Boys campus</span>
         <p>Your child’s teachers by class, and staff contacts for the British Section. Grades 9 to 12. Includes the map from the evening of 9 September 2026.</p>
@@ -1017,6 +1055,65 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
     </div>
   </div>
 </div>
+
+<!-- ============ 01 · CLASS TIMETABLES ============ -->
+<!-- One PDF, linked per class with #page= fragments. The page order is fixed
+     by the aSc export and verified in tools/check.mjs only as far as the file
+     existing: if the school adds or removes a class, re-derive these eleven
+     page numbers from the new export before publishing. The ?v= date is
+     bumped on every revision so a parent arriving through the hub gets the
+     new file rather than a cached one. -->
+<section class="sec" id="schedule">
+  <div class="in">
+    <div class="st">
+      <h2>Class timetables</h2>
+      <p>Grades 9 to 12 · boys campus · in effect from Sunday 13 September 2026</p>
+      <div class="bar"></div>
+    </div>
+
+    <p class="tt-note">The week runs Sunday to Thursday, periods 1 to 8, 7:00 AM to 12:50 PM, with break from 9:40 to 10:10. Tap your child’s class to open their timetable.</p>
+
+    <div class="tt-grp">
+      <span class="lb">Grade 9</span>
+      <div class="classlinks">
+        <a href="assets/class-timetables-boys.pdf?v=2026-09-13#page=1">9A</a>
+        <a href="assets/class-timetables-boys.pdf?v=2026-09-13#page=2">9B</a>
+        <a href="assets/class-timetables-boys.pdf?v=2026-09-13#page=3">9C</a>
+        <a href="assets/class-timetables-boys.pdf?v=2026-09-13#page=4">9D</a>
+      </div>
+    </div>
+
+    <div class="tt-grp">
+      <span class="lb">Grade 10</span>
+      <div class="classlinks">
+        <a href="assets/class-timetables-boys.pdf?v=2026-09-13#page=5">10A</a>
+        <a href="assets/class-timetables-boys.pdf?v=2026-09-13#page=6">10B</a>
+        <a href="assets/class-timetables-boys.pdf?v=2026-09-13#page=7">10C</a>
+      </div>
+    </div>
+
+    <div class="tt-grp">
+      <span class="lb">Grade 11</span>
+      <div class="classlinks">
+        <a href="assets/class-timetables-boys.pdf?v=2026-09-13#page=8">11A</a>
+        <a href="assets/class-timetables-boys.pdf?v=2026-09-13#page=9">11B</a>
+      </div>
+    </div>
+
+    <div class="tt-grp">
+      <span class="lb">Grade 12</span>
+      <div class="classlinks">
+        <a href="assets/class-timetables-boys.pdf?v=2026-09-13#page=10">12A</a>
+        <a href="assets/class-timetables-boys.pdf?v=2026-09-13#page=11">12B</a>
+      </div>
+    </div>
+
+    <div class="tt-foot">
+      <a class="btn gold" href="assets/class-timetables-boys.pdf?v=2026-09-13" download>Open the full timetable</a>
+      <p class="tt-stamp">All classes, 11 pages · issued 10 September 2026</p>
+    </div>
+  </div>
+</section>
 
 <!-- ============ RESULTS ============ -->
 <section class="sec alt" id="results">
@@ -1549,6 +1646,15 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
       <h2>Everything in one place</h2>
       <p>Every document and link for the British Section, gathered here. More is added through the year.</p>
       <div class="bar"></div>
+    </div>
+
+    <h4>Timetables</h4>
+    <div class="docs" style="margin-top:0">
+      <a class="doc" href="assets/class-timetables-boys.pdf?v=2026-09-13" download>
+        <span class="ic" aria-hidden="true">↓</span>
+        <span class="tx"><span class="tt">Class Timetables · Grades 9 to 12</span><span class="sb">PDF · boys campus · in effect from 13 September 2026 · 11 pages</span></span>
+        <span class="ar" aria-hidden="true">→</span>
+      </a>
     </div>
 
     <h4>Meet &amp; Greet · 9 September 2026</h4>
