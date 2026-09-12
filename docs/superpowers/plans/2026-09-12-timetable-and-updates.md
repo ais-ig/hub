@@ -131,7 +131,7 @@ process.exit(failures.length ? 1 : 0);
 
 Run: `node tools/check.mjs`
 
-Expected: FAIL. The current page has no `updatesData` block and still carries event language, so you should see `FAIL updates: the updatesData block is missing` and `FAIL event: 28 occurrence(s) of "tonight" remain`. Anchors and assets should already pass. This failure is the baseline the rest of the plan clears.
+Expected: FAIL. The current page has no `updatesData` block and still carries event language, so you should see `FAIL updates: the updatesData block is missing` and `FAIL event: 17 occurrence(s) of "tonight" remain`. Anchors and assets should already pass. This failure is the baseline the rest of the plan clears.
 
 - [ ] **Step 3: Write the render check script**
 
@@ -179,7 +179,8 @@ check "countdown is hidden"        'id="cd" hidden'              yes
 check "no thank-you message shown" 'Thank you for joining us<'   no
 
 # The updates layer must have rendered into both containers.
-check "updates strip rendered"     'id="updatesStrip"[^>]*hidden' no
+check "updates strip present"      'id="updatesStrip"'            yes
+check "updates strip not hidden"   'id="updatesStrip" hidden'     no
 check "change log rendered"        'id="changelogList"'          yes
 
 echo
