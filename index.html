@@ -950,9 +950,10 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
      The countdown reads data-doors and data-end off this element, so those
      two attributes and the human-readable date and time in the banner below
      must be changed together. Both are Riyadh time, hence the +03:00. -->
-<header class="hero" id="hero"
-     data-doors="2026-09-09T18:30:00+03:00"
-     data-end="2026-09-09T20:30:00+03:00">
+<!-- No event is scheduled. Adding data-doors and data-end back, both in
+     Riyadh time with the +03:00 offset, brings the countdown back and must
+     be done together with the date in the banner below. -->
+<header class="hero" id="hero">
   <img class="wm" src="assets/emblem.png" alt="" aria-hidden="true">
   <div class="in">
     <img class="em" src="assets/emblem.png" alt="Al-Rowad International Schools" width="104" height="104">
@@ -1849,10 +1850,15 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
   var cd = document.getElementById('cd');
 
   if (hero && cd) {
-    var doors = new Date(hero.getAttribute('data-doors'));
-    var ends = new Date(hero.getAttribute('data-end'));
+    /* getAttribute returns null for a missing attribute, and new Date(null)
+       is 1 Jan 1970, a valid date. Test the strings for presence first, or a
+       retired countdown renders its closing message forever. */
+    var doorsAttr = hero.getAttribute('data-doors');
+    var endsAttr = hero.getAttribute('data-end');
+    var doors = new Date(doorsAttr || '');
+    var ends = new Date(endsAttr || '');
 
-    if (!isNaN(doors.getTime()) && !isNaN(ends.getTime())) {
+    if (doorsAttr && endsAttr && !isNaN(doors.getTime()) && !isNaN(ends.getTime())) {
       var label = document.getElementById('cdLabel');
       var cells = document.getElementById('cdCells');
       var msg = document.getElementById('cdMsg');
