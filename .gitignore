@@ -1,3 +1,6 @@
 .DS_Store
 *.code-workspace
 /*.pdf
+
+# Subagent-driven development scratch (ledger, briefs, review packages)
+.superpowers/
