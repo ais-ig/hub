@@ -617,6 +617,37 @@ p:last-child { margin-bottom: 0; }
 .tt-foot { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
 .tt-stamp { font-size: 12px; color: var(--muted); margin: 0; }
 
+/* --- updates strip and change log --- */
+
+.ustrip { background: var(--card); border-bottom: 1px solid var(--border-soft); padding: 14px var(--pad); }
+.ustrip .in { max-width: var(--wrap); margin: 0 auto; }
+.ustrip .hd {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 9px;
+}
+.ulist { display: grid; gap: 8px; }
+.uitem { border-left: 3px solid var(--gold); padding: 2px 0 2px 11px; }
+.uitem .top { display: flex; flex-wrap: wrap; gap: 7px; align-items: baseline; }
+.uitem .dt { font-size: 11px; color: var(--muted); }
+.uitem .ti { font-size: 13px; font-weight: 700; color: var(--navy-deep); }
+.uitem .new {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  background: var(--gold);
+  color: var(--navy-deep);
+  border-radius: 999px;
+  padding: 2px 7px;
+}
+.uitem p { margin: 3px 0 0; font-size: 12px; line-height: 1.5; color: var(--ink-soft); }
+.uitem a { color: var(--navy); font-weight: 500; }
+#changelog .uitem { margin-bottom: 14px; }
+
 /* --- data tables --- */
 
 .scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
@@ -1012,6 +1043,38 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
   <span>📅 Sunday to Thursday</span>
   <span>⏰ 7:00 AM – 12:50 PM</span>
   <span>📍 Boys campus · British Section</span>
+</div>
+
+<!-- ============ WHAT'S CHANGED ============ -->
+<!-- One array, two renderings: the three newest entries in the strip below,
+     all of them in the change log near the foot of the page. Add one entry
+     per change and nothing else needs touching. Order does not matter; the
+     renderer sorts by date. An entry dated within 14 days gets a New badge
+     that expires by itself. -->
+<script type="application/json" id="updatesData">
+[
+  {
+    "date": "2026-09-13",
+    "title": "New class timetables",
+    "text": "The timetable for Grades 9 to 12 has changed and takes effect today. Tap your child’s class to open theirs.",
+    "href": "#schedule",
+    "label": "See the timetables"
+  },
+  {
+    "date": "2026-09-13",
+    "title": "This page is now your hub for the year",
+    "text": "The Meet & Greet is over, so the page has moved on from that evening. Everything about the IGCSE programme is still here, and the timetables now sit at the top.",
+    "href": "#s8",
+    "label": "Everything in one place"
+  }
+]
+</script>
+
+<div class="ustrip" id="updatesStrip" hidden>
+  <div class="in">
+    <p class="hd">Latest updates</p>
+    <div class="ulist" id="updatesList"></div>
+  </div>
 </div>
 
 <!-- ============ START HERE ============ -->
@@ -1745,6 +1808,18 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
   </div>
 </section>
 
+<!-- ============ CHANGE LOG ============ -->
+<section class="sec alt" id="changelog">
+  <div class="in">
+    <div class="st">
+      <h2>What’s changed this year</h2>
+      <p>Every update to this page since it went live, newest first</p>
+      <div class="bar"></div>
+    </div>
+    <div class="ulist" id="changelogList"></div>
+  </div>
+</section>
+
 <!-- ============ ASK A QUESTION ============ -->
 <!-- The question form is a Google Form owned by the school. Change the
      href here, in the hero button and in the Start here materials card
@@ -1896,6 +1971,94 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
       if (e.key === 'End') { e.preventDefault(); select(tabs.length - 1, true); }
     });
   });
+
+  /* --- updates: one array, rendered into the strip and the change log ---
+     Dates are parsed from their parts rather than handed to the Date string
+     parser, so no timezone shifts a day. Month names are a literal array so
+     formatting does not depend on the visitor's locale. If the JSON is
+     missing or malformed both containers stay hidden, the same way the
+     countdown stays hidden until it has validated its dates. */
+  var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'];
+  var NEW_DAYS = 14;
+
+  var uSrc = document.getElementById('updatesData');
+  var uStrip = document.getElementById('updatesStrip');
+  var uList = document.getElementById('updatesList');
+  var uLog = document.getElementById('changelogList');
+
+  if (uSrc && uList && uLog) {
+    var updates = null;
+    try {
+      updates = JSON.parse(uSrc.textContent);
+    } catch (err) {
+      updates = null;
+    }
+
+    if (Object.prototype.toString.call(updates) === '[object Array]' && updates.length) {
+      var parseDay = function (s) {
+        var p = String(s || '').split('-');
+        if (p.length !== 3) return null;
+        var d = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+        return isNaN(d.getTime()) ? null : d;
+      };
+
+      var clean = [];
+      updates.forEach(function (e) {
+        var d = parseDay(e && e.date);
+        if (d && e.title && e.text) clean.push({ d: d, e: e });
+      });
+      clean.sort(function (a, b) { return b.d - a.d; });
+
+      var today = new Date();
+      today = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+      var render = function (row) {
+        var wrap = document.createElement('div');
+        wrap.className = 'uitem';
+
+        var top = document.createElement('div');
+        top.className = 'top';
+
+        var ti = document.createElement('span');
+        ti.className = 'ti';
+        ti.textContent = row.e.title;
+        top.appendChild(ti);
+
+        var dt = document.createElement('span');
+        dt.className = 'dt';
+        dt.textContent = row.d.getDate() + ' ' + MONTHS[row.d.getMonth()] + ' ' + row.d.getFullYear();
+        top.appendChild(dt);
+
+        if (Math.floor((today - row.d) / 86400000) <= NEW_DAYS) {
+          var badge = document.createElement('span');
+          badge.className = 'new';
+          badge.textContent = 'New';
+          top.appendChild(badge);
+        }
+
+        wrap.appendChild(top);
+
+        var p = document.createElement('p');
+        p.textContent = row.e.text;
+        if (row.e.href && row.e.label) {
+          p.appendChild(document.createTextNode(' '));
+          var a = document.createElement('a');
+          a.href = row.e.href;
+          a.textContent = row.e.label + ' →';
+          p.appendChild(a);
+        }
+        wrap.appendChild(p);
+        return wrap;
+      };
+
+      if (clean.length) {
+        clean.slice(0, 3).forEach(function (row) { uList.appendChild(render(row)); });
+        clean.forEach(function (row) { uLog.appendChild(render(row)); });
+        if (uStrip) uStrip.hidden = false;
+      }
+    }
+  }
 
   /* --- countdown to the evening ---
      Counts to data-doors, flips to an "under way" message once the doors
