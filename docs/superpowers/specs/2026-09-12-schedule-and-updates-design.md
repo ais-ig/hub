@@ -46,8 +46,8 @@ linked relatively.
 
 | Path | Role |
 |---|---|
-| `assets/class-timetables.pdf` | Always the current timetable. The path never changes. |
-| `assets/archive/class-timetables-YYYY-MM-DD.pdf` | Each superseded timetable, kept for reference. |
+| `assets/class-timetables-boys.pdf` | Always the current timetable. The path never changes. |
+| `assets/archive/class-timetables-boys-YYYY-MM-DD.pdf` | Each superseded timetable, kept for reference. |
 
 The archive filename carries the aSc **"Timetable generated"** date printed
 on every page of the export, not the date it was published. A parent holding
@@ -82,7 +82,7 @@ The stable URL is exactly the thing that caches hardest, which is the one
 real cost of this approach. Two mitigations:
 
 - The page's own link carries a version query,
-  `assets/class-timetables.pdf?v=2026-09-13`, bumped on every revision so a
+  `assets/class-timetables-boys.pdf?v=2026-09-13`, bumped on every revision so a
   parent arriving through the hub always gets the new bytes.
 - **The link shared on WhatsApp is `https://ais-ig.github.io/hub/#schedule`,
   never the raw PDF.** The hub page is HTML and refreshes quickly; a raw PDF
@@ -109,7 +109,7 @@ gold bar):
 - A one-line orientation note: the week runs Sunday to Thursday, periods 1 to
   8, 7:00 AM to 12:50 PM, with break from 9:40 to 10:10.
 - **Eleven class pills**, grouped under small grade labels, each linking to
-  `assets/class-timetables.pdf?v=...#page=N`.
+  `assets/class-timetables-boys.pdf?v=...#page=N`.
 - A gold **"Open the full timetable"** button for anyone who wants all 11
   pages.
 - A muted line giving the generated date, so a parent can confirm they are
@@ -195,8 +195,8 @@ About 25 lines of JS, in the existing inline script block.
 
 To be added to the README verbatim. Publishing a new timetable:
 
-1. `cp assets/class-timetables.pdf assets/archive/class-timetables-<old generated date>.pdf`
-2. Copy the new aSc export to `assets/class-timetables.pdf`
+1. `cp assets/class-timetables-boys.pdf assets/archive/class-timetables-boys-<old generated date>.pdf`
+2. Copy the new aSc export to `assets/class-timetables-boys.pdf`
 3. **Confirm the class list is unchanged.** If a class was added or removed,
    re-derive the eleven pills and their page numbers from the new export.
 4. Update the generated date and the "in effect from" line in `#schedule`
@@ -364,10 +364,42 @@ Unchanged from the first version and still unanswered:
 3. Whether the departmental timetables are staff-facing only.
 4. The expected revision cadence.
 5. Whether a girls-campus timetable exists, which decides whether the file is
-   `class-timetables.pdf` or `class-timetables-boys.pdf`.
+   `class-timetables-boys.pdf` or `class-timetables-boys.pdf`.
 
 Items 1 and 2 block publication. Item 5 blocks the filename, which is the one
 thing in this design that is expensive to change later, because the whole
 point is that the address is permanent. **Everything in this amendment can be
 built and reviewed before any of them are answered**, since none of it
 touches the timetable file itself.
+
+---
+
+# Resolutions · 12 September 2026
+
+All five blocking questions are answered. Nothing in this design is open.
+
+| # | Question | Answer |
+|---|---|---|
+| 1 | Is the 10/09/2026 export final? | Yes. `~/Downloads/sched13sep2026/IG Classes.pdf` is the file to publish. |
+| 2 | Is the class list unchanged? | Yes. 9A–9D, 10A–10C, 11A–11B, 12A–12B, so the eleven page offsets hold. |
+| 3 | Are the departmental timetables staff-facing? | Yes. Not published. |
+| 4 | Revision cadence | No change to the design. The section carries a visible generated date regardless. |
+| 5 | Girls campus | **The hub stays boys campus.** |
+
+## On question 5
+
+This was asked because the answer first given, that the hub would be girls
+only, contradicted the file being published: the confirmed class list and
+every teacher named on the export are boys campus, as is the parent guide,
+the gates, the staff contacts and the mentors. Re-asked and resolved as boys.
+
+**The asset is therefore `class-timetables-boys.pdf`, not
+`class-timetables.pdf`**, and the archive is suffixed to match. The suffix
+costs nothing today and means a girls hub can exist later without either page
+having to break a link parents have already saved. Given that the entire
+purpose of this design is an address that never changes, paying one word now
+to keep that promise is the right trade.
+
+Every campus-specific string added in this pass carries the same suffix or
+label, so a future girls hub is a copy and a substitution rather than an
+untangling.
