@@ -187,6 +187,7 @@ button {
   border-bottom: 1px solid rgba(255, 255, 255, .05);
 }
 .menu a:hover, .menu a.on { color: var(--gold); }
+.menu a[hidden] { display: none; }
 .menu a.go {
   margin-top: 8px;
   padding: 10px 16px;
@@ -633,7 +634,7 @@ p:last-child { margin-bottom: 0; }
 .uitem { border-left: 3px solid var(--gold); padding: 2px 0 2px 11px; }
 .uitem .top { display: flex; flex-wrap: wrap; gap: 7px; align-items: baseline; }
 .uitem .dt { font-size: 11px; color: var(--muted); }
-.uitem .ti { font-size: 13px; font-weight: 700; color: var(--navy-deep); }
+.uitem .ti { font-size: 13px; font-weight: 700; color: var(--navy-deep); word-break: break-word; }
 .uitem .new {
   font-size: 9px;
   font-weight: 700;
@@ -644,7 +645,7 @@ p:last-child { margin-bottom: 0; }
   border-radius: 999px;
   padding: 2px 7px;
 }
-.uitem p { margin: 3px 0 0; font-size: 12px; line-height: 1.5; color: var(--ink-soft); }
+.uitem p { margin: 3px 0 0; font-size: 12px; line-height: 1.5; color: var(--ink-soft); word-break: break-word; }
 .uitem a { color: var(--navy); font-weight: 500; }
 #changelog .uitem { margin-bottom: 14px; }
 
@@ -1000,7 +1001,7 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
       <a href="#s6">Beyond the books</a>
       <a href="#s7">Policies</a>
       <a href="#s8">All documents</a>
-      <a href="#changelog">What’s changed</a>
+      <a href="#changelog" id="changelogNav" hidden>What’s changed</a>
       <a href="#contacts">Who to speak to</a>
       <a class="go" href="#ask">Ask a question</a>
       <a class="go2" href="#materials">Start here</a>
@@ -1809,7 +1810,7 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
 </section>
 
 <!-- ============ CHANGE LOG ============ -->
-<section class="sec alt" id="changelog">
+<section class="sec alt" id="changelog" hidden>
   <div class="in">
     <div class="st">
       <h2>What’s changed this year</h2>
@@ -1976,16 +1977,20 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
      Dates are parsed from their parts rather than handed to the Date string
      parser, so no timezone shifts a day. Month names are a literal array so
      formatting does not depend on the visitor's locale. If the JSON is
-     missing or malformed both containers stay hidden, the same way the
+     missing, malformed or empty, all three containers (the strip, the
+     change log section and its nav link) stay hidden, the same way the
      countdown stays hidden until it has validated its dates. */
   var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'];
   var NEW_DAYS = 14;
+  var HREF_OK = /^(#|assets\/|https:\/\/|mailto:)/;
 
   var uSrc = document.getElementById('updatesData');
   var uStrip = document.getElementById('updatesStrip');
   var uList = document.getElementById('updatesList');
+  var uLogSection = document.getElementById('changelog');
   var uLog = document.getElementById('changelogList');
+  var uNav = document.getElementById('changelogNav');
 
   if (uSrc && uList && uLog) {
     var updates = null;
@@ -1999,8 +2004,15 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
       var parseDay = function (s) {
         var p = String(s || '').split('-');
         if (p.length !== 3) return null;
-        var d = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
-        return isNaN(d.getTime()) ? null : d;
+        var y = Number(p[0]);
+        var m = Number(p[1]);
+        var day = Number(p[2]);
+        var d = new Date(y, m - 1, day);
+        if (isNaN(d.getTime())) return null;
+        /* Reject dates whose parts rolled over, e.g. "2026-13-45": the
+           constructed date must echo back the exact numbers given. */
+        if (d.getFullYear() !== y || d.getMonth() !== m - 1 || d.getDate() !== day) return null;
+        return d;
       };
 
       var clean = [];
@@ -2030,7 +2042,13 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
         dt.textContent = row.d.getDate() + ' ' + MONTHS[row.d.getMonth()] + ' ' + row.d.getFullYear();
         top.appendChild(dt);
 
-        if (Math.floor((today - row.d) / 86400000) <= NEW_DAYS) {
+        /* Rounded rather than floored, so a daylight-saving change between
+           "today" and the entry date cannot shorten the span by an hour and
+           extend the badge by a day. Also require a non-negative age, so a
+           mistyped future date is not badged forever and pinned to the top
+           by the sort above. */
+        var age = Math.round((today - row.d) / 86400000);
+        if (age >= 0 && age <= NEW_DAYS) {
           var badge = document.createElement('span');
           badge.className = 'new';
           badge.textContent = 'New';
@@ -2041,7 +2059,7 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
 
         var p = document.createElement('p');
         p.textContent = row.e.text;
-        if (row.e.href && row.e.label) {
+        if (row.e.href && row.e.label && HREF_OK.test(row.e.href)) {
           p.appendChild(document.createTextNode(' '));
           var a = document.createElement('a');
           a.href = row.e.href;
@@ -2056,6 +2074,8 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
         clean.slice(0, 3).forEach(function (row) { uList.appendChild(render(row)); });
         clean.forEach(function (row) { uLog.appendChild(render(row)); });
         if (uStrip) uStrip.hidden = false;
+        if (uLogSection) uLogSection.hidden = false;
+        if (uNav) uNav.hidden = false;
       }
     }
   }

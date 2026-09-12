@@ -34,10 +34,15 @@ check() { # check <description> <grep-pattern> <expected: yes|no>
 check "countdown is hidden"        'id="cd" hidden'              yes
 check "no thank-you message shown" 'Thank you for joining us<'   no
 
-# The updates layer must have rendered into both containers.
-check "updates strip present"      'id="updatesStrip"'            yes
-check "updates strip not hidden"   'id="updatesStrip" hidden'     no
-check "change log rendered"        'id="changelogList"'          yes
+# The updates layer must have rendered into both containers. The change log
+# section (and its nav link) starts hidden in the markup and is only shown
+# by the renderer once at least one entry parses, mirroring the strip: this
+# guards against Finding 1 (an empty titled box with nothing under it).
+check "updates strip present"        'id="updatesStrip"'          yes
+check "updates strip not hidden"     'id="updatesStrip" hidden'   no
+check "change log rendered"          'id="changelogList"'         yes
+check "change log section not hidden" 'id="changelog" hidden'     no
+check "change log nav not hidden"    'id="changelogNav" hidden'   no
 
 echo
 echo "-- mobile viewport check (tools/shot.mjs) --"
