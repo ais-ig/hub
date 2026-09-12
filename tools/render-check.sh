@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Behavioural checks: render index.html in headless Chrome and assert on the
-# result. Also writes a 380px screenshot for the mobile check that CLAUDE.md
-# requires. Run: bash tools/render-check.sh
+# result. Also drives a true 380px mobile viewport check (tools/shot.mjs)
+# rather than a cropped desktop screenshot. Run: bash tools/render-check.sh
 set -uo pipefail
 cd "$(dirname "$0")/.."
 
@@ -16,10 +16,6 @@ fi
 
 "$CHROME" --headless=new --disable-gpu --dump-dom --virtual-time-budget=3000 \
   "file://$PWD/index.html" 2>/dev/null > "$OUT/dom.html"
-
-"$CHROME" --headless=new --disable-gpu --hide-scrollbars \
-  --screenshot="$OUT/w380.png" --window-size=380,1600 \
-  "file://$PWD/index.html" 2>/dev/null
 
 fail=0
 check() { # check <description> <grep-pattern> <expected: yes|no>
@@ -44,6 +40,11 @@ check "updates strip not hidden"   'id="updatesStrip" hidden'     no
 check "change log rendered"        'id="changelogList"'          yes
 
 echo
-echo "screenshot: $OUT/w380.png"
+echo "-- mobile viewport check (tools/shot.mjs) --"
+node "$(dirname "$0")/shot.mjs"
+shot_status=$?
+[ $shot_status -ne 0 ] && fail=1
+
+echo
 [ $fail -eq 0 ] && echo "all render checks passed" || echo "render checks failed"
 exit $fail
