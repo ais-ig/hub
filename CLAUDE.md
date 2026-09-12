@@ -62,7 +62,8 @@ The page-specific patterns kept from the first version: the options tables and t
 
 | Section | Source |
 |---|---|
-| Tonight's programme, results, pathway, support, activities, behaviour | `Parents Meet and Greet 2026-2027.pptx.pdf`, the final 31-page 2026/27 deck, published as `assets/presentation-g9-g10.pdf`. This is the primary source and supersedes the 2025 deck and the earlier "(AIS template)" drafts. |
+| Class timetables | The aSc export `IG Classes.pdf`, published as `assets/class-timetables-boys.pdf`. Boys campus, 11 pages, one per class in a fixed order. Revised several times a term; superseded copies go to `assets/archive/`. The banner's period hours come from this file, so they change together. |
+| Results, pathway, support, activities, behaviour | `Parents Meet and Greet 2026-2027.pptx.pdf`, the final 31-page 2026/27 deck, published as `assets/presentation-g9-g10.pdf`. This is the primary source and supersedes the 2025 deck and the earlier "(AIS template)" drafts. |
 | Gates, stall map, boys campus staff contacts | `AIS_Meet_and_Greet_Parent_Guide_Grades_7-12_Boys_09Sep2026.pdf`, the printed parent guide. Pages 1 and 12 to 16 are republished as `assets/meet-and-greet-parent-guide-boys-2026-27.pdf`. |
 | Subject options | `assets/g9-igcse-options-2026-27.pdf` and `assets/g10-igcse-options-2026-27.pdf` |
 | Syllabus pages | Not on the page. `~/Downloads/AIS_Syllabus_Links_2026-2027.xlsx` holds the board and code per subject, awaiting manual verification before any of it is linked. Its Notes tab is internal; never publish it. |
@@ -72,18 +73,20 @@ The page-specific patterns kept from the first version: the options tables and t
 
 **When a source changes, the prose must change with it.** The agenda, the results figures, the subject tables, the assessment breakdown, the activity lists, the phone policy tiers and the contact cards are all duplicated from documents. Do not update one without the other.
 
+Three couplings were added on 12 September 2026. The banner's period times come from the timetable, so they move together. The `?v=` query on every timetable link must be bumped whenever the file is replaced, or parents get a cached copy. And the eleven `#page=` links in `#schedule` encode the class order of the aSc export, so they must be re-derived if the class list changes.
+
 Changes already carried in for 2026/27, worth knowing: Grade 9 Islamic Studies moved 3 to 2 periods and Quran 2 to 3; several optional loads changed in both grades; Grade 9 gained an optional Hifdh Programme, which sits inside the existing three Quran periods and neither adds to the forty-period week nor replaces a subject.
 
 Assessment changed too, and the numbers on the page are the 2026/27 ones, not the 2025 deck's: classwork moved 5 to 6 and homework 5 to 4, so continuous assessment still totals 10 per quarter but is weighted towards classwork. "Mid-semester Test" is now "Mid-Term Test" and "End of Semester Exam" is now "Final Examination". The old "rubric 0 to 5" line is gone, because a 0 to 5 rubric no longer maps onto a 6 mark classwork component.
 
 The deck's agenda is three steps, 6:30 arrival, 6:45 presentation, 7:15 stalls with no fixed close. An earlier draft agenda in `~/Downloads` dated 1 September with different timings is superseded.
 
-"Ask a question" is the school's Google Form, linked from four places on the page; README lists them.
+"Ask a question" is the school's Google Form, linked from three places on the page; README lists them.
 
 ## Workflow expectations
 
 - Placeholders, when any exist, are marked `<!-- PLACEHOLDER -->` and must read as plausible finished content, never "TBC". None remain as of 9 September 2026.
-- Verify at ~380px width before considering any change done. The page must never scroll sideways; wide content scrolls inside its own container. Headless Chrome's `--window-size` does not go below the macOS minimum window width, so use device emulation over the DevTools protocol, or a real phone, to check.
+- Verify at ~380px width before considering any change done. The page must never scroll sideways; wide content scrolls inside its own container. Headless Chrome's `--window-size` does not go below the macOS minimum window width: a screenshot at that flag's floor is cropped to 380 pixels wide, not laid out at 380, and text gets cut off mid-word while the check still passes. Use `tools/shot.mjs` instead. It drives Chrome over the DevTools Protocol and sets a real `Emulation.setDeviceMetricsOverride`, so the page genuinely reflows at 380px, then asserts `scrollWidth <= clientWidth` and names any element that overflows. `bash tools/render-check.sh` runs it as its last step. Do not reach for `--window-size` for this check; it answers a different question and will pass on a page that is actually broken at 380px.
 - Every internal anchor must resolve and every asset path must exist. Both are quick to check with grep.
 - Pushing needs the `Mohamad-Dabbagh` gh account; `madabbagh` is read-only on the org. See `README.md`.
 - The previous hub's content is archived at `~/Cooking/Rowad/parent-hub-archive-2026-08`. Do not resurrect it into this page without being asked.
