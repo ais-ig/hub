@@ -117,11 +117,21 @@ gold bar):
 
 ### On the page fragment
 
-`#page=N` is honoured by Safari on iOS, Chrome on Android and every desktop
-browser. If a parent's phone hands the PDF to Google Drive or the Files app,
-the fragment may be ignored and the file opens on page 1. That is the whole
-failure mode: correct file, wrong page. It never produces a broken link, and
-the full-timetable button is always there as the plain path. Accepted.
+`#page=N` is honoured by most desktop browsers and by Chrome on Android.
+Safari on iOS is understood NOT to honour it: its built-in PDF viewer is
+widely documented as opening straight to page 1 regardless of the fragment,
+and most of this hub's parents are on iPhones. This has not been tested on a
+real iPhone, so treat it as a strong likelihood rather than a confirmed fact.
+
+This is why each class pill also shows its own page number, in small muted
+type beneath the class label, with a one-line note explaining why it is
+there: a parent who lands on page 1 can still see which page is theirs. If a
+parent's phone hands the PDF to Google Drive or another app instead of
+opening it inline, the fragment may be ignored there too, for the same
+reason. That is the whole failure mode: correct file, possibly the wrong
+page, recoverable by reading the number on the pill. It never produces a
+broken link, and the full-timetable button remains the plain path,
+unaffected by any of this. Accepted.
 
 ### Styling
 
