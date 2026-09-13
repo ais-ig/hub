@@ -62,7 +62,8 @@ The page-specific patterns kept from the first version: the options tables and t
 
 | Section | Source |
 |---|---|
-| Class timetables | The aSc export `IG Classes.pdf`, published as `assets/class-timetables-boys.pdf`. Boys campus, 11 pages, one per class in a fixed order. Revised several times a term; superseded copies go to `assets/archive/`. The banner's period hours come from this file, so they change together. |
+| Class timetables | The aSc export `IG Classes.pdf`, published as `assets/class-timetables-boys.pdf`. Boys campus, 11 pages, one per class in a fixed order. Revised several times a term; superseded copies go to `assets/archive/`. |
+| Period times | `Daily Schedule (Summer) – British Section`, Grades 9 to 12, 2026/27. This is the authority for the times in the banner and in the `#schedule` note, **not** the aSc export. Homeroom 6:30, periods 1 to 8 from 6:45 to 12:35, break 9:25 to 9:55, Salah 12:35 to 13:05. Note it is the **Summer** schedule; a Winter one will need these swapped. |
 | Results, pathway, support, activities, behaviour | `Parents Meet and Greet 2026-2027.pptx.pdf`, the final 31-page 2026/27 deck, published as `assets/presentation-g9-g10.pdf`. This is the primary source and supersedes the 2025 deck and the earlier "(AIS template)" drafts. |
 | Gates, stall map, boys campus staff contacts | `AIS_Meet_and_Greet_Parent_Guide_Grades_7-12_Boys_09Sep2026.pdf`, the printed parent guide. Pages 1 and 12 to 16 are republished as `assets/meet-and-greet-parent-guide-boys-2026-27.pdf`. |
 | Subject options | `assets/g9-igcse-options-2026-27.pdf` and `assets/g10-igcse-options-2026-27.pdf` |
@@ -73,7 +74,30 @@ The page-specific patterns kept from the first version: the options tables and t
 
 **When a source changes, the prose must change with it.** The agenda, the results figures, the subject tables, the assessment breakdown, the activity lists, the phone policy tiers and the contact cards are all duplicated from documents. Do not update one without the other.
 
-Three couplings were added on 12 September 2026. The banner's period times come from the timetable, so they move together. The `?v=` query on every timetable link must be bumped whenever the file is replaced, or parents get a cached copy. And the eleven `#page=` links in `#schedule` encode the class order of the aSc export, so they must be re-derived if the class list changes.
+Three couplings were added on 12 September 2026. The banner's period times and
+the `#schedule` note both come from the Daily Schedule, so they move together.
+The `?v=` query on every timetable link must be bumped whenever the file is
+replaced, or parents get a cached copy. And the eleven `#page=` links in
+`#schedule` encode the class order of the aSc export, so they must be re-derived
+if the class list changes.
+
+**Known conflict between two sources, unresolved as of 13 September 2026.** The
+aSc export we publish states period times that are 15 minutes later than the
+official Daily Schedule, and shows neither Homeroom nor Salah:
+
+| | aSc export (published) | Daily Schedule (authority) |
+|---|---|---|
+| Homeroom | not shown | 6:30 to 6:45 |
+| Period 1 | 7:00 to 7:40 | 6:45 to 7:25 |
+| Break | 9:40 to 10:10 | 9:25 to 9:55 |
+| Period 8 | 12:10 to 12:50 | 11:55 to 12:35 |
+| Salah | not shown | 12:35 to 13:05 |
+
+The offset is a consistent 15 minutes across every row, which suggests the aSc
+grid was built before Homeroom was added and never regenerated. **The page
+carries the Daily Schedule times, so a parent who opens the PDF sees times that
+contradict the page.** Raise it with whoever generates the aSc export rather
+than editing either file.
 
 Changes already carried in for 2026/27, worth knowing: Grade 9 Islamic Studies moved 3 to 2 periods and Quran 2 to 3; several optional loads changed in both grades; Grade 9 gained an optional Hifdh Programme, which sits inside the existing three Quran periods and neither adds to the forty-period week nor replaces a subject.
 
