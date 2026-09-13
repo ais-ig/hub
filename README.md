@@ -71,7 +71,7 @@ The hero, the banner and the nav are deliberately generic now ("Parent Hub", a p
 **Bringing back an event.** The countdown's markup and script were never removed, only its two attributes, so switching it on again is small:
 
 1. Add `data-doors` and `data-end` back to `<header class="hero" id="hero">`, in Riyadh time with the `+03:00` offset. See "The countdown" above.
-2. Add one entry to `updatesData` announcing it, so a parent who has already bookmarked the hub sees it in the strip rather than finding out by chance.
+2. Add one entry to `updatesData` announcing it, so a parent who has already bookmarked the hub sees it in the bell and the strip rather than finding out by chance.
 3. If the event needs its own on-page agenda, the numbered-agenda-card pattern from the old "Tonight's programme" section is still in the stylesheet as the `.agenda` / `.ag` rules. They render nothing today, on purpose: they were left in place for exactly this, so reuse them rather than inventing a new pattern.
 4. Word any new copy so it still reads correctly once the event has passed, the way "Meet & Greet · 9 September 2026" does in the document library, rather than assuming it is still upcoming. `node tools/check.mjs` fails on the word "tonight" anywhere in the file, which exists to catch copy that goes stale the moment the event ends.
 
@@ -140,11 +140,25 @@ their copy.
 ## Recording a change
 
 `updatesData` near the top of `index.html` is one JSON array. Add an entry and
-both the strip under the banner and the "What's changed this year" section
-pick it up; the three newest show in the strip. Order in the file does not
+three places pick it up: the bell in the top bar, the strip under the banner,
+and the "What's changed this year" section. Order in the file does not
 matter. An entry dated within 14 days gets a "New" badge that expires on its
-own. `date` must be `YYYY-MM-DD`; `title` and `text` are required; `href` and
-`label` are optional and go together.
+own, and counts as unread until the visitor taps it or marks it read. The
+bell shows a gold count of unread entries and lists the eight newest. The
+strip shows up to three unread entries, headed "Since your last visit" for a
+returning visitor, and hides when nothing is unread.
+
+`id`, `date`, `title` and `text` are required; `href` and `label` are
+optional and go together. `date` must be `YYYY-MM-DD`. `id` is lowercase
+letters, digits and hyphens, conventionally the date and a word or two
+(`2026-09-13-mentors`), and must be unique.
+
+**Never change an `id` once it is live.** Read state is stored in each
+visitor's browser (`localStorage`, key `aisHub.updates`) as a list of ids, so
+a changed id reappears as unread for everyone. Fixing a typo in a title or
+text is safe. Read state is per browser: WhatsApp's in-app browser and Safari
+on the same phone remember separately. There are no push notifications; a
+static page cannot send them.
 
 ## Checking your work
 
@@ -154,13 +168,14 @@ Three scripts, each catching something the ones before it cannot:
 node tools/check.mjs        # Static checks over index.html: anchors resolve,
                              # asset paths exist, no em dashes, only the
                              # allowed Poppins weights, no event language
-                             # ("tonight"), and updatesData is well formed.
+                             # ("tonight"), and updatesData is well formed,
+                             # every entry with a unique id.
                              # No browser. Exits 0 or 1.
 
 bash tools/render-check.sh  # Renders index.html in headless Chrome and
                              # asserts on the resulting DOM: the countdown
                              # stays hidden with no attributes set, and the
-                             # updates strip and change log render once
+                             # updates bell and change log render once
                              # updatesData has entries. Finishes by running
                              # tools/shot.mjs.
 
@@ -171,8 +186,9 @@ node tools/shot.mjs         # The true 380px mobile check. Drives Chrome over
                              # laid out wide and cropped (see CLAUDE.md on why
                              # --window-size cannot do this). Fails, and names
                              # the offending element, if scrollWidth exceeds
-                             # clientWidth. Screenshot at
-                             # $TMPDIR/hub-check/w380.png.
+                             # clientWidth. Then opens the updates bell and
+                             # checks again. Screenshots at
+                             # $TMPDIR/hub-check/w380.png and w380-bell.png.
 ```
 
 `render-check.sh` runs `shot.mjs` as its last step, so running it on its own

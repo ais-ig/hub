@@ -32,6 +32,19 @@ const indexPath = join(root, 'index.html');
 const pageUrl = 'file://' + indexPath;
 const outDir = join(process.env.TMPDIR || '/tmp', 'hub-check');
 const outPng = join(outDir, 'w380.png');
+const outBellPng = join(outDir, 'w380-bell.png');
+
+/* Opens the updates bell the way a tap would, and reports whether its panel
+   is showing. "hidden" means the page has no update entries, so no bell. */
+const OPEN_BELL_SCRIPT = `
+(() => {
+  const b = document.getElementById('bellbtn');
+  if (!b || b.hidden) return 'hidden';
+  b.click();
+  const p = document.getElementById('bell');
+  return p && getComputedStyle(p).display !== 'none' ? 'open' : 'closed';
+})()
+`;
 
 /* The overflow probe, run inside the page. Returns a JSON string rather
    than an object because Runtime.evaluate's returnByValue only round-trips
@@ -281,14 +294,41 @@ async function main() {
   await Promise.race([loadFired, died, timeoutAfter(NAV_TIMEOUT_MS, 'the page load event')]);
   await sleep(SETTLE_MS);
 
-  const evalResult = await s('Runtime.evaluate', {
-    expression: OVERFLOW_SCRIPT,
-    returnByValue: true
-  });
-  if (evalResult.exceptionDetails) {
-    throw new Error('overflow probe threw: ' + evalResult.exceptionDetails.text);
-  }
-  const measured = JSON.parse(evalResult.result.value);
+  const measure = async () => {
+    const evalResult = await s('Runtime.evaluate', {
+      expression: OVERFLOW_SCRIPT,
+      returnByValue: true
+    });
+    if (evalResult.exceptionDetails) {
+      throw new Error('overflow probe threw: ' + evalResult.exceptionDetails.text);
+    }
+    return JSON.parse(evalResult.result.value);
+  };
+
+  /* Prints one measurement; true when nothing overflows. */
+  const report = (label, m) => {
+    console.log(
+      'ok   ' + label + ': measured scrollWidth=' + m.scrollWidth +
+      ' clientWidth=' + m.clientWidth +
+      ' innerWidth=' + m.innerWidth
+    );
+    if (m.scrollWidth > m.clientWidth) {
+      console.log(
+        'FAIL ' + label + ': horizontal overflow, scrollWidth ' + m.scrollWidth +
+        'px exceeds clientWidth ' + m.clientWidth + 'px'
+      );
+      for (const o of m.offenders) {
+        const idPart = o.id ? ' id="' + o.id + '"' : '';
+        const clsPart = o.cls ? ' class="' + o.cls + '"' : '';
+        console.log('FAIL   <' + o.tag + idPart + clsPart + '> right edge ' + o.right + 'px, width ' + o.width + 'px');
+      }
+      return false;
+    }
+    console.log('ok   ' + label + ': no horizontal overflow at ' + WIDTH + 'px width');
+    return true;
+  };
+
+  const measured = await measure();
 
   const metrics = await s('Page.getLayoutMetrics');
   const contentSize = metrics.cssContentSize || metrics.contentSize;
@@ -303,27 +343,32 @@ async function main() {
   writeFileSync(outPng, Buffer.from(shot.data, 'base64'));
 
   console.log('ok   screenshot written: ' + outPng);
-  console.log(
-    'ok   measured scrollWidth=' + measured.scrollWidth +
-    ' clientWidth=' + measured.clientWidth +
-    ' innerWidth=' + measured.innerWidth
-  );
+  let ok = report('page', measured);
 
-  if (measured.scrollWidth > measured.clientWidth) {
-    console.log(
-      'FAIL horizontal overflow: scrollWidth ' + measured.scrollWidth +
-      'px exceeds clientWidth ' + measured.clientWidth + 'px'
-    );
-    for (const o of measured.offenders) {
-      const idPart = o.id ? ' id="' + o.id + '"' : '';
-      const clsPart = o.cls ? ' class="' + o.cls + '"' : '';
-      console.log('FAIL   <' + o.tag + idPart + clsPart + '> right edge ' + o.right + 'px, width ' + o.width + 'px');
-    }
-    return 1;
+  /* Open the updates bell and measure again: its panel drops from the fixed
+     bar and has to fit the phone width too. */
+  const opened = await s('Runtime.evaluate', { expression: OPEN_BELL_SCRIPT, returnByValue: true });
+  if (opened.exceptionDetails) {
+    throw new Error('opening the bell threw: ' + opened.exceptionDetails.text);
+  }
+  const bellState = opened.result.value;
+  if (bellState === 'hidden') {
+    console.log('ok   bell hidden (no update entries), open panel not checked');
+  } else if (bellState !== 'open') {
+    console.log('FAIL the bell button did not open its panel');
+    ok = false;
+  } else {
+    await sleep(300);
+    ok = report('bell open', await measure()) && ok;
+    const bellShot = await s('Page.captureScreenshot', {
+      format: 'png',
+      clip: { x: 0, y: 0, width: WIDTH, height: HEIGHT, scale: 1 }
+    });
+    writeFileSync(outBellPng, Buffer.from(bellShot.data, 'base64'));
+    console.log('ok   screenshot written: ' + outBellPng);
   }
 
-  console.log('ok   no horizontal overflow at ' + WIDTH + 'px width');
-  return 0;
+  return ok ? 0 : 1;
 }
 
 const watchdog = setTimeout(async () => {

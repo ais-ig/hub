@@ -63,10 +63,20 @@ if (!block) {
   }
   if (data && !Array.isArray(data)) fail('updates', 'updatesData must be an array');
   if (Array.isArray(data)) {
+    /* Browsers remember read entries by id, so an id must exist, be unique,
+       and stay stable once live. */
+    const seenIds = new Set();
     data.forEach((e, i) => {
       if (typeof e !== 'object' || e === null) {
         fail('updates', 'entry ' + i + ' is not an object');
         return;
+      }
+      if (typeof e.id !== 'string' || !/^[a-z0-9]+(-[a-z0-9]+)*$/.test(e.id)) {
+        fail('updates', 'entry ' + i + ' needs an id of lowercase letters, digits and hyphens');
+      } else if (seenIds.has(e.id)) {
+        fail('updates', 'entry ' + i + ' reuses the id ' + e.id + '; ids must be unique');
+      } else {
+        seenIds.add(e.id);
       }
       if (!/^\d{4}-\d{2}-\d{2}$/.test(e.date || '')) {
         fail('updates', 'entry ' + i + ' needs a YYYY-MM-DD date');

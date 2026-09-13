@@ -217,6 +217,109 @@ button {
   border-bottom: 1px solid rgba(255, 255, 255, .3);
 }
 
+/* --- updates bell: a second drop-down in the bar, beside the menu ---
+   Opening one closes the other. Unread items carry a gold left bar; gold,
+   not red, because the brand allows no other accent. */
+
+.acts { display: flex; align-items: center; }
+.bellbtn {
+  position: relative;
+  background: none;
+  border: 0;
+  color: #fff;
+  width: var(--tap); height: var(--tap);
+  display: grid;
+  place-items: center;
+}
+.bellbtn[hidden] { display: none; }
+.bellbtn svg { width: 22px; height: 22px; display: block; }
+.topbar.bellopen .bellbtn { color: var(--gold); }
+.bellbtn .count {
+  position: absolute;
+  top: 4px; right: 2px;
+  min-width: 19px; height: 19px;
+  padding: 0 5px;
+  border-radius: 999px;
+  border: 2px solid var(--navy-deep);
+  background: var(--gold);
+  color: var(--navy-deep);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 15px;
+  text-align: center;
+}
+.bellbtn .count[hidden] { display: none; }
+
+.bell {
+  display: none;
+  background: var(--navy-deep);
+  border-top: 1px solid rgba(255, 255, 255, .1);
+  max-height: calc(100vh - var(--bar) - 3px);
+  overflow-y: auto;
+}
+.topbar.bellopen .bell { display: block; }
+.bell .in { max-width: 900px; padding: 6px var(--pad) 12px; }
+.bell .bhd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 8px 0 11px;
+  min-height: var(--tap);
+}
+.bell .lb {
+  margin: 0;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, .6);
+}
+.bell .markall {
+  background: none;
+  border: 0;
+  padding: 12px 0;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--gold);
+}
+.bell .markall[hidden] { display: none; }
+.bitem {
+  display: block;
+  padding: 10px 8px 10px 11px;
+  border-left: 3px solid transparent;
+  border-bottom: 1px solid rgba(255, 255, 255, .05);
+}
+.bitem.unread { border-left-color: var(--gold); }
+.bitem .top { display: flex; flex-wrap: wrap; gap: 2px 8px; align-items: baseline; justify-content: space-between; }
+.bitem .ti { font-size: 14px; font-weight: 500; color: #ccc; word-break: break-word; }
+.bitem.unread .ti { font-weight: 700; color: #fff; }
+.bitem:hover .ti { color: var(--gold); }
+.bitem .dt { font-size: 11px; color: rgba(255, 255, 255, .5); white-space: nowrap; }
+.bitem .tx {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-top: 2px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, .6);
+}
+.bell .bfoot { display: block; padding: 12px 8px 4px 11px; font-size: 13px; font-weight: 500; color: var(--gold); }
+.bell .bfoot:hover { color: #fff; }
+
+/* Text for screen readers only. */
+.vh {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* --- hero: navy field, watermark emblem, gold title --- */
 
 .hero {
@@ -631,14 +734,27 @@ p:last-child { margin-bottom: 0; }
 
 .ustrip { background: var(--card); border-bottom: 1px solid var(--border-soft); padding: 14px var(--pad); }
 .ustrip .in { max-width: var(--wrap); margin: 0 auto; }
+.ustrip .uhd { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 9px; }
 .ustrip .hd {
   font-size: 10px;
   font-weight: 700;
   letter-spacing: .07em;
   text-transform: uppercase;
   color: var(--muted);
-  margin: 0 0 9px;
+  margin: 0;
 }
+.ustrip .umark {
+  background: none;
+  border: 0;
+  padding: 12px 0;
+  margin: -12px 0;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--navy);
+  white-space: nowrap;
+}
+.ustrip .uitem.read { border-left-color: var(--border); }
+.ustrip .uitem.read .ti { color: var(--ink-soft); }
 .ulist { display: grid; gap: 8px; }
 .uitem { border-left: 3px solid var(--gold); padding: 2px 0 2px 11px; }
 .uitem .top { display: flex; flex-wrap: wrap; gap: 7px; align-items: baseline; }
@@ -995,9 +1111,16 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
       <img src="assets/emblem.png" alt="" width="36" height="36">
       <span>AIS Parent Hub<small>British Section</small></span>
     </a>
-    <button class="menubtn" id="menubtn" type="button" aria-expanded="false" aria-controls="menu" aria-label="Menu">
-      <span class="bars" aria-hidden="true">☰</span><span class="x" aria-hidden="true">✕</span>
-    </button>
+    <div class="acts">
+      <!-- Hidden until the updates script has rendered at least one entry. -->
+      <button class="bellbtn" id="bellbtn" hidden type="button" aria-expanded="false" aria-controls="bell" aria-label="Updates">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="count" id="bellCount" aria-hidden="true" hidden></span>
+      </button>
+      <button class="menubtn" id="menubtn" type="button" aria-expanded="false" aria-controls="menu" aria-label="Menu">
+        <span class="bars" aria-hidden="true">☰</span><span class="x" aria-hidden="true">✕</span>
+      </button>
+    </div>
   </div>
   <nav class="menu" id="menu" aria-label="Sections">
     <div class="in">
@@ -1016,6 +1139,16 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
       <a class="go2" href="#materials">Start here</a>
     </div>
   </nav>
+  <div class="bell" id="bell" role="region" aria-label="Updates">
+    <div class="in">
+      <div class="bhd">
+        <p class="lb">Updates</p>
+        <button class="markall" id="bellMarkAll" type="button" hidden>Mark all as read</button>
+      </div>
+      <div id="bellList"></div>
+      <a class="bfoot" href="#changelog">See full history →</a>
+    </div>
+  </div>
 </div>
 
 <!-- ============ HERO ============ -->
@@ -1056,14 +1189,29 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
 </div>
 
 <!-- ============ WHAT'S CHANGED ============ -->
-<!-- One array, two renderings: the three newest entries in the strip below,
-     all of them in the change log near the foot of the page. Add one entry
-     per change and nothing else needs touching. Order does not matter; the
-     renderer sorts by date. An entry dated within 14 days gets a New badge
-     that expires by itself. -->
+<!-- One array, three renderings: the bell in the top bar, the strip below,
+     and the change log near the foot of the page. Add one entry per change
+     and nothing else needs touching. Order does not matter; the renderer
+     sorts by date. An entry dated within 14 days gets a New badge that
+     expires by itself, and counts as unread in the bell and the strip until
+     the visitor opens it or marks it read. The strip shows only unread
+     entries and hides when there are none.
+     Every entry needs a unique "id" of lowercase letters, digits and
+     hyphens, e.g. "2026-09-13-mentors". The browser remembers read entries
+     by id, so never reuse or change an id once it has gone live; fixing a
+     typo in a title is safe. tools/check.mjs enforces all of this. -->
 <script type="application/json" id="updatesData">
 [
   {
+    "id": "2026-09-13-updates-bell",
+    "date": "2026-09-13",
+    "title": "See what’s new at a glance",
+    "text": "Tap the bell at the top of the page to see every update. Anything you haven’t opened yet is marked in gold.",
+    "href": "#changelog",
+    "label": "See what’s changed"
+  },
+  {
+    "id": "2026-09-13-mentors",
     "date": "2026-09-13",
     "title": "Updated homeroom mentors",
     "text": "Six of the seven Grade 9 and 10 classes have a new homeroom mentor, and the Grade 11 and 12 mentors are now listed too, each with their email.",
@@ -1071,6 +1219,7 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
     "label": "Find your son’s mentor"
   },
   {
+    "id": "2026-09-13-timetables",
     "date": "2026-09-13",
     "title": "New class timetables",
     "text": "The timetable for Grades 9 to 12 has changed and takes effect on Sunday 13 September. Tap your child’s class to open theirs.",
@@ -1078,6 +1227,7 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
     "label": "See the timetables"
   },
   {
+    "id": "2026-09-13-class-pdfs",
     "date": "2026-09-13",
     "title": "Each class now opens on its own",
     "text": "Tapping your child’s class now opens just that class’s timetable, on any phone. Before, some phones opened the full timetable at the first page instead.",
@@ -1085,6 +1235,7 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
     "label": "See the timetables"
   },
   {
+    "id": "2026-09-13-year-hub",
     "date": "2026-09-13",
     "title": "This page is now your hub for the year",
     "text": "The Meet & Greet is over, so the page has moved on from that evening. Everything about the IGCSE programme is still here, and the timetables now sit at the top.",
@@ -1092,6 +1243,7 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
     "label": "Everything in one place"
   },
   {
+    "id": "2026-09-09-live",
     "date": "2026-09-09",
     "title": "The Parent Hub went live",
     "text": "The hub opened for the Parents’ Meet & Greet on 9 September 2026. It’s now the one link to keep for the rest of the year."
@@ -1101,7 +1253,10 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
 
 <div class="ustrip" id="updatesStrip" hidden>
   <div class="in">
-    <p class="hd">Latest updates</p>
+    <div class="uhd">
+      <p class="hd" id="updatesHead">New updates</p>
+      <button class="umark" id="updatesMark" type="button">Mark as read</button>
+    </div>
     <div class="ulist" id="updatesList"></div>
   </div>
 </div>
@@ -1966,10 +2121,24 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
   var bar = document.getElementById('topbar');
   var btn = document.getElementById('menubtn');
   var menu = document.getElementById('menu');
+  var bellBtn = document.getElementById('bellbtn');
+  var bell = document.getElementById('bell');
 
+  /* The menu and the updates bell share the bar, so opening one closes the
+     other. The bell's contents are filled in by the updates script below. */
   function setMenu(open) {
+    if (open) setBell(false);
     bar.classList.toggle('open', open);
     btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+  function setBell(open) {
+    if (!bellBtn || !bell) return;
+    if (open) {
+      bar.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
+    }
+    bar.classList.toggle('bellopen', open);
+    bellBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
   }
   btn.addEventListener('click', function () {
     setMenu(!bar.classList.contains('open'));
@@ -1977,8 +2146,19 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
   menu.addEventListener('click', function (e) {
     if (e.target.closest('a')) setMenu(false);
   });
+  if (bellBtn && bell) {
+    bellBtn.addEventListener('click', function () {
+      setBell(!bar.classList.contains('bellopen'));
+    });
+    /* A tap anywhere outside the bar closes the bell, as drop-downs do. */
+    document.addEventListener('click', function (e) {
+      if (bar.classList.contains('bellopen') && !bar.contains(e.target)) setBell(false);
+    });
+  }
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && bar.classList.contains('open')) { setMenu(false); btn.focus(); }
+    if (e.key !== 'Escape') return;
+    if (bar.classList.contains('open')) { setMenu(false); btn.focus(); }
+    else if (bar.classList.contains('bellopen')) { setBell(false); bellBtn.focus(); }
   });
 
   /* --- highlight the section in view --- */
@@ -2022,24 +2202,45 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
     });
   });
 
-  /* --- updates: one array, rendered into the strip and the change log ---
+  /* --- updates: one array, rendered into the bell, the strip and the change log ---
      Dates are parsed from their parts rather than handed to the Date string
      parser, so no timezone shifts a day. Month names are a literal array so
      formatting does not depend on the visitor's locale. If the JSON is
-     missing, malformed or empty, all three containers (the strip, the
-     change log section and its nav link) stay hidden, the same way the
-     countdown stays hidden until it has validated its dates. */
+     missing, malformed or empty, every container (the bell, the strip, the
+     change log section and its nav link) stays hidden, the same way the
+     countdown stays hidden until it has validated its dates.
+
+     Read state lives in this browser only, under STORE_KEY, as the ids of
+     the entries the visitor has opened or marked read. An entry is unread
+     while it is inside the NEW_DAYS window and its id is not in that list,
+     so nothing stays unread for ever and an old entry never counts on a
+     first visit. Where storage is blocked (private browsing, some in-app
+     browsers) read state lasts for this page view only.
+
+     Reading an entry restyles it in place rather than removing it. The
+     strip sits above every section, so taking an item out of it while the
+     page scrolls to that item's section would shift the target and land
+     the scroll in the wrong place. Only the strip's own button hides it. */
   var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'];
   var NEW_DAYS = 14;
+  var BELL_MAX = 8;
+  var STRIP_MAX = 3;
+  var STORE_KEY = 'aisHub.updates';
   var HREF_OK = /^(#|assets\/|https:\/\/|mailto:)/;
 
   var uSrc = document.getElementById('updatesData');
   var uStrip = document.getElementById('updatesStrip');
+  var uHead = document.getElementById('updatesHead');
+  var uMark = document.getElementById('updatesMark');
   var uList = document.getElementById('updatesList');
   var uLogSection = document.getElementById('changelog');
   var uLog = document.getElementById('changelogList');
   var uNav = document.getElementById('changelogNav');
+  var bellList = document.getElementById('bellList');
+  var bellCount = document.getElementById('bellCount');
+  var bellMarkAll = document.getElementById('bellMarkAll');
+  var hasBell = !!(bellBtn && bell && bellList && bellCount && bellMarkAll);
 
   if (uSrc && uList && uLog) {
     var updates = null;
@@ -2064,19 +2265,71 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
         return d;
       };
 
+      var today = new Date();
+      today = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+      /* Age is rounded rather than floored, so a daylight-saving change
+         between "today" and the entry date cannot shorten the span by an
+         hour and extend the window by a day. It must also be non-negative,
+         so a mistyped future date is not badged forever and pinned to the
+         top by the sort below. */
       var clean = [];
+      var rowById = Object.create(null);
       updates.forEach(function (e) {
         var d = parseDay(e && e.date);
-        if (d && e.title && e.text) clean.push({ d: d, e: e });
+        if (!d || !e.title || !e.text) return;
+        var age = Math.round((today - d) / 86400000);
+        var row = {
+          d: d,
+          e: e,
+          id: typeof e.id === 'string' ? e.id : '',
+          isNew: age >= 0 && age <= NEW_DAYS
+        };
+        if (row.id) rowById[row.id] = row;
+        clean.push(row);
       });
       clean.sort(function (a, b) { return b.d - a.d; });
 
-      var today = new Date();
-      today = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      var read = Object.create(null);
+      var visited = false;
+      var canStore = false;
+      try {
+        var raw = window.localStorage.getItem(STORE_KEY);
+        canStore = true;
+        if (raw !== null) {
+          visited = true;
+          var saved = JSON.parse(raw);
+          if (saved && Object.prototype.toString.call(saved.read) === '[object Array]') {
+            saved.read.forEach(function (id) { if (typeof id === 'string') read[id] = true; });
+          }
+        }
+      } catch (err) {
+        /* Blocked storage or a corrupt value: carry on with nothing read. */
+      }
+
+      /* An entry without an id cannot be remembered, so it never counts as
+         unread. tools/check.mjs stops one shipping. */
+      var isUnread = function (row) { return row.isNew && row.id !== '' && !read[row.id]; };
+      var unreadRows = function () { return clean.filter(isUnread); };
+
+      /* Only ids still on the page are saved, so the list cannot grow
+         without end. Saving on load also records the visit, so the next
+         one reads "Since your last visit". */
+      var save = function () {
+        if (!canStore) return;
+        var ids = [];
+        clean.forEach(function (row) { if (row.id && read[row.id]) ids.push(row.id); });
+        try {
+          window.localStorage.setItem(STORE_KEY, JSON.stringify({ read: ids }));
+        } catch (err) {
+          canStore = false;
+        }
+      };
 
       var render = function (row) {
         var wrap = document.createElement('div');
         wrap.className = 'uitem';
+        if (row.id) wrap.setAttribute('data-id', row.id);
 
         var top = document.createElement('div');
         top.className = 'top';
@@ -2091,13 +2344,7 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
         dt.textContent = row.d.getDate() + ' ' + MONTHS[row.d.getMonth()] + ' ' + row.d.getFullYear();
         top.appendChild(dt);
 
-        /* Rounded rather than floored, so a daylight-saving change between
-           "today" and the entry date cannot shorten the span by an hour and
-           extend the badge by a day. Also require a non-negative age, so a
-           mistyped future date is not badged forever and pinned to the top
-           by the sort above. */
-        var age = Math.round((today - row.d) / 86400000);
-        if (age >= 0 && age <= NEW_DAYS) {
+        if (row.isNew) {
           var badge = document.createElement('span');
           badge.className = 'new';
           badge.textContent = 'New';
@@ -2119,12 +2366,120 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
         return wrap;
       };
 
+      /* A bell item is one link, so the whole row is the tap target. An
+         entry with no link of its own opens the change log. */
+      var renderBellItem = function (row) {
+        var href = row.e.href && HREF_OK.test(row.e.href) ? row.e.href : '#changelog';
+        var a = document.createElement('a');
+        a.className = 'bitem';
+        a.href = href;
+        if (href.indexOf('https://') === 0) {
+          a.target = '_blank';
+          a.rel = 'noopener';
+        }
+        if (row.id) a.setAttribute('data-id', row.id);
+
+        var top = document.createElement('span');
+        top.className = 'top';
+
+        var ti = document.createElement('span');
+        ti.className = 'ti';
+        var flag = document.createElement('span');
+        flag.className = 'vh';
+        flag.textContent = 'Unread: ';
+        ti.appendChild(flag);
+        ti.appendChild(document.createTextNode(row.e.title));
+        top.appendChild(ti);
+
+        var dt = document.createElement('span');
+        dt.className = 'dt';
+        dt.textContent = row.d.getDate() + ' ' + MONTHS[row.d.getMonth()].slice(0, 3);
+        top.appendChild(dt);
+        a.appendChild(top);
+
+        var tx = document.createElement('span');
+        tx.className = 'tx';
+        tx.textContent = row.e.text;
+        a.appendChild(tx);
+        return a;
+      };
+
+      /* Bring every rendered item, the count and the button label into line
+         with the read list. */
+      var refresh = function () {
+        Array.prototype.forEach.call(uList.querySelectorAll('.uitem'), function (el) {
+          var row = rowById[el.getAttribute('data-id')];
+          el.classList.toggle('read', !row || !isUnread(row));
+        });
+        if (!hasBell) return;
+        Array.prototype.forEach.call(bellList.querySelectorAll('.bitem'), function (el) {
+          var row = rowById[el.getAttribute('data-id')];
+          var unread = !!row && isUnread(row);
+          el.classList.toggle('unread', unread);
+          el.querySelector('.vh').hidden = !unread;
+        });
+        var n = unreadRows().length;
+        bellCount.textContent = n > 9 ? '9+' : String(n);
+        bellCount.hidden = n === 0;
+        bellMarkAll.hidden = n === 0;
+        bellBtn.setAttribute('aria-label', n ? 'Updates, ' + n + ' unread' : 'Updates');
+      };
+
+      var markRead = function (ids) {
+        ids.forEach(function (id) { if (id) read[id] = true; });
+        save();
+        refresh();
+      };
+      var markAll = function () {
+        markRead(unreadRows().map(function (row) { return row.id; }));
+      };
+
+      /* Following an entry's link from any list marks that entry read. */
+      var onOpen = function (e) {
+        if (!e.target.closest('a')) return;
+        var item = e.target.closest('[data-id]');
+        if (item) markRead([item.getAttribute('data-id')]);
+      };
+
       if (clean.length) {
-        clean.slice(0, 3).forEach(function (row) { uList.appendChild(render(row)); });
+        var fresh = unreadRows();
+
         clean.forEach(function (row) { uLog.appendChild(render(row)); });
-        if (uStrip) uStrip.hidden = false;
+        uLog.addEventListener('click', onOpen);
         if (uLogSection) uLogSection.hidden = false;
         if (uNav) uNav.hidden = false;
+
+        if (uStrip && fresh.length) {
+          fresh.slice(0, STRIP_MAX).forEach(function (row) { uList.appendChild(render(row)); });
+          if (uHead) uHead.textContent = (visited ? 'Since your last visit' : 'New updates') + ' · ' + fresh.length;
+          uList.addEventListener('click', onOpen);
+          if (uMark) {
+            uMark.addEventListener('click', function () {
+              markAll();
+              uStrip.hidden = true;
+            });
+          }
+          uStrip.hidden = false;
+        }
+
+        if (hasBell) {
+          clean.slice(0, BELL_MAX).forEach(function (row) { bellList.appendChild(renderBellItem(row)); });
+          bell.addEventListener('click', function (e) {
+            if (!e.target.closest('a')) return;
+            onOpen(e);
+            setBell(false);
+          });
+          /* The button hides once nothing is unread, so hand focus back to
+             the bell rather than dropping it on the page. */
+          bellMarkAll.addEventListener('click', function () {
+            markAll();
+            bellBtn.focus();
+          });
+          bellBtn.hidden = false;
+        }
+
+        refresh();
+        save();
       }
     }
   }

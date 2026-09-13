@@ -34,12 +34,15 @@ check() { # check <description> <grep-pattern> <expected: yes|no>
 check "countdown is hidden"        'id="cd" hidden'              yes
 check "no thank-you message shown" 'Thank you for joining us<'   no
 
-# The updates layer must have rendered into both containers. The change log
-# section (and its nav link) starts hidden in the markup and is only shown
-# by the renderer once at least one entry parses, mirroring the strip: this
-# guards against Finding 1 (an empty titled box with nothing under it).
+# The updates layer must have rendered. The change log section (and its nav
+# link) and the bell start hidden in the markup and are only shown by the
+# renderer once at least one entry parses: this guards against Finding 1 (an
+# empty titled box with nothing under it). The strip's visibility is not
+# asserted: it shows only unread entries inside the 14-day window, so it
+# depends on today's date and on the browser's saved read state.
 check "updates strip present"        'id="updatesStrip"'          yes
-check "updates strip not hidden"     'id="updatesStrip" hidden'   no
+check "bell button not hidden"       'id="bellbtn" hidden'        no
+check "bell list rendered"           'class="bitem'               yes
 check "change log rendered"          'id="changelogList"'         yes
 check "change log section not hidden" 'id="changelog" hidden'     no
 check "change log nav not hidden"    'id="changelogNav" hidden'   no
