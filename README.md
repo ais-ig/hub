@@ -58,6 +58,8 @@ Bringing the countdown back for a future event is just those two attributes. The
 
 **Ask a question** is a Google Form owned by the school, `https://docs.google.com/forms/d/e/1FAIpQLSe5bU8ruZOil2hbbXmYcrQNrXJu1IDsOPLj1kQ1FtgIGw69Ow/viewform`. It is linked from three places: the hero button, the Start here card, and the Ask a question block near the foot of the page. Change all three together.
 
+**Student Council applications**, `https://forms.gle/WNYxBGu17yEsBJTp9`, are linked from the first hero button and the `2026-09-13-student-council` update. The button carries `data-until="2026-09-16T23:59:00+03:00"`: it starts hidden and a few lines of script show it only before that moment, so it retires itself when applications close and can be deleted at the next edit after that. Any element given a `data-until` behaves the same way. The update entry stays in the change log; its title names the closing date, so it still reads correctly afterwards.
+
 ## Keeping the hub current through the year
 
 There is no event on the page. The Meet & Greet took place on 9 September 2026, and on 12 September 2026 the "Tonight's programme" section it lived in, together with the countdown's live dates, were retired: once the evening had passed, a page still counting down to it and still headed "Parents' Meet & Greet" was actively wrong, not just stale. What replaced it is reference material, updated only when a source document changes:
@@ -95,6 +97,7 @@ Nothing currently shows "Available soon". To announce a document before it exist
 | `parents-calendar-2026-27.pdf` | live | library |
 | `no-mobile-phone-policy.pdf` | live | Policies, library |
 | `phone-policy-commitment-form.pdf` | live | Policies, library |
+| `student-council-policy-boys-2026-27.pdf` | live | library |
 | `presentation-g9-g10.pdf` | live | band, library |
 
 External links, the school's own pages: the Grade 9 and 10 IG weekly plans and the Parent Assessment Guide on `ict001001.github.io`, reached through the school-wide Linktree `linktr.ee/rowad.curriculum2627`.

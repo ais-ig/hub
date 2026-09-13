@@ -39,6 +39,7 @@
        assets/parents-calendar-2026-27.pdf                  LIVE  library
        assets/no-mobile-phone-policy.pdf                    LIVE  policies, library
        assets/phone-policy-commitment-form.pdf              LIVE  policies, library
+       assets/student-council-policy-boys-2026-27.pdf       LIVE  library
        assets/presentation-g9-g10.pdf                       LIVE  band, library
 
      External links (the school's own pages, not copied here). The examination
@@ -381,6 +382,7 @@ button {
 .btn.gold:hover { background: #F2C63A; color: var(--navy-deep); }
 .btn.line { background: transparent; color: var(--gold); border: 2px solid var(--gold); font-weight: 500; padding-block: 10px; }
 .btn.line:hover { background: rgba(237, 186, 29, .12); color: var(--gold); }
+.btn[hidden] { display: none; }
 
 /* --- countdown ---
    Pattern from the Grade 9 Pathway hub: four white cells, days through
@@ -1174,7 +1176,12 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
       <p class="cdmsg" id="cdMsg" role="status" hidden></p>
     </div>
 
+    <!-- A button with data-until starts hidden and is shown by script only
+         before that moment, Riyadh time, so it retires itself at the deadline.
+         The Student Council button closes with applications, Wednesday
+         16 September 2026 at 11:59 PM. -->
     <div class="ctas">
+      <a class="btn gold" href="https://forms.gle/WNYxBGu17yEsBJTp9" target="_blank" rel="noopener" data-until="2026-09-16T23:59:00+03:00" hidden>Apply for Student Council</a>
       <a class="btn gold" href="#schedule">Class timetables</a>
       <a class="btn line" href="https://docs.google.com/forms/d/e/1FAIpQLSe5bU8ruZOil2hbbXmYcrQNrXJu1IDsOPLj1kQ1FtgIGw69Ow/viewform" target="_blank" rel="noopener">Ask a question</a>
     </div>
@@ -1202,6 +1209,14 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
      typo in a title is safe. tools/check.mjs enforces all of this. -->
 <script type="application/json" id="updatesData">
 [
+  {
+    "id": "2026-09-13-student-council",
+    "date": "2026-09-13",
+    "title": "Student Council applications close Wednesday 16 September",
+    "text": "Boys in Grades 9, 11 and 12 can apply until Wednesday 16 September at 11:59 PM, Saudi time. The open seats are the Grade 9, 11 and 12 Representatives and the Grade 12 Vice President. The Grade 10 Representative is already in place, so there is no Grade 10 seat this round. Shortlisted students are interviewed the following week.",
+    "href": "https://forms.gle/WNYxBGu17yEsBJTp9",
+    "label": "Apply through the form"
+  },
   {
     "id": "2026-09-13-updates-bell",
     "date": "2026-09-13",
@@ -2009,6 +2024,11 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
         <span class="tx"><span class="tt">Phone Policy Commitment Form</span><span class="sb">PDF · signed when a phone is collected</span></span>
         <span class="ar" aria-hidden="true">→</span>
       </a>
+      <a class="doc" href="assets/student-council-policy-boys-2026-27.pdf" download>
+        <span class="ic" aria-hidden="true">↓</span>
+        <span class="tx"><span class="tt">Student Council Policy</span><span class="sb">PDF · Grades 9 to 12 · boys campus · 3 pages</span></span>
+        <span class="ar" aria-hidden="true">→</span>
+      </a>
     </div>
   </div>
 </section>
@@ -2551,6 +2571,14 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
       timer = setInterval(tick, 1000);
     }
   }
+
+  /* --- links with a deadline ---
+     Anything carrying data-until starts hidden and is shown only before that
+     moment. A missing or unparseable date keeps it hidden. */
+  Array.prototype.forEach.call(document.querySelectorAll('[data-until]'), function (el) {
+    var until = new Date(el.getAttribute('data-until') || '');
+    if (!isNaN(until.getTime()) && Date.now() < until.getTime()) el.hidden = false;
+  });
 })();
 </script>
 
