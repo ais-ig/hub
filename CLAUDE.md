@@ -81,23 +81,21 @@ replaced, or parents get a cached copy. And the eleven `#page=` links in
 `#schedule` encode the class order of the aSc export, so they must be re-derived
 if the class list changes.
 
-**Known conflict between two sources, unresolved as of 13 September 2026.** The
-aSc export we publish states period times that are 15 minutes later than the
-official Daily Schedule, and shows neither Homeroom nor Salah:
+**The aSc export does not display period times.** Its header row shows only the
+period numbers 1 to 8 and BREAK. The times are present in the file's hidden text
+layer, so `pdftotext` will happily report them, and they are stale: a consistent
+15 minutes later than the Daily Schedule, with no Homeroom or Salah row. **Do not
+take period times from the aSc export.** Nothing a parent sees is wrong, because
+nothing a parent sees states a time, but anyone extracting text from that file
+will be misled, as happened on 13 September 2026.
 
-| | aSc export (published) | Daily Schedule (authority) |
-|---|---|---|
-| Homeroom | not shown | 6:30 to 6:45 |
-| Period 1 | 7:00 to 7:40 | 6:45 to 7:25 |
-| Break | 9:40 to 10:10 | 9:25 to 9:55 |
-| Period 8 | 12:10 to 12:50 | 11:55 to 12:35 |
-| Salah | not shown | 12:35 to 13:05 |
+`Daily Schedule (Summer) - British Section`, published as
+`assets/daily-schedule-summer-2026-27.pdf`, is the only authority for times.
 
-The offset is a consistent 15 minutes across every row, which suggests the aSc
-grid was built before Homeroom was added and never regenerated. **The page
-carries the Daily Schedule times, so a parent who opens the PDF sees times that
-contradict the page.** Raise it with whoever generates the aSc export rather
-than editing either file.
+**A Winter schedule exists and shifts everything earlier.** The 2025/26 Winter
+sheet ran Homeroom 06:15 and Salah 12:20 to 12:50. When the 2026/27 Winter
+schedule is issued, the banner, the `#schedule` note and this asset all change
+together.
 
 Changes already carried in for 2026/27, worth knowing: Grade 9 Islamic Studies moved 3 to 2 periods and Quran 2 to 3; several optional loads changed in both grades; Grade 9 gained an optional Hifdh Programme, which sits inside the existing three Quran periods and neither adds to the forty-period week nor replaces a subject.
 

@@ -117,21 +117,20 @@ gold bar):
 
 ### On the page fragment
 
-`#page=N` is honoured by most desktop browsers and by Chrome on Android.
-Safari on iOS is understood NOT to honour it: its built-in PDF viewer is
-widely documented as opening straight to page 1 regardless of the fragment,
-and most of this hub's parents are on iPhones. This has not been tested on a
-real iPhone, so treat it as a strong likelihood rather than a confirmed fact.
+**Tested on real devices, 13 September 2026.** `#page=N` works on macOS and on
+iPad. It does NOT work on iPhone, and it does NOT work on Android. Both open
+the file at page 1 regardless of the fragment.
 
-This is why each class pill also shows its own page number, in small muted
-type beneath the class label, with a one-line note explaining why it is
-there: a parent who lands on page 1 can still see which page is theirs. If a
-parent's phone hands the PDF to Google Drive or another app instead of
-opening it inline, the fragment may be ignored there too, for the same
-reason. That is the whole failure mode: correct file, possibly the wrong
-page, recoverable by reading the number on the pill. It never produces a
-broken link, and the full-timetable button remains the plain path,
-unaffected by any of this. Accepted.
+That is the majority of this hub's parents, so the fragment is a bonus for
+desktop and iPad users rather than the mechanism the section relies on. The
+mechanism is the page number printed on each pill, in small muted type beneath
+the class label: a parent who lands on page 1 reads "Page 11" on the 12B pill
+and scrolls to it. The explanatory sentence that sat above the pills was
+removed on 13 September as clutter; the numbers carry the meaning on their own.
+
+The failure mode is therefore: correct file, page 1 instead of the child's
+page, recoverable by reading the number on the pill. It never produces a broken
+link, and the full-timetable button is unaffected. Accepted.
 
 ### Styling
 
