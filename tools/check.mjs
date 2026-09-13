@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /* Static checks for the Parent Hub. Zero dependencies.
    Run: node tools/check.mjs */
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, readdirSync, existsSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -79,6 +80,28 @@ if (!block) {
     notes.push(data.length + ' update entries are well formed');
   }
 }
+
+/* 7. Each per-class timetable holds the class its filename names, so a bad
+   split cannot ship silently. The label, e.g. 9B-IG, sits on its own line in
+   the PDF's text layer. Needs pdftotext (poppler). */
+const ttDir = join(root, 'assets', 'timetables');
+const ttFiles = existsSync(ttDir) ? readdirSync(ttDir).filter((f) => f.endsWith('.pdf')) : [];
+if (!ttFiles.length) fail('timetable', 'no per-class PDFs in assets/timetables/');
+for (const f of ttFiles) {
+  let text = '';
+  try {
+    text = execFileSync('pdftotext', ['-f', '1', '-l', '1', join(ttDir, f), '-'], { encoding: 'utf8' });
+  } catch (e) {
+    fail('timetable', 'pdftotext could not read ' + f + ': ' + e.message);
+    continue;
+  }
+  const labels = [...text.matchAll(/^(9|10|11|12)[A-D]-(IG|AS|A2)$/gm)].map((m) => m[0]);
+  const want = f.replace(/\.pdf$/, '').toUpperCase();
+  if (labels.length !== 1 || labels[0].split('-')[0] !== want) {
+    fail('timetable', f + ' should hold class ' + want + ' but reads ' + (labels.join(', ') || 'no class label'));
+  }
+}
+notes.push(ttFiles.length + ' class timetables match their filenames');
 
 for (const n of notes) console.log('ok   ' + n);
 for (const f of failures) console.log('FAIL ' + f);

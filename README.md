@@ -84,6 +84,7 @@ Nothing currently shows "Available soon". To announce a document before it exist
 | File | Status | Appears in |
 |---|---|---|
 | `class-timetables-boys.pdf` | live | band, Class timetables, library |
+| `timetables/9a.pdf` to `timetables/12b.pdf` | live | Class timetables, one per class pill |
 | `meet-and-greet-parent-guide-boys-2026-27.pdf` | live | band, library |
 | `g9-igcse-options-2026-27.pdf` | live | band, Subject options, library |
 | `g10-igcse-options-2026-27.pdf` | live | band, Subject options, library |
@@ -109,16 +110,24 @@ never changes**, which is the whole point: parents keep the link.
 
 1. `cp assets/class-timetables-boys.pdf assets/archive/class-timetables-boys-<old generated date>.pdf`
 2. Copy the new aSc export over `assets/class-timetables-boys.pdf`
-3. **Check the class list.** Run the page-order loop in
-   `docs/superpowers/plans/2026-09-12-timetable-and-updates.md`, Task 4 Step 3.
-   If a class was added or removed, the eleven links in `#schedule` must be
-   re-derived before you push.
+3. **Split it per class.** `bash tools/split-timetable.sh` rewrites the eleven
+   one-page files in `assets/timetables/` (`9a.pdf` to `12b.pdf`) that the class
+   pills open. It stops if the page count no longer matches its class list: if
+   a class was added or removed, update `CLASSES` in the script and the pills in
+   `#schedule` together, then run it again.
 4. Update the "in effect from" line and the issued date in `#schedule`
-5. Bump `?v=` on every timetable link: the section, the Start here card and
-   the library row
+5. Bump `?v=` on every timetable link: the eleven class pills, the full
+   timetable button, the Start here card and the library row
 6. Add one entry to `updatesData`
-7. `node tools/check.mjs && bash tools/render-check.sh`
+7. `node tools/check.mjs && bash tools/render-check.sh`. `check.mjs` reads the
+   class label out of each per-class file and fails if it does not match the
+   filename, so a class list that changed order cannot ship silently.
 8. Commit, push, and share `https://ais-ig.github.io/hub/#schedule`
+
+**Why one file per class.** The pills used to open the combined file with
+`#page=N`. Tested on real devices on 13 September 2026, that works on macOS and
+iPad but opens page 1 on iPhone and Android, which is most parents. Keep the
+split; do not go back to fragments.
 
 **Share the section, never the raw PDF.** A raw PDF URL a parent has already
 opened can be served from their phone's cache for a long time. The hub page

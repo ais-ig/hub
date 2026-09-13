@@ -78,9 +78,16 @@ The page-specific patterns kept from the first version: the options tables and t
 Three couplings were added on 12 September 2026. The banner's period times and
 the `#schedule` note both come from the Daily Schedule, so they move together.
 The `?v=` query on every timetable link must be bumped whenever the file is
-replaced, or parents get a cached copy. And the eleven `#page=` links in
-`#schedule` encode the class order of the aSc export, so they must be re-derived
-if the class list changes.
+replaced, or parents get a cached copy. And the class order of the aSc export
+is encoded in `tools/split-timetable.sh`, which splits the combined file into
+one PDF per class in `assets/timetables/`, and in the eleven class pills in
+`#schedule` that open those files. Rerun the script whenever the combined file
+is replaced, and re-derive both if the class list changes. `tools/check.mjs`
+fails if a split file's class label does not match its filename.
+
+The pills link to per-class files, not `#page=` fragments, since 13 September
+2026. Fragments were tested on real devices: they work on macOS and iPad and
+open page 1 on iPhone and Android. Do not reintroduce them.
 
 **The aSc export does not display period times.** Its header row shows only the
 period numbers 1 to 8 and BREAK. The times are present in the file's hidden text

@@ -22,9 +22,12 @@
      own sections.
 
        assets/class-timetables-boys.pdf                     LIVE  band, schedule, library
+       assets/timetables/9a.pdf to 12b.pdf                  LIVE  schedule, one per class
        assets/daily-schedule-summer-2026-27.pdf             LIVE  library
      Superseded timetables are kept in assets/archive/, named by the aSc
-     "Timetable generated" date printed on the file.
+     "Timetable generated" date printed on the file. The eleven class files
+     are split from the combined one by tools/split-timetable.sh; rerun it
+     whenever the combined file is replaced.
 
        assets/meet-and-greet-parent-guide-boys-2026-27.pdf  LIVE  band, library
        assets/g9-igcse-options-2026-27.pdf                  LIVE  band, options, library
@@ -607,23 +610,20 @@ p:last-child { margin-bottom: 0; }
 .classlinks { display: flex; gap: 8px; flex-wrap: wrap; }
 .classlinks a {
   display: inline-flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1px;
   min-width: 58px;
   min-height: var(--tap);
-  padding: 7px 16px;
+  padding: 10px 16px;
   border: 1px solid var(--border);
   border-radius: 999px;
   background: var(--card);
   color: var(--navy-deep);
+  font-size: 13px;
+  font-weight: 700;
   text-decoration: none;
 }
-.classlinks a .cl-name { font-size: 13px; font-weight: 700; line-height: 1.2; }
-.classlinks a .cl-pg { font-size: 10px; font-weight: 400; color: var(--muted); line-height: 1.2; }
 .classlinks a:hover { background: var(--navy-deep); border-color: var(--navy-deep); color: #fff; }
-.classlinks a:hover .cl-pg { color: rgba(255, 255, 255, .75); }
 .tt-foot { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
 .tt-stamp { font-size: 12px; color: var(--muted); margin: 0; }
 
@@ -1079,6 +1079,13 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
   },
   {
     "date": "2026-09-13",
+    "title": "Each class now opens on its own",
+    "text": "Tapping your child’s class now opens just that class’s timetable, on any phone. Before, some phones opened the full timetable at the first page instead.",
+    "href": "#schedule",
+    "label": "See the timetables"
+  },
+  {
+    "date": "2026-09-13",
     "title": "This page is now your hub for the year",
     "text": "The Meet & Greet is over, so the page has moved on from that evening. Everything about the IGCSE programme is still here, and the timetables now sit at the top.",
     "href": "#s8",
@@ -1142,12 +1149,14 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
 </div>
 
 <!-- ============ 01 · CLASS TIMETABLES ============ -->
-<!-- One PDF, linked per class with #page= fragments. The page order is fixed
-     by the aSc export and verified in tools/check.mjs only as far as the file
-     existing: if the school adds or removes a class, re-derive these eleven
-     page numbers from the new export before publishing. The ?v= date is
-     bumped on every revision so a parent arriving through the hub gets the
-     new file rather than a cached one. -->
+<!-- One PDF per class in assets/timetables/, split from the combined file by
+     tools/split-timetable.sh. #page= fragments into the combined file were
+     dropped on 13 September 2026 because iPhone and Android open them at
+     page 1. The split follows the fixed page order of the aSc export, and
+     tools/check.mjs reads the class label out of each file: if the school
+     adds or removes a class, update the script and these pills together.
+     The ?v= date is bumped on every revision so a parent arriving through
+     the hub gets the new file rather than a cached one. -->
 <section class="sec" id="schedule">
   <div class="in">
     <div class="st">
@@ -1161,35 +1170,35 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
     <div class="tt-grp">
       <span class="lb">Grade 9</span>
       <div class="classlinks">
-        <a href="assets/class-timetables-boys.pdf?v=2026-09-13#page=1" aria-label="9A timetable, page 1 of the PDF"><span class="cl-name">9A</span><span class="cl-pg">Page 1</span></a>
-        <a href="assets/class-timetables-boys.pdf?v=2026-09-13#page=2" aria-label="9B timetable, page 2 of the PDF"><span class="cl-name">9B</span><span class="cl-pg">Page 2</span></a>
-        <a href="assets/class-timetables-boys.pdf?v=2026-09-13#page=3" aria-label="9C timetable, page 3 of the PDF"><span class="cl-name">9C</span><span class="cl-pg">Page 3</span></a>
-        <a href="assets/class-timetables-boys.pdf?v=2026-09-13#page=4" aria-label="9D timetable, page 4 of the PDF"><span class="cl-name">9D</span><span class="cl-pg">Page 4</span></a>
+        <a href="assets/timetables/9a.pdf?v=2026-09-13" aria-label="Grade 9A class timetable">9A</a>
+        <a href="assets/timetables/9b.pdf?v=2026-09-13" aria-label="Grade 9B class timetable">9B</a>
+        <a href="assets/timetables/9c.pdf?v=2026-09-13" aria-label="Grade 9C class timetable">9C</a>
+        <a href="assets/timetables/9d.pdf?v=2026-09-13" aria-label="Grade 9D class timetable">9D</a>
       </div>
     </div>
 
     <div class="tt-grp">
       <span class="lb">Grade 10</span>
       <div class="classlinks">
-        <a href="assets/class-timetables-boys.pdf?v=2026-09-13#page=5" aria-label="10A timetable, page 5 of the PDF"><span class="cl-name">10A</span><span class="cl-pg">Page 5</span></a>
-        <a href="assets/class-timetables-boys.pdf?v=2026-09-13#page=6" aria-label="10B timetable, page 6 of the PDF"><span class="cl-name">10B</span><span class="cl-pg">Page 6</span></a>
-        <a href="assets/class-timetables-boys.pdf?v=2026-09-13#page=7" aria-label="10C timetable, page 7 of the PDF"><span class="cl-name">10C</span><span class="cl-pg">Page 7</span></a>
+        <a href="assets/timetables/10a.pdf?v=2026-09-13" aria-label="Grade 10A class timetable">10A</a>
+        <a href="assets/timetables/10b.pdf?v=2026-09-13" aria-label="Grade 10B class timetable">10B</a>
+        <a href="assets/timetables/10c.pdf?v=2026-09-13" aria-label="Grade 10C class timetable">10C</a>
       </div>
     </div>
 
     <div class="tt-grp">
       <span class="lb">Grade 11</span>
       <div class="classlinks">
-        <a href="assets/class-timetables-boys.pdf?v=2026-09-13#page=8" aria-label="11A timetable, page 8 of the PDF"><span class="cl-name">11A</span><span class="cl-pg">Page 8</span></a>
-        <a href="assets/class-timetables-boys.pdf?v=2026-09-13#page=9" aria-label="11B timetable, page 9 of the PDF"><span class="cl-name">11B</span><span class="cl-pg">Page 9</span></a>
+        <a href="assets/timetables/11a.pdf?v=2026-09-13" aria-label="Grade 11A class timetable">11A</a>
+        <a href="assets/timetables/11b.pdf?v=2026-09-13" aria-label="Grade 11B class timetable">11B</a>
       </div>
     </div>
 
     <div class="tt-grp">
       <span class="lb">Grade 12</span>
       <div class="classlinks">
-        <a href="assets/class-timetables-boys.pdf?v=2026-09-13#page=10" aria-label="12A timetable, page 10 of the PDF"><span class="cl-name">12A</span><span class="cl-pg">Page 10</span></a>
-        <a href="assets/class-timetables-boys.pdf?v=2026-09-13#page=11" aria-label="12B timetable, page 11 of the PDF"><span class="cl-name">12B</span><span class="cl-pg">Page 11</span></a>
+        <a href="assets/timetables/12a.pdf?v=2026-09-13" aria-label="Grade 12A class timetable">12A</a>
+        <a href="assets/timetables/12b.pdf?v=2026-09-13" aria-label="Grade 12B class timetable">12B</a>
       </div>
     </div>
 
