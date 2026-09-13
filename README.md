@@ -22,7 +22,7 @@ Root-level PDFs are ignored by `.gitignore`. The Grade 11 and 12 options forms s
 
 ## Open items
 
-There are no `<!-- PLACEHOLDER -->` comments left in `index.html`. The 2026/27 homeroom mentors come from slide 19 of the final deck.
+There are no `<!-- PLACEHOLDER -->` comments left in `index.html`. The homeroom mentors for Grades 9 to 12 (`#mentors`) come from the British Section's `Homeroom Mentors 2026-2027.docx.pdf`, issued 13 September 2026, which superseded slide 19 of the final deck: six of the seven Grade 9 and 10 mentors changed, and Grades 11 and 12 were added. The sheet lists 11B as Mr. Shehabuddin Hassan with `s.ameen@ais.sch.sa`; the page reproduces it as given.
 
 **Girls campus content was removed on 9 September 2026** at the user's request, because the evening was boys only. The two girls contact cards (Ms. Shamsiya Alkalbani, Head of School, Girls, and the Deputy Head, who appears as *Ms. Malak Rajeh* in the old hub package and *Ms. Malak Alkhasawna* in last year's presentation, both `m.alkhasawna@ais.sch.sa`) are in git history before commit `0f6b883` if the page is widened to both campuses again. The banner carries the boys campus gates from the printed guide.
 
