@@ -156,6 +156,15 @@ optional and go together. `date` must be `YYYY-MM-DD`. `id` is lowercase
 letters, digits and hyphens, conventionally the date and a word or two
 (`2026-09-13-mentors`), and must be unique.
 
+**Never date an entry in the future.** The "New" window runs forward from the
+date, so an entry dated tomorrow has a negative age, is not new, and is
+therefore not unread: no bell count, nothing in the strip, and only a quiet
+row in the change log. The guard is deliberate, so that a mistyped year
+cannot badge an entry for ever. Date an entry the day you publish it and let
+the text carry the future date ("takes effect on Sunday 20 September"). The
+id may still name the effective date; only `date` drives the window. This
+caught out the 20 September timetable entry, published on the 19th.
+
 **Never change an `id` once it is live.** Read state is stored in each
 visitor's browser (`localStorage`, key `aisHub.updates`) as a list of ids, so
 a changed id reappears as unread for everyone. Fixing a typo in a title or
