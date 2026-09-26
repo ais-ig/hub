@@ -81,6 +81,19 @@ if (!block) {
       if (!/^\d{4}-\d{2}-\d{2}$/.test(e.date || '')) {
         fail('updates', 'entry ' + i + ' needs a YYYY-MM-DD date');
       }
+      /* newUntil is optional and ends the New window early. The page ignores
+         one it cannot parse, which would leave a superseded entry badged, so
+         a malformed one fails here. ISO dates compare correctly as strings. */
+      if ('newUntil' in e) {
+        const t = new Date(String(e.newUntil) + 'T00:00:00Z');
+        const ok = /^\d{4}-\d{2}-\d{2}$/.test(e.newUntil || '') &&
+          !isNaN(t) && t.toISOString().slice(0, 10) === e.newUntil;
+        if (!ok) {
+          fail('updates', 'entry ' + i + ' has a newUntil that is not a real YYYY-MM-DD date');
+        } else if (e.date && e.newUntil < e.date) {
+          fail('updates', 'entry ' + i + ' has a newUntil before its date, so it is never new');
+        }
+      }
       if (!e.title) fail('updates', 'entry ' + i + ' has no title');
       if (!e.text) fail('updates', 'entry ' + i + ' has no text');
       if (e.href && e.href.startsWith('#') && !ids.has(e.href.slice(1))) {

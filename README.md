@@ -121,7 +121,9 @@ never changes**, which is the whole point: parents keep the link.
 4. Update the "in effect from" line and the issued date in `#schedule`
 5. Bump `?v=` on every timetable link: the eleven class pills, the full
    timetable button, the Start here card and the library row
-6. Add one entry to `updatesData`
+6. Add one entry to `updatesData`, dated the day you publish. Give the
+   previous timetable entry a `newUntil` of the day before, and reword it to
+   the past tense (see "Recording a change")
 7. `node tools/check.mjs && bash tools/render-check.sh`. `check.mjs` reads the
    class label out of each per-class file and fails if it does not match the
    filename, so a class list that changed order cannot ship silently.
@@ -164,6 +166,21 @@ cannot badge an entry for ever. Date an entry the day you publish it and let
 the text carry the future date ("takes effect on Sunday 20 September"). The
 id may still name the effective date; only `date` drives the window. This
 caught out the 20 September timetable entry, published on the 19th.
+
+**End the New window early with `newUntil`.** Optional, `YYYY-MM-DD`, the
+last day the entry counts as new. Use it in two cases:
+
+- **A later entry supersedes it.** When a new timetable is published, set
+  `newUntil` on the previous timetable entry to the day before the new
+  entry's `date`, so a parent who never opened the old notice is not shown
+  it next to the new one. Reword it to the past tense too, since it stays in
+  the change log.
+- **It announces an event.** Set `newUntil` to the day of the event, so the
+  notice stops counting as new once the event has passed.
+
+The entry stays in the change log either way, as an ordinary read row.
+`tools/check.mjs` fails a `newUntil` that is not a real date or that falls
+before the entry's own `date`.
 
 **Never change an `id` once it is live.** Read state is stored in each
 visitor's browser (`localStorage`, key `aisHub.updates`) as a list of ids, so

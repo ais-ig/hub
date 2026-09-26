@@ -1203,6 +1203,10 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
      expires by itself, and counts as unread in the bell and the strip until
      the visitor opens it or marks it read. The strip shows only unread
      entries and hides when there are none.
+     An optional "newUntil" (YYYY-MM-DD) ends the New window early: set it
+     on an entry a later one supersedes, or on an event notice, to the last
+     day it should count as new. The entry stays in the change log.
+     Date every entry the day it goes live, never in the future.
      Every entry needs a unique "id" of lowercase letters, digits and
      hyphens, e.g. "2026-09-13-mentors". The browser remembers read entries
      by id, so never reuse or change an id once it has gone live; fixing a
@@ -1212,6 +1216,7 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
   {
     "id": "2026-09-27-national-day",
     "date": "2026-09-26",
+    "newUntil": "2026-09-27",
     "title": "No lessons in periods 1 to 3 on Sunday 27 September",
     "text": "Grades 9 to 12 celebrate Saudi National Day 96 on the Basketball Court during periods 1 to 3, so there are no lessons in those periods."
   },
@@ -1226,6 +1231,7 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
   {
     "id": "2026-09-20-timetables",
     "date": "2026-09-19",
+    "newUntil": "2026-09-25",
     "title": "Revised class timetables",
     "text": "The timetable for Grades 9 to 12 was revised and took effect on Sunday 20 September. It has since been revised again, and the page always carries the current one.",
     "href": "#schedule",
@@ -1258,6 +1264,7 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
   {
     "id": "2026-09-13-timetables",
     "date": "2026-09-13",
+    "newUntil": "2026-09-25",
     "title": "New class timetables",
     "text": "The timetable for Grades 9 to 12 changed and took effect on Sunday 13 September. It has since been revised again, and the page always carries the current one.",
     "href": "#schedule",
@@ -2254,7 +2261,8 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
 
      Read state lives in this browser only, under STORE_KEY, as the ids of
      the entries the visitor has opened or marked read. An entry is unread
-     while it is inside the NEW_DAYS window and its id is not in that list,
+     while it is inside the NEW_DAYS window (cut short by its newUntil, if
+     it has one) and its id is not in that list,
      so nothing stays unread for ever and an old entry never counts on a
      first visit. Where storage is blocked (private browsing, some in-app
      browsers) read state lasts for this page view only.
@@ -2314,18 +2322,22 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
          between "today" and the entry date cannot shorten the span by an
          hour and extend the window by a day. It must also be non-negative,
          so a mistyped future date is not badged forever and pinned to the
-         top by the sort below. */
+         top by the sort below. An optional newUntil date ends the window
+         early, for an entry that is superseded or whose event has passed;
+         the entry stays in the change log. One that does not parse is
+         ignored here, and tools/check.mjs stops one shipping. */
       var clean = [];
       var rowById = Object.create(null);
       updates.forEach(function (e) {
         var d = parseDay(e && e.date);
         if (!d || !e.title || !e.text) return;
         var age = Math.round((today - d) / 86400000);
+        var until = e.newUntil ? parseDay(e.newUntil) : null;
         var row = {
           d: d,
           e: e,
           id: typeof e.id === 'string' ? e.id : '',
-          isNew: age >= 0 && age <= NEW_DAYS
+          isNew: age >= 0 && age <= NEW_DAYS && (!until || today <= until)
         };
         if (row.id) rowById[row.id] = row;
         clean.push(row);
