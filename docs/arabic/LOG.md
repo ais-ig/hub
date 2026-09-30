@@ -88,3 +88,18 @@ each is listed here so you can overrule it.
   - Fluency: reads the Arabic alone, as a Saudi parent, before seeing any English.
   - Visual: renders the Arabic page at 320, 380, 800 and 1100px in readable slices, opens the menu, bell, tabs and countdown, compares the English page with `main`, and tests the `?lang=` link on a real local server.
   One fixer applies all three reports afterwards.
+- **Accuracy review** (`docs/arabic/reports/task-5-accuracy-review.md`). All 366 pairs read against the English. Verdict: trustworthy. Every number, date, time, phone number, extension and name matches, and no condition is lost in the policy, assessment or timetable text. 23 findings: 2 strings that could be misread (the phone commitment form's subtitle; and "candidates", which my glossary term made read as "advanced students"), 1 content slip, 2 glossary, 16 consistency between batches, 2 style. It also ruled on all 121 "unsure" items: 97 keep, 14 change, 10 ask the school.
+- **Fluency critique** (`docs/arabic/reports/task-5-fluency-critique.md`). Read the Arabic alone first. Verdict: reads as one hand and mostly as school Arabic, publishable once its first twelve findings are applied. 41 findings. Weakest: the behaviour levels, the activities lead, and "intervention". It challenged several of my glossary terms, and I accepted most (below).
+- **Visual critique** (`docs/arabic/reports/task-6-visual-critique.md`). Rendered at 320, 380, 800 and 1100px. Verdict: sound, nothing broken, properly mirrored, Cairo with letters joined, no overflow at any width. 2 wrong, 4 rough, 6 nits.
+  - English at 380px against `main`: 28 of 31 slices pixel-identical; the other 3 differ only in the rectangle of the new button.
+  - The countdown works in Arabic in all three states.
+  - On a real local server, `?lang=ar` opens in Arabic, cleans itself out of the address bar, survives a reload, and `?lang=en` returns to English.
+- **My rulings for the fixer**, where the reviewers disagreed with each other or with my glossary (`.superpowers/arabic/fix-rulings.md`, local only):
+  - **D18** Mobile phone is الجوال, not الهاتف المحمول. Both a translator and the fluency critic said Saudi parents and school circulars say الجوال. If the school's own bilingual commitment form uses another word, the fixer follows the school.
+  - **D19** "Mark as read" is تمييز كمقروء, the wording phones and WhatsApp use.
+  - **D20** Academic "intervention" is الخطة العلاجية; "early dismissal" is الاستئذان; the summer schedule is الدوام الصيفي.
+  - **D21** Percentages are digits in Arabic (60%) even where the English spells them out, so a parent scanning for the pass mark finds it.
+  - **D22** One grade alone is a word (الصف التاسع); grades listed together are digits (الصفوف 9 و11 و12); a sentence that lists grades uses digits throughout.
+  - **D23** Kept, because only the school can say: مقر البنين for "Boys campus", مدير المدرسة and نائب مدير المدرسة for Head and Deputy Head, المرشد الطلابي for the counsellor.
+  - **D24** D17 reversed for the Parent Guide: it is an English document in effect, so it gets the بالإنجليزية tag. The Commitment Form stays untagged; it is bilingual.
+- **One fixer** is applying all three reports under those rulings, and **Task 7** (CLAUDE.md and README) is being written in parallel.
