@@ -259,3 +259,56 @@ Against the real page:
 Seven of the ten live notices carry digits, so their Arabic must repeat each
 number as digits or the entry needs `"numsAr": false`. `check.mjs` already
 accepts unknown fields on an entry, so `numsAr` does not trip it.
+
+## Fix round 2
+
+### What changed
+
+1. **English attributes inside an Arabic string now fail.** For every
+   dictionary entry, `check` reads the tags of the Arabic and fails, as rule
+   9 and naming the key and the attribute, when an `aria-label`, `alt`,
+   `title` or `placeholder` value holds two or more Latin letters. Message:
+   `i18n 9 unkeyed: s5.m has Arabic whose title="The mentors list" on <a> is
+   still in Latin letters`. The page-side exemption for attributes inside a
+   keyed element is kept. One decision of mine: inside the Arabic, an element
+   that carries `data-i18n-skip` or `aria-hidden="true"`, or sits under one,
+   is excused, the same escape the page has, so that an `alt="Schoology"`
+   that rightly stays Latin can pass. Rule 5 does not compare those two
+   attributes, so the escape has to be present in the English markup too only
+   by convention, not by check.
+2. **`mergeAr` keeps every other field** of an entry it is given new Arabic
+   for. `nums` changes only when the map gives it: `false` sets it, anything
+   else removes it. The test now exercises merge as well as stamp.
+3. **The id-less entry message is one-based**: `entry 2 of updatesData has no
+   id` for the second entry.
+
+### Evidence
+
+RED. `node --test tools/i18n.test.mjs` with the new tests, before the code
+changed:
+
+```
+not ok 51 - rule 8: an update entry with no id fails and gives its position
+not ok 60 - mergeAr keeps the other fields of an entry it is given new Arabic for
+not ok 61 - rule 9: an English attribute left inside an Arabic string fails, naming key and attribute
+not ok 62 - rule 9: each of the four read attributes is checked inside the Arabic
+# tests 74
+# pass 70
+# fail 4
+```
+
+The two passing new tests (translated attributes pass; skip and aria-hidden
+excuse) guard against the new rule over-firing, so they could only fail
+after the change.
+
+GREEN. `node --test tools/i18n.test.mjs`:
+
+```
+# tests 74
+# pass 74
+# fail 0
+```
+
+`node tools/i18n.mjs check` still runs against the real `index.html` without
+crashing. The page is being edited by another task at the same time, so its
+failure count is not recorded here.

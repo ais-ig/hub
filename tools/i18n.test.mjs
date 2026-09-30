@@ -545,8 +545,8 @@ test('rule 8: an update entry with no id fails and gives its position', () => {
   const { id, ...noId } = GOOD_UPDATES[0];
   const failures = checkAll(good({ updates: [GOOD_UPDATES[0], noId, 'loose text'] }));
   assert.deepEqual(failures, [
-    'i18n 8 updates: entry 1 of updatesData has no id, so its Arabic cannot be checked',
     'i18n 8 updates: entry 2 of updatesData has no id, so its Arabic cannot be checked',
+    'i18n 8 updates: entry 3 of updatesData has no id, so its Arabic cannot be checked',
   ]);
 });
 
@@ -627,6 +627,67 @@ test('merge and stamp keep fields of an entry they do not know', () => {
   const out = stampAll(good({ ar }).replace('>British Section</p>', '>The British Section</p>'));
   assert.ok(out.includes('"ar": "القسم البريطاني", "note": "checked by the school" }'));
   assert.deepEqual(checkAll(out), []);
+});
+
+test('mergeAr keeps the other fields of an entry it is given new Arabic for', () => {
+  const ar = goodAr();
+  ar['foot.sign'].note = 'checked by the school';
+  ar['foot.sign'].nums = false;
+  const out = mergeAr(good({ ar }), { 'foot.sign': 'القسم البريطاني.' });
+  assert.ok(out.includes(
+    '"ar": "القسم البريطاني.", "note": "checked by the school", "nums": false }'
+  ));
+  assert.deepEqual(checkAll(out), []);
+  /* An explicit nums: true lifts the exemption and nothing else. */
+  const lifted = mergeAr(out, { 'foot.sign': { ar: 'القسم البريطاني', nums: true } });
+  assert.ok(lifted.includes('"ar": "القسم البريطاني", "note": "checked by the school" }'));
+});
+
+/* ---------- fix round 2 ---------- */
+
+const TIP_EN = 'See <a href="#m" title="The mentors list">the list</a> and ' +
+  '<img src="e.png" alt="School emblem">';
+const tipPage = (arabic) => page({
+  body: '<p data-i18n="s5.m">' + TIP_EN + '</p>',
+  ar: { 's5.m': entry(TIP_EN, arabic) },
+});
+
+test('rule 9: an English attribute left inside an Arabic string fails, naming key and attribute', () => {
+  const failures = checkAll(tipPage(
+    'انظر <a href="#m" title="The mentors list">القائمة</a> و<img src="e.png" alt="شعار المدرسة">'
+  ));
+  assert.equal(failures.length, 1);
+  assert.match(failures[0], /^i18n 9 unkeyed: s5\.m /);
+  assert.ok(failures[0].includes('title="The mentors list"'), failures[0]);
+});
+
+test('rule 9: each of the four read attributes is checked inside the Arabic', () => {
+  for (const attr of ['aria-label', 'alt', 'title', 'placeholder']) {
+    const en = 'Type <input ' + attr + '="Your name"> here';
+    const html = page({
+      body: '<p data-i18n="s5.f">' + en + '</p>',
+      ar: { 's5.f': entry(en, 'اكتب <input ' + attr + '="Your name"> هنا') },
+    });
+    const failures = checkAll(html);
+    assert.equal(failures.length, 1, attr);
+    assert.ok(failures[0].startsWith('i18n 9 unkeyed: s5.f '), failures[0]);
+    assert.ok(failures[0].includes(attr + '="Your name"'), failures[0]);
+  }
+});
+
+test('rule 9: translated or short attributes inside the Arabic pass', () => {
+  assert.deepEqual(checkAll(tipPage(
+    'انظر <a href="#m" title="قائمة الرواد">القائمة</a> و<img src="e.png" alt="شعار A">'
+  )), []);
+});
+
+test('rule 9: data-i18n-skip or aria-hidden inside the Arabic excuses a Latin attribute', () => {
+  const en = 'Sign in to <span data-i18n-skip><img src="s.png" alt="Schoology"></span>' +
+    '<img src="d.png" alt="Decorative dots" aria-hidden="true">';
+  const arabic = 'سجلوا الدخول إلى <span data-i18n-skip><img src="s.png" alt="Schoology"></span>' +
+    '<img src="d.png" alt="Decorative dots" aria-hidden="true">';
+  const html = page({ body: '<p data-i18n="s5.s">' + en + '</p>', ar: { 's5.s': entry(en, arabic) } });
+  assert.deepEqual(checkAll(html), []);
 });
 
 test('markup: an empty data-i18n key fails and gives the line', () => {

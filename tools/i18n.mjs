@@ -259,7 +259,7 @@ function scan(html) {
     upBlock.data.forEach((e, i) => {
       if (!isDict(e) || typeof e.id !== 'string' || !e.id) {
         updateProblems.push(['8 updates',
-          'entry ' + i + ' of updatesData has no id, so its Arabic cannot be checked']);
+          'entry ' + (i + 1) + ' of updatesData has no id, so its Arabic cannot be checked']);
         return;
       }
       for (const field of UPDATE_FIELDS) {
@@ -434,6 +434,33 @@ function unkeyedText(html, tokens) {
   return found;
 }
 
+/* The aria-label, alt, title and placeholder values in a fragment that hold
+   two or more Latin letters, outside data-i18n-skip and aria-hidden. */
+function latinAttrs(fragment) {
+  const found = [];
+  const stack = [];
+  for (const t of tokenize(fragment)) {
+    if (t.type === 'open') {
+      const a = t.attrs;
+      const hidden = (stack.length > 0 && stack[stack.length - 1].hidden) ||
+        has(a, 'data-i18n-skip') || a['aria-hidden'] === 'true';
+      if (!hidden) {
+        for (const attr of READ_ATTRS) {
+          if (has(a, attr) && latinLetters(a[attr]) >= 2) {
+            found.push({ attr, tag: t.name, text: clip(a[attr]) });
+          }
+        }
+      }
+      if (!t.void) stack.push({ name: t.name, hidden });
+    } else if (t.type === 'close') {
+      let k = stack.length - 1;
+      while (k >= 0 && stack[k].name !== t.name) k--;
+      if (k >= 0) stack.length = k;
+    }
+  }
+  return found;
+}
+
 /* The nine rules. Returns failure strings, empty when the two languages are
    in step. Each string starts "i18n <rule> <name>:" and names the key. */
 export function checkAll(html) {
@@ -543,6 +570,14 @@ export function checkAll(html) {
       /* 7. No forbidden characters. */
       for (const what of forbiddenIn(ar)) {
         fail('7 characters', key + ' has Arabic that contains ' + what);
+      }
+
+      /* 9, inside the Arabic. Attributes within a keyed element are excused
+         on the page because the Arabic string carries them, so it is here
+         that one left in English is caught. */
+      for (const f of latinAttrs(ar)) {
+        fail('9 unkeyed', key + ' has Arabic whose ' + f.attr + '="' + f.text +
+          '" on <' + f.tag + '> is still in Latin letters');
       }
     }
   }
@@ -654,9 +689,13 @@ export function mergeAr(html, map) {
       updateEdits.get(u.id)[u.field + 'Ar'] = ar;
       continue;
     }
-    const entry = { h: hashEn(s.sources.get(key).en), ar };
-    const nums = isDict(value) && has(value, 'nums') ? value.nums : (dict[key] || {}).nums;
-    if (nums === false) entry.nums = false;
+    /* Every other field of the entry is kept. nums changes only when the
+       map gives it: false sets the exemption, anything else lifts it. */
+    const entry = { ...(isDict(dict[key]) ? dict[key] : {}), h: hashEn(s.sources.get(key).en), ar };
+    if (isDict(value) && has(value, 'nums')) {
+      if (value.nums === false) entry.nums = false;
+      else delete entry.nums;
+    }
     dict[key] = entry;
   }
 
