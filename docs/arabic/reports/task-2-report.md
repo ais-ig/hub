@@ -203,3 +203,53 @@ Nothing.
 - `tools/render-check.sh`
 - `tools/check.mjs`
 - `docs/arabic/reports/task-2-report.md` (new)
+
+## Polish round
+
+After the review (approved, minor findings only).
+
+### What changed
+
+1. **`t()` has literal English defaults.** The script carries an `EN` table
+   of the thirteen strings it writes; `enOf(key)` reads `i18nEn` first and
+   the table second. `tools/check.mjs` fails if a table entry differs from
+   the block, if `js.months` or `js.monthsShort` does not hold twelve names
+   in either language, or if `js.bell.count` lacks `{n}` in either language.
+   The title and description need no default: they are left as the head has
+   them when the block gives nothing.
+2. **The cover is lifted before the repaint hooks**, and each hook runs in
+   its own `try`/`catch`.
+3. **The language is stored only when the one asked for is the one now
+   showing.** A tap and `?lang=en` are always honoured; a request for Arabic
+   with no readable Arabic block no longer overwrites a saved `ar`.
+4. **A comment at the bell button** explains that its `aria-label` is keyed
+   and also written by `refresh()`, and the order that makes the count win.
+5. **A notice label left in English keeps the English arrow.**
+6. **`applyLang` sets `data-lang-ready` on `<html>`** when it lifts the
+   cover. `render-check.sh` asserts `data-lang-ready="ar"` on the Arabic DOM
+   and `"en"` on the English one, and that `<html>` no longer carries
+   `i18n-wait`.
+7. **The Arabic date check no longer names a month.** It asserts a date was
+   rendered and that no date is followed by a Latin letter.
+8. **Wording**, by the controller's rulings, merged with `i18n.mjs merge`:
+   `menu.contacts` مع من تتواصلون, `menu.ask` and `hero.cta.ask` اطرحوا
+   سؤالاً, `menu.start` ابدأوا من هنا, `menu.beyond` خارج الصف,
+   `hero.cta.council` الترشح لمجلس الطلاب, `js.cd.thanksNote` نأمل أن اللقاء
+   كان مفيداً لكم with the full stop its English has. No other key of mine
+   addressed the reader in the singular. This supersedes the two wordings
+   listed under "Interfaces later tasks need": `menu.beyond` is now خارج
+   الصف.
+
+### Evidence
+
+- `node --test tools/i18n.test.mjs`: 74 tests, 74 pass, 0 fail.
+- `bash tools/render-check.sh`: all render checks passed, both languages,
+  including the two toggle-twice assertions.
+- `node tools/check.mjs`: 475 failures, all rule 9 (446) and rule 8 (29).
+- Mutation run, then reverted: changing one `EN` entry made `check.mjs`
+  report that key as differing, and deleting the `data-lang-ready` line made
+  `render-check.sh` fail both ready checks.
+
+### Files
+
+`index.html`, `tools/render-check.sh`, `tools/check.mjs`, this report.

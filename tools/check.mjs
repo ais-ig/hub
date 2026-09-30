@@ -152,6 +152,43 @@ for (const k of asked) {
 }
 notes.push(asked.size + ' script strings have their English');
 
+/* 10. The script's own copy of that English, its EN table, matches the
+   block, so the fallback cannot drift from what is translated. */
+const table = html.match(/var EN = \{([\s\S]*?)\n  \};/);
+if (!table) {
+  fail('i18n', 'the EN fallback table is missing from the script');
+} else {
+  for (const m of table[1].matchAll(/'(js\.[A-Za-z0-9.]+)': '([^']*)'/g)) {
+    if (enKeys[m[1]] !== m[2]) {
+      fail('i18n', m[1] + ' differs between the EN table in the script and i18nEn');
+    }
+  }
+}
+
+/* 11. The strings the script takes apart keep their shape in both
+   languages: twelve months in each list, and {n} where the count goes. */
+const arBlock = html.match(
+  /<script type="application\/json" id="i18nAr">([\s\S]*?)<\/script>/
+);
+let arKeys = {};
+try {
+  arKeys = JSON.parse(arBlock ? arBlock[1] : '{}');
+} catch (e) {
+  /* checkAll has already reported a block that does not parse. */
+}
+const both = (k) => [['English', enKeys[k]], ['Arabic', (arKeys[k] || {}).ar]];
+for (const k of ['js.months', 'js.monthsShort']) {
+  for (const [name, v] of both(k)) {
+    const n = typeof v === 'string' ? v.trim().split(/\s+/).length : 0;
+    if (n !== 12) fail('i18n', k + ' needs twelve month names in ' + name + ', has ' + n);
+  }
+}
+for (const [name, v] of both('js.bell.count')) {
+  if (typeof v !== 'string' || !v.includes('{n}')) {
+    fail('i18n', 'js.bell.count has no {n} placeholder in ' + name);
+  }
+}
+
 for (const n of notes) console.log('ok   ' + n);
 for (const f of failures) console.log('FAIL ' + f);
 console.log(failures.length ? '\n' + failures.length + ' failure(s)' : '\nall checks passed');

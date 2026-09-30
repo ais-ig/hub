@@ -55,16 +55,22 @@ check "change log nav not hidden"    'id="changelogNav" hidden'   no
 # English is the default and must not pick up the Arabic direction.
 check "English page is left to right" '<html lang="en" dir="ltr"'  yes
 check "language button not hidden"   'id="langbtn"[^>]* hidden'    no
+check "English page marked ready"    '<html[^>]*data-lang-ready="en"' yes
 
-# Arabic: the root element is flipped, the hero title is the Arabic one, the
-# cover that hides the page while the Arabic is written has been lifted, and
-# the updates have been painted with the Arabic month names.
+# Arabic: the root element is flipped, the hero title is the Arabic one, and
+# applyLang itself lifted the cover that hides the page while the Arabic is
+# written. It marks the root data-lang-ready when it does; the class alone
+# proves nothing, because the fail-safe timer removes it within this run's
+# time budget anyway. The updates must be painted with no English month
+# left in a date, whichever months the entries fall in.
 DOM="$OUT/dom-ar.html"
 check "Arabic page is right to left" '<html lang="ar" dir="rtl"'   yes
 check "Arabic hero title"            'data-i18n="hero.title">بوابة أولياء الأمور</h1>' yes
-check "Arabic page is not left hidden" 'i18n-wait"'                no
+check "Arabic cover lifted by applyLang" '<html[^>]*data-lang-ready="ar"' yes
+check "Arabic page is not left hidden" '<html[^>]*i18n-wait'       no
 check "Arabic bell list rendered"    'class="bitem'                yes
-check "Arabic dates in the change log" 'class="dt">[0-9]* سبتمبر 2026<' yes
+check "Arabic dates rendered"        'class="dt">[0-9][0-9]* [^<]'  yes
+check "no English month in an Arabic date" 'class="dt">[0-9]* [A-Za-z]' no
 
 echo
 echo "-- mobile viewport check, English (tools/shot.mjs) --"

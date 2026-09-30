@@ -1250,7 +1250,10 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
       <!-- Names the other language. Hidden until the script has read the
            Arabic block, since without it there is nothing to switch to. -->
       <button class="langbtn" id="langbtn" type="button" lang="ar" hidden>العربية</button>
-      <!-- Hidden until the updates script has rendered at least one entry. -->
+      <!-- Hidden until the updates script has rendered at least one entry.
+           Its aria-label is keyed and is also written by refresh() in the
+           updates script, with the unread count. applyLang() sets the keyed
+           value first and runs refresh() after it, so the count wins. -->
       <button class="bellbtn" id="bellbtn" hidden type="button" aria-expanded="false" aria-controls="bell" aria-label="Updates" data-i18n-attr="aria-label:bar.updates">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
         <span class="count" id="bellCount" aria-hidden="true" hidden></span>
@@ -2339,13 +2342,13 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
   "menu.options": { "h": "7aeacdd5", "ar": "اختيار المواد" },
   "menu.assessment": { "h": "ef136f10", "ar": "التقييم" },
   "menu.support": { "h": "f32d5a3b", "ar": "الدعم" },
-  "menu.beyond": { "h": "02114819", "ar": "أبعد من الكتب" },
+  "menu.beyond": { "h": "02114819", "ar": "خارج الصف" },
   "menu.policies": { "h": "8d611849", "ar": "السياسات" },
   "menu.documents": { "h": "5eb6fe96", "ar": "جميع المستندات" },
   "menu.changelog": { "h": "f588cbba", "ar": "سجل التحديثات" },
-  "menu.contacts": { "h": "6b3e8e7d", "ar": "مع من تتواصل" },
-  "menu.ask": { "h": "cf94bdf3", "ar": "اطرح سؤالاً" },
-  "menu.start": { "h": "54acc280", "ar": "ابدأ من هنا" },
+  "menu.contacts": { "h": "6b3e8e7d", "ar": "مع من تتواصلون" },
+  "menu.ask": { "h": "cf94bdf3", "ar": "اطرحوا سؤالاً" },
+  "menu.start": { "h": "54acc280", "ar": "ابدأوا من هنا" },
   "bell.title": { "h": "c76d1807", "ar": "التحديثات" },
   "bell.markAll": { "h": "1b83163b", "ar": "تحديد الكل كمقروء" },
   "bell.history": { "h": "95bf7ef9", "ar": "عرض السجل الكامل ←" },
@@ -2358,9 +2361,9 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
   "hero.cd.hours": { "h": "9e25a34e", "ar": "ساعة" },
   "hero.cd.min": { "h": "7eb0cee8", "ar": "دقيقة" },
   "hero.cd.sec": { "h": "1da305d6", "ar": "ثانية" },
-  "hero.cta.council": { "h": "fda6b975", "ar": "التقديم لمجلس الطلاب" },
+  "hero.cta.council": { "h": "fda6b975", "ar": "الترشح لمجلس الطلاب" },
   "hero.cta.timetables": { "h": "04cb0762", "ar": "الجداول الدراسية" },
-  "hero.cta.ask": { "h": "cf94bdf3", "ar": "اطرح سؤالاً" },
+  "hero.cta.ask": { "h": "cf94bdf3", "ar": "اطرحوا سؤالاً" },
   "banner.days": { "h": "89f31e63", "ar": "📅 من الأحد إلى الخميس" },
   "banner.hours": { "h": "25613764", "ar": "⏰ من 6:30 صباحاً إلى 1:05 ظهراً" },
   "banner.place": { "h": "b4e48a2f", "ar": "📍 مقر البنين · القسم البريطاني" },
@@ -2379,7 +2382,7 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
   "js.cd.under": { "h": "24dbd963", "ar": "اللقاء جارٍ الآن" },
   "js.cd.underNote": { "h": "433a8abb", "ar": "تفضلوا بالدخول." },
   "js.cd.thanks": { "h": "5a3630fb", "ar": "شكراً لحضوركم" },
-  "js.cd.thanksNote": { "h": "d1d46be1", "ar": "نأمل أن يكون اللقاء مفيداً لكم." }
+  "js.cd.thanksNote": { "h": "d1d46be1", "ar": "نأمل أن اللقاء كان مفيداً لكم." }
 }
 </script>
 
@@ -2413,6 +2416,24 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
     }
   };
   var enDict = readBlock('i18nEn') || {};
+  /* The English again, in case the i18nEn block is missing, malformed or
+     short of a key, so the English page can never print an empty badge,
+     month or label. tools/check.mjs fails if one differs from the block. */
+  var EN = {
+    'js.months': 'January February March April May June July August September October November December',
+    'js.monthsShort': 'Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec',
+    'js.new': 'New',
+    'js.unread': 'Unread:',
+    'js.arrow': '→',
+    'js.strip.new': 'New updates',
+    'js.strip.visit': 'Since your last visit',
+    'js.bell.label': 'Updates',
+    'js.bell.count': 'Updates, {n} unread',
+    'js.cd.under': 'The evening is under way',
+    'js.cd.underNote': 'Please make your way in.',
+    'js.cd.thanks': 'Thank you for joining us',
+    'js.cd.thanksNote': 'We hope the evening was useful.'
+  };
   var arDict = readBlock('i18nAr');
   var lang = 'en';
   var repaint = [];
@@ -2421,10 +2442,13 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
     var e = arDict && has(arDict, key) ? arDict[key] : null;
     return e && typeof e.ar === 'string' && e.ar ? e.ar : null;
   };
+  var enOf = function (key) {
+    if (has(enDict, key) && typeof enDict[key] === 'string' && enDict[key]) return enDict[key];
+    return has(EN, key) ? EN[key] : '';
+  };
   var t = function (key) {
     var s = lang === 'ar' ? arOf(key) : null;
-    if (s === null) s = has(enDict, key) && typeof enDict[key] === 'string' ? enDict[key] : '';
-    return s;
+    return s === null ? enOf(key) : s;
   };
 
   var keyed = Array.prototype.slice.call(document.querySelectorAll('[data-i18n]'));
@@ -2473,14 +2497,30 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
       langBtn.textContent = ar ? 'English' : 'العربية';
       langBtn.lang = ar ? 'en' : 'ar';
     }
-    try {
-      window.localStorage.setItem(LANG_KEY, lang);
-    } catch (err) {
-      /* Blocked storage: the choice lasts for this page view only. */
+    /* Remembered only when the language asked for is the one now showing,
+       so a saved Arabic choice survives a visit on which the Arabic block
+       could not be read. */
+    if (lang === next) {
+      try {
+        window.localStorage.setItem(LANG_KEY, lang);
+      } catch (err) {
+        /* Blocked storage: the choice lasts for this page view only. */
+      }
     }
 
-    repaint.forEach(function (fn) { fn(); });
+    /* The cover comes off before the hooks run, and a hook that throws is
+       contained, so neither can hold the page back or stop the button
+       below being wired. data-lang-ready tells tools/render-check.sh that
+       this function lifted the cover, not the timer in the head. */
     root.classList.remove('i18n-wait');
+    root.setAttribute('data-lang-ready', lang);
+    repaint.forEach(function (fn) {
+      try {
+        fn();
+      } catch (err) {
+        /* That part of the page keeps what it last showed. */
+      }
+    });
   }
 
   /* --- menu --- */
@@ -2754,7 +2794,9 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
           p.appendChild(document.createTextNode(' '));
           var a = document.createElement('a');
           a.href = row.e.href;
-          a.textContent = pick(row.e, 'label') + ' ' + t('js.arrow');
+          /* A label left in English keeps the English arrow. */
+          var label = pick(row.e, 'label');
+          a.textContent = label + ' ' + (lang === 'ar' && label === row.e.label ? enOf('js.arrow') : t('js.arrow'));
           p.appendChild(a);
         }
         wrap.appendChild(p);
