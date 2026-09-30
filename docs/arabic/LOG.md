@@ -103,3 +103,17 @@ each is listed here so you can overrule it.
   - **D23** Kept, because only the school can say: مقر البنين for "Boys campus", مدير المدرسة and نائب مدير المدرسة for Head and Deputy Head, المرشد الطلابي for the counsellor.
   - **D24** D17 reversed for the Parent Guide: it is an English document in effect, so it gets the بالإنجليزية tag. The Commitment Form stays untagged; it is bilingual.
 - **One fixer** is applying all three reports under those rulings, and **Task 7** (CLAUDE.md and README) is being written in parallel.
+- **Fix wave** (`e9ac676`, report `docs/arabic/reports/task-5-6-fix-report.md`). Applied: accuracy 23 of 23, fluency 37 of 41, visual 11 of 12, and all 14 "change" verdicts on the unsure items. 70 Arabic strings changed. Rejected with reasons: four fluency points and one visual point.
+  - The school's own bilingual commitment form says الجوال, so D18 is confirmed by the school's wording.
+  - The Semester 1 letter's card now uses the Arabic title printed on the letter itself: الخطة الدراسية وتوقعاتنا من الطالب.
+  - The fixer also added two checks I had parked: an "Arabic" entry with no Arabic letters now fails as untranslated, and the review file no longer glues words together where a tag was removed.
+  - Final captures of the Arabic page are in `docs/arabic/screens/` (not committed): 380px and 800px in page order, plus the menu, the bell and both option tabs.
+- **Task 7, documentation** (`9101230`, `187a592`). `CLAUDE.md`: the "English only" decision is replaced by the new locked decisions with the date and the reason, Cairo added to the brand rules, the Arabic writing rules, a new section "English and Arabic move together" with step-by-step recipes, and the traps found on the way. `README.md`: an "Arabic" section with the same recipes as commands. Every recipe was later run as written by the final reviewer and worked.
+- **Re-review of the fix wave** (`docs/arabic/reports/fix-wave-re-review.md`), by a fresh agent. Clean. All 70 changed strings read against the English: no number, date, name or condition lost. No leftovers of the replaced terms. All 62 captures opened: nothing clipped, misordered, disconnected or unmirrored. It agreed with all five rejections.
+- **Final whole-branch code review** (`docs/arabic/reports/final-code-review.md`). Verdict: **ready for your review.** No critical findings, one important, 14 minor.
+  - English reader: the page text is identical to `main` at 380, 360 and 320px apart from the button; the bell's read state carries over from `main` and back.
+  - Never blank: blocked storage, a broken Arabic block, a deleted English block, JavaScript off, and a script error all leave a visible page.
+  - No injection path: `?lang=` only meets an `ar|en` test, and notice text is written as text, not HTML.
+  - It attacked the checker with realistic edits (a changed sentence, number, label, link, a new paragraph, a notice without Arabic, English pasted as Arabic): all caught.
+  - The one important finding: update notices had no fingerprint, so **rewording a notice's English would pass with stale Arabic**. Being fixed now, with a few of the minors (keeping your place on the page when you switch language mid-page, two old-browser CSS points, a truncated-output bug in the tool).
+  - Accepted and not fixed: English readers now download Cairo's Arabic subset (about 31 KB, once) because the button says العربية. The page HTML grew from 25 KB to about 47 KB compressed.
