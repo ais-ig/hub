@@ -216,7 +216,7 @@ languages.
 |---|---|
 | `extract` | Prints every key with its English source, as JSON. |
 | `merge <file>...` | Writes key to Arabic maps from files into the `i18nAr` block and stamps `h`. |
-| `stamp [key...]` | Re-stamps `h` for the named keys after their Arabic has been brought up to date. |
+| `stamp <key...>` or `stamp --all` | Re-stamps `h` for the named keys after their Arabic has been brought up to date. A bare `stamp` does nothing, so stale Arabic cannot be waved through by accident. |
 | `pairs` | Writes `docs/arabic/translation-review.html` and `.md`. |
 | `check` | The rules below. Exit 1 on any failure. |
 
@@ -233,12 +233,16 @@ languages.
    and `<bdi>` in the Arabic are ignored. This is what stops a bumped `?v=` on a
    timetable link being missed in Arabic.
 6. A number in the English is absent from the Arabic, unless `"nums": false`.
+   Update notices are checked the same way, with `"numsAr": false` on the entry
+   as the escape.
 7. The Arabic contains an em dash, an Arabic-Indic digit or a tatweel.
 8. An `updatesData` entry lacks `titleAr` or `textAr`, or has `label` without
    `labelAr`.
 9. A visible text node in `<body>` with two or more Latin letters sits outside
    every keyed element, outside the allow list (class pills, emoji, script and
-   style). This catches new English added without a key.
+   style). This catches new English added without a key. The same applies to
+   `aria-label`, `alt`, `title` and `placeholder` attributes: one with two or
+   more Latin letters needs a `data-i18n-attr` pair on its element.
 
 `tools/shot.mjs` takes `--lang=ar` and then loads the page in Arabic, asserts
 `dir="rtl"`, asserts no horizontal overflow at 380px, and writes `w380-ar.png`.

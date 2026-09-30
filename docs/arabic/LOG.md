@@ -1,8 +1,9 @@
 # Arabic for the Parent Hub · work log
 
 Everything that happened while you were away, in order, newest at the bottom.
-Branch `arabic`, local only. Nothing is pushed and nothing is committed; the
-whole change is in the working tree so `git diff main` shows all of it.
+Branch `arabic`, local only. Nothing is pushed. The work is committed locally
+on that branch, one commit per step, so `git diff main..arabic` shows all of it
+and `git log main..arabic` shows the order. `main` is untouched.
 
 Files to open when you are back:
 
@@ -43,7 +44,7 @@ each is listed here so you can overrule it.
 | D8 | Update notices carry `titleAr`, `textAr`, `labelAr` beside the English in `updatesData`. | Whoever adds a notice sees both languages in one place. | n/a |
 | D9 | Document cards get a small "بالإنجليزية" tag in Arabic mode. | Every PDF is English. | Remove one CSS rule. |
 | D10 | No "now available in Arabic" update notice is added. | Notices must be dated the day they go live, and that day is yours to choose. A draft is in the section "Left for you" at the end. | n/a |
-| D11 | Work is on a local branch `arabic`, uncommitted. | You asked to review before anything else happens. | `git checkout main` leaves it behind; `git stash` or `git checkout -- .` discards it. |
+| D11 | Work is committed locally on branch `arabic`. Not pushed. | Each reviewer agent is handed the exact diff of the step it reviews, which needs commits. You only ruled out pushing. | `git checkout main` leaves it behind; `git branch -D arabic` discards it; the commits can be squashed into one before any push. |
 | D12 | The separate class timetable page in the pending 27 September spec is out of scope. | It does not exist in the repository yet. | n/a |
 
 ## Timeline
@@ -53,3 +54,12 @@ each is listed here so you can overrule it.
 - Read the page, the tools and the archived hub. Found 468 English text nodes, about 2,500 words, and ten update notices. JavaScript writes text in three places only: updates, change log, countdown.
 - Checked ais.sch.sa. Arabic pages load Cairo from Google Fonts, use Western digits, and write الصف التاسع, مدارس الرواد العالمية, أولياء الأمور.
 - Created branch `arabic`.
+- Wrote the design (`docs/superpowers/specs/2026-09-30-arabic-language-design.md`) and a seven-task plan (`docs/superpowers/plans/2026-09-30-arabic-language.md`). Committed both with this log as `6c2890d`.
+- The plan, in order: 1 the translation tool and its checks; 2 the switching mechanism, proven on the top bar and hero; 3 a key on every string; 4 translation by three agents in parallel, then a merge; 5 two Arabic reviewers (accuracy, fluency) and a fixer; 6 a visual critique of the right-to-left page from screenshots; 7 documentation. Each of tasks 1 to 3 is followed by an independent reviewer, and a whole-branch code review comes last.
+- How the agents are run: every builder, reviewer and critic is a fresh Opus agent that sees only its brief, the spec and the diff, never this conversation. No agent reviews its own work.
+- Task 1 dispatched.
+- **Task 1 built**: `tools/i18n.mjs` and 48 tests (`5a076e5`). Report: `docs/arabic/reports/task-1-report.md`.
+- **Task 1 reviewed** by an independent agent. Verdict: needs fixes. Two real holes, both about update notices: numbers in a notice were not compared between English and Arabic, and a broken `updatesData` block passed silently. Sent back to the builder with five further tightenings of mine:
+  - the "untranslated English" check now also covers screen-reader labels (`aria-label`, `alt`, `title`), which the design had missed;
+  - `stamp` must be told which keys, so stale Arabic cannot be cleared by one bare command.
+  The spec was amended to match.
