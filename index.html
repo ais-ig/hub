@@ -7,9 +7,33 @@
 <title>AIS Parent Hub</title>
 <meta name="description" content="Al-Rowad International Schools, British Section Parent Hub, academic year 2026/27. Class timetables, IGCSE results, subject options, assessment, support, policies, and every document and link in one place.">
 <link rel="icon" href="assets/emblem.png">
+<!-- Language, decided before anything paints. ?lang=ar or ?lang=en wins, then
+     the choice saved in this browser, then English. For Arabic the page is
+     flipped and hidden until the script at the foot of the body has written
+     the Arabic, so English never flashes. The timer lifts the cover after
+     1.5 seconds whatever happens, so a script error cannot leave a blank
+     page. -->
+<script>
+(function () {
+  var lang = 'en';
+  try {
+    var m = /[?&]lang=(ar|en)(?:&|$)/.exec(window.location.search);
+    if (m) lang = m[1];
+    else if (window.localStorage.getItem('aisHub.lang') === 'ar') lang = 'ar';
+  } catch (err) {
+    /* Blocked storage: English. */
+  }
+  if (lang !== 'ar') return;
+  var root = document.documentElement;
+  root.lang = 'ar';
+  root.dir = 'rtl';
+  root.classList.add('i18n-wait');
+  setTimeout(function () { root.classList.remove('i18n-wait'); }, 1500);
+})();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;700&family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
 
 <!-- ===================================================================
      DOCUMENT PATHS · single reference list
@@ -223,6 +247,35 @@ button {
    not red, because the brand allows no other accent. */
 
 .acts { display: flex; align-items: center; }
+
+/* The language button names the other language in its own script and face.
+   The button is a full tap target; the pill drawn inside it is smaller, so
+   it sits comfortably in the bar. Hidden until the script has the Arabic. */
+.langbtn {
+  position: relative;
+  background: none;
+  border: 0;
+  color: #fff;
+  height: var(--tap);
+  padding: 0 12px;
+  margin-inline-end: 2px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+}
+.langbtn[lang="ar"] { font-family: 'Cairo', 'Poppins', sans-serif; font-size: 13px; }
+.langbtn::before {
+  content: "";
+  position: absolute;
+  inset: 7px 0;
+  border: 1px solid rgba(255, 255, 255, .35);
+  border-radius: 999px;
+}
+.langbtn:hover { color: var(--gold); }
+.langbtn:hover::before { border-color: var(--gold); }
+.langbtn[hidden] { display: none; }
 .bellbtn {
   position: relative;
   background: none;
@@ -1102,6 +1155,86 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
   html { scroll-behavior: auto; }
   * { transition: none !important; }
 }
+
+/* --- Arabic ---
+   Everything the page needs in Arabic sits below this line and nothing
+   above it is rewritten, so the English layout cannot change. Cairo is the
+   Arabic face, in the same four weights. The rules under html[dir="rtl"]
+   mirror each physical left or right in the stylesheet above; flex, grid
+   and the logical properties mirror by themselves. Tracking is removed
+   everywhere, because letter-spacing breaks the joining of Arabic letters.
+   A rule added above with a left or a right in it needs its mirror here. */
+
+html.i18n-wait body { visibility: hidden; }
+html[lang="ar"] body { font-family: 'Cairo', 'Poppins', sans-serif; }
+
+html[dir="rtl"] * { letter-spacing: 0 !important; }
+
+html[dir="rtl"] .bellbtn .count { right: auto; left: 2px; }
+html[dir="rtl"] .bell .bhd { padding: 0 11px 0 8px; }
+html[dir="rtl"] .bitem {
+  padding: 10px 11px 10px 8px;
+  border-left: 0;
+  border-right: 3px solid transparent;
+}
+html[dir="rtl"] .bitem.unread { border-right-color: var(--gold); }
+html[dir="rtl"] .bell .bfoot { padding: 12px 11px 4px 8px; }
+
+html[dir="rtl"] .strip b { margin-right: 0; margin-left: 6px; }
+
+html[dir="rtl"] .jm { padding-left: 0; padding-right: 28px; }
+html[dir="rtl"] .jm::before { left: auto; right: 10px; }
+html[dir="rtl"] .jm .dot { left: auto; right: -22px; }
+html[dir="rtl"] .jm .bx {
+  border-left: 1px solid var(--border);
+  border-right: 4px solid var(--gold);
+}
+html[dir="rtl"] .jm .it.later .bx { border-left-color: var(--border); border-right-color: var(--navy-deep); }
+
+html[dir="rtl"] .uitem {
+  border-left: 0;
+  border-right: 3px solid var(--gold);
+  padding: 2px 11px 2px 0;
+}
+html[dir="rtl"] .ustrip .uitem.read { border-right-color: var(--border); }
+
+html[dir="rtl"] .lvl .l {
+  border-left: 0;
+  border-right: 3px solid var(--gold);
+  padding-left: 0;
+  padding-right: 12px;
+}
+
+html[dir="rtl"] ul.ticks li { padding-left: 0; padding-right: 22px; }
+html[dir="rtl"] ul.ticks li::before { left: auto; right: 4px; }
+
+/* The arrows on a document row are decoration, not text, so they are turned
+   to point left here. A row still waiting for its file holds words there. */
+html[dir="rtl"] .doc .ic,
+html[dir="rtl"] .doc:not(.soon) .ar { transform: scaleX(-1); }
+
+/* The PDFs are in English. In Arabic, a link carrying data-pdf-en says so
+   in a small tag: after the call to action on a Start here card, after the
+   title on a document row, and after the text of any other link. The word
+   is written once, here. */
+html[lang="ar"] { --pdf-en: "بالإنجليزية"; }
+html[lang="ar"] .mcard[data-pdf-en] .cta::after,
+html[lang="ar"] .doc[data-pdf-en] .tt::after,
+html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
+  content: var(--pdf-en);
+  display: inline-block;
+  margin-inline-start: 8px;
+  padding: 0 8px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1.7;
+  vertical-align: middle;
+  white-space: nowrap;
+}
 </style>
 </head>
 <body id="top">
@@ -1111,44 +1244,47 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
   <div class="row">
     <a class="brand" href="#top">
       <img src="assets/emblem.png" alt="" width="36" height="36">
-      <span>AIS Parent Hub<small>British Section</small></span>
+      <span data-i18n="bar.brand">AIS Parent Hub<small>British Section</small></span>
     </a>
     <div class="acts">
+      <!-- Names the other language. Hidden until the script has read the
+           Arabic block, since without it there is nothing to switch to. -->
+      <button class="langbtn" id="langbtn" type="button" lang="ar" hidden>العربية</button>
       <!-- Hidden until the updates script has rendered at least one entry. -->
-      <button class="bellbtn" id="bellbtn" hidden type="button" aria-expanded="false" aria-controls="bell" aria-label="Updates">
+      <button class="bellbtn" id="bellbtn" hidden type="button" aria-expanded="false" aria-controls="bell" aria-label="Updates" data-i18n-attr="aria-label:bar.updates">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
         <span class="count" id="bellCount" aria-hidden="true" hidden></span>
       </button>
-      <button class="menubtn" id="menubtn" type="button" aria-expanded="false" aria-controls="menu" aria-label="Menu">
+      <button class="menubtn" id="menubtn" type="button" aria-expanded="false" aria-controls="menu" aria-label="Menu" data-i18n-attr="aria-label:bar.menu">
         <span class="bars" aria-hidden="true">☰</span><span class="x" aria-hidden="true">✕</span>
       </button>
     </div>
   </div>
-  <nav class="menu" id="menu" aria-label="Sections">
+  <nav class="menu" id="menu" aria-label="Sections" data-i18n-attr="aria-label:menu.label">
     <div class="in">
-      <a href="#schedule">Class timetables</a>
-      <a href="#results">IGCSE results</a>
-      <a href="#s2">Your IG pathway</a>
-      <a href="#s3">Subject options</a>
-      <a href="#s4">Assessment</a>
-      <a href="#s5">Support</a>
-      <a href="#s6">Beyond the books</a>
-      <a href="#s7">Policies</a>
-      <a href="#s8">All documents</a>
-      <a href="#changelog" id="changelogNav" hidden>What’s changed</a>
-      <a href="#contacts">Who to speak to</a>
-      <a class="go" href="#ask">Ask a question</a>
-      <a class="go2" href="#materials">Start here</a>
+      <a href="#schedule" data-i18n="menu.schedule">Class timetables</a>
+      <a href="#results" data-i18n="menu.results">IGCSE results</a>
+      <a href="#s2" data-i18n="menu.pathway">Your IG pathway</a>
+      <a href="#s3" data-i18n="menu.options">Subject options</a>
+      <a href="#s4" data-i18n="menu.assessment">Assessment</a>
+      <a href="#s5" data-i18n="menu.support">Support</a>
+      <a href="#s6" data-i18n="menu.beyond">Beyond the books</a>
+      <a href="#s7" data-i18n="menu.policies">Policies</a>
+      <a href="#s8" data-i18n="menu.documents">All documents</a>
+      <a href="#changelog" id="changelogNav" hidden data-i18n="menu.changelog">What’s changed</a>
+      <a href="#contacts" data-i18n="menu.contacts">Who to speak to</a>
+      <a class="go" href="#ask" data-i18n="menu.ask">Ask a question</a>
+      <a class="go2" href="#materials" data-i18n="menu.start">Start here</a>
     </div>
   </nav>
-  <div class="bell" id="bell" role="region" aria-label="Updates">
+  <div class="bell" id="bell" role="region" aria-label="Updates" data-i18n-attr="aria-label:bar.updates">
     <div class="in">
       <div class="bhd">
-        <p class="lb">Updates</p>
-        <button class="markall" id="bellMarkAll" type="button" hidden>Mark all as read</button>
+        <p class="lb" data-i18n="bell.title">Updates</p>
+        <button class="markall" id="bellMarkAll" type="button" hidden data-i18n="bell.markAll">Mark all as read</button>
       </div>
       <div id="bellList"></div>
-      <a class="bfoot" href="#changelog">See full history →</a>
+      <a class="bfoot" href="#changelog" data-i18n="bell.history">See full history →</a>
     </div>
   </div>
 </div>
@@ -1160,18 +1296,18 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
 <header class="hero" id="hero">
   <img class="wm" src="assets/emblem.png" alt="" aria-hidden="true">
   <div class="in">
-    <img class="em" src="assets/emblem.png" alt="Al-Rowad International Schools" width="104" height="104">
-    <h1>Parent Hub</h1>
-    <p class="sub">British Section IGCSE, Academic Year 2026/27</p>
-    <p class="desc">Your one place for the class timetables, last year’s IGCSE results, the subject options, how marks are built, the support in place, and every document and link, kept up to date through the year.</p>
+    <img class="em" src="assets/emblem.png" alt="Al-Rowad International Schools" data-i18n-attr="alt:hero.emblem" width="104" height="104">
+    <h1 data-i18n="hero.title">Parent Hub</h1>
+    <p class="sub" data-i18n="hero.sub">British Section IGCSE, Academic Year 2026/27</p>
+    <p class="desc" data-i18n="hero.desc">Your one place for the class timetables, last year’s IGCSE results, the subject options, how marks are built, the support in place, and every document and link, kept up to date through the year.</p>
 
     <div class="cd" id="cd" hidden>
-      <span class="cdlbl" id="cdLabel">Doors open in</span>
+      <span class="cdlbl" id="cdLabel" data-i18n="hero.cd.label">Doors open in</span>
       <div class="cdcells" id="cdCells" aria-hidden="true">
-        <span class="cell"><span class="num" id="cdD">0</span><span class="lbl">Days</span></span>
-        <span class="cell"><span class="num" id="cdH">00</span><span class="lbl">Hours</span></span>
-        <span class="cell"><span class="num" id="cdM">00</span><span class="lbl">Min</span></span>
-        <span class="cell"><span class="num" id="cdS">00</span><span class="lbl">Sec</span></span>
+        <span class="cell"><span class="num" id="cdD">0</span><span class="lbl" data-i18n="hero.cd.days">Days</span></span>
+        <span class="cell"><span class="num" id="cdH">00</span><span class="lbl" data-i18n="hero.cd.hours">Hours</span></span>
+        <span class="cell"><span class="num" id="cdM">00</span><span class="lbl" data-i18n="hero.cd.min">Min</span></span>
+        <span class="cell"><span class="num" id="cdS">00</span><span class="lbl" data-i18n="hero.cd.sec">Sec</span></span>
       </div>
       <p class="cdmsg" id="cdMsg" role="status" hidden></p>
     </div>
@@ -1181,18 +1317,18 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
          The Student Council button closes with applications, Wednesday
          16 September 2026 at 11:59 PM. -->
     <div class="ctas">
-      <a class="btn gold" href="https://forms.gle/WNYxBGu17yEsBJTp9" target="_blank" rel="noopener" data-until="2026-09-16T23:59:00+03:00" hidden>Apply for Student Council</a>
-      <a class="btn gold" href="#schedule">Class timetables</a>
-      <a class="btn line" href="https://docs.google.com/forms/d/e/1FAIpQLSe5bU8ruZOil2hbbXmYcrQNrXJu1IDsOPLj1kQ1FtgIGw69Ow/viewform" target="_blank" rel="noopener">Ask a question</a>
+      <a class="btn gold" href="https://forms.gle/WNYxBGu17yEsBJTp9" target="_blank" rel="noopener" data-until="2026-09-16T23:59:00+03:00" hidden data-i18n="hero.cta.council">Apply for Student Council</a>
+      <a class="btn gold" href="#schedule" data-i18n="hero.cta.timetables">Class timetables</a>
+      <a class="btn line" href="https://docs.google.com/forms/d/e/1FAIpQLSe5bU8ruZOil2hbbXmYcrQNrXJu1IDsOPLj1kQ1FtgIGw69Ow/viewform" target="_blank" rel="noopener" data-i18n="hero.cta.ask">Ask a question</a>
     </div>
   </div>
 </header>
 
 <!-- ============ SCHOOL WEEK BANNER ============ -->
 <div class="banner">
-  <span>📅 Sunday to Thursday</span>
-  <span>⏰ 6:30 AM – 1:05 PM</span>
-  <span>📍 Boys campus · British Section</span>
+  <span data-i18n="banner.days">📅 Sunday to Thursday</span>
+  <span data-i18n="banner.hours">⏰ 6:30 AM – 1:05 PM</span>
+  <span data-i18n="banner.place">📍 Boys campus · British Section</span>
 </div>
 
 <!-- ============ WHAT'S CHANGED ============ -->
@@ -1300,8 +1436,8 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
 <div class="ustrip" id="updatesStrip" hidden>
   <div class="in">
     <div class="uhd">
-      <p class="hd" id="updatesHead">New updates</p>
-      <button class="umark" id="updatesMark" type="button">Mark as read</button>
+      <p class="hd" id="updatesHead"></p>
+      <button class="umark" id="updatesMark" type="button" data-i18n="strip.mark">Mark as read</button>
     </div>
     <div class="ulist" id="updatesList"></div>
   </div>
@@ -2164,9 +2300,188 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
   <a class="top" href="#top">Back to top</a>
 </footer>
 
+<!-- ============ LANGUAGES ============ -->
+<!-- English stays in the markup, on elements carrying data-i18n or
+     data-i18n-attr. i18nEn holds the English that only the script writes,
+     keyed js.*; its title and description repeat the two in the head.
+     i18nAr holds the Arabic for every key, each stamped with a hash of its
+     English so that tools/i18n.mjs can tell when the English has moved on.
+     After changing any English: update its Arabic here, then run
+     node tools/i18n.mjs stamp <key>. -->
+<script type="application/json" id="i18nEn">
+{
+  "js.title": "AIS Parent Hub",
+  "js.desc": "Al-Rowad International Schools, British Section Parent Hub, academic year 2026/27. Class timetables, IGCSE results, subject options, assessment, support, policies, and every document and link in one place.",
+  "js.months": "January February March April May June July August September October November December",
+  "js.monthsShort": "Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec",
+  "js.new": "New",
+  "js.unread": "Unread:",
+  "js.arrow": "→",
+  "js.strip.new": "New updates",
+  "js.strip.visit": "Since your last visit",
+  "js.bell.label": "Updates",
+  "js.bell.count": "Updates, {n} unread",
+  "js.cd.under": "The evening is under way",
+  "js.cd.underNote": "Please make your way in.",
+  "js.cd.thanks": "Thank you for joining us",
+  "js.cd.thanksNote": "We hope the evening was useful."
+}
+</script>
+<script type="application/json" id="i18nAr">
+{
+  "bar.brand": { "h": "7d89a410", "ar": "بوابة أولياء الأمور<small>القسم البريطاني</small>" },
+  "bar.updates": { "h": "c76d1807", "ar": "التحديثات" },
+  "bar.menu": { "h": "57f5f5ef", "ar": "القائمة" },
+  "menu.label": { "h": "7ff5a6da", "ar": "أقسام الصفحة" },
+  "menu.schedule": { "h": "04cb0762", "ar": "الجداول الدراسية" },
+  "menu.results": { "h": "6b5c20fc", "ar": "نتائج IGCSE" },
+  "menu.pathway": { "h": "14408ecc", "ar": "مسار IG لابنكم" },
+  "menu.options": { "h": "7aeacdd5", "ar": "اختيار المواد" },
+  "menu.assessment": { "h": "ef136f10", "ar": "التقييم" },
+  "menu.support": { "h": "f32d5a3b", "ar": "الدعم" },
+  "menu.beyond": { "h": "02114819", "ar": "أبعد من الكتب" },
+  "menu.policies": { "h": "8d611849", "ar": "السياسات" },
+  "menu.documents": { "h": "5eb6fe96", "ar": "جميع المستندات" },
+  "menu.changelog": { "h": "f588cbba", "ar": "سجل التحديثات" },
+  "menu.contacts": { "h": "6b3e8e7d", "ar": "مع من تتواصل" },
+  "menu.ask": { "h": "cf94bdf3", "ar": "اطرح سؤالاً" },
+  "menu.start": { "h": "54acc280", "ar": "ابدأ من هنا" },
+  "bell.title": { "h": "c76d1807", "ar": "التحديثات" },
+  "bell.markAll": { "h": "1b83163b", "ar": "تحديد الكل كمقروء" },
+  "bell.history": { "h": "95bf7ef9", "ar": "عرض السجل الكامل ←" },
+  "hero.emblem": { "h": "af4ff6a2", "ar": "مدارس الرواد العالمية" },
+  "hero.title": { "h": "1852f8d8", "ar": "بوابة أولياء الأمور" },
+  "hero.sub": { "h": "a903230d", "ar": "برنامج IGCSE في القسم البريطاني، العام الدراسي <span dir=\"ltr\">2026/27</span>" },
+  "hero.desc": { "h": "c189b572", "ar": "مكان واحد يجمع لكم الجداول الدراسية، ونتائج IGCSE للعام الماضي، واختيار المواد، وطريقة احتساب الدرجات، والدعم المتاح، وجميع المستندات والروابط، ونحدّثه على مدار العام." },
+  "hero.cd.label": { "h": "37b75cac", "ar": "تفتح الأبواب بعد" },
+  "hero.cd.days": { "h": "f6bb0f46", "ar": "يوم" },
+  "hero.cd.hours": { "h": "9e25a34e", "ar": "ساعة" },
+  "hero.cd.min": { "h": "7eb0cee8", "ar": "دقيقة" },
+  "hero.cd.sec": { "h": "1da305d6", "ar": "ثانية" },
+  "hero.cta.council": { "h": "fda6b975", "ar": "التقديم لمجلس الطلاب" },
+  "hero.cta.timetables": { "h": "04cb0762", "ar": "الجداول الدراسية" },
+  "hero.cta.ask": { "h": "cf94bdf3", "ar": "اطرح سؤالاً" },
+  "banner.days": { "h": "89f31e63", "ar": "📅 من الأحد إلى الخميس" },
+  "banner.hours": { "h": "25613764", "ar": "⏰ من 6:30 صباحاً إلى 1:05 ظهراً" },
+  "banner.place": { "h": "b4e48a2f", "ar": "📍 مقر البنين · القسم البريطاني" },
+  "strip.mark": { "h": "c1ee860b", "ar": "تحديد كمقروء" },
+  "js.title": { "h": "b45b4f70", "ar": "بوابة أولياء الأمور · مدارس الرواد العالمية" },
+  "js.desc": { "h": "104c768d", "ar": "بوابة أولياء الأمور للقسم البريطاني في مدارس الرواد العالمية، العام الدراسي 2026/27. الجداول الدراسية، ونتائج IGCSE، واختيار المواد، والتقييم، والدعم، والسياسات، وجميع المستندات والروابط في مكان واحد." },
+  "js.months": { "h": "e1b2ea39", "ar": "يناير فبراير مارس أبريل مايو يونيو يوليو أغسطس سبتمبر أكتوبر نوفمبر ديسمبر" },
+  "js.monthsShort": { "h": "c9041033", "ar": "يناير فبراير مارس أبريل مايو يونيو يوليو أغسطس سبتمبر أكتوبر نوفمبر ديسمبر" },
+  "js.new": { "h": "6403f2b7", "ar": "جديد" },
+  "js.unread": { "h": "a09f9237", "ar": "غير مقروء:" },
+  "js.arrow": { "h": "213edd25", "ar": "←" },
+  "js.strip.new": { "h": "a33261dc", "ar": "تحديثات جديدة" },
+  "js.strip.visit": { "h": "d5f3362f", "ar": "منذ زيارتكم الأخيرة" },
+  "js.bell.label": { "h": "c76d1807", "ar": "التحديثات" },
+  "js.bell.count": { "h": "c466bab4", "ar": "التحديثات، {n} غير مقروءة" },
+  "js.cd.under": { "h": "24dbd963", "ar": "اللقاء جارٍ الآن" },
+  "js.cd.underNote": { "h": "433a8abb", "ar": "تفضلوا بالدخول." },
+  "js.cd.thanks": { "h": "5a3630fb", "ar": "شكراً لحضوركم" },
+  "js.cd.thanksNote": { "h": "d1d46be1", "ar": "نأمل أن يكون اللقاء مفيداً لكم." }
+}
+</script>
+
 <script>
 (function () {
   'use strict';
+
+  /* --- language ---
+     English is the markup. The Arabic for each data-i18n key replaces that
+     element's innerHTML, and the English is kept the first time so that
+     switching back restores it exactly. t() serves the strings only this
+     script writes. A key with no Arabic stays in English, and with no
+     readable Arabic block the page stays English and the button stays
+     hidden. applyLang() is called once at the foot of this script, and
+     again on every tap of the button; each call reruns the repaint hooks,
+     which the updates and the countdown add below. */
+  var LANG_KEY = 'aisHub.lang';
+  var root = document.documentElement;
+  var langBtn = document.getElementById('langbtn');
+  var metaDesc = document.querySelector('meta[name="description"]');
+  var has = function (o, k) { return Object.prototype.hasOwnProperty.call(o, k); };
+
+  var readBlock = function (id) {
+    var el = document.getElementById(id);
+    if (!el) return null;
+    try {
+      var v = JSON.parse(el.textContent);
+      return v && typeof v === 'object' ? v : null;
+    } catch (err) {
+      return null;
+    }
+  };
+  var enDict = readBlock('i18nEn') || {};
+  var arDict = readBlock('i18nAr');
+  var lang = 'en';
+  var repaint = [];
+
+  var arOf = function (key) {
+    var e = arDict && has(arDict, key) ? arDict[key] : null;
+    return e && typeof e.ar === 'string' && e.ar ? e.ar : null;
+  };
+  var t = function (key) {
+    var s = lang === 'ar' ? arOf(key) : null;
+    if (s === null) s = has(enDict, key) && typeof enDict[key] === 'string' ? enDict[key] : '';
+    return s;
+  };
+
+  var keyed = Array.prototype.slice.call(document.querySelectorAll('[data-i18n]'));
+  var keyedEn = [];
+  var keyedAttrs = [];
+  Array.prototype.forEach.call(document.querySelectorAll('[data-i18n-attr]'), function (el) {
+    el.getAttribute('data-i18n-attr').split(';').forEach(function (pair) {
+      var at = pair.indexOf(':');
+      if (at === -1) return;
+      var attr = pair.slice(0, at).trim();
+      var key = pair.slice(at + 1).trim();
+      if (attr && key) keyedAttrs.push({ el: el, attr: attr, key: key, en: null });
+    });
+  });
+
+  function applyLang(next) {
+    lang = next === 'ar' && arDict ? 'ar' : 'en';
+    var ar = lang === 'ar';
+
+    keyed.forEach(function (el, i) {
+      var s = ar ? arOf(el.getAttribute('data-i18n')) : null;
+      if (s !== null) {
+        if (keyedEn[i] === undefined) keyedEn[i] = el.innerHTML;
+        el.innerHTML = s;
+      } else if (keyedEn[i] !== undefined) {
+        el.innerHTML = keyedEn[i];
+      }
+    });
+    keyedAttrs.forEach(function (k) {
+      var s = ar ? arOf(k.key) : null;
+      if (s !== null) {
+        if (k.en === null) k.en = k.el.getAttribute(k.attr);
+        k.el.setAttribute(k.attr, s);
+      } else if (k.en !== null) {
+        k.el.setAttribute(k.attr, k.en);
+      }
+    });
+
+    root.lang = lang;
+    root.dir = ar ? 'rtl' : 'ltr';
+    var title = t('js.title');
+    if (title) document.title = title;
+    var desc = t('js.desc');
+    if (desc && metaDesc) metaDesc.setAttribute('content', desc);
+    if (langBtn) {
+      langBtn.textContent = ar ? 'English' : 'العربية';
+      langBtn.lang = ar ? 'en' : 'ar';
+    }
+    try {
+      window.localStorage.setItem(LANG_KEY, lang);
+    } catch (err) {
+      /* Blocked storage: the choice lasts for this page view only. */
+    }
+
+    repaint.forEach(function (fn) { fn(); });
+    root.classList.remove('i18n-wait');
+  }
 
   /* --- menu --- */
   var bar = document.getElementById('topbar');
@@ -2255,8 +2570,8 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
 
   /* --- updates: one array, rendered into the bell, the strip and the change log ---
      Dates are parsed from their parts rather than handed to the Date string
-     parser, so no timezone shifts a day. Month names are a literal array so
-     formatting does not depend on the visitor's locale. If the JSON is
+     parser, so no timezone shifts a day. Month names come from the language
+     blocks, so formatting does not depend on the visitor's locale. If the JSON is
      missing, malformed or empty, every container (the bell, the strip, the
      change log section and its nav link) stays hidden, the same way the
      countdown stays hidden until it has validated its dates.
@@ -2272,9 +2587,13 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
      Reading an entry restyles it in place rather than removing it. The
      strip sits above every section, so taking an item out of it while the
      page scrolls to that item's section would shift the target and land
-     the scroll in the wrong place. Only the strip's own button hides it. */
-  var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'];
+     the scroll in the wrong place. Only the strip's own button hides it.
+
+     The work is in two parts. The setup runs once: it reads the entries and
+     the read list and attaches the listeners. paint() then clears and
+     refills the bell, the strip and the change log in the current language,
+     and runs again on every language switch. An entry's titleAr, textAr
+     and labelAr are used in Arabic, each falling back to its English. */
   var NEW_DAYS = 14;
   var BELL_MAX = 8;
   var STRIP_MAX = 3;
@@ -2382,6 +2701,26 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
         }
       };
 
+      /* An entry's field in the current language. In Arabic the entry's
+         own Arabic is used when it has one, and the English when it has
+         not; put() then marks the element as English, left to right, so
+         its punctuation does not land on the wrong side. */
+      var pick = function (e, field) {
+        var ar = lang === 'ar' ? e[field + 'Ar'] : null;
+        return typeof ar === 'string' && ar ? ar : e[field];
+      };
+      var put = function (el, e, field) {
+        var s = pick(e, field);
+        el.textContent = s;
+        if (lang === 'ar' && s === e[field]) {
+          el.lang = 'en';
+          el.dir = 'ltr';
+        }
+      };
+      var month = function (key, d) {
+        return t(key).split(' ')[d.getMonth()] || '';
+      };
+
       var render = function (row) {
         var wrap = document.createElement('div');
         wrap.className = 'uitem';
@@ -2392,30 +2731,30 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
 
         var ti = document.createElement('span');
         ti.className = 'ti';
-        ti.textContent = row.e.title;
+        put(ti, row.e, 'title');
         top.appendChild(ti);
 
         var dt = document.createElement('span');
         dt.className = 'dt';
-        dt.textContent = row.d.getDate() + ' ' + MONTHS[row.d.getMonth()] + ' ' + row.d.getFullYear();
+        dt.textContent = row.d.getDate() + ' ' + month('js.months', row.d) + ' ' + row.d.getFullYear();
         top.appendChild(dt);
 
         if (row.isNew) {
           var badge = document.createElement('span');
           badge.className = 'new';
-          badge.textContent = 'New';
+          badge.textContent = t('js.new');
           top.appendChild(badge);
         }
 
         wrap.appendChild(top);
 
         var p = document.createElement('p');
-        p.textContent = row.e.text;
+        put(p, row.e, 'text');
         if (row.e.href && row.e.label && HREF_OK.test(row.e.href)) {
           p.appendChild(document.createTextNode(' '));
           var a = document.createElement('a');
           a.href = row.e.href;
-          a.textContent = row.e.label + ' →';
+          a.textContent = pick(row.e, 'label') + ' ' + t('js.arrow');
           p.appendChild(a);
         }
         wrap.appendChild(p);
@@ -2442,20 +2781,22 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
         ti.className = 'ti';
         var flag = document.createElement('span');
         flag.className = 'vh';
-        flag.textContent = 'Unread: ';
+        flag.textContent = t('js.unread') + ' ';
         ti.appendChild(flag);
-        ti.appendChild(document.createTextNode(row.e.title));
+        var name = document.createElement('span');
+        put(name, row.e, 'title');
+        ti.appendChild(name);
         top.appendChild(ti);
 
         var dt = document.createElement('span');
         dt.className = 'dt';
-        dt.textContent = row.d.getDate() + ' ' + MONTHS[row.d.getMonth()].slice(0, 3);
+        dt.textContent = row.d.getDate() + ' ' + month('js.monthsShort', row.d);
         top.appendChild(dt);
         a.appendChild(top);
 
         var tx = document.createElement('span');
         tx.className = 'tx';
-        tx.textContent = row.e.text;
+        put(tx, row.e, 'text');
         a.appendChild(tx);
         return a;
       };
@@ -2478,7 +2819,7 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
         bellCount.textContent = n > 9 ? '9+' : String(n);
         bellCount.hidden = n === 0;
         bellMarkAll.hidden = n === 0;
-        bellBtn.setAttribute('aria-label', n ? 'Updates, ' + n + ' unread' : 'Updates');
+        bellBtn.setAttribute('aria-label', n ? t('js.bell.count').replace('{n}', n) : t('js.bell.label'));
       };
 
       var markRead = function (ids) {
@@ -2498,16 +2839,34 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
       };
 
       if (clean.length) {
+        /* The strip keeps the entries that were unread when the page
+           loaded, so a repaint shows the same ones, read or not. Once its
+           button has hidden it, it stays hidden for this page view. */
         var fresh = unreadRows();
 
-        clean.forEach(function (row) { uLog.appendChild(render(row)); });
+        var paint = function () {
+          uLog.textContent = '';
+          clean.forEach(function (row) { uLog.appendChild(render(row)); });
+
+          if (uStrip && fresh.length) {
+            uList.textContent = '';
+            fresh.slice(0, STRIP_MAX).forEach(function (row) { uList.appendChild(render(row)); });
+            if (uHead) uHead.textContent = t(visited ? 'js.strip.visit' : 'js.strip.new') + ' · ' + fresh.length;
+          }
+
+          if (hasBell) {
+            bellList.textContent = '';
+            clean.slice(0, BELL_MAX).forEach(function (row) { bellList.appendChild(renderBellItem(row)); });
+          }
+
+          refresh();
+        };
+
         uLog.addEventListener('click', onOpen);
         if (uLogSection) uLogSection.hidden = false;
         if (uNav) uNav.hidden = false;
 
         if (uStrip && fresh.length) {
-          fresh.slice(0, STRIP_MAX).forEach(function (row) { uList.appendChild(render(row)); });
-          if (uHead) uHead.textContent = (visited ? 'Since your last visit' : 'New updates') + ' · ' + fresh.length;
           uList.addEventListener('click', onOpen);
           if (uMark) {
             uMark.addEventListener('click', function () {
@@ -2519,7 +2878,6 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
         }
 
         if (hasBell) {
-          clean.slice(0, BELL_MAX).forEach(function (row) { bellList.appendChild(renderBellItem(row)); });
           bell.addEventListener('click', function (e) {
             if (!e.target.closest('a')) return;
             onOpen(e);
@@ -2534,7 +2892,7 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
           bellBtn.hidden = false;
         }
 
-        refresh();
+        repaint.push(paint);
         save();
       }
     }
@@ -2586,12 +2944,12 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
         var now = Date.now();
 
         if (now >= ends.getTime()) {
-          say('Thank you for joining us', 'We hope the evening was useful.');
+          say(t('js.cd.thanks'), t('js.cd.thanksNote'));
           if (timer) clearInterval(timer);
           return;
         }
         if (now >= doors.getTime()) {
-          say('The evening is under way', 'Please make your way in.');
+          say(t('js.cd.under'), t('js.cd.underNote'));
           return;
         }
 
@@ -2603,7 +2961,7 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
       };
 
       cd.hidden = false;
-      tick();
+      repaint.push(tick);
       timer = setInterval(tick, 1000);
     }
   }
@@ -2615,6 +2973,32 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
     var until = new Date(el.getAttribute('data-until') || '');
     if (!isNaN(until.getTime()) && Date.now() < until.getTime()) el.hidden = false;
   });
+
+  /* --- language: first paint and the button ---
+     The script in the head has already chosen the language and, for Arabic,
+     set it on the root element, so it is read from there. ?lang= is then
+     taken out of the address bar, so a parent who shares the page shares
+     the plain link. This call is also the first paint of the updates. */
+  try {
+    if (/[?&]lang=/.test(window.location.search) && window.history.replaceState) {
+      var kept = window.location.search.slice(1).split('&').filter(function (q) {
+        return q && q.indexOf('lang=') !== 0;
+      });
+      window.history.replaceState(null, '', window.location.pathname +
+        (kept.length ? '?' + kept.join('&') : '') + window.location.hash);
+    }
+  } catch (err) {
+    /* Some browsers refuse this on a local file. The page still works. */
+  }
+
+  applyLang(root.lang === 'ar' ? 'ar' : 'en');
+
+  if (langBtn && arDict) {
+    langBtn.addEventListener('click', function () {
+      applyLang(lang === 'ar' ? 'en' : 'ar');
+    });
+    langBtn.hidden = false;
+  }
 })();
 </script>
 

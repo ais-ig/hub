@@ -17,9 +17,14 @@ fi
 "$CHROME" --headless=new --disable-gpu --dump-dom --virtual-time-budget=3000 \
   "file://$PWD/index.html" 2>/dev/null > "$OUT/dom.html"
 
+# The same page opened in Arabic, as a parent following a ?lang=ar link.
+"$CHROME" --headless=new --disable-gpu --dump-dom --virtual-time-budget=3000 \
+  "file://$PWD/index.html?lang=ar" 2>/dev/null > "$OUT/dom-ar.html"
+
 fail=0
+DOM="$OUT/dom.html"
 check() { # check <description> <grep-pattern> <expected: yes|no>
-  if grep -q "$2" "$OUT/dom.html"; then found=yes; else found=no; fi
+  if grep -q "$2" "$DOM"; then found=yes; else found=no; fi
   if [ "$found" = "$3" ]; then
     echo "ok   $1"
   else
@@ -47,9 +52,29 @@ check "change log rendered"          'id="changelogList"'         yes
 check "change log section not hidden" 'id="changelog" hidden'     no
 check "change log nav not hidden"    'id="changelogNav" hidden'   no
 
+# English is the default and must not pick up the Arabic direction.
+check "English page is left to right" '<html lang="en" dir="ltr"'  yes
+check "language button not hidden"   'id="langbtn"[^>]* hidden'    no
+
+# Arabic: the root element is flipped, the hero title is the Arabic one, the
+# cover that hides the page while the Arabic is written has been lifted, and
+# the updates have been painted with the Arabic month names.
+DOM="$OUT/dom-ar.html"
+check "Arabic page is right to left" '<html lang="ar" dir="rtl"'   yes
+check "Arabic hero title"            'data-i18n="hero.title">بوابة أولياء الأمور</h1>' yes
+check "Arabic page is not left hidden" 'i18n-wait"'                no
+check "Arabic bell list rendered"    'class="bitem'                yes
+check "Arabic dates in the change log" 'class="dt">[0-9]* سبتمبر 2026<' yes
+
 echo
-echo "-- mobile viewport check (tools/shot.mjs) --"
+echo "-- mobile viewport check, English (tools/shot.mjs) --"
 node "$(dirname "$0")/shot.mjs"
+shot_status=$?
+[ $shot_status -ne 0 ] && fail=1
+
+echo
+echo "-- mobile viewport check, Arabic (tools/shot.mjs --lang=ar) --"
+node "$(dirname "$0")/shot.mjs" --lang=ar
 shot_status=$?
 [ $shot_status -ne 0 ] && fail=1
 

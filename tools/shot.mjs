@@ -8,7 +8,13 @@
    metrics override, so the page reflows at 380px instead of being laid
    out wide and cropped. See CLAUDE.md.
 
-   Run: node tools/shot.mjs */
+   With --lang=ar the page is loaded in Arabic: the script also asserts
+   that it came up right to left, and writes w380-ar.png and
+   w380-ar-bell.png instead. In either language it taps the language
+   button twice and asserts the page is back exactly where it started.
+
+   Run: node tools/shot.mjs
+        node tools/shot.mjs --lang=ar */
 
 import { spawn } from 'node:child_process';
 import { mkdtempSync, mkdirSync, rmSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
@@ -29,10 +35,33 @@ const SETTLE_MS = 500; /* let webfonts and inline JS finish after load */
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const indexPath = join(root, 'index.html');
-const pageUrl = 'file://' + indexPath;
+const ARABIC = process.argv.includes('--lang=ar');
+const pageUrl = 'file://' + indexPath + (ARABIC ? '?lang=ar' : '');
 const outDir = join(process.env.TMPDIR || '/tmp', 'hub-check');
-const outPng = join(outDir, 'w380.png');
-const outBellPng = join(outDir, 'w380-bell.png');
+const outPng = join(outDir, ARABIC ? 'w380-ar.png' : 'w380.png');
+const outBellPng = join(outDir, ARABIC ? 'w380-ar-bell.png' : 'w380-bell.png');
+
+/* What the page is showing, as one string: the language, the direction, the
+   title, the description and the whole body. The countdown's four numbers
+   are blanked, since a running countdown moves on between two readings. */
+const STATE_SCRIPT = `
+(() => {
+  const de = document.documentElement;
+  const meta = document.querySelector('meta[name="description"]');
+  const body = document.body.innerHTML.replace(/( id="cd[DHMS]">)[0-9]+/g, '$1');
+  return JSON.stringify([de.lang, de.dir, document.title, meta && meta.content, body]);
+})()
+`;
+
+/* Taps the language button the way a parent would. */
+const TOGGLE_SCRIPT = `
+(() => {
+  const b = document.getElementById('langbtn');
+  if (!b || b.hidden) return 'hidden';
+  b.click();
+  return document.documentElement.lang;
+})()
+`;
 
 /* Opens the updates bell the way a tap would, and reports whether its panel
    is showing. "hidden" means the page has no update entries, so no bell. */
@@ -56,21 +85,24 @@ const OVERFLOW_SCRIPT = `
   const offenders = [];
   for (const el of document.querySelectorAll('*')) {
     const rect = el.getBoundingClientRect();
-    if (rect.right > clientWidth + 0.5) {
+    /* Right to left, content overflows past the left edge instead. */
+    if (rect.right > clientWidth + 0.5 || (de.dir === 'rtl' && rect.left < -0.5)) {
       offenders.push({
         tag: el.tagName.toLowerCase(),
         id: el.id || null,
         cls: el.getAttribute('class') || null,
+        left: Math.round(rect.left),
         right: Math.round(rect.right),
         width: Math.round(rect.width)
       });
     }
   }
-  offenders.sort((a, b) => b.right - a.right);
+  offenders.sort((a, b) => de.dir === 'rtl' ? a.left - b.left : b.right - a.right);
   return JSON.stringify({
     scrollWidth: de.scrollWidth,
     clientWidth,
     innerWidth: window.innerWidth,
+    dir: de.dir,
     offenders: offenders.slice(0, 10)
   });
 })()
@@ -320,7 +352,8 @@ async function main() {
       for (const o of m.offenders) {
         const idPart = o.id ? ' id="' + o.id + '"' : '';
         const clsPart = o.cls ? ' class="' + o.cls + '"' : '';
-        console.log('FAIL   <' + o.tag + idPart + clsPart + '> right edge ' + o.right + 'px, width ' + o.width + 'px');
+        const edge = m.dir === 'rtl' ? 'left edge ' + o.left : 'right edge ' + o.right;
+        console.log('FAIL   <' + o.tag + idPart + clsPart + '> ' + edge + 'px, width ' + o.width + 'px');
       }
       return false;
     }
@@ -345,6 +378,15 @@ async function main() {
   console.log('ok   screenshot written: ' + outPng);
   let ok = report('page', measured);
 
+  if (ARABIC) {
+    if (measured.dir === 'rtl') {
+      console.log('ok   the page opened right to left from ?lang=ar');
+    } else {
+      console.log('FAIL ?lang=ar did not set dir="rtl" on the page; dir is "' + measured.dir + '"');
+      ok = false;
+    }
+  }
+
   /* Open the updates bell and measure again: its panel drops from the fixed
      bar and has to fit the phone width too. */
   const opened = await s('Runtime.evaluate', { expression: OPEN_BELL_SCRIPT, returnByValue: true });
@@ -366,6 +408,43 @@ async function main() {
     });
     writeFileSync(outBellPng, Buffer.from(bellShot.data, 'base64'));
     console.log('ok   screenshot written: ' + outBellPng);
+  }
+
+  /* Tap the language button twice. The first tap must change the language
+     and the second must put back every character of the page, or the two
+     languages are not swapping cleanly. */
+  const evalValue = async (expression, what) => {
+    const r = await s('Runtime.evaluate', { expression, returnByValue: true });
+    if (r.exceptionDetails) throw new Error(what + ' threw: ' + r.exceptionDetails.text);
+    return r.result.value;
+  };
+  const before = await evalValue(STATE_SCRIPT, 'reading the page state');
+  const startLang = JSON.parse(before)[0];
+  const firstTap = await evalValue(TOGGLE_SCRIPT, 'tapping the language button');
+  if (firstTap === 'hidden') {
+    console.log('FAIL the language button is missing or hidden');
+    ok = false;
+  } else if (firstTap === startLang) {
+    console.log('FAIL the language button did not change the language from "' + startLang + '"');
+    ok = false;
+  } else {
+    const between = await evalValue(STATE_SCRIPT, 'reading the page state');
+    await evalValue(TOGGLE_SCRIPT, 'tapping the language button');
+    const after = await evalValue(STATE_SCRIPT, 'reading the page state');
+    if (between === before) {
+      console.log('FAIL the language button changed the language but not the page');
+      ok = false;
+    } else if (after !== before) {
+      const a = JSON.parse(before)[4];
+      const b = JSON.parse(after)[4];
+      let i = 0;
+      while (i < a.length && a[i] === b[i]) i++;
+      console.log('FAIL switching language twice did not restore the page; first difference: "' +
+        a.slice(Math.max(0, i - 40), i + 60) + '" became "' + b.slice(Math.max(0, i - 40), i + 60) + '"');
+      ok = false;
+    } else {
+      console.log('ok   language switched ' + startLang + ' to ' + firstTap + ' and back, page restored exactly');
+    }
   }
 
   return ok ? 0 : 1;

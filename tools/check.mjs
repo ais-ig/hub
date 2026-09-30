@@ -5,6 +5,7 @@ import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { checkAll } from './i18n.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const html = readFileSync(join(root, 'index.html'), 'utf8');
@@ -125,6 +126,31 @@ for (const f of ttFiles) {
   }
 }
 notes.push(ttFiles.length + ' class timetables match their filenames');
+
+/* 8. English and Arabic are in step: the nine rules of tools/i18n.mjs. Its
+   failure strings already name their rule. */
+const i18nFailures = checkAll(html);
+for (const f of i18nFailures) failures.push(f);
+if (!i18nFailures.length) notes.push('English and Arabic are in step');
+
+/* 9. Every string the script asks for with t('js. ...') has its English in
+   the i18nEn block, or the page would print nothing in its place. */
+const enBlock = html.match(
+  /<script type="application\/json" id="i18nEn">([\s\S]*?)<\/script>/
+);
+let enKeys = {};
+try {
+  enKeys = JSON.parse(enBlock ? enBlock[1] : '{}');
+} catch (e) {
+  /* checkAll has already reported a block that does not parse. */
+}
+const asked = new Set([...html.matchAll(/'(js\.[A-Za-z0-9.]+)'/g)].map((m) => m[1]));
+for (const k of asked) {
+  if (typeof enKeys[k] !== 'string' || !enKeys[k]) {
+    fail('i18n', 'the script uses ' + k + ' but i18nEn has no English for it');
+  }
+}
+notes.push(asked.size + ' script strings have their English');
 
 for (const n of notes) console.log('ok   ' + n);
 for (const f of failures) console.log('FAIL ' + f);
