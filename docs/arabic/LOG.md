@@ -13,6 +13,7 @@ Files to open when you are back:
 | `docs/arabic/translation-review.html` | Every English string with its Arabic, side by side. Open in a browser. |
 | `docs/arabic/translation-review.md` | The same pairs as plain text, for searching. |
 | `docs/arabic/reports/` | The full report of every sub-agent: builders, reviewers, critics. |
+| `docs/arabic/screens/` | 63 captures of the finished Arabic page at 380px and 800px, in page order, plus the menu, the bell, both option tabs and the top at 320px. Not committed. |
 | `docs/superpowers/specs/2026-09-30-arabic-language-design.md` | The design. |
 | `docs/superpowers/plans/2026-09-30-arabic-language.md` | The build plan the agents followed. |
 | `index.html?lang=ar` | The page in Arabic. |
@@ -94,7 +95,7 @@ each is listed here so you can overrule it.
   - English at 380px against `main`: 28 of 31 slices pixel-identical; the other 3 differ only in the rectangle of the new button.
   - The countdown works in Arabic in all three states.
   - On a real local server, `?lang=ar` opens in Arabic, cleans itself out of the address bar, survives a reload, and `?lang=en` returns to English.
-- **My rulings for the fixer**, where the reviewers disagreed with each other or with my glossary (`.superpowers/arabic/fix-rulings.md`, local only):
+- **My rulings for the fixer**, where the reviewers disagreed with each other or with my glossary (`docs/arabic/reports/controller-rulings.md`):
   - **D18** Mobile phone is الجوال, not الهاتف المحمول. Both a translator and the fluency critic said Saudi parents and school circulars say الجوال. If the school's own bilingual commitment form uses another word, the fixer follows the school.
   - **D19** "Mark as read" is تمييز كمقروء, the wording phones and WhatsApp use.
   - **D20** Academic "intervention" is الخطة العلاجية; "early dismissal" is الاستئذان; the summer schedule is الدوام الصيفي.
@@ -117,3 +118,89 @@ each is listed here so you can overrule it.
   - It attacked the checker with realistic edits (a changed sentence, number, label, link, a new paragraph, a notice without Arabic, English pasted as Arabic): all caught.
   - The one important finding: update notices had no fingerprint, so **rewording a notice's English would pass with stale Arabic**. Being fixed now, with a few of the minors (keeping your place on the page when you switch language mid-page, two old-browser CSS points, a truncated-output bug in the tool).
   - Accepted and not fixed: English readers now download Cairo's Arabic subset (about 31 KB, once) because the button says العربية. The page HTML grew from 25 KB to about 47 KB compressed.
+- **Final fix wave** (`d9f8e47`). The one important finding is closed: each update notice now carries a fingerprint of its English, so rewording a notice fails the check until its Arabic is brought up to date. Also: switching language mid-page keeps your place (measured: up to 914px of jump before, 0px now); two old-browser CSS points; the tool's truncated output; the documents updated to match. 105 tests.
+- **Re-review of the final fix wave** (`docs/arabic/reports/final-fix-re-review.md`). All seven points addressed, nothing critical or important introduced. It reworded a notice in a scratch copy and confirmed the check caught it and the suggested command cleared it. Two minor edge cases found and **not fixed**, listed below.
+- **My own last run**, after everything: `node tools/check.mjs` all checks passed; `node --test tools/i18n.test.mjs` 105 pass, 0 fail; `bash tools/render-check.sh` all render checks passed in both languages. 367 strings, none missing Arabic.
+
+## Where it stands
+
+Done, reviewed, and sitting on the local branch `arabic`, 22 commits ahead of `main`. Not pushed. `main` is untouched, and the live site is unchanged.
+
+| | |
+|---|---|
+| Strings translated | 367, none missing |
+| Page text for an English reader | Identical to `main`, apart from the language button |
+| Tests | 105 passing |
+| Agents used | 22 runs, all Opus: 4 builders, 3 translators, 2 fixers' worth of fix rounds, and 11 reviews by agents that did not write what they reviewed |
+| Not verified | Any real phone. Everything was rendered in desktop Chrome under phone emulation. |
+
+## How to look at it
+
+1. `git checkout arabic` (you are already on it).
+2. Open `index.html` in a browser, tap **العربية** in the top bar. Or open `index.html?lang=ar`.
+3. Open `docs/arabic/translation-review.html` for every English string beside its Arabic.
+4. Flip through `docs/arabic/screens/` for the phone view without opening anything.
+5. Worth doing on your own iPhone before it goes live: the contact cards and the mentor list (mixed Arabic and Latin text), and switching language halfway down the page.
+
+To change a string yourself: edit its `"ar"` value in the `i18nAr` block near the end of `index.html`, then run `node tools/check.mjs`. The steps for every other kind of change are in `CLAUDE.md` under "English and Arabic move together".
+
+## Left for you
+
+### 1. Questions only the school can answer
+
+The full table, with the keys each affects and the Arabic now on the page, is section 5 of `docs/arabic/reports/task-5-6-fix-report.md`. The ones that matter most:
+
+1. **Homeroom, homeroom mentor, Mentorship Programme.** The page says حصة الريادة, رائد الفصل, برنامج رائد الفصل. My guess at the start, and both reviewers found it natural, but it is the school's own term that should be used.
+2. **Head of School and Deputy Head.** The page says مدير المدرسة and نائب مدير المدرسة. A parent could read the first as the head of all of Al-Rowad. One reviewer wanted وكيل المدرسة for the deputy.
+3. **Boys campus.** The page says مقر البنين. Families may say مبنى البنين or قسم البنين. Whatever the signage says.
+4. **The counsellor**: المرشد الطلابي, or the Ministry's newer الموجّه الطلابي?
+5. **"UK High School"** in the contacts heading: a building, a department, or the secondary stage? The page says الثانوية البريطانية.
+6. **"Grade 9 Prayer Assembly Competition"**: the Arabic, مسابقة ملتقى الصلاة للصف التاسع, is a guess.
+7. **Early dismissal**: the page says الاستئذان. What does MyAIS call it?
+8. Names written from memory, not verified: مخيم رماح, المدرسة الباكستانية العالمية, كرة المراوغة for dodgeball.
+
+### 2. Things the reviewers noticed in the English
+
+Sixteen, in section 4 of the same report. None was changed. The ones a parent might trip on, in either language:
+
+1. **Subject options, "Choose Arabic or Accounting"**, directly above a table that lists Arabic as compulsory. The optional one is IGCSE Arabic and the compulsory one is the Ministry subject; the page does not say so.
+2. **The online-lessons notice**: "Periods 1 to 3 today run as normal too." In school as normal, or online at the normal times? And "today" was 27 September. The notice leaves its New window on 1 October, so this only matters if it is reissued.
+3. **Behaviour, Level C**: "leaving school grounds", presumably without permission.
+4. The pass threshold is "sixty per cent" in one section and "60%" in another. The Arabic uses digits in both.
+5. The academic year is "2026/27" in most places and "2026-2027" in four.
+
+### 3. Known and not fixed
+
+- **Two edge cases in "keep your place"**, both minor: if you switch language and then tap an in-page link within a fraction of a second, exactly as a late font arrives, the page may stay put once; and switching an options tab in that same instant can nudge the page. Details in `docs/arabic/reports/final-fix-re-review.md`.
+- **The four mentor lists are skipped as a whole** by the "untranslated English" check, because they are names and emails. New wording added inside them would not be caught. Documented in `CLAUDE.md`.
+- **Latin names inside Arabic are not marked `lang="en"`** for screen readers. It touches about forty English elements and needs a real screen reader to judge.
+- **English readers download Cairo's Arabic subset**, about 31 KB once, because the button says العربية.
+- **Three small layout nits exist in English too** and were fixed only in Arabic, since the English CSS was not to be touched. Listed in the fix report.
+- **The class timetable page** in your pending 27 September spec is not covered. When it is built it should use the same mechanism.
+
+### 4. An announcement, when you decide to go live
+
+I did not add an update notice, because a notice must be dated the day it goes live. A draft, to paste into `updatesData` with that day's date:
+
+```json
+{
+  "id": "2026-10-xx-arabic",
+  "date": "2026-10-xx",
+  "title": "The hub is now in Arabic too",
+  "text": "Tap العربية at the top of the page to read everything in Arabic. Tap English to switch back. The documents themselves are still in English.",
+  "titleAr": "البوابة متاحة الآن باللغة العربية",
+  "textAr": "اضغطوا على «العربية» أعلى الصفحة لقراءة جميع المحتويات بالعربية، واضغطوا على English للعودة. أما المستندات نفسها فما زالت بالإنجليزية."
+}
+```
+
+After pasting, set the date and the id, then run `node tools/i18n.mjs stamp updates.<the id>` and `node tools/check.mjs`. This draft has not been through the reviewers. For WhatsApp, the Arabic link is `https://ais-ig.github.io/hub/?lang=ar`.
+
+### 5. What happens next is yours to choose
+
+- **Keep it as it is for now**: nothing to do. The branch stays local.
+- **Go live**: the 22 commits can be squashed into one before anything is pushed. Pushing needs the `Mohamad-Dabbagh` account.
+- **Discard**: `git checkout main && git branch -D arabic`.
+
+## Every decision I made for you, in one list
+
+D1 to D12 are in the table at the top. D13 to D24 are in the timeline. The builders and the fixer also made smaller rulings of their own, each recorded in its report under "Rulings". The ones I would look at first, because they are judgement and not mechanics: **D3** (respectful plural), **D13** (Cairo for Latin text in Arabic mode), **D16** (subject names as "Arabic (English)" everywhere), **D18** (الجوال), **D21** (percentages in digits), **D23** (the titles left for the school).
