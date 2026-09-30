@@ -312,3 +312,81 @@ GREEN. `node --test tools/i18n.test.mjs`:
 `node tools/i18n.mjs check` still runs against the real `index.html` without
 crashing. The page is being edited by another task at the same time, so its
 failure count is not recorded here.
+
+## Number words
+
+Requirement from the translation step: natural Arabic writes "Grade 9" as
+الصف التاسع, and rule 6 then reported the digit as missing, leaving only the
+blanket `"nums": false`.
+
+### What changed
+
+Rule 6, for dictionary entries and update notices alike: when a digit run
+from the English is short in the Arabic as digits, an Arabic number word for
+that value makes up the difference, one word occurrence for each missing
+occurrence. `"nums": false` and `"numsAr": false` work as before.
+
+- **Values 1 to 12 only.** 1 to 10 in ordinal and cardinal, masculine and
+  feminine forms; 11 and 12 as compounds (الحادي عشر, الحادية عشرة, أحد عشر,
+  الثاني عشر, الثانية عشرة, اثنا عشر, اثني عشر, and the feminine اثنتا, اثنتي,
+  إحدى). Anything above 12 must stay digits.
+- **Compounds first.** A number word followed by عشر or عشرة is read as one
+  unit: 11 or 12 where listed, and otherwise (ثلاثة عشر, 13) it counts for
+  nothing, rather than for a 3 and a 10.
+- **Whole words.** The Arabic is reduced to visible text and split into runs
+  of Arabic letters, so ست inside مستوى does not count.
+- **Folding before matching.** Diacritics and tatweel are dropped; أ, إ and آ
+  become ا; ى becomes ي; ة becomes ه. So الأولى and الاولى both match.
+- **Attached prefixes.** A leading و or ف, a leading ب, ك or ل, and the
+  article ال (also لل) are taken off when the bare word is a number word, so
+  والعاشر, للتاسع and بالأولى match. The word is tried whole first, so واحد
+  is not read as و plus something.
+- **Digits with a leading zero** (the 05 of 09:05) are never satisfied by a
+  word.
+
+### Rulings
+
+1. A word satisfies only the value it names; the wrong ordinal fails.
+2. أول and ثاني without the article are accepted, as asked. They are also
+   ordinary words, so a stray one can excuse a missing 1 or 2. The rule only
+   ever relaxes toward a real number word, and the translation review reads
+   every string, so this was taken as the lesser risk.
+3. A unit word followed by a tens word joined by و (الثاني والعشرون, 22)
+   still counts as its unit. English on this page writes such numbers as
+   digits, and the digits must then appear in the Arabic anyway.
+4. One existing test changed: `"nums": false exempts an entry` used
+   "Grade 9" and الصف التاسع as its failing case, which now rightly passes.
+   It uses "40 periods" and أربعون حصة instead.
+
+### Evidence
+
+RED. `node --test tools/i18n.test.mjs` with the 14 new tests, before the
+code changed:
+
+```
+not ok 75 - number words: an ordinal satisfies its digit
+not ok 76 - number words: the compound for 12 counts as 12 and not also as 2
+not ok 77 - number words: 11 in its three forms
+not ok 78 - number words: 12 in its forms
+not ok 79 - number words: another number in the same string is still protected
+not ok 81 - number words: feminine, indefinite and cardinal forms
+not ok 82 - number words: diacritics and attached prefixes do not hide a word
+not ok 83 - number words: each word satisfies one missing number, as a multiset
+not ok 85 - number words: a word inside a longer word does not count
+not ok 87 - number words: an update notice is satisfied by a word, and still protected
+# tests 88
+# pass 78
+# fail 10
+```
+
+The four that passed before the change (wrong ordinal, nothing above 12,
+leading zero, exemptions) assert failures the old rule already gave; they
+guard the new code against accepting too much.
+
+GREEN. `node --test tools/i18n.test.mjs`:
+
+```
+# tests 88
+# pass 88
+# fail 0
+```

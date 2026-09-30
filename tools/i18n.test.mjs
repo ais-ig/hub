@@ -309,11 +309,11 @@ test('rule 6: digits inside attributes and entities are not numbers', () => {
 });
 
 test('rule 6: "nums": false exempts an entry', () => {
-  const en = 'Grade 9';
+  const en = '40 periods';
   const body = '<p data-i18n="s3.g">' + en + '</p>';
-  const strict = { 's3.g': entry(en, 'الصف التاسع') };
+  const strict = { 's3.g': entry(en, 'أربعون حصة') };
   assert.equal(ruleHits(checkAll(page({ body, ar: strict })), 6, 's3.g').length, 1);
-  const exempt = { 's3.g': entry(en, 'الصف التاسع', { nums: false }) };
+  const exempt = { 's3.g': entry(en, 'أربعون حصة', { nums: false }) };
   assert.deepEqual(checkAll(page({ body, ar: exempt })), []);
 });
 
@@ -769,4 +769,138 @@ test('the generated review files hold no em dash', () => {
   const { html, md } = buildPairs(good());
   assert.ok(!html.includes(EM_DASH));
   assert.ok(!md.includes(EM_DASH));
+});
+
+/* ---------- number words ---------- */
+
+/* The rule 6 failures for one key whose English and Arabic are given. */
+const numberFailures = (en, arabic) => {
+  const html = page({ body: '<p data-i18n="n.k">' + en + '</p>', ar: { 'n.k': entry(en, arabic) } });
+  const failures = checkAll(html);
+  assert.deepEqual(failures.filter((f) => !f.startsWith('i18n 6 ')), []);
+  return failures;
+};
+
+test('number words: an ordinal satisfies its digit', () => {
+  assert.deepEqual(numberFailures('Grade 9', 'الصف التاسع'), []);
+  assert.deepEqual(numberFailures('Quarter 1', 'الربع الأول'), []);
+});
+
+test('number words: the compound for 12 counts as 12 and not also as 2', () => {
+  assert.deepEqual(numberFailures('Grade 12', 'الصف الثاني عشر'), []);
+  const both = numberFailures('Grade 12 and Grade 2', 'الصف الثاني عشر');
+  assert.equal(both.length, 1);
+  assert.match(both[0], /n\.k has Arabic that lacks 2;/);
+  assert.deepEqual(numberFailures('Grade 12 and Grade 2', 'الصف الثاني عشر والصف الثاني'), []);
+});
+
+test('number words: 11 in its three forms', () => {
+  for (const arabic of ['الصف الحادي عشر', 'الحصة الحادية عشرة', 'أحد عشر صفاً']) {
+    assert.deepEqual(numberFailures('Number 11', arabic), [], arabic);
+  }
+  assert.equal(numberFailures('Number 1 of 10', 'الحادي عشر').length, 1);
+});
+
+test('number words: 12 in its forms', () => {
+  for (const arabic of ['الثانية عشرة', 'اثنا عشر صفاً', 'اثني عشر صفاً']) {
+    assert.deepEqual(numberFailures('Number 12', arabic), [], arabic);
+  }
+});
+
+test('number words: another number in the same string is still protected', () => {
+  const failures = numberFailures('Grade 9 classwork is 6 marks', 'أعمال الصف للصف التاسع بالدرجات');
+  assert.equal(failures.length, 1);
+  assert.match(failures[0], /lacks 6;/);
+  assert.deepEqual(numberFailures('Grade 9 classwork is 6 marks', 'أعمال الصف للصف التاسع 6 درجات'), []);
+  assert.deepEqual(numberFailures('Grade 9 classwork is 6 marks', 'أعمال الصف للصف التاسع ست درجات'), []);
+});
+
+test('number words: the wrong ordinal fails', () => {
+  const failures = numberFailures('Grade 9', 'الصف العاشر');
+  assert.equal(failures.length, 1);
+  assert.match(failures[0], /lacks 9;/);
+});
+
+test('number words: feminine, indefinite and cardinal forms', () => {
+  const cases = [
+    ['Period 1', 'الحصة الأولى'],
+    ['Period 1', 'الحصة الاولى'],
+    ['Period 1', 'أول حصة'],
+    ['1 form', 'نموذج واحد'],
+    ['1 page', 'صفحة واحدة'],
+    ['Period 2', 'الحصة الثانية'],
+    ['2 forms', 'نموذجان اثنان'],
+    ['2 forms', 'في اثنين منها'],
+    ['Period 3', 'الحصة الثالثة'],
+    ['3 periods', 'ثلاث حصص'],
+    ['3 days', 'ثلاثة أيام'],
+    ['Grade 4', 'الرابع'],
+    ['4 periods', 'أربع حصص'],
+    ['5 days', 'خمسة أيام'],
+    ['Period 5', 'الحصة الخامسة'],
+    ['6 marks', 'ست درجات'],
+    ['Period 7', 'السابعة'],
+    ['8 periods', 'ثماني حصص'],
+    ['Period 8', 'الحصة الثامنة'],
+    ['Grade 10', 'الصف العاشر'],
+    ['10 marks', 'عشر درجات'],
+    ['10 days', 'عشرة أيام'],
+  ];
+  for (const [en, arabic] of cases) assert.deepEqual(numberFailures(en, arabic), [], arabic);
+});
+
+test('number words: diacritics and attached prefixes do not hide a word', () => {
+  assert.deepEqual(numberFailures('Grade 9', 'الصفّ التاسعِ'), []);
+  assert.deepEqual(numberFailures('Grades 9 and 10', 'الصفان التاسع والعاشر'), []);
+  assert.deepEqual(numberFailures('For Grade 9', 'للتاسع'), []);
+  assert.deepEqual(numberFailures('In Period 1', 'بالأولى'), []);
+});
+
+test('number words: each word satisfies one missing number, as a multiset', () => {
+  assert.equal(numberFailures('Grade 9 and Grade 9', 'الصف التاسع').length, 1);
+  assert.deepEqual(numberFailures('Grade 9 and Grade 9', 'الصف التاسع ثم التاسع'), []);
+  assert.deepEqual(numberFailures('Grade 9 and Grade 9', 'الصف التاسع ثم 9'), []);
+});
+
+test('number words: no word is accepted above 12, and teens are not split', () => {
+  assert.equal(numberFailures('13 students', 'ثلاثة عشر طالباً').length, 1);
+  const split = numberFailures('3 of 10', 'ثلاثة عشر');
+  assert.equal(split.length, 1);
+  assert.match(split[0], /lacks 3, 10;/);
+  assert.equal(numberFailures('40 periods', 'أربعون حصة').length, 1);
+  assert.equal(numberFailures('20 marks', 'عشرون درجة').length, 1);
+});
+
+test('number words: a word inside a longer word does not count', () => {
+  assert.equal(numberFailures('6 marks', 'ستة').length, 0);
+  assert.equal(numberFailures('6 marks', 'مستوى الدرجات').length, 1);
+  assert.equal(numberFailures('10 marks', 'عشرات الدرجات').length, 1);
+});
+
+test('number words: a digit with a leading zero must stay digits', () => {
+  assert.equal(numberFailures('At 09:05', 'في التاسعة والخامسة').length, 1);
+});
+
+test('number words: an update notice is satisfied by a word, and still protected', () => {
+  const base = {
+    ...GOOD_UPDATES[0],
+    text: 'Boys in Grade 9 can apply until 16 September.',
+  };
+  const ok = [{ ...base, textAr: 'يمكن لطلاب الصف التاسع التقديم حتى 16 سبتمبر.' }];
+  assert.deepEqual(checkAll(good({ updates: ok })), []);
+  const bad = [{ ...base, textAr: 'يمكن لطلاب الصف التاسع التقديم حتى سبتمبر.' }];
+  const failures = checkAll(good({ updates: bad }));
+  assert.equal(failures.length, 1);
+  assert.match(failures[0], /^i18n 6 numbers: updates\.2026-09-27-timetables\.text .* lacks 16;/);
+});
+
+test('number words: nums false and numsAr false still exempt', () => {
+  const en = '40 periods';
+  const html = page({
+    body: '<p data-i18n="n.k">' + en + '</p>',
+    ar: { 'n.k': entry(en, 'أربعون حصة', { nums: false }) },
+  });
+  assert.deepEqual(checkAll(html), []);
+  const updates = [{ ...GOOD_UPDATES[0], textAr: 'تم تعديل الجدول الدراسي.', numsAr: false }];
+  assert.deepEqual(checkAll(good({ updates })), []);
 });

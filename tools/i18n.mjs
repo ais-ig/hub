@@ -348,12 +348,93 @@ function numberCounts(fragment) {
   return counts;
 }
 
-/* The numbers of the English that the Arabic lacks, counting repeats. */
+/* Arabic number words, so that natural Arabic such as "the ninth grade"
+   satisfies a digit in the English. Spelled in the folded form foldArabic
+   produces: no diacritics, plain alef, final ya and ha. Nothing above 12 is
+   listed, so larger numbers must stay digits. */
+const UNIT_WORDS = {
+  1: 'اول اولي واحد واحده',
+  2: 'ثاني ثانيه اثنان اثنين اثنتان اثنتين',
+  3: 'ثالث ثالثه ثلاثه ثلاث',
+  4: 'رابع رابعه اربعه اربع',
+  5: 'خامس خامسه خمسه خمس',
+  6: 'سادس سادسه سته ست',
+  7: 'سابع سابعه سبعه سبع',
+  8: 'ثامن ثامنه ثمانيه ثماني ثمان',
+  9: 'تاسع تاسعه تسعه تسع',
+  10: 'عاشر عاشره عشره عشر',
+};
+/* The first word of a compound whose second word is "ten". */
+const COMPOUND_WORDS = {
+  11: 'حادي حاديه احد احدي',
+  12: 'ثاني ثانيه اثنا اثني اثنتا اثنتي',
+};
+const wordTable = (lists) => {
+  const table = new Map();
+  for (const [value, words] of Object.entries(lists)) {
+    for (const w of words.split(' ')) table.set(w, Number(value));
+  }
+  return table;
+};
+const UNITS = wordTable(UNIT_WORDS);
+const COMPOUNDS = wordTable(COMPOUND_WORDS);
+const TEN = new Set(['عشر', 'عشره']);
+
+/* Drops the diacritics and the tatweel, and folds the letter variants a
+   writer may or may not type: hamza on alef, alef maqsura, ta marbuta. */
+const foldArabic = (text) =>
+  text
+    .replace(/[\u064B-\u0652\u0670\u0640]/g, '')
+    .replace(/[\u0622\u0623\u0625]/g, '\u0627')
+    .replace(/\u0649/g, '\u064A')
+    .replace(/\u0629/g, '\u0647');
+
+/* The word itself, then the word with an attached conjunction, preposition
+   and definite article taken off, since Arabic writes those joined on. */
+const PREFIX = /^[وف]?(?:لل|[بكل]?ال|[بكل])?/;
+function lookUp(table, word) {
+  if (table.has(word)) return table.get(word);
+  const bare = word.replace(PREFIX, '');
+  if (table.has(bare)) return table.get(bare);
+  const noConjunction = word.replace(/^[وف]/, '');
+  return table.has(noConjunction) ? table.get(noConjunction) : 0;
+}
+
+/* How often each value from 1 to 12 is written as a whole word. A compound
+   is read before its parts, so "the twelfth" is 12 and not 2, and a teen
+   above 12 counts for nothing rather than for a unit and a ten. */
+function numberWordCounts(fragment) {
+  const counts = new Map();
+  const words = foldArabic(visibleText(fragment)).match(/[\u0621-\u064A]+/g) || [];
+  for (let i = 0; i < words.length; i++) {
+    let value = 0;
+    if (i + 1 < words.length && TEN.has(words[i + 1])) {
+      value = lookUp(COMPOUNDS, words[i]);
+      if (value || lookUp(UNITS, words[i])) i++; /* the "ten" is used up */
+    } else {
+      value = lookUp(UNITS, words[i]);
+    }
+    if (value) counts.set(value, (counts.get(value) || 0) + 1);
+  }
+  return counts;
+}
+
+/* The numbers of the English that the Arabic lacks, counting repeats. A
+   number from 1 to 12 that is short as digits may be made up by its Arabic
+   word, one word for each missing occurrence. */
 function lostNumbers(en, ar) {
   const arNums = numberCounts(ar);
+  let words = null;
   const lost = [];
   for (const [num, count] of numberCounts(en)) {
-    if ((arNums.get(num) || 0) < count) lost.push(num);
+    const short = count - (arNums.get(num) || 0);
+    if (short <= 0) continue;
+    const value = Number(num);
+    if (String(value) === num && value >= 1 && value <= 12) {
+      words = words || numberWordCounts(ar);
+      if ((words.get(value) || 0) >= short) continue;
+    }
+    lost.push(num);
   }
   return lost;
 }
