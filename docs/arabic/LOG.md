@@ -124,14 +124,14 @@ each is listed here so you can overrule it.
 
 ## Where it stands
 
-Done, reviewed, and sitting on the local branch `arabic`, 22 commits ahead of `main`. Not pushed. `main` is untouched, and the live site is unchanged.
+Done, reviewed, and sitting on the local branch `arabic`, 23 commits ahead of `main`. Not pushed. `main` is untouched, and the live site is unchanged.
 
 | | |
 |---|---|
 | Strings translated | 367, none missing |
 | Page text for an English reader | Identical to `main`, apart from the language button |
 | Tests | 105 passing |
-| Agents used | 22 runs, all Opus: 4 builders, 3 translators, 2 fixers' worth of fix rounds, and 11 reviews by agents that did not write what they reviewed |
+| Agents used | 19, all Opus: 4 builders, 3 translators, 1 fixer, and 11 reviewers and critics, none of whom reviewed their own work |
 | Not verified | Any real phone. Everything was rendered in desktop Chrome under phone emulation. |
 
 ## How to look at it
@@ -198,7 +198,7 @@ After pasting, set the date and the id, then run `node tools/i18n.mjs stamp upda
 ### 5. What happens next is yours to choose
 
 - **Keep it as it is for now**: nothing to do. The branch stays local.
-- **Go live**: the 22 commits can be squashed into one before anything is pushed. Pushing needs the `Mohamad-Dabbagh` account.
+- **Go live**: the 23 commits can be squashed into one before anything is pushed. Pushing needs the `Mohamad-Dabbagh` account.
 - **Discard**: `git checkout main && git branch -D arabic`.
 
 ## Every decision I made for you, in one list
