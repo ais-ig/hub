@@ -4,6 +4,8 @@ Single-page Parent Hub for the AIS British Section, academic year 2026/27. It op
 
 **Live at `https://ais-ig.github.io/hub/`**, repository `ais-ig/hub`. The earlier link, `ais-ig.github.io/meet-n-greet-26/`, redirects here.
 
+The page opens in English and can be read in full in Arabic, right to left, since 30 September 2026; see "Arabic" below.
+
 The design follows the Grade 9 Pathway Hub, `https://ais-ig.github.io/g9-pathway-26/`, rebuilt in plain HTML and CSS. See `CLAUDE.md` for what was carried over and what was deliberately changed.
 
 ## Publishing
@@ -81,7 +83,7 @@ The hero, the banner and the nav are deliberately generic now ("Parent Hub", a p
 
 Files live in `assets/`. Every document appears once in **Everything in one place**; the ones parents need first also appear in the Start here band under the hero, and forms and policies also appear in their own sections.
 
-Nothing currently shows "Available soon". To announce a document before it exists, copy a live card or row, change the opening tag to `<span class="mcard soon">` or `<span class="doc soon">`, drop the `href`, and replace the arrow with "Available soon"; reverse that once the file lands in `assets/`. Add every new file to the `DOCUMENT PATHS` comment at the top of `index.html` and to the table above.
+Nothing currently shows "Available soon". To announce a document before it exists, copy a live card or row, change the opening tag to `<span class="mcard soon">` or `<span class="doc soon">`, drop the `href`, and replace the arrow with "Available soon"; reverse that once the file lands in `assets/`. Add every new file to the `DOCUMENT PATHS` comment at the top of `index.html` and to the table above. A new card or row also needs keys and Arabic for its title and sub line, and `data-pdf-en` on its link if the file is English only; see "Arabic".
 
 | File | Status | Appears in |
 |---|---|---|
@@ -118,12 +120,14 @@ never changes**, which is the whole point: parents keep the link.
    pills open. It stops if the page count no longer matches its class list: if
    a class was added or removed, update `CLASSES` in the script and the pills in
    `#schedule` together, then run it again.
-4. Update the "in effect from" line and the issued date in `#schedule`
+4. Update the "in effect from" line and the issued date in `#schedule`, and
+   the same line in the library row. These are keyed strings, so update their
+   Arabic and stamp them (see "Arabic")
 5. Bump `?v=` on every timetable link: the eleven class pills, the full
    timetable button, the Start here card and the library row
-6. Add one entry to `updatesData`, dated the day you publish. Give the
-   previous timetable entry a `newUntil` of the day before, and reword it to
-   the past tense (see "Recording a change")
+6. Add one entry to `updatesData`, dated the day you publish, in English and
+   Arabic. Give the previous timetable entry a `newUntil` of the day before,
+   and reword it to the past tense in both languages (see "Recording a change")
 7. `node tools/check.mjs && bash tools/render-check.sh`. `check.mjs` reads the
    class label out of each per-class file and fails if it does not match the
    filename, so a class list that changed order cannot ship silently.
@@ -153,8 +157,10 @@ bell shows a gold count of unread entries and lists the eight newest. The
 strip shows up to three unread entries, headed "Since your last visit" for a
 returning visitor, and hides when nothing is unread.
 
-`id`, `date`, `title` and `text` are required; `href` and `label` are
-optional and go together. `date` must be `YYYY-MM-DD`. `id` is lowercase
+`id`, `date`, `title` and `text` are required, and so are `titleAr` and
+`textAr`, the same notice in Arabic; `href` and `label` are optional and go
+together, and a `label` needs a `labelAr`. All six are plain text: a tag typed
+into one shows as text. `date` must be `YYYY-MM-DD`. `id` is lowercase
 letters, digits and hyphens, conventionally the date and a word or two
 (`2026-09-13-mentors`), and must be unique.
 
@@ -196,17 +202,23 @@ Three scripts, each catching something the ones before it cannot:
 ```
 node tools/check.mjs        # Static checks over index.html: anchors resolve,
                              # asset paths exist, no em dashes, only the
-                             # allowed Poppins weights, no event language
-                             # ("tonight"), and updatesData is well formed,
-                             # every entry with a unique id.
+                             # allowed font weights, no event language
+                             # ("tonight"), updatesData is well formed,
+                             # every entry with a unique id, each per-class
+                             # timetable holds the class its filename names,
+                             # and English and Arabic are in step (the rules
+                             # of tools/i18n.mjs, see "Arabic").
                              # No browser. Exits 0 or 1.
 
 bash tools/render-check.sh  # Renders index.html in headless Chrome and
                              # asserts on the resulting DOM: the countdown
                              # stays hidden with no attributes set, and the
                              # updates bell and change log render once
-                             # updatesData has entries. Finishes by running
-                             # tools/shot.mjs.
+                             # updatesData has entries. Then the same page
+                             # opened with ?lang=ar: right to left, the
+                             # Arabic hero title, the cover lifted, no
+                             # English month in a date. Finishes by running
+                             # tools/shot.mjs in English and in Arabic.
 
 node tools/shot.mjs         # The true 380px mobile check. Drives Chrome over
                              # the DevTools Protocol and sets a real
@@ -216,13 +228,114 @@ node tools/shot.mjs         # The true 380px mobile check. Drives Chrome over
                              # --window-size cannot do this). Fails, and names
                              # the offending element, if scrollWidth exceeds
                              # clientWidth. Then opens the updates bell and
-                             # checks again. Screenshots at
-                             # $TMPDIR/hub-check/w380.png and w380-bell.png.
+                             # checks again, and taps the language button
+                             # twice to prove the page is restored exactly.
+                             # Screenshots at $TMPDIR/hub-check/w380.png and
+                             # w380-bell.png.
+
+node tools/shot.mjs --lang=ar  # The same at 380px in Arabic: also asserts the
+                             # page came up right to left. Screenshots at
+                             # w380-ar.png and w380-ar-bell.png.
 ```
 
-`render-check.sh` runs `shot.mjs` as its last step, so running it on its own
-covers all three day to day; call `shot.mjs` directly when you only need the
-mobile layout check. All must pass before pushing.
+`render-check.sh` runs `shot.mjs` as its last step, once in each language, so
+running it on its own covers all three day to day; call `shot.mjs` directly
+when you only need the mobile layout check. All must pass before pushing.
+
+`node --test tools/i18n.test.mjs` runs the tests of the Arabic tool itself. Run
+it after changing `tools/i18n.mjs`; day-to-day edits to the page do not need it.
+
+## Arabic
+
+Added on 30 September 2026 at the school's request. The whole page can be read
+in Arabic, right to left, set in Cairo. English is the default and the source
+of truth; the PDFs stay English, and in Arabic a link to one carries a small
+tag saying so. `CLAUDE.md` has the reasons and the traps.
+
+**To view it**, tap the language button in the top bar, or open
+`https://ais-ig.github.io/hub/?lang=ar`. That link is the one to share with a
+parent who wants Arabic. The choice is remembered in the browser
+(`localStorage`, key `aisHub.lang`); `?lang=en` switches back. Locally,
+`index.html?lang=ar` works from the file.
+
+**How it is held.** English stays in the markup. Each element a parent reads
+has a `data-i18n` key, and the Arabic for every key is one line in the
+`i18nAr` JSON block near the foot of `index.html`:
+
+```
+"hero.title": { "h": "3fa1c2d9", "ar": "..." },
+```
+
+`h` is a hash of the English the Arabic was written from. When the English
+changes, the hash no longer matches and `node tools/check.mjs` fails, naming
+the key. **Every change to English text needs its Arabic in the same commit.**
+
+**Change an existing sentence.** Edit the English, edit the `ar` of the same
+key in `i18nAr`, then say so:
+
+```
+node tools/i18n.mjs stamp s4.cw.note      # one or more keys, by name
+```
+
+A bare `stamp` prints usage and does nothing, so stale Arabic cannot be waved
+through. `stamp --all` re-stamps every stale entry; use it only after reading
+all of the Arabic.
+
+**Add a new string.** Put `data-i18n="section.item"` on the element, write the
+Arabic into a small JSON file, and merge it, which also stamps it:
+
+```
+echo '{ "s4.new.note": "..." }' > /tmp/ar.json
+node tools/i18n.mjs merge /tmp/ar.json
+```
+
+For an `aria-label`, `alt`, `title` or `placeholder`, the attribute on the
+element is `data-i18n-attr="aria-label:section.item"`. The Arabic must keep the
+same tags and links as the English and every number in it.
+
+**Add an update notice.** Write the Arabic beside the English in `updatesData`:
+`titleAr`, `textAr`, and `labelAr` when there is a `label`. See "Recording a
+change".
+
+**Leave something in Latin letters.** A name, an email, a code: add the bare
+attribute `data-i18n-skip` to its element, and the check stops asking for a
+key.
+
+**Link an English PDF.** Add the bare attribute `data-pdf-en` to the `<a>`.
+Leave it off a PDF that already carries Arabic.
+
+**See what needs doing, and check.**
+
+```
+node tools/i18n.mjs extract    # every key with its English, as JSON
+node tools/i18n.mjs check      # the Arabic rules alone
+node tools/check.mjs           # the same rules, with every other check
+node tools/shot.mjs --lang=ar  # the Arabic page at 380px
+```
+
+**The review file.** `docs/arabic/translation-review.html` lists every English
+string beside its Arabic, section by section, and marks any that is missing;
+`translation-review.md` is the same as plain text, for searching. It is what to
+hand a reader of Arabic who is checking the translation, since they need not
+open the source. Regenerate both after any change to the Arabic, and do not
+edit them by hand:
+
+```
+node tools/i18n.mjs pairs
+```
+
+**The glossary** and the Arabic writing rules live in
+`docs/superpowers/specs/2026-09-30-arabic-language-design.md`. The glossary is
+the authority for terms: الصف for Grade, never السنة; Western digits; ranges
+written من … إلى …, never with a dash; the reader addressed in the respectful
+plural. `docs/arabic/LOG.md` is the dated record of how the Arabic was built.
+
+**New CSS** with a physical left or right needs its mirror in the
+`html[dir="rtl"]` block at the end of the stylesheet.
+
+The address bar drops `?lang=` after the page reads it. That step does not run
+from a local file, so test it on a server (`python3 -m http.server`) or on the
+live site.
 
 ## Syllabus links
 
@@ -230,4 +343,4 @@ Removed from the page on 9 September 2026 pending manual verification with Mr. F
 
 ## The previous Parent Information Hub
 
-Until 9 September 2026 this repository held a different page: a Parent Information Hub for Grades 9 to 12 with an Arabic toggle, a Boys/Girls toggle and Google Sheet hydration. It was never sent to parents. It is archived locally at `~/Cooking/Rowad/parent-hub-archive-2026-08` with its git history, and it remains in this repository's history before commit `0c7cb23`.
+Until 9 September 2026 this repository held a different page: a Parent Information Hub for Grades 9 to 12 with an Arabic toggle, a Boys/Girls toggle and Google Sheet hydration. It was never sent to parents. The Arabic on the present page was built afresh on 30 September 2026 and takes nothing from it. It is archived locally at `~/Cooking/Rowad/parent-hub-archive-2026-08` with its git history, and it remains in this repository's history before commit `0c7cb23`.
