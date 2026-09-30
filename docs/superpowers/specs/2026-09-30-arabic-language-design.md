@@ -27,7 +27,9 @@ exactly as it is. The two languages cannot silently drift apart.
    `data-i18n`. English stays in the markup and is what a browser without
    JavaScript shows.
 4. **Cairo** for Arabic, weights 300, 400, 500 and 700, from Google Fonts. It is
-   the face the school's own site uses. Poppins stays the only Latin face.
+   the face the school's own site uses. In Arabic mode Latin runs (IGCSE, class
+   names, digits) are also set in Cairo, so a line does not mix two faces. In
+   English mode Poppins stays the only face.
 5. **Western digits** in Arabic text, as on the school's site.
 6. **Right-to-left is an override block.** All RTL CSS sits under
    `html[dir="rtl"]` at the end of the stylesheet. Existing rules are not
@@ -121,12 +123,14 @@ Translators and reviewers use these and nothing else for these terms.
 | New | جديد |
 | Mark as read | تحديد كمقروء |
 | What's changed | سجل التحديثات |
-| Start here | ابدأ من هنا |
+| Start here | ابدأوا من هنا |
 | All documents | جميع المستندات |
 | Open PDF | فتح الملف |
 | Available soon | متاح قريباً |
-| Ask a question | اطرح سؤالاً |
-| Who to speak to | مع من تتواصل |
+| Ask a question | اطرحوا سؤالاً |
+| Who to speak to | مع من تتواصلون |
+| Beyond the books | خارج الصف |
+| Apply for Student Council | الترشح لمجلس الطلاب |
 | in English (PDF tag) | بالإنجليزية |
 
 "Homeroom" and "Homeroom mentor" are the two terms most likely to need the

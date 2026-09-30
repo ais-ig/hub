@@ -66,3 +66,9 @@ each is listed here so you can overrule it.
 - **Task 1, fix round 1** (`3fe9590`, 69 tests). Re-reviewed: all six points fixed, one new gap found, an English screen-reader label could sit inside an Arabic string unchecked.
 - **Task 1, fix round 2** (`a264bf9`, 74 tests). Re-reviewed: clean. **Task 1 is complete.** Three small points are parked for the final review rather than fixed now; the most useful is that no rule yet fails an "Arabic" entry that is really English copied over.
 - **Task 2 dispatched** in parallel with the above: the switching mechanism in `index.html`.
+- **Task 2 built** (`f190ceb`): the language button, the head script, `applyLang`, the Arabic for the top bar, menu, bell, hero and banner (51 strings), Cairo, the right-to-left CSS block, and the Arabic runs of `tools/shot.mjs` and `tools/render-check.sh`. Both languages pass at 380px; toggling twice restores the page exactly. Report: `docs/arabic/reports/task-2-report.md`.
+- **Task 2 reviewed**: approved, nothing critical or important. The reviewer read all 51 Arabic strings, confirmed the English updates behaviour is unchanged, and confirmed no failure can leave the page blank. Nine minor points; I had eight fixed straight away because later tasks build on them.
+- Decisions from that review, added to the table above in effect:
+  - **D13** In Arabic mode, Latin text (IGCSE, 9A, digits) is also set in Cairo, so one line never mixes two typefaces. English mode is Poppins only, as before.
+  - **D14** The glossary's short commands were singular (ابدأ، اطرح) against my own respectful-plural rule. Now plural: ابدأوا من هنا، اطرحوا سؤالاً، مع من تتواصلون.
+  - **D15** "Beyond the books" is خارج الصف, not the literal أبعد من الكتب. "Apply for Student Council" is الترشح لمجلس الطلاب.
