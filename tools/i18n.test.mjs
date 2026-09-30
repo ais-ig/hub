@@ -2,6 +2,8 @@
    Run: node --test tools/i18n.test.mjs */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import {
   normalise,
   hashEn,
@@ -9,6 +11,7 @@ import {
   checkAll,
   mergeAr,
   stampKeys,
+  stampAll,
   buildPairs,
 } from './i18n.mjs';
 
@@ -473,11 +476,192 @@ test('stampKeys re-stamps only the named keys', () => {
   assert.equal(ruleHits(failures, 3, 'hero.title').length, 1);
 });
 
-test('stampKeys with no keys re-stamps every stale entry', () => {
+test('stampKeys with no keys refuses rather than stamping everything', () => {
+  assert.throws(() => stampKeys(good(), []), /name the keys/);
+  assert.throws(() => stampKeys(good()), /name the keys/);
+});
+
+test('stampAll re-stamps every stale entry', () => {
   const stale = good()
     .replace('>British Section</p>', '>The British Section</p>')
     .replace('>Parent   Hub</h1>', '>The Parent Hub</h1>');
-  assert.deepEqual(checkAll(stampKeys(stale, [])), []);
+  assert.deepEqual(checkAll(stampAll(stale)), []);
+});
+
+test('the stamp command with no keys and no --all prints usage and exits 2', () => {
+  const tool = fileURLToPath(new URL('./i18n.mjs', import.meta.url));
+  const run = spawnSync(process.execPath, [tool, 'stamp'], { encoding: 'utf8' });
+  assert.equal(run.status, 2);
+  assert.match(run.stderr, /stamp <key>\.\.\. \| stamp --all/);
+  const mixed = spawnSync(process.execPath, [tool, 'stamp', '--all', 'hero.title'], { encoding: 'utf8' });
+  assert.equal(mixed.status, 2);
+});
+
+/* ---------- fix round 1 ---------- */
+
+test('rule 6: a number missing from an update notice fails and names the key', () => {
+  const updates = [{ ...GOOD_UPDATES[0], textAr: 'تم تعديل الجدول الدراسي للصفوف من 9 إلى 11.' }];
+  const failures = checkAll(good({ updates }));
+  const hits = ruleHits(failures, 6, 'updates.2026-09-27-timetables.text');
+  assert.equal(hits.length, 1);
+  assert.match(hits[0], /\b12\b/);
+  assert.match(hits[0], /numsAr/);
+  assert.equal(failures.length, 1);
+});
+
+test('rule 6: the title and label of an update notice are checked too', () => {
+  const updates = [{
+    ...GOOD_UPDATES[0],
+    title: 'Revised timetables from 27 September',
+    label: 'See all 11 timetables',
+  }];
+  const failures = checkAll(good({ updates }));
+  assert.equal(ruleHits(failures, 6, 'updates.2026-09-27-timetables.title').length, 1);
+  assert.equal(ruleHits(failures, 6, 'updates.2026-09-27-timetables.label').length, 1);
+});
+
+test('rule 6: "numsAr": false exempts an update notice', () => {
+  const updates = [{ ...GOOD_UPDATES[0], textAr: 'تم تعديل الجدول الدراسي.', numsAr: false }];
+  assert.deepEqual(checkAll(good({ updates })), []);
+});
+
+test('a missing updatesData block is reported once', () => {
+  const html = good().replace(/<script type="application\/json" id="updatesData">[\s\S]*?<\/script>\n/, '');
+  const failures = checkAll(html);
+  assert.equal(failures.length, 1);
+  assert.match(failures[0], /^i18n block: the updatesData block is missing/);
+});
+
+test('an updatesData block that is not valid JSON or not an array is reported', () => {
+  const broken = checkAll(good().replace('"id": "2026-09-27-timetables",', '"id": ,'));
+  assert.equal(broken.length, 1);
+  assert.match(broken[0], /^i18n block: the updatesData block is not valid JSON/);
+  const object = checkAll(good({ updates: { id: 'x' } }));
+  assert.equal(object.length, 1);
+  assert.match(object[0], /updatesData block .* must be an array/);
+});
+
+test('rule 8: an update entry with no id fails and gives its position', () => {
+  const { id, ...noId } = GOOD_UPDATES[0];
+  const failures = checkAll(good({ updates: [GOOD_UPDATES[0], noId, 'loose text'] }));
+  assert.deepEqual(failures, [
+    'i18n 8 updates: entry 1 of updatesData has no id, so its Arabic cannot be checked',
+    'i18n 8 updates: entry 2 of updatesData has no id, so its Arabic cannot be checked',
+  ]);
+});
+
+test('rule 9: a read attribute with no data-i18n-attr pair fails, naming attribute and line', () => {
+  const cases = [
+    ['<button aria-label="Close the list">✕</button>', 'aria-label', 'Close the list'],
+    ['<img src="e.png" alt="School emblem">', 'alt', 'School emblem'],
+    ['<a href="#top" title="Back to top">↑</a>', 'title', 'Back to top'],
+    ['<input type="search" placeholder="Search here">', 'placeholder', 'Search here'],
+  ];
+  for (const [markup, attr, value] of cases) {
+    const failures = checkAll(good({ body: GOOD_BODY + '\n' + markup }));
+    assert.equal(failures.length, 1, attr);
+    assert.match(failures[0], /^i18n 9 unkeyed: line \d+: /);
+    assert.ok(failures[0].includes(attr + '="' + value + '"'), failures[0]);
+  }
+});
+
+test('rule 9: a pair must name that attribute, not just any attribute', () => {
+  const body = GOOD_BODY + '\n<a href="#top" aria-label="Open the menu" title="Back to top" ' +
+    'data-i18n-attr="aria-label:bar.menu">↑</a>';
+  const failures = checkAll(good({ body }));
+  assert.equal(failures.length, 1);
+  assert.ok(failures[0].includes('title="Back to top"'));
+});
+
+test('rule 9: a keyed element still needs a pair for its own attribute', () => {
+  const body = GOOD_BODY + '\n<p data-i18n="foot.sign" title="Signed by us">British Section</p>';
+  const failures = checkAll(good({ body }));
+  assert.equal(failures.length, 1);
+  assert.ok(failures[0].includes('title="Signed by us"'));
+});
+
+test('rule 9: attributes that are excused or hold under two Latin letters pass', () => {
+  const body = GOOD_BODY + '\n' + [
+    '<img src="e.png" alt="">',
+    '<img src="e.png" alt="A">',
+    '<img src="e.png" alt="School emblem" aria-hidden="true">',
+    '<div data-i18n-skip><img src="p.png" alt="Mr Ahmed Bakr"></div>',
+    '<div aria-hidden="true"><img src="e.png" alt="School emblem"></div>',
+  ].join('\n');
+  assert.deepEqual(checkAll(good({ body })), []);
+  /* Inside a keyed element the Arabic string carries the attribute. */
+  const en = 'See <a href="#m" title="The mentors list">the list</a>';
+  const ar = { 's5.m': entry(en, 'انظر <a href="#m" title="قائمة الرواد">القائمة</a>') };
+  assert.deepEqual(checkAll(page({ body: '<p data-i18n="s5.m">' + en + '</p>', ar })), []);
+});
+
+test('rule 9: the classlinks pills excuse their text but not their attributes', () => {
+  const body = GOOD_BODY + '\n<div class="classlinks"><a href="c.pdf" aria-label="Class 11A timetable">11A</a></div>';
+  const failures = checkAll(good({ body }));
+  assert.equal(failures.length, 1);
+  assert.ok(failures[0].includes('aria-label="Class 11A timetable"'));
+});
+
+test('rule 1: an i18nAr entry that is not an object fails and names the key', () => {
+  const ar = goodAr();
+  ar['foot.sign'] = 'القسم البريطاني';
+  const failures = checkAll(good({ ar }));
+  assert.equal(failures.length, 1);
+  assert.match(failures[0], /^i18n 1 malformed: foot\.sign /);
+});
+
+test('merge and stamp never discard the Arabic of a malformed entry', () => {
+  const ar = goodAr();
+  ar['foot.sign'] = 'القسم البريطاني';
+  const stale = good({ ar }).replace('>Parent   Hub</h1>', '>The Parent Hub</h1>');
+  const line = '  "foot.sign": "القسم البريطاني"';
+  assert.ok(mergeAr(stale, { 'hero.title': 'البوابة' }).includes(line));
+  assert.ok(stampKeys(stale, ['hero.title']).includes(line));
+  assert.ok(stampAll(stale).includes(line));
+  assert.throws(() => stampKeys(stale, ['foot.sign']), /foot\.sign/);
+});
+
+test('merge and stamp keep fields of an entry they do not know', () => {
+  const ar = goodAr();
+  ar['foot.sign'].note = 'checked by the school';
+  const out = stampAll(good({ ar }).replace('>British Section</p>', '>The British Section</p>'));
+  assert.ok(out.includes('"ar": "القسم البريطاني", "note": "checked by the school" }'));
+  assert.deepEqual(checkAll(out), []);
+});
+
+test('markup: an empty data-i18n key fails and gives the line', () => {
+  const failures = checkAll(good({ body: GOOD_BODY + '\n<p data-i18n="">British Section</p>' }));
+  assert.equal(failures.filter((f) => /^i18n markup: line \d+: <p> has an empty data-i18n/.test(f)).length, 1);
+});
+
+test('markup: a data-i18n on a void element fails and names the key', () => {
+  const failures = checkAll(good({ body: GOOD_BODY + '\n<br data-i18n="s6.void">' }));
+  const hits = failures.filter((f) => f.startsWith('i18n markup: s6.void'));
+  assert.equal(hits.length, 1);
+  assert.match(hits[0], /void or never closes/);
+});
+
+test('markup: a data-i18n-attr naming an absent attribute fails and names the key', () => {
+  const body = GOOD_BODY + '\n<a href="#top" data-i18n-attr="aria-label:s6.up">↑</a>';
+  const failures = checkAll(good({ body }));
+  const hits = failures.filter((f) => f.startsWith('i18n markup: s6.up'));
+  assert.equal(hits.length, 1);
+  assert.match(hits[0], /has no aria-label attribute/);
+});
+
+test('markup: a data-i18n-attr that is not attribute:key pairs fails', () => {
+  const body = GOOD_BODY + '\n<a href="#top" data-i18n-attr="s6.up">↑</a>';
+  const failures = checkAll(good({ body }));
+  assert.equal(failures.filter((f) => /^i18n markup: line \d+: data-i18n-attr needs/.test(f)).length, 1);
+});
+
+test('a malformed i18nEn block is reported once', () => {
+  const html = good().replace('"js.new": "New"', '"js.new": "New",');
+  const failures = checkAll(html);
+  const hits = failures.filter((f) => f.startsWith('i18n block: the i18nEn block is not valid JSON'));
+  assert.equal(hits.length, 1);
+  const array = checkAll(good({ en: ['New'] }));
+  assert.equal(array.filter((f) => f.includes('i18nEn block')).length, 1);
 });
 
 test('stampKeys refuses a key with no Arabic entry and names it', () => {

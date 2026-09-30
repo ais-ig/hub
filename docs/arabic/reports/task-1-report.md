@@ -119,9 +119,11 @@ key is named (rule 9 has no key, so it asserts the quoted text and the line).
     Orphan entries are written last so `check` reports them.
 11. **`stamp` with no keys re-stamps every stale entry.** The spec's
     `stamp [key...]` makes the keys optional.
-12. **`</script` inside Arabic is written as `<\/script`** and `<!--` as
-    `<!--`, both valid JSON, so a string cannot end its own block.
-    Arabic itself is never escaped.
+12. **A string cannot end its own block.** When the Arabic holds a closing
+    script tag, `merge` writes its slash with a backslash before it, and
+    writes the `<` of an HTML comment opener as a JSON unicode escape. Both
+    are valid JSON and parse back to the original text. Arabic letters are
+    never escaped.
 13. **Rule 9 counts Latin letters per text node after removing entities**, so
     `&rarr;` is not four letters. A page with no `<body>` tag is treated as
     all body.
@@ -158,3 +160,102 @@ key is named (rule 9 has no key, so it asserts the quoted text and the line).
 - `tools/i18n.mjs` (new)
 - `tools/i18n.test.mjs` (new)
 - `docs/arabic/reports/task-1-report.md` (new)
+
+## Fix round 1
+
+Rulings 4 and 11 above are superseded by items 1 and 4 below. The concern
+about attributes is closed by item 3.
+
+### What changed
+
+1. **Rule 6 now covers update notices.** The title, text and label of each
+   notice are compared with `titleAr`, `textAr` and `labelAr` by the same
+   multiset rule as dictionary keys. An entry may carry `"numsAr": false` to
+   exempt all three of its fields; the failure message says so.
+2. **An unreadable `updatesData` block is a failure.** A missing block, a
+   JSON syntax error and a non-array each give one `i18n block:` line saying
+   rules 6, 7 and 8 were skipped for notices. An entry that is not an object
+   or has no string `id` gives `i18n 8 updates: entry N of updatesData has no
+   id, so its Arabic cannot be checked`.
+3. **Rule 9 covers attributes.** An `aria-label`, `alt`, `title` or
+   `placeholder` in `<body>` with two or more Latin letters fails unless a
+   `data-i18n-attr` pair on the same element names that attribute, or the
+   element or an ancestor carries `data-i18n-skip` or `aria-hidden="true"`.
+   Message: `i18n 9 unkeyed: line N: aria-label="Menu" on <button> has no
+   data-i18n-attr pair`. Two points decided here:
+   - An attribute on an element inside a keyed element passes, because the
+     Arabic string replaces that markup and carries the attribute itself. An
+     attribute on the keyed element itself still needs a pair.
+   - The `.classlinks` allowance excuses the pills' text only, not their
+     attributes, as the controller's ruling lists only skip and aria-hidden.
+4. **`stamp` needs keys or `--all`.** The bare command, and `--all` mixed
+   with keys, print usage and exit 2. In the module, `stampKeys(html, keys)`
+   throws on an empty list and the new export `stampAll(html)` does the full
+   re-stamp. The rule 3 message already named the key
+   (`... run: node tools/i18n.mjs stamp <key>`), so it is unchanged.
+5. **A non-object `i18nAr` entry** fails as `i18n 1 malformed: <key> in
+   i18nAr must be an entry of the form { "h": "...", "ar": "..." }`. `merge`
+   and `stamp` write such an entry back verbatim, and `stamp <that key>`
+   refuses. While there, entries now also keep any field other than `h` and
+   `ar` (before, only `nums` survived a rewrite).
+6. **Tests added** for the four markup failures (empty key, keyed void
+   element, `data-i18n-attr` naming an absent attribute, a pair with no
+   colon) and for a malformed and a non-object `i18nEn` block.
+7. **`pairs` was run for real** and the two files deleted again. Ruling 12
+   is reworded above.
+
+### Evidence
+
+RED. The new tests run against the tool as committed in `5a076e5` (copied to
+a scratch folder, with a one-line `stampAll` stub so the import resolves):
+
+```
+not ok 43 - stampKeys with no keys refuses rather than stamping everything
+not ok 45 - the stamp command with no keys and no --all prints usage and exits 2
+not ok 46 - rule 6: a number missing from an update notice fails and names the key
+not ok 47 - rule 6: the title and label of an update notice are checked too
+not ok 49 - a missing updatesData block is reported once
+not ok 50 - an updatesData block that is not valid JSON or not an array is reported
+not ok 51 - rule 8: an update entry with no id fails and gives its position
+not ok 52 - rule 9: a read attribute with no data-i18n-attr pair fails, naming attribute and line
+not ok 53 - rule 9: a pair must name that attribute, not just any attribute
+not ok 54 - rule 9: a keyed element still needs a pair for its own attribute
+not ok 56 - rule 9: the classlinks pills excuse their text but not their attributes
+not ok 57 - rule 1: an i18nAr entry that is not an object fails and names the key
+not ok 58 - merge and stamp never discard the Arabic of a malformed entry
+not ok 59 - merge and stamp keep fields of an entry they do not know
+# tests 69
+# pass 55
+# fail 14
+```
+
+The item 6 tests passed against the old tool, as expected: they pin
+behaviour that existed but was untested. In this round the code and tests
+were written together and the RED run was taken afterwards against the old
+commit, rather than before the change.
+
+GREEN. `node --test tools/i18n.test.mjs`:
+
+```
+# tests 69
+# pass 69
+# fail 0
+```
+
+Against the real page:
+
+- `node tools/i18n.mjs check`: exit 1, 511 failures, no crash. 1 missing
+  `i18nAr` block, 29 rule 8, 481 rule 9, of which 17 are attributes (for
+  example `aria-label="Updates" on <button>`, line 1118).
+- `node tools/i18n.mjs stamp`: prints usage, exit 2.
+  `node tools/i18n.mjs stamp --all`: `0 key(s) stamped`, exit 0.
+- `node tools/i18n.mjs pairs`: exit 0, wrote
+  `docs/arabic/translation-review.html` (7111 bytes, 29 rows) and
+  `translation-review.md` (29 rows marked missing). Both deleted afterwards.
+- `node tools/check.mjs`: all checks passed.
+
+### Note for later tasks
+
+Seven of the ten live notices carry digits, so their Arabic must repeat each
+number as digits or the entry needs `"numsAr": false`. `check.mjs` already
+accepts unknown fields on an entry, so `numsAr` does not trip it.

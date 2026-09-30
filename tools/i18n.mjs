@@ -4,7 +4,8 @@
 
      node tools/i18n.mjs extract          print every key and its English, as JSON
      node tools/i18n.mjs merge <file>...  write key to Arabic maps into the page
-     node tools/i18n.mjs stamp [key...]   re-stamp hashes once the Arabic is current
+     node tools/i18n.mjs stamp <key>...   re-stamp hashes once the Arabic is current
+     node tools/i18n.mjs stamp --all      the same, for every stale entry
      node tools/i18n.mjs pairs            write docs/arabic/translation-review.*
      node tools/i18n.mjs check            the nine rules; exit 1 on any failure
 
@@ -25,6 +26,8 @@ const RAW = new Set(['script', 'style', 'textarea', 'title']);
 /* The attributes rule 5 compares between the English and the Arabic. */
 const TAG_ATTRS = ['href', 'class', 'target', 'rel', 'download'];
 const UPDATE_FIELDS = ['title', 'text', 'label'];
+/* The attributes a parent reads or hears, which rule 9 wants keyed. */
+const READ_ATTRS = ['aria-label', 'alt', 'title', 'placeholder'];
 
 const has = (obj, k) => Object.prototype.hasOwnProperty.call(obj, k);
 
@@ -241,10 +244,24 @@ function scan(html) {
   }
 
   const upBlock = jsonBlock(html, 'updatesData');
-  const updates = []; /* { key, en, ar, id, field }, Arabic null when absent */
-  if (Array.isArray(upBlock.data)) {
-    for (const e of upBlock.data) {
-      if (!isDict(e) || typeof e.id !== 'string') continue;
+  /* { key, en, ar, id, field, numsOff }, Arabic null when absent. An entry
+     may carry "numsAr": false to exempt it from the number check. */
+  const updates = [];
+  const updateProblems = []; /* [rule, detail] for a block that cannot be read */
+  if (!upBlock.found) {
+    updateProblems.push(['block',
+      'the updatesData block is missing; rules 6, 7 and 8 were skipped for update notices']);
+  } else if (!Array.isArray(upBlock.data)) {
+    updateProblems.push(['block', 'the updatesData block is not valid JSON' +
+      (upBlock.error ? ': ' + upBlock.error : '; it must be an array') +
+      '; rules 6, 7 and 8 were skipped for update notices']);
+  } else {
+    upBlock.data.forEach((e, i) => {
+      if (!isDict(e) || typeof e.id !== 'string' || !e.id) {
+        updateProblems.push(['8 updates',
+          'entry ' + i + ' of updatesData has no id, so its Arabic cannot be checked']);
+        return;
+      }
       for (const field of UPDATE_FIELDS) {
         if (!e[field]) continue;
         const ar = e[field + 'Ar'];
@@ -254,9 +271,10 @@ function scan(html) {
           ar: typeof ar === 'string' && ar.trim() ? ar : null,
           id: e.id,
           field,
+          numsOff: e.numsAr === false,
         });
       }
-    }
+    });
   }
 
   /* The English per key, first appearance winning, in page order. */
@@ -264,7 +282,7 @@ function scan(html) {
   for (const o of occurrences) if (!sources.has(o.key)) sources.set(o.key, o);
 
   return {
-    tokens, occurrences, problems, sources, updates,
+    tokens, occurrences, problems, sources, updates, updateProblems,
     arBlock: jsonBlock(html, 'i18nAr'), enBlock, upBlock,
   };
 }
@@ -330,6 +348,16 @@ function numberCounts(fragment) {
   return counts;
 }
 
+/* The numbers of the English that the Arabic lacks, counting repeats. */
+function lostNumbers(en, ar) {
+  const arNums = numberCounts(ar);
+  const lost = [];
+  for (const [num, count] of numberCounts(en)) {
+    if ((arNums.get(num) || 0) < count) lost.push(num);
+  }
+  return lost;
+}
+
 /* Built from code points so this file stays free of the characters
    themselves: the em dash, both Arabic-Indic digit ranges, the tatweel. */
 const ch = String.fromCharCode;
@@ -344,43 +372,63 @@ function forbiddenIn(ar) {
   return FORBIDDEN.filter(([re]) => re.test(ar)).map(([, what]) => what);
 }
 
-/* Rule 9. Visible text in <body> holding two or more Latin letters, outside
-   every keyed element and outside the allow list. */
+const latinLetters = (raw) =>
+  (raw.replace(/&[#\w]+;/g, ' ').match(/[A-Za-z]/g) || []).length;
+
+const clip = (raw) => {
+  const shown = normalise(decodeEntities(raw));
+  return shown.length > 60 ? shown.slice(0, 60) + '…' : shown;
+};
+
+/* Rule 9. English in <body> that no key covers: a visible text node with two
+   or more Latin letters outside every keyed element and the allow list, or
+   an aria-label, alt, title or placeholder with no data-i18n-attr pair.
+   Text items are { line, text }; attribute items add attr and tag. */
 function unkeyedText(html, tokens) {
   const found = [];
   const hasBody = tokens.some((t) => t.type === 'open' && t.name === 'body');
   let inBody = !hasBody;
   const stack = [];
-  const covered = () => stack.length > 0 && stack[stack.length - 1].covered;
+  const top = () => stack[stack.length - 1] || { covered: false, attrCovered: false };
   for (const t of tokens) {
     if (t.type === 'open') {
       if (t.name === 'body') inBody = true;
-      if (t.void) continue;
       const a = t.attrs;
+      /* An attribute is excused only by data-i18n-skip or aria-hidden, here
+         or above, or by sitting inside a keyed element, whose Arabic
+         replaces it along with the rest of the innerHTML. */
+      const hidden = top().attrCovered ||
+        has(a, 'data-i18n-skip') || a['aria-hidden'] === 'true';
+      if (inBody && !hidden) {
+        const paired = new Set(
+          has(a, 'data-i18n-attr') ? attrPairs(a['data-i18n-attr']).map((p) => p[0]) : []
+        );
+        for (const attr of READ_ATTRS) {
+          if (!has(a, attr) || paired.has(attr) || latinLetters(a[attr]) < 2) continue;
+          found.push({ line: lineOf(html, t.start), attr, tag: t.name, text: clip(a[attr]) });
+        }
+      }
+      if (t.void) continue;
       stack.push({
         name: t.name,
-        covered: covered() ||
+        covered: top().covered ||
           has(a, 'data-i18n') ||
           has(a, 'data-i18n-skip') ||
           a['aria-hidden'] === 'true' ||
           (a.class || '').split(/\s+/).includes('classlinks') ||
           t.name === 'script' || t.name === 'style',
+        attrCovered: hidden || has(a, 'data-i18n'),
       });
     } else if (t.type === 'close') {
       if (t.name === 'body') inBody = false;
       let k = stack.length - 1;
       while (k >= 0 && stack[k].name !== t.name) k--;
       if (k >= 0) stack.length = k;
-    } else if (t.type === 'text' && inBody && !covered()) {
+    } else if (t.type === 'text' && inBody && !top().covered) {
       const raw = html.slice(t.start, t.end);
-      const letters = raw.replace(/&[#\w]+;/g, ' ').match(/[A-Za-z]/g) || [];
-      if (letters.length < 2) continue;
-      const shown = normalise(decodeEntities(raw));
+      if (latinLetters(raw) < 2) continue;
       const lead = raw.length - raw.trimStart().length;
-      found.push({
-        line: lineOf(html, t.start + lead),
-        text: shown.length > 60 ? shown.slice(0, 60) + '…' : shown,
-      });
+      found.push({ line: lineOf(html, t.start + lead), text: clip(raw) });
     }
   }
   return found;
@@ -415,7 +463,14 @@ export function checkAll(html) {
   /* 1. Every key has Arabic, and every Arabic entry has a key. */
   if (dict) {
     for (const key of s.sources.keys()) {
+      if (has(dict, key) && !isDict(dict[key])) continue; /* said below */
       if (arabicOf(dict[key]) === null) fail('1 missing', key + ' has no Arabic in i18nAr');
+    }
+    for (const key of Object.keys(dict)) {
+      if (!isDict(dict[key])) {
+        fail('1 malformed', key + ' in i18nAr must be an entry of the form ' +
+          '{ "h": "...", "ar": "..." }');
+      }
     }
     for (const key of Object.keys(dict)) {
       if (!s.sources.has(key)) {
@@ -478,11 +533,7 @@ export function checkAll(html) {
 
       /* 6. Every number in the English is in the Arabic, as often. */
       if (dict[key].nums !== false) {
-        const arNums = numberCounts(ar);
-        const lost = [];
-        for (const [num, count] of numberCounts(source.en)) {
-          if ((arNums.get(num) || 0) < count) lost.push(num);
-        }
+        const lost = lostNumbers(source.en, ar);
         if (lost.length) {
           fail('6 numbers', key + ' has Arabic that lacks ' + lost.join(', ') +
             '; add it, or set "nums": false where a number is rightly a word');
@@ -496,11 +547,19 @@ export function checkAll(html) {
     }
   }
 
-  /* 7 and 8 for update notices, whose Arabic lives beside their English. */
+  /* 6, 7 and 8 for update notices, whose Arabic lives beside their English. */
+  for (const [rule, detail] of s.updateProblems) fail(rule, detail);
   for (const u of s.updates) {
     if (u.ar === null) {
       fail('8 updates', u.key + ' has no ' + u.field + 'Ar in updatesData');
       continue;
+    }
+    if (!u.numsOff) {
+      const lost = lostNumbers(u.en, u.ar);
+      if (lost.length) {
+        fail('6 numbers', u.key + ' has Arabic that lacks ' + lost.join(', ') +
+          '; add it, or set "numsAr": false on the entry where a number is rightly a word');
+      }
     }
     for (const what of forbiddenIn(u.ar)) {
       fail('7 characters', u.key + ' has Arabic that contains ' + what);
@@ -509,7 +568,10 @@ export function checkAll(html) {
 
   /* 9. No English a parent reads sits outside a key. */
   for (const f of unkeyedText(html, s.tokens)) {
-    fail('9 unkeyed', 'line ' + f.line + ': "' + f.text + '" has no data-i18n key');
+    fail('9 unkeyed', f.attr
+      ? 'line ' + f.line + ': ' + f.attr + '="' + f.text + '" on <' + f.tag +
+        '> has no data-i18n-attr pair'
+      : 'line ' + f.line + ': "' + f.text + '" has no data-i18n key');
   }
 
   return failures;
@@ -531,9 +593,14 @@ function serialiseDict(dict, pageOrder) {
   if (!keys.length) return '\n{}\n';
   const lines = keys.map((k) => {
     const e = dict[k];
+    /* An entry that is not an object is written back untouched, so a hand
+       slip never costs its Arabic; check reports it. */
+    if (!isDict(e)) return '  ' + blockJson(k) + ': ' + blockJson(e);
     let line = '  ' + blockJson(k) + ': { "h": ' + blockJson(String(e.h ?? '')) +
       ', "ar": ' + blockJson(String(e.ar ?? ''));
-    if (e.nums === false) line += ', "nums": false';
+    for (const [field, value] of Object.entries(e)) {
+      if (field !== 'h' && field !== 'ar') line += ', ' + blockJson(field) + ': ' + blockJson(value);
+    }
     return line + ' }';
   });
   return '\n{\n' + lines.join(',\n') + '\n}\n';
@@ -613,14 +680,14 @@ export function mergeAr(html, map) {
   return touchedDict ? writeDict(out, dict) : out;
 }
 
-/* Re-stamps hashes. With no keys, every entry whose hash is stale. Returns
-   the new page and the keys whose hash changed. */
-function stamp(html, keys) {
+/* Re-stamps hashes: the named keys, or with `all` every entry whose hash
+   is stale. Returns the new page and the keys whose hash changed. */
+function stamp(html, keys, all) {
   const s = scan(html);
   const dict = readDict(s);
-  const named = keys.length
-    ? keys
-    : Object.keys(dict).filter((k) => s.sources.has(k));
+  const named = all
+    ? Object.keys(dict).filter((k) => s.sources.has(k) && isDict(dict[k]))
+    : keys;
   const bad = named.filter((k) => !s.sources.has(k) || !isDict(dict[k]));
   if (bad.length) {
     throw new Error('no key on the page with an Arabic entry: ' + bad.join(', '));
@@ -635,9 +702,18 @@ function stamp(html, keys) {
   return { html: stamped.length ? writeDict(html, dict) : html, stamped };
 }
 
-/* Run only once the Arabic of each named key has been brought up to date. */
-export function stampKeys(html, keys = []) {
-  return stamp(html, keys).html;
+/* Run only once the Arabic of each named key has been brought up to date.
+   The keys must be named; an empty list is refused, not read as "all". */
+export function stampKeys(html, keys) {
+  if (!Array.isArray(keys) || !keys.length) {
+    throw new Error('name the keys to stamp, or use stampAll');
+  }
+  return stamp(html, keys, false).html;
+}
+
+/* Re-stamps every stale entry. For use after a full review of the Arabic. */
+export function stampAll(html) {
+  return stamp(html, [], true).html;
 }
 
 /* ---------- pairs ---------- */
@@ -754,7 +830,12 @@ function main(argv) {
   }
 
   if (command === 'stamp') {
-    const result = stamp(html, args);
+    const all = args.includes('--all');
+    if (!args.length || (all && args.length > 1)) {
+      console.error('usage: node tools/i18n.mjs stamp <key>... | stamp --all');
+      return 2;
+    }
+    const result = stamp(html, all ? [] : args, all);
     if (result.stamped.length) writeFileSync(pagePath, result.html);
     for (const key of result.stamped) console.log('stamped ' + key);
     console.log(result.stamped.length + ' key(s) stamped');
@@ -780,7 +861,7 @@ function main(argv) {
     return failures.length ? 1 : 0;
   }
 
-  console.error('usage: node tools/i18n.mjs extract | merge <file>... | stamp [key...] | pairs | check');
+  console.error('usage: node tools/i18n.mjs extract | merge <file>... | stamp <key>... | stamp --all | pairs | check');
   return 2;
 }
 
