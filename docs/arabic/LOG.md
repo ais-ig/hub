@@ -63,3 +63,6 @@ each is listed here so you can overrule it.
   - the "untranslated English" check now also covers screen-reader labels (`aria-label`, `alt`, `title`), which the design had missed;
   - `stamp` must be told which keys, so stale Arabic cannot be cleared by one bare command.
   The spec was amended to match.
+- **Task 1, fix round 1** (`3fe9590`, 69 tests). Re-reviewed: all six points fixed, one new gap found, an English screen-reader label could sit inside an Arabic string unchecked.
+- **Task 1, fix round 2** (`a264bf9`, 74 tests). Re-reviewed: clean. **Task 1 is complete.** Three small points are parked for the final review rather than fixed now; the most useful is that no rule yet fails an "Arabic" entry that is really English copied over.
+- **Task 2 dispatched** in parallel with the above: the switching mechanism in `index.html`.
