@@ -1208,6 +1208,17 @@ html[dir="rtl"] .lvl .l {
 html[dir="rtl"] ul.ticks li { padding-left: 0; padding-right: 22px; }
 html[dir="rtl"] ul.ticks li::before { left: auto; right: 4px; }
 
+/* A phone number, an email address and a grade such as A* must keep their
+   own order inside a right-to-left line. Each of these takes its direction
+   from its own first letter: a run of digits or Latin stays left to right,
+   and a line the translators have put into Arabic runs right to left. The
+   alignment is then stated outright, where it was start or end above. */
+html[dir="rtl"] a[href^="tel:"],
+html[dir="rtl"] a[href^="mailto:"],
+html[dir="rtl"] table.data td.num { unicode-bidi: plaintext; }
+html[dir="rtl"] .ccard a { text-align: right; }
+html[dir="rtl"] table.data td.num { text-align: left; }
+
 /* The arrows on a document row are decoration, not text, so they are turned
    to point left here. A row still waiting for its file holds words there. */
 html[dir="rtl"] .doc .ic,

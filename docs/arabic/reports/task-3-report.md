@@ -142,7 +142,10 @@ rulings 1 and 2.
 9. **Phone lines with an extension are keyed**, because "ext." is a word
    (`contacts.head.tel` and five more). The number travels inside the
    string; Task 4 should wrap it in `<span dir="ltr">`. Mr. Noor's line has
-   no extension and no Latin letters, so it needs nothing.
+   no extension and no Latin letters, so it has no key. *Corrected in fix
+   round 1:* I first wrote that it "needs nothing", which was wrong. In a
+   right-to-left line its digit groups reordered to "1006 855 050". It is
+   now held in order by CSS, see "Fix round 1".
 10. **The mentor list is skipped at the `<ul>`**, four attributes rather
     than eleven. "Mr." stays with the name in Latin letters.
 11. **Tabs are keyed on the buttons** (`#tab9`, `#tab10`) and the tab list's
@@ -202,3 +205,84 @@ rulings 1 and 2.
 - `index.html`
 - `docs/arabic/reports/task-3-report.md` (new)
 - `.superpowers/arabic/en.json` (git-ignored, left in place)
+
+## Fix round 1
+
+After the review (two Important findings). No key was renamed, removed or
+added. `index.html` gained one comment and five lines of CSS in the
+`html[dir="rtl"]` block, before the document arrow rule; nothing else.
+
+### What changed
+
+```css
+html[dir="rtl"] a[href^="tel:"],
+html[dir="rtl"] a[href^="mailto:"],
+html[dir="rtl"] table.data td.num { unicode-bidi: plaintext; }
+html[dir="rtl"] .ccard a { text-align: right; }
+html[dir="rtl"] table.data td.num { text-align: left; }
+```
+
+1. **Phone and email links keep their own order.** Every `tel:` and
+   `mailto:` link takes its direction from its own first strong letter. A
+   line of digits only (Mr. Noor's) or an email has no Arabic letter and
+   runs left to right, so it reads 050 855 1006.
+2. **Grade and number cells keep their own order.** `table.data td.num`
+   gets the same treatment, so `A*` stays `A*`. This covers the
+   equivalence table, the options tables, the assessment table and the
+   phone table, which all use `td.num` for their grades and numbers.
+3. **Alignment is kept.** `td.num` was `text-align: end`, which in Arabic
+   is the left; `.ccard a` is a block link at the default start, which in
+   Arabic is the right. With `plaintext`, start and end follow each line's
+   own direction, so both are now stated outright as `left` and `right`
+   and do not move.
+
+### Ruling: `plaintext`, not `direction: ltr; unicode-bidi: isolate`
+
+The review asked for a forced left-to-right isolate on the links. I tried
+the reasoning through against the six keyed `contacts.*.tel` lines and it
+fails them: once translated they read "phone, number, middot, تحويلة 236",
+an Arabic sentence, and a forced left-to-right base would lay its parts out
+in the English order, with the extension an Arabic reader meets first. The
+review allows "an equivalent" for the cells and asks that both cases read
+correctly for the links; `unicode-bidi: plaintext` does that for both. A
+line with an Arabic word runs right to left, a line without one runs left to
+right. The translators' `<span dir="ltr">` around the number still works
+inside it.
+
+### What I looked at
+
+`node tools/shot.mjs --lang=ar`, with two Arabic strings merged in
+temporarily (`contacts.head.tel` as the phone icon, the number in
+`<span dir="ltr">`, a middot and "تحويلة 236"; `s7.phones.hours24` as
+"24 ساعة"), then `index.html` restored from a copy and confirmed identical
+with `cmp`. The full-page PNG was cut into strips and I read these:
+
+- **Contacts, Activity Supervisor card**: the line reads `050 855 1006`
+  after the phone icon, at the right edge like the other cards.
+- **Contacts, Head of School card** (the temporary Arabic): from the right,
+  phone icon, `054 987 4933`, middot, `تحويلة 236`. Correct Arabic order,
+  number intact, right-aligned.
+- **Contacts, the five other keyed lines** (still English): unchanged,
+  `050 043 1494 · ext. 213` and so on, right-aligned.
+- **Email links**: intact and right-aligned.
+- **Edexcel grade equivalence**: the first cell reads `A*`; A, B, C, D
+  below it; all at the left edge of the column as before.
+- **Semester One table**: 6, 4, 10, 20, 30, `50%` and the en dash in place
+  at the left of their columns.
+
+Not read: the phone table row with the temporary "24 ساعة". Its cell uses
+the same rule as the Head of School line, which I did read.
+
+### Commands and output
+
+- `node tools/i18n.mjs check`: 315 failures, 286 rule 1 and 29 rule 8. Zero
+  rule 9, rule 2, rule 4, no markup failure. Same as before the round.
+- `bash tools/render-check.sh`: `all render checks passed`, no FAIL line,
+  both languages, no overflow at 380px.
+- `cmp` of the English `w380.png` and `w380-bell.png` against the baseline
+  taken before Task 3 began: both byte-identical.
+- `node tools/check.mjs`: no failure other than the rule 1 and rule 8 ones.
+
+### Files
+
+`index.html`, this report.
