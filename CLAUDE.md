@@ -14,7 +14,7 @@ Live at `https://ais-ig.github.io/hub/`, repository `ais-ig/hub`. This folder is
 - **Mobile-first**, an 800px content column, the same width as the pathway hub. The documents band and the contact grid go multi-column above roughly 520px; nothing else changes shape on desktop.
 - **English and Arabic, English first.** Decided on 30 September 2026, at the school's request, after parents asked for the hub in Arabic. It reverses the earlier locked decision "English only, no language toggle, no RTL"; that line is gone on purpose, so do not restore it. English is the default and the source of truth: it stays in the markup and is what a browser without JavaScript shows. A text button in the top bar, before the bell, switches in place with no reload. `?lang=ar` and `?lang=en` override, and the choice is remembered per browser in `localStorage` under `aisHub.lang`. The printed QR codes and the plain link still open in English.
 - **The Arabic is a dictionary, not second markup.** Every element a parent reads carries `data-i18n="<key>"`, every read attribute a `data-i18n-attr="aria-label:<key>"` pair, and the Arabic sits in one JSON block, `<script type="application/json" id="i18nAr">`, keyed the same way. Strings that only the script writes have their English in a second block, `i18nEn`, under `js.*` keys. Each Arabic entry stores `h`, a short hash of the English it was translated from. This shape was chosen over side-by-side English and Arabic markup and over a second page because drift is the long-term risk here: the prose is duplicated from source documents that change, and only a dictionary lets a script prove that nothing was missed and nothing went stale. Do not split the page in two and do not inline the Arabic. The PDFs stay English, and in Arabic a link to one says so. See "English and Arabic move together" below.
-- **Right-to-left is one override block.** Every Arabic or RTL rule sits at the end of the stylesheet, under `html[lang="ar"]` or `html[dir="rtl"]`. The rules above it are not rewritten, so the English layout cannot change. Keep it that way: never edit an existing rule to suit Arabic, add its mirror to the block.
+- **Right-to-left is one override block.** Every Arabic or RTL rule sits at the end of the stylesheet, under `html[lang="ar"]` or `html[dir="rtl"]`. The rules above it are not rewritten, so the English layout cannot change. The one exception is the language button, which shows in both languages: its own rules sit with the top bar, and beside them a `@media (max-width: 359px)` rule that applies in both languages and gives the bar a few pixels back so the brand stays on one line on the narrowest phones. From 360px up that rule does nothing. Keep it that way: never edit an existing rule to suit Arabic, add its mirror to the block.
 - **Arabic can never blank the page.** A few lines in `<head>` choose the language before anything paints and, for Arabic, hide `<body>` under the class `i18n-wait` until the Arabic is written, so English never flashes. A timer lifts that cover after 1.5 seconds whatever happens. With no readable `i18nAr` block the page is English and the button stays hidden, and a missing key leaves its element in English rather than empty.
 - **No campus toggle.** Grades 9 and 10 curriculum, options, assessment and policies are identical across campuses. Only venues and contacts differ. The page currently carries the boys campus only.
 - **No Google Sheets hydration.** All content is static. The old hub's CSV layer was deliberately dropped: nothing on this page is volatile enough to justify the failure surface.
@@ -176,9 +176,13 @@ rules, so a commit that forgets fails the check. What to do in each case:
   it, so put it on the smallest element that fits.
 - **A new link to an English PDF.** Put the bare attribute `data-pdf-en` on the
   `<a>`. In Arabic the link then shows a small "in English" tag; the word is
-  written once, in the CSS. Do not put it on a PDF that already carries Arabic
-  (the Semester 1 parent letter, the commitment form, the parent guide) or on
-  the class pills.
+  written once, in the CSS. Do not put it on a PDF that is itself in Arabic
+  and English. As of 30 September 2026 the PDF links without the marker are
+  the Semester 1 parent letter, the phone policy commitment form (both rows)
+  and the eleven class pills, which are not cards or rows. Every other PDF
+  link carries it, the parent guide included: it has Arabic on its map pages
+  but is an English document in effect, and the first decision to leave it
+  unmarked was reversed after review.
 - **New CSS with a physical left or right** (`left`, `right`, `padding-left`,
   `margin-right`, `border-left`, an asymmetric shorthand, `text-align: left`)
   needs its mirror in the `html[dir="rtl"]` block at the end of the stylesheet.
@@ -186,7 +190,11 @@ rules, so a commit that forgets fails the check. What to do in each case:
   Nothing checks this but the Arabic screenshot, so look at it.
 
 `node tools/check.mjs` now fails when: a key has no Arabic, or an Arabic entry
-has no key on the page; a key sits on two elements with different English; an
+has no key on the page; an Arabic entry, or a notice's Arabic field, shows no
+Arabic letter at all, which is English copied over by mistake, unless the
+English itself has no letters or the entry carries `"latin": true` (for a
+notice, `"latinAr": true` on the `updatesData` entry); a key sits on two
+elements with different English; an
 entry's hash no longer matches its English; a keyed element contains another
 keyed element or an `id`; the Arabic's tags or link attributes differ from the
 English's; a number in the English is missing from the Arabic; the Arabic holds
@@ -237,6 +245,11 @@ Found while building this, each one after it had gone wrong on screen.
   The override block sets `letter-spacing: 0 !important` on everything under
   `html[dir="rtl"]`, so a tracked rule added later cannot be forgotten. Do not
   remove it and do not out-rank it.
+- **An uppercase transform makes Latin words shout inside an Arabic heading.**
+  Arabic has no capitals, so `text-transform: uppercase` does nothing to the
+  Arabic and turns a word like Schoology or Zoom beside it into capitals. The
+  override block sets `text-transform: none` on `h4` for that reason. A new
+  uppercase rule on an element that can hold Arabic needs the same.
 - **`history.replaceState` does not run on `file://`.** The script takes
   `?lang=` out of the address bar after reading it, so a parent who shares the
   page shares the plain link. Chrome refuses that on a local file and the code

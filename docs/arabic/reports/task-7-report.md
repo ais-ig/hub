@@ -131,3 +131,39 @@ the design departures (it is a comparison with the pathway hub's English).
   the fixer changes decision D17, that sentence in `CLAUDE.md` changes too.
 - `docs/arabic/LOG.md` was modified in the working tree by someone else and is
   not in this commit.
+
+## Reconciliation
+
+After the fixer's commit `e9ac676`. Each point was checked in the code first.
+
+1. **Parent guide and `data-pdf-en`.** Listing every `assets/*.pdf` link on
+   the page without the attribute gives: the Semester 1 parent letter (one
+   link), the phone policy commitment form (two rows) and the eleven class
+   pills. `CLAUDE.md` now states exactly that list, dated, and says the parent
+   guide carries the marker and why the first decision was reversed.
+   `README.md` names the letter, the form and the pills.
+2. **The untranslated rule.** Read in `tools/i18n.mjs` (`leftInLatin`, reported
+   as `i18n 1 untranslated`) and its three tests. It fails an entry, or a
+   notice's Arabic field, whose visible text has no Arabic letter, unless the
+   English has no letters, the entry carries `"latin": true`, or the notice
+   carries `"latinAr": true`. Added to the failure list in `CLAUDE.md` and to
+   the README's "Leave something in Latin letters". No entry on the page uses
+   either flag today.
+3. **`pairs` separator.** The README's description of the review file now says
+   tags are stripped. The middot separator itself is not described: neither
+   document goes into the file's format that far.
+4. **CSS outside the block.** `CLAUDE.md`, "Right-to-left is one override
+   block", now names the exception. Stated slightly wider than the brief,
+   because the code shows it: the language button's own rules also sit with
+   the top bar, since the button shows in both languages, and the
+   `@media (max-width: 359px)` rule sits beside them.
+5. **`h4` and `text-transform`.** `html[dir="rtl"] h4 { text-transform: none; }`
+   is in the block; added to "Arabic traps".
+6. **Glossary.** Neither document quoted a term that changed. The terms quoted
+   (الصف, السنة, العام الدراسي, القسم البريطاني, يمكنكم, ابنكم, اطرحوا, الصف
+   التاسع, من … إلى …) stand in the amended spec. The spec's new rule that a
+   single grade is an ordinal word and a list of grades takes digits is
+   consistent with what `CLAUDE.md` says and is left to the spec.
+7. `node tools/check.mjs`: all checks passed.
+
+The two "could not verify" items above are now closed.

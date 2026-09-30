@@ -299,10 +299,15 @@ change".
 
 **Leave something in Latin letters.** A name, an email, a code: add the bare
 attribute `data-i18n-skip` to its element, and the check stops asking for a
-key.
+key. Where the element is keyed and its Arabic is rightly Latin letters only,
+add `"latin": true` to its `i18nAr` entry, or `"latinAr": true` to an update
+notice. Without it the check reports the entry as untranslated, which is how it
+catches English pasted in where the Arabic should be.
 
 **Link an English PDF.** Add the bare attribute `data-pdf-en` to the `<a>`.
-Leave it off a PDF that already carries Arabic.
+Leave it off a PDF that is itself in Arabic and English; today that is the
+Semester 1 parent letter and the phone policy commitment form. The class pills
+do not carry it either.
 
 **See what needs doing, and check.**
 
@@ -314,7 +319,8 @@ node tools/shot.mjs --lang=ar  # the Arabic page at 380px
 ```
 
 **The review file.** `docs/arabic/translation-review.html` lists every English
-string beside its Arabic, section by section, and marks any that is missing;
+string beside its Arabic, section by section, with tags stripped, and marks
+any that is missing;
 `translation-review.md` is the same as plain text, for searching. It is what to
 hand a reader of Arabic who is checking the translation, since they need not
 open the source. Regenerate both after any change to the Arabic, and do not
