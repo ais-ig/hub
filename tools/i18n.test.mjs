@@ -2,7 +2,10 @@
    Run: node --test tools/i18n.test.mjs */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { spawnSync } from 'node:child_process';
+import { spawnSync, execFileSync } from 'node:child_process';
+import { mkdtempSync, copyFileSync, readFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
   normalise,
@@ -13,6 +16,7 @@ import {
   stampKeys,
   stampAll,
   buildPairs,
+  hashUpdate,
 } from './i18n.mjs';
 
 /* Characters the Arabic must never hold, built from code points so this
@@ -25,8 +29,17 @@ const jsonBlock = (id, data) =>
   '<script type="application/json" id="' + id + '">\n' +
   JSON.stringify(data, null, 2) + '\n</script>\n';
 
-/* A small page shaped like the real one. ar and en are left out when null. */
-function page({ body = '', ar = null, en = null, updates = [] } = {}) {
+/* A notice as merge or stamp would leave it: carrying the hash of its
+   English, wherever it has Arabic and the test gave no hash of its own. */
+const stamped = (e) =>
+  (e.titleAr || e.textAr || e.labelAr) && !Object.hasOwn(e, 'hAr')
+    ? { ...e, hAr: hashUpdate(e) }
+    : e;
+
+/* A small page shaped like the real one. ar and en are left out when null.
+   Update notices are stamped unless stampUpdates is false. */
+function page({ body = '', ar = null, en = null, updates = [], stampUpdates = true } = {}) {
+  if (stampUpdates && Array.isArray(updates)) updates = updates.map((e) => (e && typeof e === 'object' ? stamped(e) : e));
   return '<!doctype html>\n<html lang="en">\n<head>\n<title>Parent Hub</title>\n' +
     '<style>.english { color: red; }</style>\n</head>\n<body id="top">\n' +
     body + '\n' +
@@ -448,8 +461,9 @@ test('mergeAr writes update keys into updatesData, not into i18nAr', () => {
   assert.deepEqual(checkAll(out), []);
   const data = JSON.parse(out.match(/id="updatesData">([\s\S]*?)<\/script>/)[1]);
   assert.deepEqual(Object.keys(data[0]), [
-    'id', 'date', 'title', 'titleAr', 'text', 'textAr', 'href', 'label', 'labelAr',
+    'id', 'date', 'title', 'titleAr', 'text', 'textAr', 'href', 'label', 'labelAr', 'hAr',
   ]);
+  assert.equal(data[0].hAr, hashUpdate(GOOD_UPDATES[0]));
   const dict = out.match(/id="i18nAr">([\s\S]*?)<\/script>/)[1];
   assert.ok(!dict.includes('updates.'));
 });
@@ -490,13 +504,121 @@ test('stampAll re-stamps every stale entry', () => {
   assert.deepEqual(checkAll(stampAll(stale)), []);
 });
 
+/* The command line is run against a copy of the page in a temp folder, named
+   through I18N_PAGE, so no test can ever write to the real index.html. */
+const TOOL = fileURLToPath(new URL('./i18n.mjs', import.meta.url));
+const REAL_PAGE = fileURLToPath(new URL('../index.html', import.meta.url));
+function withPageCopy(fn) {
+  const dir = mkdtempSync(join(tmpdir(), 'hub-i18n-test-'));
+  const copy = join(dir, 'index.html');
+  copyFileSync(REAL_PAGE, copy);
+  try {
+    return fn(copy, { encoding: 'utf8', env: { ...process.env, I18N_PAGE: copy } });
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+}
+
 test('the stamp command with no keys and no --all prints usage and exits 2', () => {
-  const tool = fileURLToPath(new URL('./i18n.mjs', import.meta.url));
-  const run = spawnSync(process.execPath, [tool, 'stamp'], { encoding: 'utf8' });
-  assert.equal(run.status, 2);
-  assert.match(run.stderr, /stamp <key>\.\.\. \| stamp --all/);
-  const mixed = spawnSync(process.execPath, [tool, 'stamp', '--all', 'hero.title'], { encoding: 'utf8' });
-  assert.equal(mixed.status, 2);
+  withPageCopy((copy, opts) => {
+    const before = readFileSync(copy, 'utf8');
+    const run = spawnSync(process.execPath, [TOOL, 'stamp'], opts);
+    assert.equal(run.status, 2);
+    assert.match(run.stderr, /stamp <key>\.\.\. \| stamp --all/);
+    const mixed = spawnSync(process.execPath, [TOOL, 'stamp', '--all', 'hero.title'], opts);
+    assert.equal(mixed.status, 2);
+    assert.equal(readFileSync(copy, 'utf8'), before);
+  });
+});
+
+test('extract captured by a parent process arrives whole and parses', () => {
+  withPageCopy((copy, opts) => {
+    const out = execFileSync(process.execPath, [TOOL, 'extract'], opts);
+    assert.ok(out.length > 8192, 'the real page has more than one pipe buffer of keys');
+    const keys = JSON.parse(out);
+    assert.deepEqual(Object.keys(keys), extractKeys(readFileSync(copy, 'utf8')).map((k) => k.key));
+  });
+});
+
+test('check exits 1 on a failure and 0 when clean, through exitCode', () => {
+  withPageCopy((copy, opts) => {
+    const clean = spawnSync(process.execPath, [TOOL, 'check'], opts);
+    assert.equal(clean.status, 0, clean.stdout);
+    const bad = spawnSync(process.execPath, [TOOL, 'merge', join(copy, 'absent.json')], opts);
+    assert.equal(bad.status, 1);
+    assert.match(bad.stderr, /^i18n: /);
+  });
+});
+
+/* ---------- the hash of an update notice ---------- */
+
+const NOTICE = 'updates.2026-09-27-timetables';
+
+test('rule 3: a reworded notice title fails, naming the entry and the command', () => {
+  const html = good().replace('"Revised class timetables"', '"Earlier revision of the class timetables"');
+  const failures = checkAll(html);
+  assert.equal(failures.length, 1);
+  assert.match(failures[0], /^i18n 3 stale: updates\.2026-09-27-timetables /);
+  assert.ok(failures[0].includes('node tools/i18n.mjs stamp ' + NOTICE));
+});
+
+test('rule 3: a reworded notice text or label fails', () => {
+  const text = good().replace('has been revised."', 'is suspended."');
+  assert.equal(ruleHits(checkAll(text), 3, NOTICE).length, 1);
+  const label = good().replace('"See the timetables"', '"Open the timetables"');
+  assert.equal(ruleHits(checkAll(label), 3, NOTICE).length, 1);
+});
+
+test('rule 3: whitespace alone does not make a notice stale, and ids are untouched', () => {
+  const html = good().replace('"Revised class timetables"', '"Revised  class timetables "');
+  assert.deepEqual(checkAll(html), []);
+});
+
+test('rule 3: stamping the entry clears it, and changes nothing else', () => {
+  const stale = good().replace('"Revised class timetables"', '"Earlier revision of the class timetables"');
+  const fixed = stampKeys(stale, [NOTICE]);
+  assert.deepEqual(checkAll(fixed), []);
+  assert.ok(fixed.includes('"id": "2026-09-27-timetables"'));
+  assert.ok(fixed.includes('"titleAr": "جداول دراسية معدلة"'));
+  assert.deepEqual(checkAll(stampAll(stale)), []);
+});
+
+test('rule 3: an entry with Arabic but no hAr fails', () => {
+  const failures = checkAll(good({ stampUpdates: false }));
+  assert.equal(failures.length, 1);
+  assert.match(failures[0], /^i18n 3 stale: updates\.2026-09-27-timetables has Arabic but no hAr/);
+  assert.ok(failures[0].includes('node tools/i18n.mjs stamp ' + NOTICE));
+  assert.deepEqual(checkAll(stampKeys(good({ stampUpdates: false }), [NOTICE])), []);
+});
+
+test('merge stamps the notice whose Arabic it writes', () => {
+  const stale = good().replace('"Revised class timetables"', '"Earlier revision of the class timetables"');
+  const merged = mergeAr(stale, { [NOTICE + '.title']: 'نسخة سابقة من الجداول الدراسية' });
+  assert.deepEqual(checkAll(merged), []);
+  assert.ok(merged.includes('"titleAr": "نسخة سابقة من الجداول الدراسية"'));
+});
+
+test('stamp refuses an update id that is not on the page', () => {
+  assert.throws(() => stampKeys(good(), ['updates.2020-01-01-absent']), /updates\.2020-01-01-absent/);
+});
+
+/* ---------- attributes the English does not have ---------- */
+
+test('rule 5: an attribute in the Arabic that its English tag lacks fails', () => {
+  const ar = goodAr();
+  ar['hero.lead'].ar = LEAD_AR.replace('class="btn"', 'class="btn" onclick="x()" style="color:red"');
+  const hits = ruleHits(checkAll(good({ ar })), 5, 'hero.lead');
+  assert.equal(hits.length, 1);
+  assert.match(hits[0], /onclick, style/);
+});
+
+test('rule 5: a direction span may carry dir and nothing else', () => {
+  const ar = goodAr();
+  ar['hero.lead'].ar = LEAD_AR.replace('<span dir="ltr">', '<span dir="ltr" onclick="x()">');
+  const hits = ruleHits(checkAll(good({ ar })), 5, 'hero.lead');
+  assert.equal(hits.length, 1);
+  assert.match(hits[0], /onclick/);
+  assert.deepEqual(checkAll(good()), []);
 });
 
 /* ---------- fix round 1 ---------- */

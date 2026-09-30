@@ -5,6 +5,7 @@
      node tools/i18n.mjs extract          print every key and its English, as JSON
      node tools/i18n.mjs merge <file>...  write key to Arabic maps into the page
      node tools/i18n.mjs stamp <key>...   re-stamp hashes once the Arabic is current
+                                          (updates.<id> stamps an update notice)
      node tools/i18n.mjs stamp --all      the same, for every stale entry
      node tools/i18n.mjs pairs            write docs/arabic/translation-review.*
      node tools/i18n.mjs check            the nine rules; exit 1 on any failure
@@ -39,6 +40,12 @@ export const normalise = (s) => String(s).replace(/\s+/g, ' ').trim();
 /* The first eight hex characters of the SHA-1 of the normalised English. */
 export const hashEn = (text) =>
   createHash('sha1').update(normalise(text), 'utf8').digest('hex').slice(0, 8);
+
+/* The stamp of an update notice, kept on the entry as hAr: the same hash,
+   over its English title, text and label together. A notice has no markup
+   to carry a key, so this is what makes a reworded notice stale. */
+export const hashUpdate = (entry) =>
+  hashEn(['title', 'text', 'label'].map((f) => normalise(entry[f] ?? '')).join('\u001F'));
 
 const ENTITIES = {
   amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ',
@@ -289,6 +296,8 @@ function scan(html) {
      An entry may carry "numsAr": false to exempt it from the number check,
      and "latinAr": true where its Arabic is rightly in Latin letters. */
   const updates = [];
+  /* One per entry: { id, h, hAr, hasAr }, for rule 3 and for stamp. */
+  const updateEntries = [];
   const updateProblems = []; /* [rule, detail] for a block that cannot be read */
   if (!upBlock.found) {
     updateProblems.push(['block',
@@ -304,6 +313,12 @@ function scan(html) {
           'entry ' + (i + 1) + ' of updatesData has no id, so its Arabic cannot be checked']);
         return;
       }
+      updateEntries.push({
+        id: e.id,
+        h: hashUpdate(e),
+        hAr: e.hAr,
+        hasAr: UPDATE_FIELDS.some((f) => typeof e[f + 'Ar'] === 'string' && e[f + 'Ar'].trim()),
+      });
       for (const field of UPDATE_FIELDS) {
         if (!e[field]) continue;
         const ar = e[field + 'Ar'];
@@ -325,7 +340,7 @@ function scan(html) {
   for (const o of occurrences) if (!sources.has(o.key)) sources.set(o.key, o);
 
   return {
-    tokens, occurrences, problems, sources, updates, updateProblems,
+    tokens, occurrences, problems, sources, updates, updateEntries, updateProblems,
     arBlock: jsonBlock(html, 'i18nAr'), enBlock, upBlock,
   };
 }
@@ -380,6 +395,34 @@ function tagSignature(fragment, dropBidi) {
     }
   }
   return sig;
+}
+
+/* Rule 5, second half. The attribute names the Arabic carries on a tag that
+   the English tag in the same place does not: an onclick or a style slipped
+   into the Arabic alone. A direction span or a <bdi> has no English tag to
+   compare with, so it may carry dir and nothing else. Only called once the
+   two signatures match, so the tags pair up one to one. */
+function addedAttrs(en, ar) {
+  const isBidi = (t) => t.name === 'bdi' || (
+    t.name === 'span' &&
+    (t.attrs.dir || '').toLowerCase() === 'ltr' &&
+    !TAG_ATTRS.some((a) => has(t.attrs, a))
+  );
+  const enTags = tokenize(en).filter((t) => t.type === 'open');
+  const added = [];
+  let i = 0;
+  for (const t of tokenize(ar)) {
+    if (t.type !== 'open') continue;
+    const names = Object.keys(t.attrs);
+    if (isBidi(t)) {
+      for (const n of names) if (n !== 'dir') added.push({ tag: t.name, attr: n });
+      continue;
+    }
+    const pair = enTags[i++];
+    if (!pair) break;
+    for (const n of names) if (!has(pair.attrs, n)) added.push({ tag: t.name, attr: n });
+  }
+  return added;
 }
 
 /* Maximal runs of ASCII digits in what the reader sees, as a count per run. */
@@ -687,11 +730,21 @@ export function checkAll(html) {
       const enSig = tagSignature(source.en, false);
       const arSig = tagSignature(ar, true);
       const n = Math.max(enSig.length, arSig.length);
+      let sameTags = true;
       for (let i = 0; i < n; i++) {
         if (enSig[i] === arSig[i]) continue;
         fail('5 tags', key + ' differs at tag ' + (i + 1) + ': English has ' +
           (enSig[i] || 'nothing') + ', Arabic has ' + (arSig[i] || 'nothing'));
+        sameTags = false;
         break;
+      }
+      if (sameTags) {
+        const added = addedAttrs(source.en, ar);
+        if (added.length) {
+          fail('5 tags', key + ' has Arabic that adds ' +
+            added.map((a) => a.attr).join(', ') + ' on <' + added[0].tag +
+            '>, which the English tag does not have');
+        }
       }
 
       /* 6. Every number in the English is in the Arabic, as often. */
@@ -721,6 +774,16 @@ export function checkAll(html) {
   /* 1, 6, 7 and 8 for update notices, whose Arabic lives beside their
      English. */
   for (const [rule, detail] of s.updateProblems) fail(rule, detail);
+  /* 3 for a notice: its hAr still matches its English. */
+  for (const e of s.updateEntries) {
+    if (!e.hasAr || e.hAr === e.h) continue;
+    const command = 'node tools/i18n.mjs stamp updates.' + e.id;
+    fail('3 stale', typeof e.hAr === 'string' && e.hAr
+      ? 'updates.' + e.id + ' has English that changed after its Arabic was written; ' +
+        'update its titleAr, textAr and labelAr, then run: ' + command
+      : 'updates.' + e.id + ' has Arabic but no hAr, so a reworded notice would pass unseen; ' +
+        'read its Arabic against its English, then run: ' + command);
+  }
   for (const u of s.updates) {
     if (u.ar === null) {
       fail('8 updates', u.key + ' has no ' + u.field + 'Ar in updatesData');
@@ -805,6 +868,11 @@ function readDict(s) {
   return { ...s.arBlock.data };
 }
 
+/* Puts the updatesData array back into the page, as merge has always
+   written it. */
+const writeUpdates = (html, s, data) =>
+  html.slice(0, s.upBlock.start) + '\n' + blockJson(data, 2) + '\n' + html.slice(s.upBlock.end);
+
 /* Writes a key to Arabic map into the page and stamps each entry's hash from
    the current English. A value is the Arabic string, or { ar, nums }. Keys
    of the form updates.<id>.<field> go to that notice's <field>Ar instead.
@@ -848,13 +916,15 @@ export function mergeAr(html, map) {
       if (!edits) return e;
       const next = {};
       for (const [k, v] of Object.entries(e)) {
+        if (k === 'hAr') continue;
         if (!has(edits, k)) next[k] = v;
         if (has(edits, k + 'Ar')) next[k + 'Ar'] = edits[k + 'Ar'];
       }
+      /* Writing a notice's Arabic says it matches the English as it stands. */
+      next.hAr = hashUpdate(next);
       return next;
     });
-    out = out.slice(0, s.upBlock.start) + '\n' + blockJson(data, 2) + '\n' +
-      out.slice(s.upBlock.end);
+    out = writeUpdates(out, s, data);
   }
   const touchedDict = Object.keys(map).some((k) => !updateKeys.has(k));
   return touchedDict ? writeDict(out, dict) : out;
@@ -865,21 +935,38 @@ export function mergeAr(html, map) {
 function stamp(html, keys, all) {
   const s = scan(html);
   const dict = readDict(s);
+  /* A target of the form updates.<id> is a notice, stamped on its entry. */
+  const notices = new Map(s.updateEntries.filter((e) => e.hasAr).map((e) => ['updates.' + e.id, e]));
   const named = all
     ? Object.keys(dict).filter((k) => s.sources.has(k) && isDict(dict[k]))
-    : keys;
+    : keys.filter((k) => !notices.has(k));
+  const namedNotices = all ? [...notices.keys()] : keys.filter((k) => notices.has(k));
   const bad = named.filter((k) => !s.sources.has(k) || !isDict(dict[k]));
   if (bad.length) {
     throw new Error('no key on the page with an Arabic entry: ' + bad.join(', '));
   }
   const stamped = [];
+  let out = html;
+  const stale = new Set(namedNotices.filter((k) => notices.get(k).hAr !== notices.get(k).h));
+  if (stale.size) {
+    const data = s.upBlock.data.map((e) => {
+      if (!isDict(e) || !stale.has('updates.' + e.id)) return e;
+      const next = { ...e };
+      delete next.hAr;
+      next.hAr = hashUpdate(next);
+      return next;
+    });
+    out = writeUpdates(out, s, data);
+    stamped.push(...stale);
+  }
+  const before = stamped.length;
   for (const key of named) {
     const h = hashEn(s.sources.get(key).en);
     if (dict[key].h === h) continue;
     dict[key] = { ...dict[key], h };
     stamped.push(key);
   }
-  return { html: stamped.length ? writeDict(html, dict) : html, stamped };
+  return { html: stamped.length > before ? writeDict(out, dict) : out, stamped };
 }
 
 /* Run only once the Arabic of each named key has been brought up to date.
@@ -982,7 +1069,9 @@ export function buildPairs(html) {
 
 function main(argv) {
   const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-  const pagePath = join(root, 'index.html');
+  /* I18N_PAGE names another copy of the page; the tests use it so that they
+     never touch the real one. */
+  const pagePath = process.env.I18N_PAGE || join(root, 'index.html');
   const html = readFileSync(pagePath, 'utf8');
   const [command, ...args] = argv;
 
@@ -1012,7 +1101,8 @@ function main(argv) {
   if (command === 'stamp') {
     const all = args.includes('--all');
     if (!args.length || (all && args.length > 1)) {
-      console.error('usage: node tools/i18n.mjs stamp <key>... | stamp --all');
+      console.error('usage: node tools/i18n.mjs stamp <key>... | stamp --all\n' +
+        '       a key is a data-i18n key, or updates.<id> for an update notice');
       return 2;
     }
     const result = stamp(html, all ? [] : args, all);
@@ -1047,10 +1137,12 @@ function main(argv) {
 
 const invoked = process.argv[1] ? realpathSync(process.argv[1]) : '';
 if (invoked === realpathSync(fileURLToPath(import.meta.url))) {
+  /* exitCode, not process.exit: exit would cut off output still queued on a
+     pipe, which lost everything past 8192 bytes of extract. */
   try {
-    process.exit(main(process.argv.slice(2)));
+    process.exitCode = main(process.argv.slice(2));
   } catch (e) {
     console.error('i18n: ' + e.message);
-    process.exit(1);
+    process.exitCode = 1;
   }
 }

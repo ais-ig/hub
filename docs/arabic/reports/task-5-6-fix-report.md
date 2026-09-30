@@ -281,3 +281,150 @@ iPhone), and the page with Google Fonts blocked.
 
 Not touched and not committed by this task: `CLAUDE.md`, `README.md`,
 `docs/arabic/LOG.md` (edited by others while this ran), `docs/arabic/screens/`.
+
+## 8. Final fix wave
+
+30 September 2026, after the whole-branch code review
+(`final-code-review.md`) and the re-review of the first fix wave
+(`fix-wave-re-review.md`). Tests were written first in each case and seen to
+fail before the code changed.
+
+### Fixed
+
+| Finding | What was done |
+|---|---|
+| Important 1, notices have no hash | Each `updatesData` entry now carries `hAr`: the first eight hex characters of the SHA-1 of its English `title`, `text` and `label` together, with the same whitespace normalisation as dictionary entries. Rule 3 fails a notice with Arabic whose `hAr` is missing or no longer matches, naming the entry and the exact command, `node tools/i18n.mjs stamp updates.<id>`. `merge` stamps it when it writes a notice's Arabic; `stamp` accepts `updates.<id>`; `stamp --all` covers notices. The ten live entries are stamped. No `id` changed. The page script reads named fields only and ignores `hAr`; the toggle round trip and the render checks confirm it. 7 tests: a reworded title, text or label fails; whitespace alone does not; stamping clears it; Arabic with no `hAr` fails; `merge` stamps; an unknown id is refused. |
+| Minor 1, output cut at 8192 bytes | `process.exitCode` in place of `process.exit`. A test captures `extract` from a child process, checks it is longer than 8192 bytes and parses all of it; another checks exit 0 and exit 1 still come through. |
+| Minor 4, `:has()` in a selector list | Split into two rules, so the last-column heading keeps its alignment on a browser without `:has()`. |
+| Minor 5, `inset` | Line 272 is not on `main`: it is the language button's outline, added on this branch. Rewritten as `top: 7px; right: 0; bottom: 7px; left: 0`. The 380px comparison below shows the button unchanged. |
+| Minor 2, toggling mid-page moves the reader | On a tap of the button only: before the swap the script notes the first keyed element that starts below the bar's row and its distance from the top; after the swap and the repaint it scrolls, with `scroll-behavior` set to `auto` for that one call, so the element is there again. It does it once more when `document.fonts.ready` resolves, unless the reader has scrolled or tapped again, because a face that lands late moves the text a second time (seen: 142px). Nothing happens on first load or at the very top. The bar is measured by its row, since with the bell or the menu open the bar as a whole reaches far down the screen (that was the first version's bug, caught by the test). `tools/shot.mjs` now asserts it beside the toggle-twice check, in both languages, with `overflow-anchor: none` injected for the test, the bell open, at `s4.progress.title`, `s7.phones.title` and `contacts.campus`: before the fix the reader moved 72 to 914px, now 0px in all twelve toggles. |
+| Re-review nit, `results.sub` | The no-break space is in. At 380px the line now breaks before المتقدمين للاختبارات, which stay together (seen in `ar-380-04.png`). |
+| Minor 6, rule 5 ignores other attributes | Rule 5 now also fails an Arabic tag carrying an attribute its English tag does not have, and a direction span or `<bdi>` carrying anything but `dir`. 2 tests. The live page passes unchanged. |
+| Minor 11, CLI test runs on the real page | The command line takes `I18N_PAGE`; the CLI tests run on a copy in a temp folder and assert it is not written to. |
+| Item 9, documents | `CLAUDE.md` ("English and Arabic move together") and `README.md` ("Arabic", the timetable recipe and "Recording a change") now describe the notice hash and state the gap that the four mentor lists and the class pills are skipped whole. The spec's rules 3 and 5 say the same. |
+
+### Left, with the reason
+
+| Finding | Reason |
+|---|---|
+| Re-review, `s3.boards.share1` | No change, by instruction: A-Level is what "advanced level study" means here. It stays listed as English source issue 12. |
+| Minor 3, Cairo downloaded by English readers | Not acted on, by instruction. |
+| Minor 7, text inside mentor lists and pills escapes rule 9 | Accepted by the review; now documented as a known gap. Keying each row would put staff names into the dictionary for no gain. |
+| Minor 8, a script error before the last line now stops the updates painting in English | Would mean a second first-paint path for the updates. No such error exists, and a change there is a risk to the English page, which this wave must not take. |
+| Minor 9, the bell's English `aria-label` captured with a count in it | Harmless: `refresh()` rewrites it after every swap, as the markup comment says. |
+| Minor 10, no `lang="en"` on Latin names in Arabic mode | Needs a screen reader on a real phone to judge; it touches some forty elements of the English markup. Left for the owner. |
+| Minor 12, no tests for `check.mjs` rules 9 to 11 | Test coverage only; outside this wave. |
+| Minor 13, two commits without the co-author line | Not acted on, by instruction. |
+| Minor 14, the 1.5 second cover on a slow connection | Accepted by design. |
+
+### Verification
+
+`node --test tools/i18n.test.mjs`
+
+```
+# tests 105
+# suites 0
+# pass 105
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+```
+
+`node tools/check.mjs`
+
+```
+ok   14 internal anchors resolve
+ok   26 asset links exist
+ok   10 update entries are well formed
+ok   11 class timetables match their filenames
+ok   English and Arabic are in step
+ok   15 script strings have their English
+
+all checks passed
+```
+
+`bash tools/render-check.sh` (the four "screenshot written" lines left out)
+
+```
+ok   countdown is hidden
+ok   no thank-you message shown
+ok   updates strip present
+ok   bell button not hidden
+ok   bell list rendered
+ok   change log rendered
+ok   change log section not hidden
+ok   change log nav not hidden
+ok   English page is left to right
+ok   language button not hidden
+ok   English page marked ready
+ok   Arabic page is right to left
+ok   Arabic hero title
+ok   Arabic cover lifted by applyLang
+ok   Arabic page is not left hidden
+ok   Arabic bell list rendered
+ok   Arabic dates rendered
+ok   no English month in an Arabic date
+
+-- mobile viewport check, English (tools/shot.mjs) --
+ok   page: measured scrollWidth=380 clientWidth=380 innerWidth=380
+ok   page: no horizontal overflow at 380px width
+ok   bell open: measured scrollWidth=380 clientWidth=380 innerWidth=380
+ok   bell open: no horizontal overflow at 380px width
+ok   language switched en to ar and back, page restored exactly
+ok   switching language at s4.progress.title kept the place, within 0px
+ok   switching language at s7.phones.title kept the place, within 0px
+ok   switching language at contacts.campus kept the place, within 0px
+
+-- mobile viewport check, Arabic (tools/shot.mjs --lang=ar) --
+ok   page: measured scrollWidth=380 clientWidth=380 innerWidth=380
+ok   page: no horizontal overflow at 380px width
+ok   the page opened right to left from ?lang=ar
+ok   bell open: measured scrollWidth=380 clientWidth=380 innerWidth=380
+ok   bell open: no horizontal overflow at 380px width
+ok   language switched ar to en and back, page restored exactly
+ok   switching language at s4.progress.title kept the place, within 0px
+ok   switching language at s7.phones.title kept the place, within 0px
+ok   switching language at contacts.campus kept the place, within 0px
+
+all render checks passed
+```
+
+`node tools/i18n.mjs pairs`, then `check`
+
+```
+wrote docs/arabic/translation-review.html and translation-review.md
+ok   367 strings have Arabic in step with their English
+```
+
+The two review files came out byte-identical to the committed ones: the only
+string that changed gained a no-break space, which the review shows as a space.
+
+**English at 380px against `main`**, same method as section 6, captured again
+after every change in this wave:
+
+```
+36 pairs, 33 identical
+DIFF en380-01.png (430, 26, 548, 86)
+DIFF en380-bell.png (430, 26, 548, 86)
+DIFF en380-menu.png (430, 26, 548, 86)
+```
+
+Only the language button differs.
+
+**Screens refreshed** in `docs/arabic/screens/` (untracked, 63 files): the same
+62 as before, plus `ar-320-01.png`, the top of the page at 320px, where the
+brand sits on one line beside the button. No overflow at 320, 380 or 800px.
+Looked at after this wave: `ar-320-01.png`, `ar-380-04.png` (the results line
+and the button's outline) and `ar-380-10.png` (table headings over their
+figures).
+
+Still not checked: a real iPhone. The keep-place fix was verified in Chrome
+with scroll anchoring switched off, which is the iOS condition, but not on iOS
+itself.
+
+### Files changed in this wave
+
+`index.html`, `tools/i18n.mjs`, `tools/i18n.test.mjs`, `tools/shot.mjs`,
+`CLAUDE.md`, `README.md`,
+`docs/superpowers/specs/2026-09-30-arabic-language-design.md`, this report.

@@ -447,6 +447,54 @@ async function main() {
     }
   }
 
+  /* The reader keeps their place when they switch language mid-page. Scroll
+     anchoring is turned off for this test, as it is on iOS Safari, so only
+     the page's own correction can hold the place. In three sections: put a
+     keyed element just below the bar, tap the button, and the element
+     must be within a few pixels of where it was; tap again, the same. */
+  if (firstTap !== 'hidden') {
+    await evalValue(`(() => { const st = document.createElement('style');
+      st.id = 'shot-no-anchor'; st.textContent = '* { overflow-anchor: none !important; }';
+      document.head.appendChild(st); return 1; })()`, 'turning scroll anchoring off');
+    const topOf = (key) => `(() => { const e = document.querySelector('[data-i18n="${key}"]');
+      return e ? e.getBoundingClientRect().top : null; })()`;
+    for (const key of ['s4.progress.title', 's7.phones.title', 'contacts.campus']) {
+      const placed = await evalValue(`(() => { const e = document.querySelector('[data-i18n="${key}"]');
+        if (!e) return null;
+        const de = document.documentElement; const was = de.style.scrollBehavior;
+        de.style.scrollBehavior = 'auto';
+        scrollTo(0, e.getBoundingClientRect().top + pageYOffset - 64);
+        de.style.scrollBehavior = was;
+        return e.getBoundingClientRect().top; })()`, 'scrolling to ' + key);
+      if (placed === null) {
+        console.log('FAIL no element with data-i18n="' + key + '" to hold the place by');
+        ok = false;
+        continue;
+      }
+      let worst = 0;
+      for (let tap = 0; tap < 2; tap++) {
+        await evalValue(TOGGLE_SCRIPT, 'tapping the language button');
+        /* A face may still be loading; the page holds the place again when
+           it lands, so wait for that before measuring. */
+        for (let waited = 0; waited < 3000; waited += 100) {
+          await new Promise((r) => setTimeout(r, 100));
+          if (await evalValue('document.fonts.status', 'reading the font status') === 'loaded') break;
+        }
+        await new Promise((r) => setTimeout(r, 150));
+        const now = await evalValue(topOf(key), 'reading the place of ' + key);
+        worst = Math.max(worst, Math.abs(now - placed));
+      }
+      if (worst > 4) {
+        console.log('FAIL switching language at ' + key + ' moved the reader by ' + Math.round(worst) + 'px');
+        ok = false;
+      } else {
+        console.log('ok   switching language at ' + key + ' kept the place, within ' + Math.round(worst) + 'px');
+      }
+    }
+    await evalValue(`(() => { const st = document.getElementById('shot-no-anchor'); if (st) st.remove(); scrollTo(0, 0); return 1; })()`,
+      'turning scroll anchoring back on');
+  }
+
   return ok ? 0 : 1;
 }
 

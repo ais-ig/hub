@@ -269,11 +269,16 @@ languages.
    carries `"latinAr": true`.
 2. A key is used on two elements with different English.
 3. `h` does not match the current English. The message names the key and says
-   to update the Arabic, then run `stamp`.
+   to update the Arabic, then run `stamp`. An update notice carries `hAr`, the
+   same hash over its English `title`, `text` and `label`; a notice with
+   Arabic whose `hAr` is missing or no longer matches fails here, naming the
+   entry and `stamp updates.<id>`.
 4. A keyed element contains another keyed element or an element with an `id`.
 5. The Arabic's tags differ from the English's: same elements, same `href`,
    `class`, `target`, `rel` and `download`, in the same order. `<span dir="ltr">`
-   and `<bdi>` in the Arabic are ignored. This is what stops a bumped `?v=` on a
+   and `<bdi>` in the Arabic are ignored, and may carry `dir` and nothing
+   else. An attribute of any name on an Arabic tag that its English tag does
+   not have also fails. This is what stops a bumped `?v=` on a
    timetable link being missed in Arabic.
 6. A number in the English is absent from the Arabic, unless `"nums": false`.
    Update notices are checked the same way, with `"numsAr": false` on the entry

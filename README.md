@@ -127,7 +127,9 @@ never changes**, which is the whole point: parents keep the link.
    timetable button, the Start here card and the library row
 6. Add one entry to `updatesData`, dated the day you publish, in English and
    Arabic. Give the previous timetable entry a `newUntil` of the day before,
-   and reword it to the past tense in both languages (see "Recording a change")
+   and reword it to the past tense in both languages, then run
+   `node tools/i18n.mjs stamp updates.<id>` for it (see "Recording a change"
+   and "Arabic")
 7. `node tools/check.mjs && bash tools/render-check.sh`. `check.mjs` reads the
    class label out of each per-class file and fails if it does not match the
    filename, so a class list that changed order cannot ship silently.
@@ -191,7 +193,8 @@ before the entry's own `date`.
 **Never change an `id` once it is live.** Read state is stored in each
 visitor's browser (`localStorage`, key `aisHub.updates`) as a list of ids, so
 a changed id reappears as unread for everyone. Fixing a typo in a title or
-text is safe. Read state is per browser: WhatsApp's in-app browser and Safari
+text is safe for read state, but the check then asks for the entry's Arabic to
+be looked at and stamped (see "Arabic"). Read state is per browser: WhatsApp's in-app browser and Safari
 on the same phone remember separately. There are no push notifications; a
 static page cannot send them.
 
@@ -295,7 +298,17 @@ same tags and links as the English and every number in it.
 
 **Add an update notice.** Write the Arabic beside the English in `updatesData`:
 `titleAr`, `textAr`, and `labelAr` when there is a `label`. See "Recording a
-change".
+change". Then stamp it, which writes `hAr`, a hash of the entry's English
+title, text and label, onto the entry:
+
+```
+node tools/i18n.mjs stamp updates.2026-09-27-timetables   # updates.<id>
+```
+
+**Reword an update notice.** Change the English, change the Arabic fields to
+say the same, and run the same `stamp updates.<id>`. Until then the check
+fails and names the entry, so a reworded notice can no longer go out with its
+old Arabic. Do not change the `id`.
 
 **Leave something in Latin letters.** A name, an email, a code: add the bare
 attribute `data-i18n-skip` to its element, and the check stops asking for a
@@ -303,6 +316,11 @@ key. Where the element is keyed and its Arabic is rightly Latin letters only,
 add `"latin": true` to its `i18nAr` entry, or `"latinAr": true` to an update
 notice. Without it the check reports the entry as untranslated, which is how it
 catches English pasted in where the Arabic should be.
+
+One known gap: the four mentor lists under `#mentors` (and the class pills)
+are skipped as a whole. New wording typed inside them is not caught by the
+check and would stay English on the Arabic page, so give it its own element
+and a key by hand.
 
 **Link an English PDF.** Add the bare attribute `data-pdf-en` to the `<a>`.
 Leave it off a PDF that is itself in Arabic and English; today that is the

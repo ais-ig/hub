@@ -170,10 +170,27 @@ rules, so a commit that forgets fails the check. What to do in each case:
   the check knows, set `"numsAr": false` on the entry; the same escape for a
   dictionary entry is `"nums": false`. Use neither to silence a number that is
   really missing.
+- **Rewording an update notice.** A notice has no markup to carry a key, so
+  since 30 September 2026 each entry carries `hAr`, a hash of its English
+  `title`, `text` and `label` together. Reword any of the three and the check
+  fails, naming the entry, until its `titleAr`, `textAr` and `labelAr` say the
+  same thing and `node tools/i18n.mjs stamp updates.<id>` is run. `merge`
+  stamps `hAr` itself when it writes a notice's Arabic, and an entry with
+  Arabic but no `hAr` fails, so a new notice written by hand needs the same
+  `stamp`. Before this, a reworded notice passed with its old Arabic in place,
+  and notices are the urgent content the Arabic was asked for. The page script
+  does not read `hAr`. Never change the `id` to get past it.
 - **Text that stays in Latin letters** and needs no Arabic, such as a staff
   name, an email address or a cell holding only `IGCSE`: put the bare attribute
   `data-i18n-skip` on the element. It excuses the element and everything inside
   it, so put it on the smallest element that fits.
+- **A known gap: the four mentor lists.** Each `<ul>` under `#mentors` carries
+  `data-i18n-skip` as a whole, because its rows are class labels, names and
+  email addresses. The cost is that new wording typed inside one, "New mentor
+  from Sunday:" for instance, is not caught by the unkeyed-text rule and would
+  show in English on the Arabic page. The class pills are excused the same
+  way. Anything a parent reads that is added inside them must be given its own
+  element and keyed by hand.
 - **A new link to an English PDF.** Put the bare attribute `data-pdf-en` on the
   `<a>`. In Arabic the link then shows a small "in English" tag; the word is
   written once, in the CSS. Do not put it on a PDF that is itself in Arabic
@@ -195,9 +212,10 @@ Arabic letter at all, which is English copied over by mistake, unless the
 English itself has no letters or the entry carries `"latin": true` (for a
 notice, `"latinAr": true` on the `updatesData` entry); a key sits on two
 elements with different English; an
-entry's hash no longer matches its English; a keyed element contains another
+entry's hash no longer matches its English, or an update notice's `hAr` no
+longer matches its English title, text and label; a keyed element contains another
 keyed element or an `id`; the Arabic's tags or link attributes differ from the
-English's; a number in the English is missing from the Arabic; the Arabic holds
+English's, or an Arabic tag carries an attribute its English tag does not; a number in the English is missing from the Arabic; the Arabic holds
 an em dash, an Arabic-Indic digit or a tatweel; an update notice lacks `titleAr`
 or `textAr`, or has a `label` with no `labelAr`; or English a parent reads, text
 or attribute, sits outside every key and every `data-i18n-skip`. It also fails

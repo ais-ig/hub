@@ -269,7 +269,7 @@ button {
 .langbtn::before {
   content: "";
   position: absolute;
-  inset: 7px 0;
+  top: 7px; right: 0; bottom: 7px; left: 0;
   border: 1px solid rgba(255, 255, 255, .35);
   border-radius: 999px;
 }
@@ -1261,7 +1261,8 @@ html[dir="rtl"] h4 { text-transform: none; }
 /* A column of figures is set against the left edge, so its heading goes
    there with it: the last column always, and the middle one where it holds
    figures too. */
-html[dir="rtl"] table.data thead th:last-child,
+html[dir="rtl"] table.data thead th:last-child { text-align: left; }
+/* On its own, because a browser without :has() drops the whole rule. */
 html[dir="rtl"] table.data:has(tbody td.num:nth-child(2)) thead th:nth-child(2) { text-align: left; }
 
 /* An update's link keeps its arrow on the same line as its words. */
@@ -1425,7 +1426,8 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
     "textAr": "بناءً على توجيهات وزارة التعليم، تُقام جميع الحصص عن بُعد عبر Zoom من الأحد 27 سبتمبر إلى الخميس 1 أكتوبر، وفق الجدول الدراسي المعتاد. والحصص من 1 إلى 3 اليوم تُقام كالمعتاد أيضاً. روابط الحصص منشورة في مجلدات فصل ابنكم على Schoology، ويسجّل الدخول برقم S الخاص به. وإذا تعذّر عليه تسجيل الدخول، فراسلونا على a.bakr@ais.sch.sa.",
     "href": "#schedule",
     "label": "See the timetables",
-    "labelAr": "عرض الجداول الدراسية"
+    "labelAr": "عرض الجداول الدراسية",
+    "hAr": "04be33a7"
   },
   {
     "id": "2026-09-27-timetables",
@@ -1436,7 +1438,8 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
     "textAr": "عُدِّل الجدول الدراسي للصفوف من 9 إلى 12 مرة أخرى، ويبدأ العمل به يوم الأحد 27 سبتمبر. اضغطوا على فصل ابنكم لفتح جدوله.",
     "href": "#schedule",
     "label": "See the timetables",
-    "labelAr": "عرض الجداول الدراسية"
+    "labelAr": "عرض الجداول الدراسية",
+    "hAr": "ac541b74"
   },
   {
     "id": "2026-09-20-timetables",
@@ -1448,7 +1451,8 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
     "textAr": "عُدِّل الجدول الدراسي للصفوف من 9 إلى 12 وبدأ العمل به يوم الأحد 20 سبتمبر. وقد عُدِّل مرة أخرى بعد ذلك، والصفحة تعرض دائماً الجدول الحالي.",
     "href": "#schedule",
     "label": "See the timetables",
-    "labelAr": "عرض الجداول الدراسية"
+    "labelAr": "عرض الجداول الدراسية",
+    "hAr": "78cd7043"
   },
   {
     "id": "2026-09-13-student-council",
@@ -1459,7 +1463,8 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
     "textAr": "يمكن لطلاب الصفوف 9 و11 و12 الترشح حتى يوم الأربعاء 16 سبتمبر الساعة 11:59 مساءً بتوقيت السعودية. المقاعد المتاحة: ممثل لكل صف من الصفوف 9 و11 و12، ونائب للرئيس من الصف 12. أما ممثل الصف 10 فهو في منصبه بالفعل، ولذلك لا يوجد مقعد للصف 10 في هذه الدورة. وتُجرى المقابلات في الأسبوع التالي مع الطلاب المدرجين في القائمة المختصرة.",
     "href": "https://forms.gle/WNYxBGu17yEsBJTp9",
     "label": "Apply through the form",
-    "labelAr": "الترشح عبر النموذج"
+    "labelAr": "الترشح عبر النموذج",
+    "hAr": "69d85bf4"
   },
   {
     "id": "2026-09-13-updates-bell",
@@ -1470,7 +1475,8 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
     "textAr": "اضغطوا على الجرس أعلى الصفحة لعرض جميع التحديثات. وكل ما لم تفتحوه بعد يظهر مميزاً باللون الذهبي.",
     "href": "#changelog",
     "label": "See what’s changed",
-    "labelAr": "عرض سجل التحديثات"
+    "labelAr": "عرض سجل التحديثات",
+    "hAr": "cf974c87"
   },
   {
     "id": "2026-09-13-mentors",
@@ -1481,7 +1487,8 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
     "textAr": "تغيّر رائد الفصل في ستة من الفصول السبعة في الصفين 9 و10، وأضفنا الآن رواد فصول الصفين 11 و12 أيضاً، مع البريد الإلكتروني لكل منهم.",
     "href": "#mentors",
     "label": "Find your son’s mentor",
-    "labelAr": "تعرّفوا على رائد فصل ابنكم"
+    "labelAr": "تعرّفوا على رائد فصل ابنكم",
+    "hAr": "691e6012"
   },
   {
     "id": "2026-09-13-timetables",
@@ -1493,7 +1500,8 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
     "textAr": "تغيّر الجدول الدراسي للصفوف من 9 إلى 12 وبدأ العمل به يوم الأحد 13 سبتمبر. وقد عُدِّل مرة أخرى بعد ذلك، والصفحة تعرض دائماً الجدول الحالي.",
     "href": "#schedule",
     "label": "See the timetables",
-    "labelAr": "عرض الجداول الدراسية"
+    "labelAr": "عرض الجداول الدراسية",
+    "hAr": "47279afb"
   },
   {
     "id": "2026-09-13-class-pdfs",
@@ -1504,7 +1512,8 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
     "textAr": "الضغط على فصل ابنكم يفتح الآن جدول ذلك الفصل وحده، على أي جوال. في السابق كانت بعض الجوالات تفتح الجدول الدراسي الكامل عند الصفحة الأولى.",
     "href": "#schedule",
     "label": "See the timetables",
-    "labelAr": "عرض الجداول الدراسية"
+    "labelAr": "عرض الجداول الدراسية",
+    "hAr": "36fbdcda"
   },
   {
     "id": "2026-09-13-year-hub",
@@ -1515,7 +1524,8 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
     "textAr": "انتهى اللقاء التعريفي، ولذلك لم تعد الصفحة خاصة بتلك الأمسية. كل ما يخص برنامج IGCSE ما زال هنا، والجداول الدراسية أصبحت في أعلى الصفحة.",
     "href": "#s8",
     "label": "Everything in one place",
-    "labelAr": "كل شيء في مكان واحد"
+    "labelAr": "كل شيء في مكان واحد",
+    "hAr": "cf0c1d63"
   },
   {
     "id": "2026-09-09-live",
@@ -1523,7 +1533,8 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
     "title": "The Parent Hub went live",
     "titleAr": "انطلاق بوابة أولياء الأمور",
     "text": "The hub opened for the Parents’ Meet & Greet on 9 September 2026. It’s now the one link to keep for the rest of the year.",
-    "textAr": "انطلقت البوابة بمناسبة اللقاء التعريفي لأولياء الأمور في 9 سبتمبر 2026. وهي الآن الرابط الوحيد الذي تحتاجون إلى حفظه لبقية العام."
+    "textAr": "انطلقت البوابة بمناسبة اللقاء التعريفي لأولياء الأمور في 9 سبتمبر 2026. وهي الآن الرابط الوحيد الذي تحتاجون إلى حفظه لبقية العام.",
+    "hAr": "af68e33e"
   }
 ]
 </script>
@@ -2496,7 +2507,7 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
   "schedule.full": { "h": "0a3ee81d", "ar": "فتح الجدول الدراسي الكامل" },
   "schedule.stamp": { "h": "25499a93", "ar": "جميع الفصول، 11 صفحة · صدر في 22 سبتمبر 2026" },
   "results.title": { "h": "0f05f636", "ar": "نتائج IGCSE للعام الدراسي <span dir=\"ltr\">2025/26</span>" },
-  "results.sub": { "h": "dcb6ccb9", "ar": "718 نتيجة في 20 مادة، حققها 192 من الطلاب المتقدمين للاختبارات، لدى جميع هيئات الاختبارات مجتمعة" },
+  "results.sub": { "h": "dcb6ccb9", "ar": "718 نتيجة في 20 مادة، حققها 192 من الطلاب المتقدمين&nbsp;للاختبارات، لدى جميع هيئات الاختبارات مجتمعة" },
   "results.stat1": { "h": "d45240c0", "ar": "من النتائج بأعلى التقديرات: 9 أو 8 أو <span dir=\"ltr\">A*</span>" },
   "results.stat2": { "h": "09609620", "ar": "بالتقديرات من 9 إلى 7، أو من <span dir=\"ltr\">A*</span> إلى A" },
   "results.stat3": { "h": "3fd6de5f", "ar": "بالتقديرات من 9 إلى 4، أو من <span dir=\"ltr\">A*</span> إلى C" },
@@ -3414,9 +3425,61 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
 
   applyLang(root.lang === 'ar' ? 'ar' : 'en');
 
+  /* A reader who switches language part way down keeps their place. The two
+     languages set the same content at different heights, and a browser with
+     no scroll anchoring (iOS Safari) would leave them about a section away.
+     Before the swap: the first keyed element that starts below the bar, and
+     how far it is from the top. After the swap and the repaint: scroll so it is
+     there again, at once and not smoothly. Only a tap does this; the first
+     load is left alone, as is a reader at the very top. */
+  var topbar = document.getElementById('topbar');
+  var taps = 0;
+  var placeMark = function () {
+    var y = window.pageYOffset || root.scrollTop || 0;
+    if (y <= 0) return null;
+    /* The bar's own row: with the menu or the bell open, the bar as a whole
+       reaches far down the screen. */
+    var row = topbar ? topbar.querySelector('.row') || topbar : null;
+    var edge = row ? row.getBoundingClientRect().bottom : 0;
+    for (var i = 0; i < keyed.length; i++) {
+      var el = keyed[i];
+      if (topbar && topbar.contains(el)) continue;
+      var r = el.getBoundingClientRect();
+      if ((r.width || r.height) && r.top >= edge) return { el: el, top: r.top };
+    }
+    return null;
+  };
+  var holdPlace = function (mark) {
+    var r = mark.el.getBoundingClientRect();
+    if (!r.width && !r.height) return;
+    var was = root.style.scrollBehavior;
+    root.style.scrollBehavior = 'auto';
+    window.scrollTo(0, (window.pageYOffset || root.scrollTop || 0) + r.top - mark.top);
+    root.style.scrollBehavior = was;
+  };
+
   if (langBtn && arDict) {
     langBtn.addEventListener('click', function () {
+      var mark = null;
+      try { mark = placeMark(); } catch (err) { mark = null; }
       applyLang(lang === 'ar' ? 'en' : 'ar');
+      if (!mark) return;
+      try {
+        holdPlace(mark);
+        /* A face the new language needs may still be on its way, and the
+           text moves again when it lands. The place is set once more then,
+           unless the reader has scrolled or tapped again in the meantime. */
+        var tap = ++taps;
+        var heldAt = window.pageYOffset || root.scrollTop || 0;
+        if (document.fonts && document.fonts.ready && document.fonts.ready.then) {
+          document.fonts.ready.then(function () {
+            var now = window.pageYOffset || root.scrollTop || 0;
+            if (tap === taps && Math.abs(now - heldAt) < 2) holdPlace(mark);
+          });
+        }
+      } catch (err) {
+        /* The switch itself has worked. */
+      }
     });
     langBtn.hidden = false;
   }
