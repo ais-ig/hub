@@ -276,6 +276,15 @@ button {
 .langbtn:hover { color: var(--gold); }
 .langbtn:hover::before { border-color: var(--gold); }
 .langbtn[hidden] { display: none; }
+/* On the narrowest phones the language button leaves the brand too little
+   room for one line, in either language. Below 360px the bar gives a few
+   pixels back; from 360px up nothing here applies. */
+@media (max-width: 359px) {
+  .topbar .row { padding: 0 8px; }
+  .brand { gap: 8px; }
+  .brand img { width: 32px; height: 32px; }
+  .langbtn { padding: 0 8px; }
+}
 .bellbtn {
   position: relative;
   background: none;
@@ -1219,6 +1228,49 @@ html[dir="rtl"] table.data td.num { unicode-bidi: plaintext; }
 html[dir="rtl"] .ccard a { text-align: right; }
 html[dir="rtl"] table.data td.num { text-align: left; }
 
+/* A contact card is the exception. Its links are whole lines, and a line
+   that took a Latin direction put its icon on the other side from the line
+   above it. They stay right to left, so the two icons stack at the right
+   edge; each phone number keeps its order through a span in its string. */
+html[dir="rtl"] .ccard a { unicode-bidi: normal; }
+
+/* A mentor row starts with its class. Isolated, the label sits first at the
+   right edge on every row and the classes line up as a column, instead of
+   joining the Latin name that follows it. */
+html[dir="rtl"] ul.ticks[data-i18n-skip] li > b { unicode-bidi: isolate; }
+
+/* The smallest labels were uppercase, tracked Latin, which reads larger
+   than its size. Arabic has neither capitals nor tracking, so the same
+   labels are set a little larger here. */
+html[dir="rtl"] h4,
+html[dir="rtl"] table.data thead th,
+html[dir="rtl"] table.data tr.grp td,
+html[dir="rtl"] .pair .hd .lb,
+html[dir="rtl"] .pair .or,
+html[dir="rtl"] .tt-grp .lb,
+html[dir="rtl"] .materials .lb,
+html[dir="rtl"] .ustrip .hd,
+html[dir="rtl"] .bell .lb,
+html[dir="rtl"] .ccard .cs { font-size: 12px; }
+html[dir="rtl"] .brand small,
+html[dir="rtl"] .cdcells .lbl { font-size: 11px; }
+/* A heading set in capitals would shout a Latin name inside an Arabic
+   line, as it did with Edexcel. */
+html[dir="rtl"] h4 { text-transform: none; }
+
+/* A column of figures is set against the left edge, so its heading goes
+   there with it: the last column always, and the middle one where it holds
+   figures too. */
+html[dir="rtl"] table.data thead th:last-child,
+html[dir="rtl"] table.data:has(tbody td.num:nth-child(2)) thead th:nth-child(2) { text-align: left; }
+
+/* An update's link keeps its arrow on the same line as its words. */
+html[dir="rtl"] .uitem a { white-space: nowrap; }
+
+/* The "In short" strips run to several lines in Arabic, where a full pill
+   pushes the first word into the curve of the corner. */
+html[dir="rtl"] .strip { border-radius: 18px; }
+
 /* The arrows on a document row are decoration, not text, so they are turned
    to point left here. A row still waiting for its file holds words there. */
 html[dir="rtl"] .doc .ic,
@@ -1240,7 +1292,7 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
   border-radius: 999px;
   background: var(--card);
   color: var(--muted);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 500;
   line-height: 1.7;
   vertical-align: middle;
@@ -1370,7 +1422,7 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
     "title": "Urgent: lessons are online this week, 27 September to 1 October",
     "titleAr": "عاجل: الدراسة عن بُعد هذا الأسبوع، من 27 سبتمبر إلى 1 أكتوبر",
     "text": "On the Ministry of Education’s instructions, all lessons from Sunday 27 September to Thursday 1 October are delivered online through Zoom, following the usual class timetable. Periods 1 to 3 today run as normal too. The class links are posted in your son’s class folders on Schoology, and he signs in with his S number. If he cannot log in, email a.bakr@ais.sch.sa.",
-    "textAr": "بناءً على توجيهات وزارة التعليم، تُقدَّم جميع الحصص من الأحد 27 سبتمبر إلى الخميس 1 أكتوبر عن بُعد عبر Zoom، وفق الجدول الدراسي المعتاد. والحصص من 1 إلى 3 اليوم تُقام كالمعتاد أيضاً. روابط الحصص منشورة في مجلدات فصل ابنكم على Schoology، ويسجّل الدخول برقم S الخاص به. وإذا تعذّر عليه تسجيل الدخول، فراسلوا العنوان a.bakr@ais.sch.sa بالبريد الإلكتروني.",
+    "textAr": "بناءً على توجيهات وزارة التعليم، تُقام جميع الحصص عن بُعد عبر Zoom من الأحد 27 سبتمبر إلى الخميس 1 أكتوبر، وفق الجدول الدراسي المعتاد. والحصص من 1 إلى 3 اليوم تُقام كالمعتاد أيضاً. روابط الحصص منشورة في مجلدات فصل ابنكم على Schoology، ويسجّل الدخول برقم S الخاص به. وإذا تعذّر عليه تسجيل الدخول، فراسلونا على a.bakr@ais.sch.sa.",
     "href": "#schedule",
     "label": "See the timetables",
     "labelAr": "عرض الجداول الدراسية"
@@ -1402,9 +1454,9 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
     "id": "2026-09-13-student-council",
     "date": "2026-09-13",
     "title": "Student Council applications close Wednesday 16 September",
-    "titleAr": "الترشح لمجلس الطلاب ينتهي يوم الأربعاء 16 سبتمبر",
+    "titleAr": "آخر موعد للترشح لمجلس الطلاب: الأربعاء 16 سبتمبر",
     "text": "Boys in Grades 9, 11 and 12 can apply until Wednesday 16 September at 11:59 PM, Saudi time. The open seats are the Grade 9, 11 and 12 Representatives and the Grade 12 Vice President. The Grade 10 Representative is already in place, so there is no Grade 10 seat this round. Shortlisted students are interviewed the following week.",
-    "textAr": "يمكن لطلاب الصفوف 9 و11 و12 الترشح حتى يوم الأربعاء 16 سبتمبر الساعة 11:59 مساءً بتوقيت السعودية. المقاعد المتاحة هي ممثل كل صف من الصفوف 9 و11 و12، ونائب الرئيس من الصف 12. أما ممثل الصف 10 فقد تم اختياره، ولذلك لا يوجد مقعد للصف 10 في هذه الدورة. وتُجرى المقابلات مع الطلاب المختارين في القائمة المختصرة في الأسبوع التالي.",
+    "textAr": "يمكن لطلاب الصفوف 9 و11 و12 الترشح حتى يوم الأربعاء 16 سبتمبر الساعة 11:59 مساءً بتوقيت السعودية. المقاعد المتاحة: ممثل لكل صف من الصفوف 9 و11 و12، ونائب للرئيس من الصف 12. أما ممثل الصف 10 فهو في منصبه بالفعل، ولذلك لا يوجد مقعد للصف 10 في هذه الدورة. وتُجرى المقابلات في الأسبوع التالي مع الطلاب المدرجين في القائمة المختصرة.",
     "href": "https://forms.gle/WNYxBGu17yEsBJTp9",
     "label": "Apply through the form",
     "labelAr": "الترشح عبر النموذج"
@@ -1426,10 +1478,10 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
     "title": "Updated homeroom mentors",
     "titleAr": "تحديث رواد الفصول",
     "text": "Six of the seven Grade 9 and 10 classes have a new homeroom mentor, and the Grade 11 and 12 mentors are now listed too, each with their email.",
-    "textAr": "ستة من الفصول السبعة في الصفين 9 و10 لها رائد فصل جديد، وأُضيف الآن رواد فصول الصفين 11 و12 أيضاً، كلٌّ مع بريده الإلكتروني.",
+    "textAr": "تغيّر رائد الفصل في ستة من الفصول السبعة في الصفين 9 و10، وأضفنا الآن رواد فصول الصفين 11 و12 أيضاً، مع البريد الإلكتروني لكل منهم.",
     "href": "#mentors",
     "label": "Find your son’s mentor",
-    "labelAr": "اعرفوا رائد فصل ابنكم"
+    "labelAr": "تعرّفوا على رائد فصل ابنكم"
   },
   {
     "id": "2026-09-13-timetables",
@@ -1447,9 +1499,9 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
     "id": "2026-09-13-class-pdfs",
     "date": "2026-09-13",
     "title": "Each class now opens on its own",
-    "titleAr": "كل فصل يُفتح الآن على حدة",
+    "titleAr": "جدول كل فصل يُفتح الآن على حدة",
     "text": "Tapping your child’s class now opens just that class’s timetable, on any phone. Before, some phones opened the full timetable at the first page instead.",
-    "textAr": "الضغط على فصل ابنكم يفتح الآن جدول ذلك الفصل وحده، على أي هاتف. في السابق كانت بعض الهواتف تفتح الجدول الكامل عند الصفحة الأولى.",
+    "textAr": "الضغط على فصل ابنكم يفتح الآن جدول ذلك الفصل وحده، على أي جوال. في السابق كانت بعض الجوالات تفتح الجدول الدراسي الكامل عند الصفحة الأولى.",
     "href": "#schedule",
     "label": "See the timetables",
     "labelAr": "عرض الجداول الدراسية"
@@ -1471,7 +1523,7 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
     "title": "The Parent Hub went live",
     "titleAr": "انطلاق بوابة أولياء الأمور",
     "text": "The hub opened for the Parents’ Meet & Greet on 9 September 2026. It’s now the one link to keep for the rest of the year.",
-    "textAr": "انطلقت البوابة بمناسبة اللقاء التعريفي لأولياء الأمور في 9 سبتمبر 2026. وهي الآن الرابط الواحد الذي تحتفظون به لبقية العام."
+    "textAr": "انطلقت البوابة بمناسبة اللقاء التعريفي لأولياء الأمور في 9 سبتمبر 2026. وهي الآن الرابط الوحيد الذي تحتاجون إلى حفظه لبقية العام."
   }
 ]
 </script>
@@ -1499,7 +1551,7 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
         <p data-i18n="start.timetables.d">Grades 9 to 12, boys campus. In effect from Sunday 27 September 2026.</p>
         <span class="cta" data-i18n="common.openpdf">Open PDF →</span>
       </a>
-      <a class="mcard" href="assets/meet-and-greet-parent-guide-boys-2026-27.pdf" download>
+      <a class="mcard" href="assets/meet-and-greet-parent-guide-boys-2026-27.pdf" download data-pdf-en>
         <span class="t" data-i18n="start.guide.t"><span class="ic" aria-hidden="true">🗺️</span>Parent Guide · Boys campus</span>
         <p data-i18n="start.guide.d">Your child’s teachers by class, and staff contacts for the British Section. Grades 9 to 12. Includes the map from the evening of 9 September 2026.</p>
         <span class="cta" data-i18n="common.openpdf">Open PDF →</span>
@@ -2152,7 +2204,7 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
 
     <h4 data-i18n="doc.head.meet">Meet &amp; Greet · 9 September 2026</h4>
     <div class="docs" style="margin-top:0">
-      <a class="doc" href="assets/meet-and-greet-parent-guide-boys-2026-27.pdf" download>
+      <a class="doc" href="assets/meet-and-greet-parent-guide-boys-2026-27.pdf" download data-pdf-en>
         <span class="ic" aria-hidden="true">↓</span>
         <span class="tx"><span class="tt" data-i18n="doc.guide.t">Meet &amp; Greet Parent Guide · Boys campus</span><span class="sb" data-i18n="doc.guide.sb">PDF · teachers by class, staff contacts · Grades 9 to 12</span></span>
         <span class="ar" aria-hidden="true">→</span>
@@ -2315,7 +2367,7 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
         <p class="nm" data-i18n-skip>Mr. Mohamed Noor</p>
         <p class="rl" data-i18n="contacts.activity.rl">Trips, competitions and activities</p>
         <a href="mailto:m.noor@ais.sch.sa" data-i18n-skip>📧 m.noor@ais.sch.sa</a>
-        <a href="tel:+966508551006">📞 050 855 1006</a>
+        <a href="tel:+966508551006" data-i18n="contacts.activity.tel">📞 050 855 1006</a>
       </div>
       <div class="ccard">
         <p class="cs" data-i18n="contacts.floor2.cs">Floor Supervisor · Second floor</p>
@@ -2378,7 +2430,7 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
   "menu.label": { "h": "7ff5a6da", "ar": "أقسام الصفحة" },
   "menu.schedule": { "h": "04cb0762", "ar": "الجداول الدراسية" },
   "menu.results": { "h": "6b5c20fc", "ar": "نتائج IGCSE" },
-  "menu.pathway": { "h": "14408ecc", "ar": "مسار IG لابنكم" },
+  "menu.pathway": { "h": "14408ecc", "ar": "مسار ابنكم في IGCSE" },
   "menu.options": { "h": "7aeacdd5", "ar": "اختيار المواد" },
   "menu.assessment": { "h": "ef136f10", "ar": "التقييم" },
   "menu.support": { "h": "f32d5a3b", "ar": "الدعم" },
@@ -2390,7 +2442,7 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
   "menu.ask": { "h": "cf94bdf3", "ar": "اطرحوا سؤالاً" },
   "menu.start": { "h": "54acc280", "ar": "ابدأوا من هنا" },
   "bell.title": { "h": "c76d1807", "ar": "التحديثات" },
-  "bell.markAll": { "h": "1b83163b", "ar": "تحديد الكل كمقروء" },
+  "bell.markAll": { "h": "1b83163b", "ar": "تمييز الكل كمقروء" },
   "bell.history": { "h": "95bf7ef9", "ar": "عرض السجل الكامل ←" },
   "hero.emblem": { "h": "af4ff6a2", "ar": "مدارس الرواد العالمية" },
   "hero.title": { "h": "1852f8d8", "ar": "بوابة أولياء الأمور" },
@@ -2407,7 +2459,7 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
   "banner.days": { "h": "89f31e63", "ar": "📅 من الأحد إلى الخميس" },
   "banner.hours": { "h": "25613764", "ar": "⏰ من 6:30 صباحاً إلى 1:05 ظهراً" },
   "banner.place": { "h": "b4e48a2f", "ar": "📍 مقر البنين · القسم البريطاني" },
-  "strip.mark": { "h": "c1ee860b", "ar": "تحديد كمقروء" },
+  "strip.mark": { "h": "c1ee860b", "ar": "تمييز كمقروء" },
   "start.title": { "h": "54acc280", "ar": "ابدأوا من هنا" },
   "start.sub": { "h": "9250d562", "ar": "حمّلوا الملفات أو افتحوها في المتصفح · قائمة المستندات الكاملة في أسفل الصفحة" },
   "start.timetables.t": { "h": "f4f22e3a", "ar": "<span class=\"ic\" aria-hidden=\"true\">🗓️</span>الجداول الدراسية" },
@@ -2419,7 +2471,7 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
   "start.ask.d": { "h": "6505f6af", "ar": "أرسلوا إلينا سؤالكم عن أي شيء في هذه الصفحة، في أي وقت خلال العام." },
   "start.ask.cta": { "h": "19eaf3ad", "ar": "فتح النموذج ←" },
   "start.g9.t": { "h": "72a4629b", "ar": "<span class=\"ic\" aria-hidden=\"true\">📝</span>نموذج اختيار مواد IGCSE للصف التاسع" },
-  "start.options.d": { "h": "b15c8a65", "ar": "العام الدراسي <span dir=\"ltr\">2026-2027</span>. اطبعوا النموذج واملؤوه ووقّعوه." },
+  "start.options.d": { "h": "b15c8a65", "ar": "العام الدراسي <span dir=\"ltr\">2026/2027</span>. اطبعوا النموذج واملؤوه ووقّعوه." },
   "start.g10.t": { "h": "b48ee4ac", "ar": "<span class=\"ic\" aria-hidden=\"true\">📝</span>نموذج اختيار مواد IGCSE للصف العاشر" },
   "start.deck.t": { "h": "e1b9b809", "ar": "<span class=\"ic\" aria-hidden=\"true\">📊</span>العرض التقديمي للقاء التعريفي" },
   "start.deck.d": { "h": "3791d1be", "ar": "شرائح العرض من اللقاء الذي أقيم مساء 9 سبتمبر 2026، 31 صفحة." },
@@ -2443,23 +2495,23 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
   "schedule.pill.12b": { "h": "1fd8d10a", "ar": "الجدول الدراسي للفصل 12B" },
   "schedule.full": { "h": "0a3ee81d", "ar": "فتح الجدول الدراسي الكامل" },
   "schedule.stamp": { "h": "25499a93", "ar": "جميع الفصول، 11 صفحة · صدر في 22 سبتمبر 2026" },
-  "results.title": { "h": "0f05f636", "ar": "نتائج IGCSE للعام <span dir=\"ltr\">2025/26</span>" },
-  "results.sub": { "h": "dcb6ccb9", "ar": "718 نتيجة مادة حققها 192 من الطلاب المتقدمين في 20 مادة، لجميع هيئات الاختبارات مجتمعة" },
+  "results.title": { "h": "0f05f636", "ar": "نتائج IGCSE للعام الدراسي <span dir=\"ltr\">2025/26</span>" },
+  "results.sub": { "h": "dcb6ccb9", "ar": "718 نتيجة في 20 مادة، حققها 192 من الطلاب المتقدمين للاختبارات، لدى جميع هيئات الاختبارات مجتمعة" },
   "results.stat1": { "h": "d45240c0", "ar": "من النتائج بأعلى التقديرات: 9 أو 8 أو <span dir=\"ltr\">A*</span>" },
   "results.stat2": { "h": "09609620", "ar": "بالتقديرات من 9 إلى 7، أو من <span dir=\"ltr\">A*</span> إلى A" },
   "results.stat3": { "h": "3fd6de5f", "ar": "بالتقديرات من 9 إلى 4، أو من <span dir=\"ltr\">A*</span> إلى C" },
-  "results.stat4": { "h": "0784f025", "ar": "مواد كانت نتائجها 100% بالتقديرات من 9 إلى 4" },
+  "results.stat4": { "h": "0784f025", "ar": "مواد كانت نتائجها <span dir=\"ltr\">100%</span> بالتقديرات من 9 إلى 4" },
   "results.students": { "h": "de4e8a31", "ar": "<b>الطلاب</b> 24 طالباً نالوا أعلى التقديرات في خمس مواد أو أكثر، و11 طالباً في سبع مواد أو أكثر، و3 طلاب نالوا الدرجة الكاملة في مادة الرياضيات في <span dir=\"ltr\">Edexcel IGCSE</span>." },
   "s2.title": { "h": "55d4b42e", "ar": "عامان وبرنامج واحد" },
   "s2.sub": { "h": "f13a5d93", "ar": "الصورة الكاملة، من الصف التاسع حتى A-Level" },
-  "s2.lead": { "h": "57a4b028", "ar": "الصفان التاسع والعاشر ليسا عامين منفصلين، بل هما برنامج IGCSE واحد متصل، والمواد التي تُختار في بداية الصف التاسع تستمر مع الطالب حتى الاختبارات الخارجية في نهاية الصف العاشر." },
+  "s2.lead": { "h": "57a4b028", "ar": "الصفان 9 و10 ليسا عامين منفصلين، بل هما برنامج IGCSE واحد متصل، والمواد التي تُختار في بداية الصف 9 تستمر مع الطالب حتى الاختبارات الخارجية في نهاية الصف 10." },
   "s2.step1.g": { "h": "0e96c1a9", "ar": "البداية · الصف التاسع" },
   "s2.step1.h": { "h": "ee11c39e", "ar": "بداية برنامج IGCSE" },
   "s2.step1.p": { "h": "3c0c619f", "ar": "تُختار المواد ويبدأ المقرر الدراسي الممتد على عامين." },
   "s2.step2.g": { "h": "c2257ef3", "ar": "الرحلة · الصف العاشر" },
   "s2.step2.h": { "h": "9971345b", "ar": "اكتمال البرنامج" },
   "s2.step2.p": { "h": "5650aaef", "ar": "يؤدي الطلاب اختبارات IGCSE الخارجية، ومعهم ما اكتسبوه من تفكير ناقد وإبداع وتعاون، وهي مهارات تتجاوز أهميتها قاعة الاختبار." },
-  "s2.step3.g": { "h": "79e6b348", "ar": "الهدف · الصفان الحادي عشر والثاني عشر" },
+  "s2.step3.g": { "h": "79e6b348", "ar": "الهدف · الصفان 11 و12" },
   "s2.step3.h": { "h": "fe32d57d", "ar": "A-Level وما بعده" },
   "s2.step3.p": { "h": "ca19a956", "ar": "AS ثم A2، وهما مبنيان مباشرة على مواد IGCSE التي درسها الطالب، ومعترف بهما لدى الجامعات حول العالم." },
   "s3.title": { "h": "3bf1650d", "ar": "اختيار المواد" },
@@ -2473,67 +2525,67 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
   "s3.th.periods": { "h": "d65472b0", "ar": "الحصص" },
   "subj.arabic": { "h": "af4f4762", "ar": "اللغة العربية (Arabic)" },
   "s3.cur.moe": { "h": "b4c89cb5", "ar": "وزارة التعليم" },
-  "subj.islamic": { "h": "079ec1ed", "ar": "الدراسات الإسلامية (Islamic Studies)" },
+  "subj.islamic": { "h": "079ec1ed", "ar": "الدراسات الإسلامية <span dir=\"ltr\">(Islamic Studies)</span>" },
   "subj.quran": { "h": "f5df3972", "ar": "القرآن الكريم (Quran)" },
-  "subj.social": { "h": "1a703618", "ar": "الدراسات الاجتماعية (Social Studies, KSAH)" },
+  "subj.social": { "h": "1a703618", "ar": "الدراسات الاجتماعية <span dir=\"ltr\">(Social Studies, KSAH)</span>" },
   "subj.pe": { "h": "3ddbb551", "ar": "التربية البدنية (PE)" },
   "subj.english": { "h": "649df08a", "ar": "اللغة الإنجليزية (English)" },
   "subj.physics": { "h": "96b61805", "ar": "الفيزياء (Physics)" },
   "subj.chemistry": { "h": "d0a3c82b", "ar": "الكيمياء (Chemistry)" },
   "subj.biology": { "h": "ffa48e0b", "ar": "الأحياء (Biology)" },
-  "subj.business": { "h": "16fa7706", "ar": "دراسات الأعمال (Business Studies)" },
+  "subj.business": { "h": "16fa7706", "ar": "دراسات الأعمال <span dir=\"ltr\">(Business Studies)</span>" },
   "s3.g9.compulsory.note": { "h": "9973c559", "ar": "عدد الحصص في الأسبوع. يدرس هذه المواد العشر كل طالب في الصف التاسع، ولا يمكن تغييرها." },
   "s3.optional": { "h": "b1583b5f", "ar": "المواد الاختيارية" },
-  "s3.g9.optional.intro": { "h": "acf38fd5", "ar": "ثلاثة اختيارات: مادة واحدة من كل مادتين." },
+  "s3.g9.optional.intro": { "h": "acf38fd5", "ar": "ثلاثة اختيارات، في كل منها مادتان تختارون إحداهما." },
   "s3.choose": { "h": "4238dc41", "ar": "اختاروا واحدة" },
   "s3.periods5": { "h": "44e959de", "ar": "5 حصص" },
-  "s3.g9.maths.cambridge": { "h": "f52f268b", "ar": "الرياضيات<br>(Cambridge Mathematics)" },
+  "s3.g9.maths.cambridge": { "h": "f52f268b", "ar": "الرياضيات<br>(Cambridge)" },
   "s3.or": { "h": "1758356d", "ar": "أو" },
-  "s3.g9.maths.edexcel": { "h": "07a915ad", "ar": "الرياضيات<br>(Edexcel Mathematics)" },
+  "s3.g9.maths.edexcel": { "h": "07a915ad", "ar": "الرياضيات<br>(Edexcel)" },
   "s3.periods3": { "h": "94d5b355", "ar": "3 حصص" },
   "subj.accounting": { "h": "2c1de79f", "ar": "المحاسبة (Accounting)" },
   "s3.periods4": { "h": "39fea4f0", "ar": "4 حصص" },
-  "subj.cs": { "h": "60b8102b", "ar": "علوم الحاسب (Computer Science)" },
+  "subj.cs": { "h": "60b8102b", "ar": "علوم الحاسب <span dir=\"ltr\">(Computer Science)</span>" },
   "subj.ict": { "h": "464d4044", "ar": "تقنية المعلومات والاتصالات (ICT)" },
   "s3.g9.optional.note": { "h": "94c579d1", "ar": "المواد الاختيارية الثلاث جميعها تتبع منهج IGCSE." },
   "s3.hifdh.title": { "h": "fdb4bc96", "ar": "برنامج تحفيظ القرآن الكريم" },
-  "s3.hifdh.p1": { "h": "33763485", "ar": "اختياري، وتوضع له علامة في خانة مستقلة في نموذج الصف التاسع. يُنفَّذ <b>ضمن حصص القرآن الكريم الثلاث المدرجة أصلاً في الجدول</b>، فلا يضيف أي حصة إلى الأسبوع ولا يحل محل أي مادة أخرى." },
+  "s3.hifdh.p1": { "h": "33763485", "ar": "اختياري، وتوضع له علامة في خانة مستقلة في نموذج الصف التاسع. يُنفَّذ <b>ضمن حصص القرآن الكريم الثلاث المدرجة أصلاً في الجدول الدراسي</b>، فلا يضيف أي حصة إلى الأسبوع ولا يحل محل أي مادة أخرى." },
   "s3.hifdh.p2": { "h": "3ffba906", "ar": "البرنامج نفسه قائم من الصف الأول، وليست له شروط قبول." },
   "s3.g10.compulsory.note": { "h": "cf6370da", "ar": "عدد الحصص في الأسبوع. يدرس هذه المواد الست كل طالب في الصف العاشر، ولا يمكن تغييرها." },
   "s3.g10.optional.intro": { "h": "094163ed", "ar": "تُختار كل مادة على حدة في نموذج اختيار المواد. جميعها تتبع منهج IGCSE." },
-  "s3.g10.maths.cambridge": { "h": "b54db65d", "ar": "الرياضيات (Maths Cambridge)" },
-  "s3.g10.maths.edexcel": { "h": "1137158e", "ar": "الرياضيات (Maths Edexcel)" },
+  "s3.g10.maths.cambridge": { "h": "b54db65d", "ar": "الرياضيات (Cambridge)" },
+  "s3.g10.maths.edexcel": { "h": "1137158e", "ar": "الرياضيات (Edexcel)" },
   "s3.g10.optional.note": { "h": "a866be52", "ar": "الأرقام هي عدد الحصص في الأسبوع." },
   "s3.boards.title": { "h": "6844155a", "ar": "الرياضيات: Cambridge أو Edexcel" },
   "s3.boards.intro": { "h": "ec952a21", "ar": "المحتوى واحد والمستوى واحد. الفرق في التوقيت واستخدام الآلة الحاسبة." },
   "s3.boards.share": { "h": "8e0fda53", "ar": "ما تشترك فيه الهيئتان" },
-  "s3.boards.share1": { "h": "a2b72a67", "ar": "كلتاهما تُعدّ الطلاب للدراسة في المستوى المتقدم." },
+  "s3.boards.share1": { "h": "a2b72a67", "ar": "كلتاهما تُعدّ الطلاب لدراسة A-Level." },
   "s3.boards.share2": { "h": "90b1f39a", "ar": "مناهج أعدّها خبراء في المادة، مبنية على أحدث البحوث التربوية." },
   "s3.boards.share3": { "h": "f5154f32", "ar": "مصادر وافرة للتعليم والتعلم، ومؤهلات معترف بها دولياً." },
   "s3.boards.share4": { "h": "b37dc071", "ar": "<b>الاختبار:</b> ورقتان، مدة كل منهما ساعتان، ومجموع الدرجات 200 درجة." },
   "s3.boards.differ": { "h": "f6fd666e", "ar": "أوجه الاختلاف" },
   "s3.boards.cam1": { "h": "c81ed826", "ar": "يجب أداء الورقتين في <b>الدورة نفسها</b>." },
   "s3.boards.cam2": { "h": "860f82c8", "ar": "يُسمح بالآلة الحاسبة في ورقة <b>واحدة</b> فقط." },
-  "s3.boards.edx1": { "h": "640c169a", "ar": "<b>نظام الوحدات.</b> يمكن أداء إحدى الورقتين في دورة، والأخرى في دورة مستقلة." },
+  "s3.boards.edx1": { "h": "640c169a", "ar": "<b>نظام الوحدات.</b> يمكن أداء إحدى الورقتين في دورة اختبارات، والأخرى في دورة أخرى." },
   "s3.boards.edx2": { "h": "431f7ad0", "ar": "يُسمح بالآلة الحاسبة في <b>الورقتين</b>: الورقة <span dir=\"ltr\">1H</span> والورقة <span dir=\"ltr\">2H</span>، ولكل منهما 100 درجة." },
   "s3.equiv.title": { "h": "f379587f", "ar": "ما يعادل تقديرات Edexcel" },
   "s3.equiv.th.grade": { "h": "4a8e3d67", "ar": "تقدير IGCSE" },
   "s3.equiv.th.equivalent": { "h": "1f55cac8", "ar": "ما يعادله" },
   "s3.equiv.89": { "h": "47097a33", "ar": "8 و9" },
-  "s3.equiv.note": { "h": "c35b42c2", "ar": "أربعون في المئة من الدرجات تستهدف التقديرين 4 و5، وستون في المئة تستهدف التقديرات من 6 إلى 9." },
+  "s3.equiv.note": { "h": "c35b42c2", "ar": "<span dir=\"ltr\">40%</span> من الدرجات مخصصة للتقديرين 4 و5، و<span dir=\"ltr\">60%</span> للتقديرات من 6 إلى 9." },
   "s3.form.title": { "h": "53df0386", "ar": "كيف تقرؤون نموذج اختيار المواد" },
   "s3.form.li1": { "h": "e5f34d3e", "ar": "<b>الجدول A</b> يضم المواد التي يدرسها كل طالب. لا يوجد ما تختارونه هنا." },
   "s3.form.li2": { "h": "2c906906", "ar": "<b>الجدول B</b> يضم الاختيارات، وهي معروضة مادتين مادتين لتختاروا إحداهما. ضعوا علامة على مادة واحدة في كل سطر." },
   "s3.form.li3": { "h": "7293eaba", "ar": "<b>الجدول C</b>، في نموذج الصف التاسع فقط، خانة اختيارية توضع فيها علامة لبرنامج تحفيظ القرآن الكريم." },
-  "s3.form.li4": { "h": "4cf2975c", "ar": "أياً كانت المواد التي تضعون عليها العلامة، يكون مجموع الأسبوع <b>40 حصة</b>." },
+  "s3.form.li4": { "h": "4cf2975c", "ar": "أياً كانت المواد التي تختارونها، يبقى مجموع الحصص <b>40 حصة</b> في الأسبوع." },
   "s3.form.li5": { "h": "95839eb9", "ar": "وقّعوا النموذج وأعيدوه قبل انتهاء <b>الموعد النهائي المطبوع عليه</b>." },
   "doc.head.options": { "h": "ab1c04ca", "ar": "نماذج اختيار المواد" },
   "doc.g9options.t": { "h": "2dd6f5d8", "ar": "نموذج اختيار مواد IGCSE للصف التاسع" },
-  "s3.form.sb": { "h": "5ad23ff9", "ar": "PDF · العام الدراسي <span dir=\"ltr\">2026-2027</span> · للطباعة والتوقيع" },
+  "s3.form.sb": { "h": "5ad23ff9", "ar": "PDF · العام الدراسي <span dir=\"ltr\">2026/2027</span> · للطباعة والتوقيع" },
   "doc.g10options.t": { "h": "67da00ec", "ar": "نموذج اختيار مواد IGCSE للصف العاشر" },
   "s4.title": { "h": "38989f21", "ar": "طريقة احتساب الدرجات" },
   "s4.sub": { "h": "360e25c7", "ar": "التقييم المستمر والتقييم الختامي، ربعاً بعد ربع" },
-  "s4.lead": { "h": "4fd7a748", "ar": "يمثّل كل فصل دراسي خمسين في المئة من درجة العام. وفي كل فصل دراسي تتكوّن الدرجات من التقييم المستمر الذي يُجمع على مدى الربعين، ومن تقييمات ختامية تُجرى في مواعيد محددة." },
+  "s4.lead": { "h": "4fd7a748", "ar": "يمثّل كل فصل دراسي <span dir=\"ltr\">50%</span> من درجة العام. وفي كل فصل دراسي تتكوّن الدرجات من التقييم المستمر الذي يُجمع على مدى الربعين، ومن تقييمات ختامية تُجرى في مواعيد محددة." },
   "s4.sem1.title": { "h": "7b063097", "ar": "الفصل الدراسي الأول" },
   "s4.th.assessment": { "h": "ef136f10", "ar": "التقييم" },
   "s4.th.q1": { "h": "a65355d8", "ar": "الربع الأول" },
@@ -2550,20 +2602,20 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
   "s4.progress.title": { "h": "d8683c77", "ar": "كيف نطلعكم على تقدّم ابنكم" },
   "s4.progress.li1": { "h": "dcabb8a6", "ar": "<b>التقارير</b> تصدر في نهاية كل ربع وفي نهاية كل فصل دراسي." },
   "s4.progress.li2": { "h": "d4b9c159", "ar": "<b>مرتين في كل فصل دراسي</b> تصلكم بالبريد الإلكتروني خطة النتائج والدعم، مادةً مادة، مع بيان ما سنقوم به بعد ذلك." },
-  "s4.progress.li3": { "h": "9fbb6b6e", "ar": "إذا كانت الدرجة الكلية في أي مادة <b>أقل من ستين في المئة</b> بدأ التدخل الموضّح في قسم <a href=\"#s5\">الدعم</a>." },
+  "s4.progress.li3": { "h": "9fbb6b6e", "ar": "إذا كانت الدرجة الكلية في أي مادة <b>أقل من <span dir=\"ltr\">60%</span></b>، بدأنا الخطة العلاجية الموضّحة في قسم <a href=\"#s5\">الدعم</a>." },
   "s4.guide.t": { "h": "e7e0ad3c", "ar": "دليل التقييم لأولياء الأمور · الصفوف من 9 إلى 12، المسار البريطاني" },
   "s4.guide.sb": { "h": "c8892e08", "ar": "التقويم الدراسي للعام <span dir=\"ltr\">2026/27</span>، وتوزيع درجات التقييم، وعدد التقييمات التكوينية، وسياسات الواجبات المنزلية وأعمال الصف" },
   "s5.title": { "h": "361d12dd", "ar": "كيف نتابع ابنكم" },
-  "s5.sub": { "h": "30c75bb3", "ar": "الدعم والتدخل" },
+  "s5.sub": { "h": "30c75bb3", "ar": "الدعم والخطط العلاجية" },
   "s5.mock.h": { "h": "8783ac19", "ar": "الاختبارات التجريبية" },
   "s5.mock.p": { "h": "524d3e1a", "ar": "محاكاة كاملة للاختبارات في ظروف حقيقية، حتى لا تكون دورة الصيف أول مرة يعيش فيها الطالب أجواء الاختبار الفعلية." },
   "s5.sheets.h": { "h": "a93ecae3", "ar": "سجلات التقدم" },
-  "s5.sheets.p": { "h": "2cc88611", "ar": "لكل مادة سجل للتقدم الأكاديمي للطالب، يرصد تطوّر كل طالب على مدار العام." },
+  "s5.sheets.p": { "h": "2cc88611", "ar": "في كل مادة سجل للتقدم الدراسي لكل طالب، نرصد فيه تطوّره على مدار العام." },
   "s5.early.h": { "h": "4900e582", "ar": "الدعم المبكر" },
-  "s5.early.p": { "h": "3582cba3", "ar": "كل طالب ينخفض مستواه عن 60% نرصده خلال الفصل الدراسي ونضع له خطة تدخل باسمه. يصلكم ملخص مكتوب بالمواد المعنية، وتُعقد مقابلات فردية مع الطالب، ثم توضع خطة دعم تناسبه." },
+  "s5.early.p": { "h": "3582cba3", "ar": "كل طالب ينخفض مستواه عن <span dir=\"ltr\">60%</span> نرصده خلال الفصل الدراسي ونضع له خطة علاجية خاصة به. يصلكم ملخص مكتوب بالمواد المعنية، ونجلس مع الطالب في مقابلات فردية، ثم نضع له خطة دعم تناسبه." },
   "s5.short": { "h": "37caa712", "ar": "<b>باختصار</b> سنتواصل معكم قبل أن تنخفض الدرجة، لا بعد ذلك." },
   "s5.mentor.title": { "h": "89933d7d", "ar": "برنامج رائد الفصل" },
-  "s5.mentor.intro": { "h": "e9e60588", "ar": "لكل طالب رائد فصل يتابع تقدّمه الدراسي وراحته النفسية ونموّه على مدار العام." },
+  "s5.mentor.intro": { "h": "e9e60588", "ar": "لكل طالب رائد فصل يتابع تقدّمه الدراسي وراحته النفسية ونموّه الشخصي على مدار العام." },
   "s5.mentor.li1": { "h": "6359fc16", "ar": "<b>لقاءات أسبوعية مع الفصل.</b> من عشر دقائق إلى خمس عشرة دقيقة في حصة الريادة، تتناول أحوال الطلاب عامةً، والمستجدات الدراسية، والسلوك المتوقع منهم، وما يشغلهم من أمور مشتركة، وإنجازاتهم." },
   "s5.mentor.li2": { "h": "ff492460", "ar": "<b>جلسات فردية شهرية.</b> مرة واحدة في الشهر على الأقل، من عشر دقائق إلى خمس عشرة دقيقة لكل طالب، يُراجَع فيها أداؤه الدراسي، وراحته النفسية والاجتماعية، وأهدافه للفصل الدراسي المقبل." },
   "s5.mentor.li3": { "h": "7a73b203", "ar": "<b>محادثات خاصة</b> كلما احتاج الطالب إلى ذلك." },
@@ -2571,17 +2623,17 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
   "s5.mentors.title": { "h": "83ac0196", "ar": "رائد فصل ابنكم · <span dir=\"ltr\">2026/27</span>" },
   "s5.mentors.note": { "h": "eeed8ee5", "ar": "رائد فصل ابنكم هو جهة تواصلكم الأولى في كل ما يتعلق بدراسته أو برعايته وشؤونه في المدرسة. آخر تحديث 13 سبتمبر 2026." },
   "s5.partner.h": { "h": "0918a071", "ar": "الشراكة" },
-  "s5.partner.p": { "h": "b605017b", "ar": "المدرسة وأولياء الأمور والطلاب، معاً من أجل نجاح الطالب. ولا تنجح المتابعة المذكورة أعلاه إلا حين يلتقي ما نراه في الصف بما ترونه في البيت. تواصلوا مع رائد الفصل مبكراً، ولا تؤجلوا ذلك." },
+  "s5.partner.p": { "h": "b605017b", "ar": "المدرسة وأولياء الأمور والطلاب، معاً من أجل نجاح الطالب. ولا تنجح المتابعة المذكورة أعلاه إلا حين يلتقي ما نراه في الفصل بما ترونه في البيت. تواصلوا مع رائد الفصل مبكراً، ولا تؤجلوا ذلك." },
   "s6.title": { "h": "02114819", "ar": "خارج الصف" },
   "s6.sub": { "h": "8c97316f", "ar": "بناء ملف الطالب للجامعة والحياة" },
-  "s6.lead": { "h": "08592836", "ar": "الدرجات والشهادات تفتح الباب. أما ما يقوم به الطالب إلى جانبها فهو ما يملأ طلب الالتحاق بالجامعة، ثم أول مقابلة شخصية بعد ذلك." },
+  "s6.lead": { "h": "08592836", "ar": "التقديرات والشهادات تفتح الباب. أما ما يقوم به الطالب إلى جانبها فهو ما يُثري طلب الالتحاق بالجامعة، ثم أول مقابلة شخصية بعده." },
   "s6.offer.title": { "h": "307b860d", "ar": "ما نقدّمه" },
   "s6.offer.li1": { "h": "21549315", "ar": "<b>التفكير الإبداعي</b> وحل المشكلات، ضمن تدريس المواد نفسها لا إضافةً منفصلة عنها." },
   "s6.offer.li2": { "h": "78f9a2b5", "ar": "<b>القيادة الطلابية.</b> مجلس الطلاب وغيره." },
-  "s6.offer.li3": { "h": "2c388ec1", "ar": "<b>زيارات ميدانية صناعية.</b> من الزيارات الأخيرة: المراعي و MACTECH." },
-  "s6.offer.li4": { "h": "c6b32ef9", "ar": "<b>خدمة المجتمع.</b> بذل الوقت في خدمة المجتمع المحلي، وهو أمر ننتظره من طلابنا دائماً." },
+  "s6.offer.li3": { "h": "2c388ec1", "ar": "<b>زيارات ميدانية صناعية.</b> من الزيارات الأخيرة: MACTECH والمراعي." },
+  "s6.offer.li4": { "h": "c6b32ef9", "ar": "<b>خدمة المجتمع.</b> تخصيص جزء من الوقت للمجتمع المحلي، وهو أمر ننتظره من طلابنا دائماً." },
   "s6.sem1.title": { "h": "1801bedf", "ar": "الأنشطة: الفصل الدراسي الأول" },
-  "s6.sem1.li1": { "h": "00a54508", "ar": "<b>جوائز التميّز.</b> تكريم المتفوقين والحاصلين على درجات الامتياز في IGCSE." },
+  "s6.sem1.li1": { "h": "00a54508", "ar": "<b>جوائز التميّز.</b> تكريم المتفوقين والحاصلين على تقدير الامتياز في IGCSE." },
   "s6.sem1.li2": { "h": "3ad307b4", "ar": "<b>مباراة الكريكيت بين المدارس.</b> مباراة ودية مع المدرسة الباكستانية العالمية." },
   "s6.sem1.li3": { "h": "f5f05588", "ar": "<b>رحلة مكة المكرمة.</b> رحلة تعليمية وإيمانية مدتها خمسة أيام." },
   "s6.sem1.li4": { "h": "8c12e333", "ar": "<b>ملتقى الصحة العالمي.</b> خارج المدرسة: الابتكار في الرعاية الصحية ومجالاتها المهنية." },
@@ -2596,19 +2648,19 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
   "s6.sem2.li5": { "h": "83393c1e", "ar": "<b>مسابقة SPARK لريادة الأعمال.</b> أفكار مشاريع تجارية يقدّمها الطلاب." },
   "s6.sem2.li6": { "h": "316e40b4", "ar": "<b>معرض STEM.</b> عرض لمشاريع العلوم والابتكار." },
   "s6.sem2.li7": { "h": "25de1aea", "ar": "<b>اليوم الترفيهي.</b> احتفال نهاية العام." },
-  "s6.allyear": { "h": "dce1ef91", "ar": "<b>على مدار العام</b> مجلس الطلاب والقيادة الطلابية، وبرنامج رائد الفصل، ومسابقة ملتقى الصلاة للصف التاسع، وتحفيظ القرآن الكريم، كلها مستمرة طوال العام." },
+  "s6.allyear": { "h": "dce1ef91", "ar": "<b>على مدار العام</b> مجلس الطلاب والقيادة الطلابية، وبرنامج رائد الفصل، ومسابقة ملتقى الصلاة للصف التاسع، وتحفيظ القرآن الكريم." },
   "s7.title": { "h": "bf8f4eba", "ar": "ما نطلبه من الطلاب والأسر" },
   "s7.sub": { "h": "f383c6ae", "ar": "بيئة تعليمية إيجابية وآمنة" },
   "s7.attendance.title": { "h": "b689313f", "ar": "الحضور" },
   "s7.attendance.li1": { "h": "4f176701", "ar": "الحضور اليومي أساس النجاح الدراسي، وأثر الغياب يظهر في النتائج أسرع مما تتوقعه معظم الأسر." },
-  "s7.attendance.li2": { "h": "4044920f", "ar": "يجب تقديم طلبات الغياب والانصراف المبكر <b>عبر MyAIS فقط</b>. ولا يمكن تنفيذ الطلبات المقدَّمة عبر الهاتف أو واتساب أو بالحضور شخصياً." },
-  "s7.phones.title": { "h": "bc4dc582", "ar": "الهواتف المحمولة" },
-  "s7.phones.li1": { "h": "bfffe400", "ar": "الهواتف <b>غير مسموح بها خلال اليوم الدراسي</b>، بما في ذلك الحصص والفسح وأوقات الغداء، ويجب حفظها في الخزائن." },
-  "s7.phones.li2": { "h": "b9e5c88d", "ar": "يُعاد الهاتف المحجوز <b>إلى أحد الوالدين أو ولي الأمر شخصياً</b>، لا إلى السائق ولا إلى أي شخص آخر ينوب عنه، ولا يُعاد إلا بعد توقيع نموذج التعهد." },
-  "s7.phones.li3": { "h": "d1c48e7b", "ar": "تزداد مدة الحجز مع كل تكرار." },
+  "s7.attendance.li2": { "h": "4044920f", "ar": "يجب تقديم طلبات الغياب والاستئذان <b>عبر MyAIS فقط</b>. ولا يمكن تنفيذ الطلبات المقدَّمة عبر الهاتف أو واتساب أو بالحضور شخصياً." },
+  "s7.phones.title": { "h": "bc4dc582", "ar": "الجوالات" },
+  "s7.phones.li1": { "h": "bfffe400", "ar": "الجوالات <b>غير مسموح بها خلال اليوم الدراسي</b>، بما في ذلك الحصص والفسح وأوقات الغداء، ويجب حفظها في الخزائن." },
+  "s7.phones.li2": { "h": "b9e5c88d", "ar": "يُعاد الجوال المحجوز <b>إلى أحد الوالدين أو ولي الأمر شخصياً</b>، لا إلى السائق ولا إلى أي شخص آخر ينوب عنه، ولا يُعاد إلا بعد توقيع نموذج التعهد." },
+  "s7.phones.li3": { "h": "d1c48e7b", "ar": "تزداد مدة الحجز كلما تكررت المخالفة." },
   "s7.phones.li4": { "h": "b7f406e6", "ar": "إذا استمرت المخالفات، يُحال الطالب إلى المرشد الطلابي ويُطلب من ولي الأمر الحضور إلى المدرسة." },
   "s7.phones.th.incident": { "h": "08c25784", "ar": "المخالفة" },
-  "s7.phones.th.held": { "h": "81672a2d", "ar": "مدة حجز الهاتف" },
+  "s7.phones.th.held": { "h": "81672a2d", "ar": "مدة حجز الجوال" },
   "s7.phones.first": { "h": "916a78d7", "ar": "الأولى" },
   "s7.phones.hours24": { "h": "cb4780f8", "ar": "24 ساعة" },
   "s7.phones.second": { "h": "2a4bcae6", "ar": "الثانية" },
@@ -2618,44 +2670,44 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
   "s7.phones.fourth": { "h": "7a3a4a42", "ar": "الرابعة" },
   "s7.phones.week1": { "h": "fdb8d5cd", "ar": "أسبوع واحد" },
   "s7.behaviour.title": { "h": "23b50510", "ar": "السلوك والمجتمع المدرسي" },
-  "s7.behaviour.intro": { "h": "19e70870", "ar": "الاحترام للمعلمين والزملاء والمدرسة. والمسؤولية عن العمل والموعد المحدد والنتيجة. والقيم الإسلامية أساس مجتمعنا. وإذا لم يكن السلوك على المستوى المطلوب، فهناك ثلاثة مستويات تحدد الإجراء المتَّبع، ليعرف الطلاب والأسر دائماً ما الخطوة التالية." },
+  "s7.behaviour.intro": { "h": "19e70870", "ar": "احترام المعلمين والزملاء والمدرسة. وتحمّل مسؤولية العمل وموعد تسليمه ونتيجته. والقيم الإسلامية أساس مجتمعنا. وإذا لم يكن السلوك على المستوى المطلوب، فهناك ثلاثة مستويات تحدد الإجراء المتَّبع، ليعرف الطلاب والأسر دائماً ما الخطوة التالية." },
   "s7.lvl.a.n": { "h": "74034462", "ar": "المستوى A · مخالفات بسيطة" },
   "s7.lvl.a.d": { "h": "8cfa121f", "ar": "مخالفة الزي المدرسي، الإخلال البسيط بالنظام." },
-  "s7.lvl.a.a": { "h": "43be0550", "ar": "<b>الإجراء:</b> توجيه من المعلم ووقت للتأمل في السلوك، مع التواصل مع ولي الأمر إذا استمرت المخالفة." },
+  "s7.lvl.a.a": { "h": "43be0550", "ar": "<b>الإجراء:</b> توجيه من المعلم ووقت يراجع فيه الطالب سلوكه، مع التواصل مع ولي الأمر إذا استمرت المخالفة." },
   "s7.lvl.b.n": { "h": "3bc50dda", "ar": "المستوى B · مخالفات متكررة أو مخلّة بالنظام" },
   "s7.lvl.b.d": { "h": "ef52a742", "ar": "الألفاظ غير اللائقة، إساءة استخدام الممتلكات." },
   "s7.lvl.b.a": { "h": "92c51c12", "ar": "<b>الإجراء:</b> إحالة إلى المرشد الطلابي وعقد سلوكي، مع تدخل مدير المدرسة إذا تكررت المخالفة." },
   "s7.lvl.c.n": { "h": "3e4657f3", "ar": "المستوى C · مخالفات جسيمة تمس السلامة" },
-  "s7.lvl.c.d": { "h": "e3d15932", "ar": "العنف، التنمر، مغادرة المدرسة." },
+  "s7.lvl.c.d": { "h": "e3d15932", "ar": "العنف، التنمر، مغادرة حرم المدرسة." },
   "s7.lvl.c.a": { "h": "6badc573", "ar": "<b>الإجراء:</b> إحالة إلى نائب مدير المدرسة، وتسجيل في سجل حماية الطلاب، واجتماعات مع ولي الأمر، واحتمال الإيقاف عن الدراسة أو النقل إلى بيئة تعليمية بديلة." },
-  "doc.phonepolicy.t": { "h": "1cc35ce8", "ar": "سياسة منع الهواتف المحمولة" },
+  "doc.phonepolicy.t": { "h": "1cc35ce8", "ar": "سياسة منع الجوال" },
   "doc.phonepolicy.sb": { "h": "11b21496", "ar": "PDF · النص الكامل للسياسة" },
-  "doc.commitment.t": { "h": "66895d32", "ar": "نموذج التعهد بسياسة الهواتف" },
-  "doc.commitment.sb": { "h": "688c85a7", "ar": "PDF · يُوقَّع عند استلام الهاتف" },
+  "doc.commitment.t": { "h": "66895d32", "ar": "نموذج التعهد بالالتزام بسياسة منع الجوال" },
+  "doc.commitment.sb": { "h": "688c85a7", "ar": "PDF · يُوقَّع عند استلام الجوال المحجوز" },
   "s8.title": { "h": "5f197528", "ar": "كل شيء في مكان واحد" },
   "s8.sub": { "h": "3f44e6c2", "ar": "جميع مستندات القسم البريطاني وروابطه مجموعة هنا، ويُضاف إليها المزيد على مدار العام." },
   "doc.head.timetables": { "h": "1fe2dea0", "ar": "الجداول الدراسية" },
   "doc.timetables.t": { "h": "5360330d", "ar": "الجداول الدراسية · الصفوف من 9 إلى 12" },
-  "doc.timetables.sb": { "h": "fe8b6dfe", "ar": "PDF · مقر البنين · سارية من 27 سبتمبر 2026 · 11 صفحة" },
+  "doc.timetables.sb": { "h": "fe8b6dfe", "ar": "PDF · مقر البنين · يُعمل بها اعتباراً من 27 سبتمبر 2026 · 11 صفحة" },
   "doc.daily.t": { "h": "1c6cf773", "ar": "جدول اليوم الدراسي · الصفوف من 9 إلى 12" },
-  "doc.daily.sb": { "h": "e6a85026", "ar": "PDF · اليوم الدراسي حصةً حصة، من حصة الريادة إلى الصلاة · التوقيت الصيفي" },
+  "doc.daily.sb": { "h": "e6a85026", "ar": "PDF · اليوم الدراسي حصةً حصة، من حصة الريادة إلى الصلاة · الدوام الصيفي" },
   "doc.head.meet": { "h": "5a00ecc7", "ar": "اللقاء التعريفي · 9 سبتمبر 2026" },
   "doc.guide.t": { "h": "080d0c9d", "ar": "دليل أولياء الأمور للقاء التعريفي · مقر البنين" },
   "doc.guide.sb": { "h": "967bc269", "ar": "PDF · المعلمون حسب الفصل، وبيانات التواصل مع منسوبي المدرسة · الصفوف من 9 إلى 12" },
   "doc.deck.t": { "h": "70e8dea4", "ar": "العرض التقديمي للقاء التعريفي" },
-  "doc.deck.sb": { "h": "bbec91ec", "ar": "PDF · شرائح العرض في 9 سبتمبر 2026، 31 صفحة" },
+  "doc.deck.sb": { "h": "bbec91ec", "ar": "PDF · شرائح عرض اللقاء في 9 سبتمبر 2026، 31 صفحة" },
   "doc.options.sb": { "h": "af415252", "ar": "PDF · العام الدراسي <span dir=\"ltr\">2026/2027</span>" },
   "doc.g11options.t": { "h": "1843aecf", "ar": "نموذج اختيار مواد AS للصف الحادي عشر" },
-  "doc.alevel.sb": { "h": "cb0a960e", "ar": "PDF · <span dir=\"ltr\">A-Levels</span> · العام الدراسي <span dir=\"ltr\">2026/2027</span>" },
+  "doc.alevel.sb": { "h": "cb0a960e", "ar": "PDF · <span dir=\"ltr\">A-Level</span> · العام الدراسي <span dir=\"ltr\">2026/2027</span>" },
   "doc.g12options.t": { "h": "95e08202", "ar": "نموذج اختيار مواد A2 للصف الثاني عشر" },
   "doc.head.guides": { "h": "880a8dbb", "ar": "أدلة وروابط" },
   "doc.pathway.t": { "h": "3d1632b3", "ar": "مسار المنهج البريطاني" },
-  "doc.pathway.sb": { "h": "d88af3aa", "ar": "PDF · كتيّب IGCSE و <span dir=\"ltr\">A-Levels</span>" },
-  "doc.letter.t": { "h": "3cabe058", "ar": "المنهج الدراسي والتوقعات الصفية" },
+  "doc.pathway.sb": { "h": "d88af3aa", "ar": "PDF · كتيّب IGCSE و<span dir=\"ltr\">A-Level</span>" },
+  "doc.letter.t": { "h": "3cabe058", "ar": "الخطة الدراسية وتوقعاتنا من الطالب" },
   "doc.letter.sb": { "h": "a65d7a4a", "ar": "PDF · خطاب المدرسة إلى أولياء الأمور للفصل الدراسي الأول · بالعربية والإنجليزية" },
-  "doc.weekly9.t": { "h": "69f95e59", "ar": "الخطط الأسبوعية لمواد IG للصف التاسع" },
+  "doc.weekly9.t": { "h": "69f95e59", "ar": "الخطط الأسبوعية لمواد IGCSE للصف التاسع" },
   "doc.weekly.sb": { "h": "cb19cf3a", "ar": "خطط الفصل الدراسي الأول حسب المادة: اللغة الإنجليزية، الأحياء، الكيمياء، الفيزياء، الرياضيات، اللغة العربية" },
-  "doc.weekly10.t": { "h": "846ab33a", "ar": "الخطط الأسبوعية لمواد IG للصف العاشر" },
+  "doc.weekly10.t": { "h": "846ab33a", "ar": "الخطط الأسبوعية لمواد IGCSE للصف العاشر" },
   "doc.assessment.t": { "h": "1948c7b4", "ar": "دليل التقييم لأولياء الأمور · الصفوف من 9 إلى 12" },
   "doc.assessment.sb": { "h": "f44fe287", "ar": "التقويم الدراسي، وتوزيع درجات التقييم، وسياسات الواجبات المنزلية وأعمال الصف" },
   "doc.calendar.t": { "h": "4cced32f", "ar": "تقويم أولياء الأمور <span dir=\"ltr\">2026/27</span>" },
@@ -2668,9 +2720,9 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
   "ask.title": { "h": "abf64953", "ar": "هل لديكم سؤال؟" },
   "ask.lead": { "h": "96b31ef4", "ar": "أرسلوه عبر النموذج وسنرد عليكم بالبريد الإلكتروني." },
   "ask.cta": { "h": "cf94bdf3", "ar": "اطرحوا سؤالاً" },
-  "ask.note": { "h": "5c12b2fd", "ar": "يُفتح النموذج في تبويب جديد ويستغرق أقل من دقيقة. نرجو ذكر صف ابنكم وفصله. تفضّلون البريد الإلكتروني؟ <a href=\"mailto:f.hussein@ais.sch.sa?subject=Question%20%C2%B7%20AIS%20Parent%20Hub\" style=\"color:#fff;text-decoration:underline\">راسلوا مدير المدرسة</a>." },
+  "ask.note": { "h": "5c12b2fd", "ar": "يُفتح النموذج في تبويب جديد ويستغرق أقل من دقيقة. نرجو ذكر صف ابنكم وفصله. وإن كنتم تفضّلون البريد الإلكتروني <a href=\"mailto:f.hussein@ais.sch.sa?subject=Question%20%C2%B7%20AIS%20Parent%20Hub\" style=\"color:#fff;text-decoration:underline\">فراسلوا مدير المدرسة</a>." },
   "contacts.title": { "h": "6b3e8e7d", "ar": "مع من تتواصلون" },
-  "contacts.sub": { "h": "d06f4a77", "ar": "ابدأوا برائد فصل ابنكم ومعلمي المواد. ولكل ما يتجاوزهم، فريق القسم في خدمتكم." },
+  "contacts.sub": { "h": "d06f4a77", "ar": "ابدأوا برائد فصل ابنكم ومعلمي المواد. وفي ما سوى ذلك، فريق القسم في خدمتكم." },
   "contacts.campus": { "h": "5408b48c", "ar": "مقر البنين · الثانوية البريطانية" },
   "contacts.head.cs": { "h": "ce9fb2f7", "ar": "مدير المدرسة" },
   "contacts.rl.british": { "h": "69420f54", "ar": "القسم البريطاني" },
@@ -2678,13 +2730,14 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
   "contacts.deputy.cs": { "h": "3e2776e8", "ar": "نائب مدير المدرسة" },
   "contacts.deputy.tel": { "h": "5f363bee", "ar": "📞 <span dir=\"ltr\">050 043 1494</span> · تحويلة 213" },
   "contacts.affairs.cs": { "h": "23c43e7a", "ar": "شؤون الطلاب" },
-  "contacts.affairs.rl": { "h": "50624f71", "ar": "الغياب والانصراف وشؤون الطلاب" },
+  "contacts.affairs.rl": { "h": "50624f71", "ar": "الغياب والاستئذان وشؤون الطلاب" },
   "contacts.affairs.tel": { "h": "45247877", "ar": "📞 <span dir=\"ltr\">050 902 0350</span> · تحويلة 220" },
   "contacts.counsellor.cs": { "h": "7ed227f1", "ar": "المرشد الطلابي" },
-  "contacts.counsellor.rl": { "h": "f63a3064", "ar": "دعم الصحة النفسية والسلوك" },
+  "contacts.counsellor.rl": { "h": "f63a3064", "ar": "دعم الراحة النفسية والسلوك" },
   "contacts.counsellor.tel": { "h": "5afe93d2", "ar": "📞 <span dir=\"ltr\">053 399 0488</span> · تحويلة 237" },
   "contacts.activity.cs": { "h": "71f510b8", "ar": "مشرف النشاط" },
   "contacts.activity.rl": { "h": "3c44a367", "ar": "الرحلات والمسابقات والأنشطة" },
+  "contacts.activity.tel": { "h": "f31246be", "ar": "📞 <span dir=\"ltr\">050 855 1006</span>" },
   "contacts.floor2.cs": { "h": "0ded18a5", "ar": "مشرف الدور · الدور الثاني" },
   "contacts.floor.rl": { "h": "a010a0e3", "ar": "الإشراف اليومي" },
   "contacts.floor2.tel": { "h": "ad7e7f0a", "ar": "📞 <span dir=\"ltr\">050 792 3461</span> · تحويلة 243" },
@@ -2708,7 +2761,7 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
   "js.cd.under": { "h": "24dbd963", "ar": "اللقاء جارٍ الآن" },
   "js.cd.underNote": { "h": "433a8abb", "ar": "تفضلوا بالدخول." },
   "js.cd.thanks": { "h": "5a3630fb", "ar": "شكراً لحضوركم" },
-  "js.cd.thanksNote": { "h": "d1d46be1", "ar": "نأمل أن اللقاء كان مفيداً لكم." }
+  "js.cd.thanksNote": { "h": "d1d46be1", "ar": "نرجو أن يكون اللقاء قد أفادكم." }
 }
 </script>
 

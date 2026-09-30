@@ -172,6 +172,47 @@ function visibleText(fragment) {
   return normalise(decodeEntities(out));
 }
 
+/* The tags that set two runs of text apart on the page without a space in
+   the source: a line break, the small second line of a label, a span that
+   carries a class (an icon, a pill), and the block elements. Inline
+   emphasis, links and the direction spans are not among them. */
+const BREAK_TAGS = new Set([
+  'br', 'small', 'div', 'p', 'li', 'ul', 'ol', 'tr', 'td', 'th',
+  'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+]);
+const breaksText = (t) => BREAK_TAGS.has(t.name) || (t.name === 'span' && has(t.attrs, 'class'));
+
+/* visibleText for the review files. Where a stripped tag of the kinds above
+   stood between two runs of text with no whitespace on either side, a
+   middot is put between them, so "Parent Hub" and "British Section" do not
+   read as one word. */
+function reviewText(fragment) {
+  let out = '';
+  let pending = false;
+  const stack = [];
+  for (const t of tokenize(fragment)) {
+    if (t.type === 'open') {
+      const breaks = breaksText(t);
+      if (!t.void) stack.push({ name: t.name, breaks });
+      if (breaks) pending = true;
+    } else if (t.type === 'close') {
+      let k = stack.length - 1;
+      while (k >= 0 && stack[k].name !== t.name) k--;
+      if (k >= 0) {
+        if (stack[k].breaks) pending = true;
+        stack.length = k;
+      }
+    } else if (t.type === 'text' && !t.raw) {
+      const text = fragment.slice(t.start, t.end);
+      if (!text) continue;
+      if (pending && out && !/\s$/.test(out) && !/^\s/.test(text)) out += ' \u00B7 ';
+      out += text;
+      pending = false;
+    }
+  }
+  return normalise(decodeEntities(out));
+}
+
 /* ---------- reading the page ---------- */
 
 /* One of the JSON blocks, by id. `start` and `end` bound its content. */
@@ -244,8 +285,9 @@ function scan(html) {
   }
 
   const upBlock = jsonBlock(html, 'updatesData');
-  /* { key, en, ar, id, field, numsOff }, Arabic null when absent. An entry
-     may carry "numsAr": false to exempt it from the number check. */
+  /* { key, en, ar, id, field, numsOff, latinOk }, Arabic null when absent.
+     An entry may carry "numsAr": false to exempt it from the number check,
+     and "latinAr": true where its Arabic is rightly in Latin letters. */
   const updates = [];
   const updateProblems = []; /* [rule, detail] for a block that cannot be read */
   if (!upBlock.found) {
@@ -272,6 +314,7 @@ function scan(html) {
           id: e.id,
           field,
           numsOff: e.numsAr === false,
+          latinOk: e.latinAr === true,
         });
       }
     });
@@ -453,6 +496,12 @@ function forbiddenIn(ar) {
   return FORBIDDEN.filter(([re]) => re.test(ar)).map(([, what]) => what);
 }
 
+/* English copied into the Arabic by mistake: what the reader sees of the
+   English holds a letter, and what they see of the Arabic holds no Arabic
+   letter at all. */
+const leftInLatin = (en, ar) =>
+  /\p{L}/u.test(visibleText(en)) && !/[\u0621-\u064A]/.test(visibleText(ar));
+
 const latinLetters = (raw) =>
   (raw.replace(/&[#\w]+;/g, ' ').match(/[A-Za-z]/g) || []).length;
 
@@ -622,6 +671,12 @@ export function checkAll(html) {
       const ar = arabicOf(dict[key]);
       if (ar === null) continue;
 
+      /* 1. The Arabic is Arabic, unless the entry says "latin": true. */
+      if (dict[key].latin !== true && leftInLatin(source.en, ar)) {
+        fail('1 untranslated', key + ' has Arabic with no Arabic letter in it; ' +
+          'translate it, or set "latin": true where it is rightly in Latin letters');
+      }
+
       /* 3. The hash still matches the English. */
       if (dict[key].h !== hashEn(source.en)) {
         fail('3 stale', key + ' has English that changed after its Arabic was written; ' +
@@ -663,12 +718,17 @@ export function checkAll(html) {
     }
   }
 
-  /* 6, 7 and 8 for update notices, whose Arabic lives beside their English. */
+  /* 1, 6, 7 and 8 for update notices, whose Arabic lives beside their
+     English. */
   for (const [rule, detail] of s.updateProblems) fail(rule, detail);
   for (const u of s.updates) {
     if (u.ar === null) {
       fail('8 updates', u.key + ' has no ' + u.field + 'Ar in updatesData');
       continue;
+    }
+    if (!u.latinOk && leftInLatin(u.en, u.ar)) {
+      fail('1 untranslated', u.key + ' has a ' + u.field + 'Ar with no Arabic letter in it; ' +
+        'translate it, or set "latinAr": true on the entry where it is rightly in Latin letters');
     }
     if (!u.numsOff) {
       const lost = lostNumbers(u.en, u.ar);
@@ -866,8 +926,8 @@ export function buildPairs(html) {
     body += '<h2>' + escapeHtml(prefix) + '</h2>\n<table>\n' +
       '<thead><tr><th>Key</th><th>English</th><th>Arabic</th></tr></thead>\n<tbody>\n';
     for (const r of list) {
-      const en = visibleText(r.en);
-      const ar = r.ar === null ? null : visibleText(r.ar);
+      const en = reviewText(r.en);
+      const ar = r.ar === null ? null : reviewText(r.ar);
       md += '| `' + r.key + '` | ' + mdCell(en) + ' | ' +
         (ar === null ? '**MISSING**' : mdCell(ar)) + ' |\n';
       body += '<tr><td class="key">' + escapeHtml(r.key) + '</td><td>' + escapeHtml(en) + '</td>' +

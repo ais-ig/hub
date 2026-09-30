@@ -57,6 +57,16 @@ exactly as it is. The two languages cannot silently drift apart.
 - Modern Standard Arabic. Clear, warm, institutional. No dialect.
 - Address the reader in the respectful plural: يمكنكم, ابنكم.
 - "Grade" is الصف. Never السنة for a grade. العام الدراسي is the academic year.
+- A single grade in prose or a title is the ordinal word: الصف التاسع. Two or
+  more grades listed together, or a range, take digits: الصفين 9 و10، الصفوف من
+  9 إلى 12. If one string holds any such list, every grade in that string is
+  written in digits.
+- The academic year is written with a slash and the same digits as its
+  English: `<span dir="ltr">2026/27</span>` for 2026/27,
+  `<span dir="ltr">2026/2027</span>` for 2026-2027. Update notices are plain
+  text, so there it is written without the span.
+- Percentages are digits, even where the English spells them out, and are
+  wrapped so the sign stays on the right: `<span dir="ltr">60%</span>`.
 - No em dashes. No Arabic-Indic digits. No tatweel.
 - Every number in the English appears in the Arabic with the same digits.
 - Ranges of time or number are written من … إلى …, never with a dash, because
@@ -70,7 +80,11 @@ exactly as it is. The two languages cannot silently drift apart.
 - Any Latin or numeric run that could reorder (phone numbers, emails, class
   names next to punctuation, `2026/27`) is wrapped in `<span dir="ltr">`.
 - Subject names in the options tables: Arabic, then the English in brackets,
-  e.g. `الأحياء (Biology)`. Elsewhere Arabic alone.
+  e.g. `الأحياء (Biology)`. Elsewhere Arabic alone. A bracket of two or more
+  English words is wrapped, `<span dir="ltr">(Islamic Studies)</span>`, so
+  that it still reads in order when it breaks across two lines. Mathematics
+  by board carries the board alone: `الرياضيات (Cambridge)`.
+- `A-Level`, never `A-Levels`. "IG" in a heading or title is written `IGCSE`.
 - Institutional content signs القسم البريطاني.
 
 ### Glossary
@@ -86,9 +100,12 @@ Translators and reviewers use these and nothing else for these terms.
 | Grade 9, 10, 11, 12 | الصف التاسع، العاشر، الحادي عشر، الثاني عشر |
 | Grades 9 to 12 | الصفوف من 9 إلى 12 |
 | Boys campus | مقر البنين |
+| Head of School, Deputy Head of School | مدير المدرسة، نائب مدير المدرسة |
+| Student Counsellor | المرشد الطلابي |
 | Parents | أولياء الأمور |
 | your child, your son | ابنكم |
-| Class timetable | الجدول الدراسي |
+| Class timetable | الجدول الدراسي (in full; bare الجدول only for Table A, B, C of a form) |
+| Class, classroom | الفصل |
 | Period | الحصة |
 | Break | الفسحة |
 | Salah | الصلاة |
@@ -100,7 +117,9 @@ Translators and reviewers use these and nothing else for these terms.
 | Optional | اختياري |
 | Pathway | المسار |
 | Results | النتائج |
-| Candidates | الطلاب المتقدمون |
+| Grade (exam result: 9, A*, distinction) | التقدير |
+| Mark, score | الدرجة |
+| Candidates | الطلاب المتقدمون للاختبارات |
 | Assessment | التقييم |
 | Continuous assessment | التقييم المستمر |
 | Classwork | أعمال الصف |
@@ -110,8 +129,15 @@ Translators and reviewers use these and nothing else for these terms.
 | Mid-Term Test | اختبار منتصف الفصل |
 | Final Examination | الاختبار النهائي |
 | Support | الدعم |
+| Intervention (academic) | الخطة العلاجية، خطة علاجية |
+| Academic (progress, performance) | الدراسي |
+| Well-being | الراحة النفسية |
+| Early dismissal | الاستئذان |
+| Summer schedule | الدوام الصيفي |
 | Policies | السياسات |
-| No Mobile Phone Policy | سياسة منع الهواتف المحمولة |
+| Mobile phone, phones | الجوال، الجوالات (عبر الهاتف where it means a phone call) |
+| No Mobile Phone Policy | سياسة منع الجوال |
+| Confiscation, confiscated | الحجز، المحجوز |
 | Commitment form | نموذج التعهد |
 | Behaviour | السلوك |
 | Student Council | مجلس الطلاب |
@@ -121,7 +147,8 @@ Translators and reviewers use these and nothing else for these terms.
 | Meet & Greet | اللقاء التعريفي |
 | Updates | التحديثات |
 | New | جديد |
-| Mark as read | تحديد كمقروء |
+| Mark as read | تمييز كمقروء |
+| Mark all as read | تمييز الكل كمقروء |
 | What's changed | سجل التحديثات |
 | Start here | ابدأوا من هنا |
 | All documents | جميع المستندات |
@@ -135,6 +162,13 @@ Translators and reviewers use these and nothing else for these terms.
 
 "Homeroom" and "Homeroom mentor" are the two terms most likely to need the
 school's own wording. They are flagged in the log for the user.
+
+The glossary was amended after the three reviews of 30 September 2026, to
+match what the page says. الجوال is the school's own word: the Arabic side of
+its phone commitment form reads "وأتعهد بعدم استخدام الجوال بالمدرسة". The
+Semester 1 letter is titled as it prints itself in Arabic, الخطة الدراسية
+وتوقعاتنا من الطالب. The open questions for the school are listed in
+`docs/arabic/reports/task-5-6-fix-report.md`.
 
 ## How it is built
 
@@ -166,7 +200,8 @@ school's own wording. They are flagged in the log for the user.
 that key: the element's `innerHTML` (or the attribute value) with runs of
 whitespace collapsed to one space and the ends trimmed. An entry may carry
 `"nums": false` to exempt it from the number check where a number is rightly
-written as a word.
+written as a word, and `"latin": true` where its Arabic is rightly in Latin
+letters only.
 
 Strings that only JavaScript writes (the updates heading, "New", "Unread:",
 month names, the bell's label, countdown messages, the page title and meta
@@ -221,13 +256,17 @@ languages.
 | `extract` | Prints every key with its English source, as JSON. |
 | `merge <file>...` | Writes key to Arabic maps from files into the `i18nAr` block and stamps `h`. |
 | `stamp <key...>` or `stamp --all` | Re-stamps `h` for the named keys after their Arabic has been brought up to date. A bare `stamp` does nothing, so stale Arabic cannot be waved through by accident. |
-| `pairs` | Writes `docs/arabic/translation-review.html` and `.md`. |
+| `pairs` | Writes `docs/arabic/translation-review.html` and `.md`. Tags are stripped; where a line break, a `<small>` or a classed span stood between two runs of text with no space, a middot is put between them. |
 | `check` | The rules below. Exit 1 on any failure. |
 
 `check` is also run by `tools/check.mjs`. It fails when:
 
 1. A `data-i18n` or `data-i18n-attr` key has no Arabic, or an Arabic entry has
-   no key on the page.
+   no key on the page. An entry, or an update notice's Arabic field, whose
+   visible text holds no Arabic letter at all is reported here as
+   untranslated (English copied over by mistake), unless the English itself
+   holds no letters, the entry carries `"latin": true`, or the update entry
+   carries `"latinAr": true`.
 2. A key is used on two elements with different English.
 3. `h` does not match the current English. The message names the key and says
    to update the Arabic, then run `stamp`.

@@ -279,9 +279,11 @@ test('rule 5: a dropped ltr span takes its own closing tag, not the next one', (
   const en = '<span class="n">b</span> c <em>d</em>';
   const body = '<p data-i18n="s2.mix">' + en + '</p>';
   const okAr = '<span dir="ltr">a <span class="n">b</span> c <em>d</em></span>';
-  assert.deepEqual(checkAll(page({ body, ar: { 's2.mix': entry(en, okAr) } })), []);
+  /* The letters stand in for Arabic; only the tags are under test. */
+  const latin = { latin: true };
+  assert.deepEqual(checkAll(page({ body, ar: { 's2.mix': entry(en, okAr, latin) } })), []);
   const bdiAr = '<bdi><span class="n">b</span></bdi> c <em>d</em>';
-  assert.deepEqual(checkAll(page({ body, ar: { 's2.mix': entry(en, bdiAr) } })), []);
+  assert.deepEqual(checkAll(page({ body, ar: { 's2.mix': entry(en, bdiAr, latin) } })), []);
 });
 
 test('rule 6: a number missing from the Arabic fails and names the number', () => {
@@ -761,6 +763,82 @@ test('buildPairs marks a missing Arabic cell visibly', () => {
   assert.ok(md.includes('| `foot.sign` | British Section | **MISSING** |'));
   const clean = buildPairs(good());
   assert.ok(!/<td class="missing"/.test(clean.html));
+});
+
+test('buildPairs puts a middot where a stripped tag joined two runs of text', () => {
+  const brand = 'AIS Parent Hub<small>British Section</small>';
+  const card = '<span class="ic" aria-hidden="true">X</span>Class Timetables';
+  const pair = 'Mathematics<br>(Cambridge)';
+  const html = page({
+    body: '<span data-i18n="bar.brand">' + brand + '</span>\n' +
+      '<h3 data-i18n="start.t">' + card + '</h3>\n' +
+      '<div data-i18n="s3.m">' + pair + '</div>',
+    ar: {
+      'bar.brand': entry(brand, 'بوابة أولياء الأمور<small>القسم البريطاني</small>'),
+      'start.t': entry(card, '<span class="ic" aria-hidden="true">X</span>الجداول الدراسية'),
+      's3.m': entry(pair, 'الرياضيات<br>(Cambridge)'),
+    },
+  });
+  assert.deepEqual(checkAll(html), []);
+  const { md } = buildPairs(html);
+  assert.ok(md.includes('| `bar.brand` | AIS Parent Hub · British Section | بوابة أولياء الأمور · القسم البريطاني |'));
+  assert.ok(md.includes('| `start.t` | X · Class Timetables | X · الجداول الدراسية |'));
+  assert.ok(md.includes('| `s3.m` | Mathematics · (Cambridge) | الرياضيات · (Cambridge) |'));
+});
+
+test('buildPairs adds no middot where there was whitespace, or around inline tags', () => {
+  const en = '<b>Reports</b> are issued.<br> Below <b>60%</b>, see <a href="#s5">Support</a>.';
+  const ar = '<b>التقارير</b> تصدر.<br> أقل من <b><span dir="ltr">60%</span></b>، انظروا <a href="#s5">الدعم</a>.';
+  const html = page({ body: '<p data-i18n="s4.k">' + en + '</p>', ar: { 's4.k': entry(en, ar) } });
+  const { md } = buildPairs(html);
+  assert.ok(md.includes('| Reports are issued. Below 60%, see Support. | التقارير تصدر. أقل من 60%، انظروا الدعم. |'));
+  assert.ok(!md.split('\n').some((line) => line.startsWith('| `s4.k`') && line.includes('·')));
+});
+
+/* ---------- untranslated Arabic ---------- */
+
+test('rule 1: Arabic with no Arabic letter fails as untranslated and names the key', () => {
+  const ar = goodAr();
+  ar['foot.sign'] = entry('British Section', 'British Section');
+  const failures = checkAll(good({ ar }));
+  assert.equal(failures.length, 1);
+  assert.match(failures[0], /^i18n 1 untranslated: foot\.sign /);
+});
+
+test('rule 1: latin true, or English without letters, excuses Latin-only Arabic', () => {
+  const ar = goodAr();
+  ar['foot.sign'] = entry('British Section', 'British Section', { latin: true });
+  assert.deepEqual(checkAll(good({ ar })), []);
+  const html = page({
+    body: '<span data-i18n="a.arrow">&rarr;</span><span data-i18n="a.tel">050 855 1006</span>' +
+      '<span data-i18n="a.name"><b>Black Hat MEA.</b> A conference.</span>',
+    ar: {
+      'a.arrow': entry('&rarr;', '&larr;'),
+      'a.tel': entry('050 855 1006', '<span dir="ltr">050 855 1006</span>'),
+      'a.name': entry('<b>Black Hat MEA.</b> A conference.', '<b>Black Hat MEA.</b> مؤتمر.'),
+    },
+  });
+  assert.deepEqual(checkAll(html), []);
+});
+
+test('rule 1: Latin letters only inside a tag of the Arabic do not count as Arabic', () => {
+  const en = '<a href="#top" class="btn">Back to top</a>';
+  const html = page({
+    body: '<p data-i18n="a.top">' + en + '</p>',
+    ar: { 'a.top': entry(en, '<a href="#top" class="btn">Back to top</a>') },
+  });
+  const failures = checkAll(html);
+  assert.equal(failures.length, 1);
+  assert.match(failures[0], /^i18n 1 untranslated: a\.top /);
+});
+
+test('rule 1: an update notice with a Latin-only Arabic field fails, and latinAr excuses it', () => {
+  const bad = [{ ...GOOD_UPDATES[0], titleAr: GOOD_UPDATES[0].title }];
+  const failures = checkAll(good({ updates: bad }));
+  assert.equal(failures.length, 1);
+  assert.match(failures[0], /^i18n 1 untranslated: updates\.2026-09-27-timetables\.title /);
+  const ok = [{ ...bad[0], latinAr: true }];
+  assert.deepEqual(checkAll(good({ updates: ok })), []);
 });
 
 /* ---------- house rules ---------- */
