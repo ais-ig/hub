@@ -204,3 +204,10 @@ After pasting, set the date and the id, then run `node tools/i18n.mjs stamp upda
 ## Every decision I made for you, in one list
 
 D1 to D12 are in the table at the top. D13 to D24 are in the timeline. The builders and the fixer also made smaller rulings of their own, each recorded in its report under "Rulings". The ones I would look at first, because they are judgement and not mechanics: **D3** (respectful plural), **D13** (Cairo for Latin text in Arabic mode), **D16** (subject names as "Arabic (English)" everywhere), **D18** (الجوال), **D21** (percentages in digits), **D23** (the titles left for the school).
+
+## 3 October 2026 · live
+
+- You opened the Arabic page in Safari, liked it, and asked for it to go live.
+- `arabic` was merged into `main` as a fast-forward, not squashed, so every commit hash named in this log stays valid. Checks run just before: `node tools/check.mjs` all passed, 105 tests passed, `bash tools/render-check.sh` passed in both languages.
+- No "now in Arabic" update notice was added. The draft in section 4 of "Left for you" is still yours to date and publish.
+- The questions for the school and the English source issues above are still open.
