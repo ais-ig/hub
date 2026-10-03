@@ -1,6 +1,6 @@
 # Translation review · AIS Parent Hub
 
-367 strings · 0 missing Arabic
+369 strings · 0 missing Arabic
 
 Written by `node tools/i18n.mjs pairs`. Do not edit by hand.
 
@@ -466,6 +466,8 @@ Written by `node tools/i18n.mjs pairs`. Do not edit by hand.
 
 | Key | English | Arabic |
 |---|---|---|
+| `updates.2026-10-03-arabic.title` | The hub is now in Arabic too | البوابة متاحة الآن باللغة العربية |
+| `updates.2026-10-03-arabic.text` | Tap العربية at the top of the page to read everything in Arabic. Tap English to switch back. The documents themselves are still in English. | اضغطوا على «العربية» أعلى الصفحة لقراءة جميع المحتويات بالعربية، واضغطوا على English للعودة. أما المستندات نفسها فما زالت بالإنجليزية. |
 | `updates.2026-09-27-online-week.title` | Urgent: lessons are online this week, 27 September to 1 October | عاجل: الدراسة عن بُعد هذا الأسبوع، من 27 سبتمبر إلى 1 أكتوبر |
 | `updates.2026-09-27-online-week.text` | On the Ministry of Education’s instructions, all lessons from Sunday 27 September to Thursday 1 October are delivered online through Zoom, following the usual class timetable. Periods 1 to 3 today run as normal too. The class links are posted in your son’s class folders on Schoology, and he signs in with his S number. If he cannot log in, email a.bakr@ais.sch.sa. | بناءً على توجيهات وزارة التعليم، تُقام جميع الحصص عن بُعد عبر Zoom من الأحد 27 سبتمبر إلى الخميس 1 أكتوبر، وفق الجدول الدراسي المعتاد. والحصص من 1 إلى 3 اليوم تُقام كالمعتاد أيضاً. روابط الحصص منشورة في مجلدات فصل ابنكم على Schoology، ويسجّل الدخول برقم S الخاص به. وإذا تعذّر عليه تسجيل الدخول، فراسلونا على a.bakr@ais.sch.sa. |
 | `updates.2026-09-27-online-week.label` | See the timetables | عرض الجداول الدراسية |

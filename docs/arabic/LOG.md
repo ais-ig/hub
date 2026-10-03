@@ -209,5 +209,5 @@ D1 to D12 are in the table at the top. D13 to D24 are in the timeline. The build
 
 - You opened the Arabic page in Safari, liked it, and asked for it to go live.
 - `arabic` was merged into `main` as a fast-forward, not squashed, so every commit hash named in this log stays valid. Checks run just before: `node tools/check.mjs` all passed, 105 tests passed, `bash tools/render-check.sh` passed in both languages.
-- No "now in Arabic" update notice was added. The draft in section 4 of "Left for you" is still yours to date and publish.
+- You then asked for the "now in Arabic" notice. Published the same day as `2026-10-03-arabic`, from the draft in section 4 of "Left for you", unchanged, dated 3 October 2026, stamped. Checked at 380px in both languages: it heads the update strip, marked New.
 - The questions for the school and the English source issues above are still open.
