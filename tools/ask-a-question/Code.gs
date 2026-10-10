@@ -83,7 +83,7 @@ function formatRiyadh(date) {
 
 /* Form question title, lower-cased and tidied, to the field it fills. The
    old titles are kept so the email still reads right if a rename is missed.
-   A title not listed here lands in `extra` and is still shown. */
+   A title not listed here lands in extra and is still shown. */
 var FIELDS = {
   'i am a': 'who',
   'your name': 'name',
