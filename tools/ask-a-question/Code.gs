@@ -78,3 +78,58 @@ function formatRiyadh(date) {
   return days[r.getUTCDay()] + ' ' + r.getUTCDate() + ' ' + months[r.getUTCMonth()] + ' ' +
     r.getUTCFullYear() + ', ' + pad(r.getUTCHours()) + ':' + pad(r.getUTCMinutes());
 }
+
+/* ---------- Answers ---------- */
+
+/* Form question title, lower-cased and tidied, to the field it fills. The
+   old titles are kept so the email still reads right if a rename is missed.
+   A title not listed here lands in `extra` and is still shown. */
+var FIELDS = {
+  'i am a': 'who',
+  'your name': 'name',
+  'parent name': 'name',
+  'student name': 'student',
+  'grade': 'grade',
+  'mobile number': 'mobile',
+  'email or mobile number': 'mobile',
+  'topic': 'topic',
+  'your question': 'question',
+  'your questions': 'question',
+  'email': 'email'
+};
+
+function normTitle(title) {
+  return String(title == null ? '' : title)
+    .toLowerCase()
+    .replace(/\s+/g, ' ')
+    .replace(/[\s:*]+$/, '')
+    .trim();
+}
+
+/* items: [{ title, answer }] as the form gave them. email: the address Google
+   collected, which wins over any Email question. Returns trimmed strings for
+   every field, '' where nothing was given. */
+function parseAnswers(items, email, timestamp) {
+  var a = {
+    who: '', name: '', student: '', grade: '', topic: '', question: '',
+    email: String(email == null ? '' : email).trim(),
+    mobile: '',
+    received: formatRiyadh(timestamp),
+    extra: []
+  };
+  (items || []).forEach(function (it) {
+    var field = FIELDS[normTitle(it.title)];
+    var answer = String(it.answer == null ? '' : it.answer).trim();
+    if (!field) {
+      if (answer) a.extra.push({ title: String(it.title == null ? '' : it.title).trim(), answer: answer });
+      return;
+    }
+    if (field === 'email') {
+      if (!a.email) a.email = answer;
+      return;
+    }
+    a[field] = answer;
+  });
+  a.who = englishHalf(a.who);
+  return a;
+}
