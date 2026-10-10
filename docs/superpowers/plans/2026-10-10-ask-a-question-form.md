@@ -927,7 +927,7 @@ Run:
 ```bash
 grep -n -E '@[a-z0-9-]+\.[a-z]{2,}' tools/ask-a-question/Code.gs | grep -v 'example.com'
 grep -n -E '\b(const|let|class|=>|import)\b|`' tools/ask-a-question/Code.gs
-grep -n '—' tools/ask-a-question/Code.gs tools/ask-a-question/code.test.mjs
+grep -n $'\xe2\x80\x94' tools/ask-a-question/Code.gs tools/ask-a-question/code.test.mjs
 ```
 
 Expected: all three print nothing. (`example.com` appears only in the sample sender, which is not a real address.)
@@ -1070,7 +1070,7 @@ Signed in as the Head of School:
 
 - [ ] **Step 2: Check the README for em dashes and the banned word**
 
-Run: `grep -n -E '—|\bYear\b' tools/ask-a-question/README.md`
+Run: `grep -n -E $'\xe2\x80\x94|\\bYear\\b' tools/ask-a-question/README.md`
 Expected: prints nothing.
 
 - [ ] **Step 3: Commit**
@@ -1228,7 +1228,7 @@ Expected: `ok`.
 
 - [ ] **Step 3: Check for em dashes in the two edits, then commit**
 
-Run: `git diff -U0 README.md CLAUDE.md | grep -n '—'`
+Run: `git diff -U0 README.md CLAUDE.md | grep -n $'\xe2\x80\x94'`
 Expected: prints nothing.
 
 ```bash
