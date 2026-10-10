@@ -90,8 +90,12 @@ sends, so the title has to read well in an inbox.
 
 - Title: `British Section (Boys): Ask a Question`
 - Description, English then Arabic on the next line:
-  `For parents and students of the British Section, boys campus. Send any question at any time of the year. It goes straight to the Head of School, and you will receive a copy by email.`
-  `لأولياء الأمور وطلاب القسم البريطاني، مجمع البنين. أرسلوا أي سؤال في أي وقت خلال العام. يصل سؤالكم مباشرة إلى مدير المدرسة، وتصلكم نسخة منه بالبريد الإلكتروني.`
+  `For parents and students of the British Section, boys campus. Send any question at any time of the year, and we will come back to you.`
+  `لأولياء الأمور وطلاب القسم البريطاني، مجمع البنين. أرسلوا أي سؤال في أي وقت خلال العام، وسنرد عليكم.`
+
+The description, the help texts and the hub's wording say nothing about where a
+question goes or about the copy Google sends. Those are background mechanics,
+at the user's decision on 10 October 2026.
 
 Questions, in order. The English title is the contract the script matches on;
 the Arabic goes in each question's description, as now. Required questions are
@@ -104,7 +108,7 @@ marked with an asterisk.
 | 3 | Student Name * | Short answer | `اسم الطالب`. Help text: `If you are the student, write your own name. / إن كنتم الطالب فاكتبوا اسمكم.` |
 | 4 | Grade * | Dropdown | Unchanged: Grade 9 to Grade 12, each with its Arabic. |
 | 5 | Email * | Google's own field | Added by the Responder input setting. Google labels it. |
-| 6 | Mobile Number | Short answer | `رقم الجوال`. Optional. Help text: `Optional. For a reply on WhatsApp if needed. / اختياري، للرد عبر WhatsApp عند الحاجة.` Renamed from Email or Mobile Number. |
+| 6 | Mobile Number | Short answer | `رقم الجوال`. Optional. Help text: `Optional. / اختياري.` Renamed from Email or Mobile Number. |
 | 7 | Topic * | Dropdown | Unchanged: the nine topics, Other last. |
 | 8 | Your Question * | Paragraph | `سؤالكم`. Renamed from Your Questions. |
 
@@ -233,17 +237,16 @@ workflow in CLAUDE.md.
 - `ask.lead`: `Send it through the form at any time in the year and we will
   come back to you by email.`
 - `ask.note`: `The form is for parents and students, opens in a new tab and
-  takes under a minute. You will receive a copy of your question by email
-  straight away. Prefer email? Write to the Head of School.` The mailto link
-  and its `href` stay as they are.
+  takes under a minute. Prefer email? Write to the Head of School.` The
+  mailto link and its `href` stay as they are.
 - `start.ask.d`: `Parents and students can send us a question about
   anything, any time through the year.`
 - A new `updatesData` entry, dated the day it goes live, with `titleAr`,
   `textAr` and `labelAr`, `href` the form's public link and `label` `Open the
   form`. Title: `Ask a question any time, parents and students`. Text: `The
   question form from the Meet & Greet now stays open all year, for parents
-  and for students. Every question goes straight to the Head of School, and
-  you receive a copy by email the moment you send it.` Stamped with
+  and for students. Send any question at any time and we will come back to
+  you.` Stamped with
   `node tools/i18n.mjs stamp updates.<id>`.
 - README: the Ask a question paragraph gains the form's new title, the
   settings that matter and a pointer to `tools/ask-a-question/`.
@@ -311,8 +314,8 @@ Branching: this work sits on `ask-a-question`, branched from `exams`, in a
 worktree, so today's unpushed Tests and exams commits are untouched. When both
 are ready, `main` fast-forwards to `ask-a-question` and is pushed once, with the
 announcement dated that day. The announcement must not go live before the form
-has been edited and the script switched live, since it tells parents the form
-is open to students and that a copy arrives by email.
+has been edited, since it tells parents the form is open to students, and the
+push waits for the script to be live so the two arrive together.
 
 ## Out of scope
 
