@@ -69,6 +69,11 @@ test('waDigits normalises Saudi and international numbers', () => {
   assert.equal(waDigits('٠٥٠٨٥٥١٠٠٦'), '966508551006');
   assert.equal(waDigits('۰۵۰۸۵۵۱۰۰۶'), '966508551006');
   assert.equal(waDigits('+44 7700 900123'), '447700900123');
+  assert.equal(waDigits('+966 050 855 1006'), '966508551006');
+  assert.equal(waDigits('00966 0508551006'), '966508551006');
+  assert.equal(waDigits('966508551006'), '966508551006');
+  assert.equal(waDigits('12345678'), '12345678');
+  assert.equal(waDigits('1234567890123456'), '');
   assert.equal(waDigits('12345'), '');
   assert.equal(waDigits('no'), '');
   assert.equal(waDigits(''), '');
@@ -186,7 +191,9 @@ test('buildHtml lays out every answer in a right-to-left-safe table', () => {
   assert.match(html, /href="https:\/\/wa\.me\/966508551006"[^>]*>Open in WhatsApp</);
   assert.match(html, /050 855 1006/);
   assert.match(html, /href="https:\/\/docs\.google\.com\/spreadsheets\/d\/SHEET123"/);
-  assert.match(html, /Press Reply to answer Suzan; your reply goes to suzan@gmail\.com\./);
+  assert.match(html, /href="mailto:suzan%40gmail\.com\?subject=Re%3A%20New%20question%3A%20Attendance%20and%20Timetable%2C%20Grade%209%2C%20Suzan&amp;body=/);
+  assert.match(html, />Reply to Suzan</);
+  assert.match(html, /Press Reply, or tap the button, to answer Suzan; both go to suzan@gmail\.com\./);
   assert.match(html, /Every submission is saved in the form/);
   assert.equal((html.match(/dir="auto"/g) || []).length, 8, 'one dir="auto" per value cell');
   assert.doesNotMatch(html, /<style/);
@@ -222,6 +229,7 @@ test('buildHtml lists an extra question, drops the sheet link without a sheet, a
   assert.match(html, />9A</);
   assert.doesNotMatch(html, /responses sheet/);
   assert.match(html, /No email address was given, so Reply will not reach the sender\./);
+  assert.doesNotMatch(html, /mailto:/);
 });
 
 test('buildText carries every field, the WhatsApp link and the sheet', () => {
@@ -239,7 +247,15 @@ test('buildText carries every field, the WhatsApp link and the sheet', () => {
     'Mobile: 050 855 1006 (WhatsApp: https://wa.me/966508551006)',
     'Class: 9A',
     'Responses sheet: https://docs.google.com/spreadsheets/d/SHEET123',
+    'Or write to: mailto:suzan%40gmail.com?subject=Re%3A%20New%20question%3A%20Attendance%20and%20Timetable%2C%20Grade%209%2C%20Suzan&body=',
   ]) assert.ok(text.includes(line), 'missing: ' + line);
+});
+
+test('replyLink quotes the question and encodes the subject', () => {
+  const { replyLink } = load();
+  const link = replyLink(answers({ question: 'Line one\nLine two' }));
+  assert.ok(link.startsWith('mailto:suzan%40gmail.com?subject=Re%3A%20New%20question'));
+  assert.ok(link.endsWith('&body=' + encodeURIComponent('\n\n> Line one\n> Line two')));
 });
 
 test('buildMessage bundles subject, html and text', () => {
@@ -368,13 +384,30 @@ test('onFormSubmit falls back to a plain email when the rich one cannot be built
   assert.equal('htmlBody' in g.sent[0], false);
   assert.match(g.sent[0].body, /could not be built \(boom\)/);
   assert.match(g.sent[0].body, /Your Question: They have chemistry class/);
-  assert.equal(g.sent[0].replyTo, 'suzan@gmail.com');
+  assert.equal('replyTo' in g.sent[0], false);
 });
 
 test('onFormSubmit rethrows when even the fallback cannot be sent', () => {
   const g = fakeGoogle({ props: { TO: 'head@example.com' } });
-  g.globals.MailApp.sendEmail = () => { throw new Error('quota'); };
+  let calls = 0;
+  g.globals.MailApp.sendEmail = () => { calls += 1; throw new Error('quota'); };
   assert.throws(() => load(g.globals).onFormSubmit(fakeEvent(RAW, 'suzan@gmail.com', WHEN)), /quota/);
+  assert.equal(calls, 2, 'the rich send and then the fallback');
+});
+
+test('onFormSubmit sends the plain fallback when the rich send itself is rejected', () => {
+  const g = fakeGoogle({ props: { TO: 'head@example.com' } });
+  g.globals.MailApp.sendEmail = (opts) => {
+    if (opts.htmlBody) throw new Error('Invalid argument: replyTo');
+    g.sent.push(opts);
+  };
+  load(g.globals).onFormSubmit(fakeEvent(RAW, 'suzan@gmail.com', WHEN));
+  assert.equal(g.sent.length, 1);
+  assert.equal('htmlBody' in g.sent[0], false);
+  assert.equal('replyTo' in g.sent[0], false);
+  assert.equal(g.sent[0].subject, 'New question: see below');
+  assert.match(g.sent[0].body, /Email: suzan@gmail\.com/);
+  assert.match(g.sent[0].body, /Your Question: They have chemistry class/);
 });
 
 test('setup installs one trigger, replaces any old ones and records the installer as TO', () => {

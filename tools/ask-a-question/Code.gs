@@ -51,8 +51,9 @@ function westernDigits(s) {
 }
 
 /* Digits for a wa.me link, or '' when the text is not a usable number. A
-   Saudi mobile typed as 05x, 5x, +966 or 00966 becomes 966xxxxxxxxx; any
-   other 8 to 15 digit run with a country code is kept as typed. */
+   Saudi mobile typed as 05x, 5x, +966 or 00966 becomes 966xxxxxxxxx, and a
+   0 typed after the country code (+966 05x) is dropped; any other 8 to 15
+   digit run with a country code is kept as typed. */
 function waDigits(s) {
   var t = westernDigits(s).trim();
   var plus = t.charAt(0) === '+';
@@ -61,6 +62,7 @@ function waDigits(s) {
   if (/^05\d{8}$/.test(d)) return '966' + d.slice(1);
   if (/^5\d{8}$/.test(d)) return '966' + d;
   if (/^966\d{9}$/.test(d)) return d;
+  if (/^9660(5\d{8})$/.test(d)) return '966' + d.slice(4);
   if (/^[1-9]\d{7,14}$/.test(d)) return d;
   return '';
 }
@@ -164,6 +166,16 @@ function mobileHtml(mobile) {
   return text + ' &nbsp;&nbsp;<a href="https://wa.me/' + d + '" style="color:' + LINK + ';">Open in WhatsApp</a>';
 }
 
+/* A mailto link that opens a reply to the respondent with the subject
+   and the question quoted, so one tap reaches them whatever Gmail does
+   with Reply-To on a message the Head sent to himself. */
+function replyLink(a) {
+  var subject = 'Re: ' + buildSubject(a, false);
+  var body = '\n\n> ' + String(a.question == null ? '' : a.question).replace(/\r?\n/g, '\n> ');
+  return 'mailto:' + encodeURIComponent(a.email) + '?subject=' + encodeURIComponent(subject) +
+    '&body=' + encodeURIComponent(body);
+}
+
 function breakLines(s) {
   return escapeHtml(s).replace(/\r?\n/g, '<br>');
 }
@@ -183,18 +195,22 @@ function buildHtml(a, sheetUrl) {
     row('Mobile', mobileHtml(a.mobile))
   ];
   (a.extra || []).forEach(function (x) { rows.push(row(x.title, breakLines(x.answer))); });
-  var reply = a.email
-    ? 'Press Reply to answer ' + escapeHtml(a.name || 'the sender') + '; your reply goes to ' + escapeHtml(a.email) + '.'
-    : 'No email address was given, so Reply will not reach the sender.';
   var sheet = sheetUrl
     ? ' <a href="' + escapeHtml(sheetUrl) + '" style="color:' + LINK + ';">Open the responses sheet</a>.'
     : '';
+  var reply = a.email
+    ? '<p style="margin:14px 0 4px;">' +
+      '<a href="' + escapeHtml(replyLink(a)) + '" style="display:inline-block;background:' + GOLD + ';color:' + NAVY +
+      ';font-weight:bold;text-decoration:none;padding:10px 16px;border-radius:6px;">Reply to ' + escapeHtml(a.name || 'the sender') + '</a></p>' +
+      '<p style="margin:4px 0 4px;">Press Reply, or tap the button, to answer ' + escapeHtml(a.name || 'the sender') +
+      '; both go to ' + escapeHtml(a.email) + '.' + sheet + '</p>'
+    : '<p style="margin:14px 0 4px;">No email address was given, so Reply will not reach the sender.' + sheet + '</p>';
   return '<div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.5;color:#111;max-width:640px;">' +
     '<div style="background:' + NAVY + ';color:#fff;padding:14px 16px;border-bottom:3px solid ' + GOLD + ';' +
     'font-size:17px;font-weight:bold;">New question from the Ask a Question form</div>' +
     '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse;width:100%;background:#fff;">' +
     rows.join('') + '</table>' +
-    '<p style="margin:14px 0 4px;">' + reply + sheet + '</p>' +
+    reply +
     '<p style="margin:4px 0 0;font-size:12px;color:#777;">Sent automatically by the form\'s script. ' +
     'Every submission is saved in the form whether or not this email arrives.</p>' +
     '</div>';
@@ -217,7 +233,7 @@ function buildText(a, sheetUrl) {
   (a.extra || []).forEach(function (x) { lines.push(x.title + ': ' + x.answer); });
   lines.push('');
   lines.push(a.email
-    ? 'Press Reply to answer ' + (a.name || 'the sender') + '; your reply goes to ' + a.email + '.'
+    ? 'Press Reply to answer ' + (a.name || 'the sender') + '; your reply goes to ' + a.email + '. Or write to: ' + replyLink(a)
     : 'No email address was given, so Reply will not reach the sender.');
   if (sheetUrl) lines.push('Responses sheet: ' + sheetUrl);
   lines.push('Sent automatically by the form\'s script. Every submission is saved in the form whether or not this email arrives.');
@@ -290,6 +306,8 @@ function send(to, msg, replyTo) {
 /* The installable on-form-submit trigger calls this with e.response, the
    FormResponse just saved. The rich email is tried first; if building or
    sending it throws, a plain fallback with every raw answer goes instead.
+   The fallback is sent with no Reply-To, so a rejected reply address cannot
+   sink both sends; the respondent's address is a line in the fallback text.
    If that throws too, the error is rethrown so Google's failure
    notification reaches the trigger's owner. */
 function onFormSubmit(e) {
@@ -301,7 +319,7 @@ function onFormSubmit(e) {
   try {
     send(cfg.to, buildMessage(parseAnswers(items, email, when), sheetLink(), cfg.test), email);
   } catch (err) {
-    send(cfg.to, fallbackMessage(items, email, when, cfg.test, err), email);
+    send(cfg.to, fallbackMessage(items, email, when, cfg.test, err), '');
   }
 }
 
