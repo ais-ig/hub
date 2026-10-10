@@ -67,6 +67,8 @@ Bringing the countdown back for a future event is just those two attributes. The
 There is no event on the page. The Meet & Greet took place on 9 September 2026, and on 12 September 2026 the "Tonight's programme" section it lived in, together with the countdown's live dates, were retired: once the evening had passed, a page still counting down to it and still headed "Parents' Meet & Greet" was actively wrong, not just stale. What replaced it is reference material, updated only when a source document changes:
 
 - **Class timetables** (`#schedule`), the current timetable; see "Updating the timetable" below.
+- **Tests and exams** (`#exams`), the current round of tests or exams and the
+  Zero Period bell for test days; see "Updating the exam schedule" below.
 - Everything from **IGCSE results** down: results, pathway, options, assessment, support, activities, policies and contacts. See `CLAUDE.md`, "Content sources", for what each is duplicated from.
 - **What's changed this year** (`#changelog`), a running log fed by the `updatesData` array; see "Recording a change" below.
 
@@ -147,6 +149,53 @@ is HTML and refreshes quickly, and the link on it carries the bumped `?v=`.
 The archive filename uses the aSc **"Timetable generated"** date printed on
 every page, not the publish date, so a parent holding a printout can match
 their copy.
+
+## Updating the exam schedule
+
+**Tests and exams** (`#exams`) carries the current round of tests or exams,
+the way Class timetables carries the current timetable, and is swapped each
+round rather than added to. It went in on 10 October 2026 with the Semester
+One Mid-Term Tests, Sunday 18 to Wednesday 28 October 2026. The sources are
+the two Mid-Term Test Schedule sheets the school sent parents on 5 October
+2026, Grades 9 to 10 and Grades 11 to 12 Science stream, and the Zero Period
+bell sheet. The sheets' own headings end the window two days early, so they
+were not published; the section is the complete copy. The holiday on Sunday
+25 October, and Monday 26 October being a buffer day with no test, were
+confirmed by the Head of Section on 10 October 2026.
+
+The window is stated in four places that move together: the section's
+subtitle and lead, the hero button's `data-until` (the last test day, 11:59
+PM Riyadh time) and the `newUntil` of the two notices. The Zero Period bell
+has two tables because Grade 9 follows the school's Grades 4 to 9 bell and
+Grades 10 to 12 the Grades 10 to 12 bell; their break falls at different
+times. The 6:30 row is written Homeroom, as the Daily Schedule and the
+timetable note call it, where the bell sheet says Assembly.
+
+For the next round:
+
+1. Replace the subtitle, the lead and the day-by-day tables with the new
+   round's dates and subjects. Reuse the `subj.*` keys for subject names and
+   the `exams.d.*` keys for dates, adding new ones as needed. Give a holiday
+   or a buffer day a row of its own with `class="off"`, so a gap explains
+   itself. Keep the Zero Period tables unless the school issues a new bell
+   sheet.
+2. Set the hero button's `data-until` to the last test day, and change its
+   text if the round has another name.
+3. Add one notice to `updatesData` with `newUntil` on the last test day, and
+   one for any holiday inside the window. Date them the day they go live.
+4. Every changed string needs its Arabic and a stamp, and every new key a
+   `merge`; see "Arabic".
+5. `node tools/check.mjs && bash tools/render-check.sh`, then look at the
+   section in both languages at 380px: the Arabic day names and subject pairs
+   run longer than the English.
+
+Between rounds, once the window has passed, swap the round for the next one
+the parents' calendar names: the subtitle becomes "Next: Semester One
+Examinations, from Tuesday 29 December 2026", the lead one line saying the
+day-by-day schedule appears here once the school issues it, and the tables
+and the bell come out. Do not announce a schedule nobody has committed to
+producing, and do not delete the section or its menu entry: `#exams` is a
+link parents keep.
 
 ## Recording a change
 

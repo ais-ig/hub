@@ -1,6 +1,6 @@
 # Translation review · AIS Parent Hub
 
-369 strings · 0 missing Arabic
+431 strings · 0 missing Arabic
 
 Written by `node tools/i18n.mjs pairs`. Do not edit by hand.
 
@@ -18,6 +18,7 @@ Written by `node tools/i18n.mjs pairs`. Do not edit by hand.
 |---|---|---|
 | `menu.label` | Sections | أقسام الصفحة |
 | `menu.schedule` | Class timetables | الجداول الدراسية |
+| `menu.exams` | Tests and exams | الاختبارات |
 | `menu.results` | IGCSE results | نتائج IGCSE |
 | `menu.pathway` | Your IG pathway | مسار ابنكم في IGCSE |
 | `menu.options` | Subject options | اختيار المواد |
@@ -53,6 +54,7 @@ Written by `node tools/i18n.mjs pairs`. Do not edit by hand.
 | `hero.cd.min` | Min | دقيقة |
 | `hero.cd.sec` | Sec | ثانية |
 | `hero.cta.council` | Apply for Student Council | الترشح لمجلس الطلاب |
+| `hero.cta.exams` | Mid-Term Tests | اختبارات منتصف الفصل |
 | `hero.cta.timetables` | Class timetables | الجداول الدراسية |
 | `hero.cta.ask` | Ask a question | اطرحوا سؤالاً |
 
@@ -106,6 +108,7 @@ Written by `node tools/i18n.mjs pairs`. Do not edit by hand.
 | `schedule.title` | Class timetables | الجداول الدراسية |
 | `schedule.sub` | Grades 9 to 12 · boys campus · in effect from Sunday 27 September 2026 | الصفوف من 9 إلى 12 · مقر البنين · يُعمل بها اعتباراً من الأحد 27 سبتمبر 2026 |
 | `schedule.note` | The week runs Sunday to Thursday. Homeroom is at 6:30 AM, periods 1 to 8 run from 6:45 AM to 12:35 PM with break from 9:25 to 9:55, and Salah is from 12:35 to 1:05 PM. Tap your child’s class to open their timetable. | أسبوع الدراسة من الأحد إلى الخميس. حصة الريادة في 6:30 صباحاً، والحصص من 1 إلى 8 من 6:45 صباحاً إلى 12:35 ظهراً، وتتخللها الفسحة من 9:25 إلى 9:55 صباحاً، والصلاة من 12:35 إلى 1:05 ظهراً. اضغطوا على فصل ابنكم لفتح جدوله. |
+| `schedule.exams` | On a day with a test, the school day follows the Zero Period bell instead. See Tests and exams. | وفي اليوم الذي فيه اختبار، يسير اليوم الدراسي وفق جدول الحصة الصفرية بدلاً من ذلك. انظروا الاختبارات. |
 | `schedule.pill.9a` | Grade 9A class timetable | الجدول الدراسي للفصل 9A |
 | `schedule.pill.9b` | Grade 9B class timetable | الجدول الدراسي للفصل 9B |
 | `schedule.pill.9c` | Grade 9C class timetable | الجدول الدراسي للفصل 9C |
@@ -120,46 +123,74 @@ Written by `node tools/i18n.mjs pairs`. Do not edit by hand.
 | `schedule.full` | Open the full timetable | فتح الجدول الدراسي الكامل |
 | `schedule.stamp` | All classes, 11 pages · issued 22 September 2026 | جميع الفصول، 11 صفحة · صدر في 22 سبتمبر 2026 |
 
-## results
+## exams
 
 | Key | English | Arabic |
 |---|---|---|
-| `results.title` | IGCSE results 2025/26 | نتائج IGCSE للعام الدراسي 2025/26 |
-| `results.sub` | 718 subject results from 192 candidates across 20 subjects, all boards combined | 718 نتيجة في 20 مادة، حققها 192 من الطلاب المتقدمين للاختبارات، لدى جميع هيئات الاختبارات مجتمعة |
-| `results.stat1` | of results at the top grades, 9, 8 or A* | من النتائج بأعلى التقديرات: 9 أو 8 أو A* |
-| `results.stat2` | at grades 9 to 7, or A* to A | بالتقديرات من 9 إلى 7، أو من A* إلى A |
-| `results.stat3` | at grades 9 to 4, or A* to C | بالتقديرات من 9 إلى 4، أو من A* إلى C |
-| `results.stat4` | subjects at 100% grades 9 to 4 | مواد كانت نتائجها 100% بالتقديرات من 9 إلى 4 |
-| `results.students` | Students 24 with five or more top grades, 11 with seven or more, and 3 with full marks in Edexcel IGCSE Mathematics. | الطلاب 24 طالباً نالوا أعلى التقديرات في خمس مواد أو أكثر، و11 طالباً في سبع مواد أو أكثر، و3 طلاب نالوا الدرجة الكاملة في مادة الرياضيات في Edexcel IGCSE. |
-
-## s2
-
-| Key | English | Arabic |
-|---|---|---|
-| `s2.title` | Two years, one programme | عامان وبرنامج واحد |
-| `s2.sub` | The big picture, from Grade 9 through to A-Level | الصورة الكاملة، من الصف التاسع حتى A-Level |
-| `s2.lead` | Grades 9 and 10 are not two separate years. They form a single continuous IGCSE programme, and the subjects chosen at the start of Grade 9 carry all the way through to the external examinations at the end of Grade 10. | الصفان 9 و10 ليسا عامين منفصلين، بل هما برنامج IGCSE واحد متصل، والمواد التي تُختار في بداية الصف 9 تستمر مع الطالب حتى الاختبارات الخارجية في نهاية الصف 10. |
-| `s2.step1.g` | Start · Grade 9 | البداية · الصف التاسع |
-| `s2.step1.h` | IGCSE begins | بداية برنامج IGCSE |
-| `s2.step1.p` | Subject options are selected and the two-year syllabus starts. | تُختار المواد ويبدأ المقرر الدراسي الممتد على عامين. |
-| `s2.step2.g` | Journey · Grade 10 | الرحلة · الصف العاشر |
-| `s2.step2.h` | The programme completes | اكتمال البرنامج |
-| `s2.step2.p` | Students sit their external IGCSE examinations, carrying the critical thinking, creativity and collaboration that matter beyond the exam hall. | يؤدي الطلاب اختبارات IGCSE الخارجية، ومعهم ما اكتسبوه من تفكير ناقد وإبداع وتعاون، وهي مهارات تتجاوز أهميتها قاعة الاختبار. |
-| `s2.step3.g` | Goal · Grades 11 and 12 | الهدف · الصفان 11 و12 |
-| `s2.step3.h` | A-Levels and beyond | A-Level وما بعده |
-| `s2.step3.p` | AS then A2, built directly on the IGCSE subjects taken, and recognised by universities worldwide. | AS ثم A2، وهما مبنيان مباشرة على مواد IGCSE التي درسها الطالب، ومعترف بهما لدى الجامعات حول العالم. |
+| `exams.title` | Tests and exams | الاختبارات |
+| `exams.sub` | Mid-Term Tests · Semester One · Grades 9 to 12 · Sunday 18 to Wednesday 28 October 2026 | اختبارات منتصف الفصل · الفصل الدراسي الأول · الصفوف من 9 إلى 12 · من الأحد 18 إلى الأربعاء 28 أكتوبر 2026 |
+| `exams.lead` | The Semester One Mid-Term Tests run from Sunday 18 October to Wednesday 28 October 2026. Every test is sat in Zero Period, 7:55 to 8:55 AM, and students should be in their seats by 7:50 AM. The tests cover the IGCSE and A-Level subjects. For Grades 9 and 10, each one is the Mid-Term Test that carries 10 marks of Quarter 1, as set out under How marks are built. | تُعقد اختبارات منتصف الفصل الدراسي الأول من الأحد 18 أكتوبر إلى الأربعاء 28 أكتوبر 2026. ويُجرى كل اختبار في الحصة الصفرية من 7:55 إلى 8:55 صباحاً، وعلى الطلاب أن يكونوا في مقاعدهم بحلول 7:50 صباحاً. وتشمل الاختبارات مواد IGCSE و A-Level. وفي الصفين التاسع والعاشر، كل اختبار منها هو اختبار منتصف الفصل الذي يحمل 10 درجات من الربع الأول، كما هو مبيّن في طريقة احتساب الدرجات. |
+| `exams.g910.h` | Grades 9 and 10 | الصفان التاسع والعاشر |
+| `exams.th.day` | Day | اليوم |
+| `exams.d.1018` | Sunday 18 October | الأحد 18 أكتوبر |
+| `exams.d.1019` | Monday 19 October | الاثنين 19 أكتوبر |
+| `exams.d.1020` | Tuesday 20 October | الثلاثاء 20 أكتوبر |
+| `exams.d.1021` | Wednesday 21 October | الأربعاء 21 أكتوبر |
+| `exams.s.csict` | Computer Science or ICT | علوم الحاسب (Computer Science) أو تقنية المعلومات والاتصالات (ICT) |
+| `exams.d.1022` | Thursday 22 October | الخميس 22 أكتوبر |
+| `exams.d.1025` | Sunday 25 October | الأحد 25 أكتوبر |
+| `exams.s.holiday` | Holiday, no school | إجازة، لا دراسة |
+| `exams.d.1026` | Monday 26 October | الاثنين 26 أكتوبر |
+| `exams.s.notest` | No test, lessons as usual | لا اختبار، والدراسة كالمعتاد |
+| `exams.d.1027` | Tuesday 27 October | الثلاثاء 27 أكتوبر |
+| `exams.d.1028` | Wednesday 28 October | الأربعاء 28 أكتوبر |
+| `exams.s.arabicacc` | Arabic or Accounting | اللغة العربية (Arabic) أو المحاسبة (Accounting) |
+| `exams.g1112.h` | Grades 11 and 12, Science stream | الصفان الحادي عشر والثاني عشر، المسار العلمي |
+| `exams.s.biocs` | Biology or Computer Science | الأحياء (Biology) أو علوم الحاسب (Computer Science) |
+| `exams.bell.h` | The school day on a test day | اليوم الدراسي في يوم الاختبار |
+| `exams.bell.p` | On a day with a test, the school day follows the Zero Period bell below instead of the usual timetable: periods 1 and 2 are shorter, the test fills Zero Period, and lessons carry on afterwards until 1:05 PM. Grade 9 has one table and Grades 10 to 12 another, because their break falls at different times. On a day without a test, the usual timetable runs. | في اليوم الذي فيه اختبار، يسير اليوم الدراسي وفق جدول الحصة الصفرية أدناه بدلاً من الجدول المعتاد: تكون الحصتان الأولى والثانية أقصر، ويشغل الاختبار الحصة الصفرية، ثم تستمر الدراسة بعده حتى 1:05 ظهراً. وللصف التاسع جدول، وللصفوف من 10 إلى 12 جدول آخر، لأن موعد الفسحة يختلف بينهما. وفي اليوم الذي لا اختبار فيه، يسير الجدول المعتاد. |
+| `exams.th.period` | Period | الحصة |
+| `exams.th.time` | Time | الوقت |
+| `exams.l.hr` | Homeroom | حصة الريادة |
+| `exams.t.0630` | 6:30 – 6:45 AM | من 6:30 إلى 6:45 صباحاً |
+| `exams.l.p1` | Period 1 | الحصة الأولى |
+| `exams.t.0645` | 6:45 – 7:20 AM | من 6:45 إلى 7:20 صباحاً |
+| `exams.l.p2` | Period 2 | الحصة الثانية |
+| `exams.t.0720` | 7:20 – 7:55 AM | من 7:20 إلى 7:55 صباحاً |
+| `exams.l.zero` | Zero Period, the test | الحصة الصفرية، الاختبار |
+| `exams.t.0755` | 7:55 – 8:55 AM | من 7:55 إلى 8:55 صباحاً |
+| `exams.l.break` | Break | الفسحة |
+| `exams.t.0855a` | 8:55 – 9:15 AM | من 8:55 إلى 9:15 صباحاً |
+| `exams.l.p3` | Period 3 | الحصة الثالثة |
+| `exams.t.0915` | 9:15 – 9:50 AM | من 9:15 إلى 9:50 صباحاً |
+| `exams.l.p4` | Period 4 | الحصة الرابعة |
+| `exams.t.0950` | 9:50 – 10:25 AM | من 9:50 إلى 10:25 صباحاً |
+| `exams.l.p5` | Period 5 | الحصة الخامسة |
+| `exams.t.1025` | 10:25 – 11:00 AM | من 10:25 إلى 11:00 صباحاً |
+| `exams.l.p6` | Period 6 | الحصة السادسة |
+| `exams.t.1100` | 11:00 – 11:35 AM | من 11:00 إلى 11:35 صباحاً |
+| `exams.l.p7` | Period 7 | الحصة السابعة |
+| `exams.t.1135` | 11:35 AM – 12:10 PM | من 11:35 صباحاً إلى 12:10 ظهراً |
+| `exams.t.1210` | 12:10 – 12:30 PM | من 12:10 إلى 12:30 ظهراً |
+| `exams.l.p8` | Period 8 | الحصة الثامنة |
+| `exams.t.1230` | 12:30 – 1:05 PM | من 12:30 إلى 1:05 ظهراً |
+| `exams.bell.g1012` | Grades 10 to 12 | الصفوف من 10 إلى 12 |
+| `exams.t.0855b` | 8:55 – 9:30 AM | من 8:55 إلى 9:30 صباحاً |
+| `exams.t.0930` | 9:30 – 10:05 AM | من 9:30 إلى 10:05 صباحاً |
+| `exams.t.1005` | 10:05 – 10:25 AM | من 10:05 إلى 10:25 صباحاً |
+| `exams.bell.note` | Phones, electronic devices and smartwatches are not allowed in the test room. See Policies. | لا يُسمح بالجوالات ولا بالأجهزة الإلكترونية ولا بالساعات الذكية في قاعة الاختبار. انظروا السياسات. |
 
 ## s3
 
 | Key | English | Arabic |
 |---|---|---|
+| `s3.th.subject` | Subject | المادة |
 | `s3.title` | Choosing subjects | اختيار المواد |
 | `s3.sub` | Compulsory subjects, the choices around them, and the forms | المواد الإلزامية، والاختيارات المتاحة معها، والنماذج |
 | `s3.lead` | Both grades take a set of compulsory subjects and then make choices around them. Select your son’s grade to see the tables that apply. | يدرس طلاب الصفين مجموعة من المواد الإلزامية، ثم يختارون مواد أخرى إلى جانبها. اختاروا صف ابنكم لعرض الجداول الخاصة به. |
 | `s3.short` | In short Everyone takes English, Mathematics, Biology, Chemistry, Physics and Business Studies. Choose Arabic or Accounting, Computer Science or ICT, and a Maths board, Cambridge or Edexcel. Grade 9 only: the optional Hifdh Programme. | باختصار يدرس الجميع اللغة الإنجليزية والرياضيات والأحياء والكيمياء والفيزياء ودراسات الأعمال. وتختارون بين اللغة العربية والمحاسبة، وبين علوم الحاسب وتقنية المعلومات والاتصالات، وتختارون هيئة اختبار الرياضيات: Cambridge أو Edexcel. للصف التاسع فقط: برنامج تحفيظ القرآن الكريم، وهو اختياري. |
 | `s3.tabs.label` | Grade | الصف |
 | `s3.compulsory` | Compulsory subjects | المواد الإلزامية |
-| `s3.th.subject` | Subject | المادة |
 | `s3.th.curriculum` | Curriculum | المنهج |
 | `s3.th.periods` | Periods | الحصص |
 | `s3.cur.moe` | MoE | وزارة التعليم |
@@ -211,19 +242,49 @@ Written by `node tools/i18n.mjs pairs`. Do not edit by hand.
 
 | Key | English | Arabic |
 |---|---|---|
+| `subj.biology` | Biology | الأحياء (Biology) |
+| `subj.english` | English | اللغة الإنجليزية (English) |
+| `subj.chemistry` | Chemistry | الكيمياء (Chemistry) |
+| `subj.physics` | Physics | الفيزياء (Physics) |
+| `subj.maths` | Mathematics | الرياضيات (Mathematics) |
 | `subj.arabic` | Arabic | اللغة العربية (Arabic) |
 | `subj.islamic` | Islamic Studies | الدراسات الإسلامية (Islamic Studies) |
 | `subj.quran` | Quran | القرآن الكريم (Quran) |
 | `subj.social` | Social Studies (KSAH) | الدراسات الاجتماعية (Social Studies, KSAH) |
 | `subj.pe` | PE | التربية البدنية (PE) |
-| `subj.english` | English | اللغة الإنجليزية (English) |
-| `subj.physics` | Physics | الفيزياء (Physics) |
-| `subj.chemistry` | Chemistry | الكيمياء (Chemistry) |
-| `subj.biology` | Biology | الأحياء (Biology) |
 | `subj.business` | Business Studies | دراسات الأعمال (Business Studies) |
 | `subj.accounting` | Accounting | المحاسبة (Accounting) |
 | `subj.cs` | Computer Science | علوم الحاسب (Computer Science) |
 | `subj.ict` | ICT | تقنية المعلومات والاتصالات (ICT) |
+
+## results
+
+| Key | English | Arabic |
+|---|---|---|
+| `results.title` | IGCSE results 2025/26 | نتائج IGCSE للعام الدراسي 2025/26 |
+| `results.sub` | 718 subject results from 192 candidates across 20 subjects, all boards combined | 718 نتيجة في 20 مادة، حققها 192 من الطلاب المتقدمين للاختبارات، لدى جميع هيئات الاختبارات مجتمعة |
+| `results.stat1` | of results at the top grades, 9, 8 or A* | من النتائج بأعلى التقديرات: 9 أو 8 أو A* |
+| `results.stat2` | at grades 9 to 7, or A* to A | بالتقديرات من 9 إلى 7، أو من A* إلى A |
+| `results.stat3` | at grades 9 to 4, or A* to C | بالتقديرات من 9 إلى 4، أو من A* إلى C |
+| `results.stat4` | subjects at 100% grades 9 to 4 | مواد كانت نتائجها 100% بالتقديرات من 9 إلى 4 |
+| `results.students` | Students 24 with five or more top grades, 11 with seven or more, and 3 with full marks in Edexcel IGCSE Mathematics. | الطلاب 24 طالباً نالوا أعلى التقديرات في خمس مواد أو أكثر، و11 طالباً في سبع مواد أو أكثر، و3 طلاب نالوا الدرجة الكاملة في مادة الرياضيات في Edexcel IGCSE. |
+
+## s2
+
+| Key | English | Arabic |
+|---|---|---|
+| `s2.title` | Two years, one programme | عامان وبرنامج واحد |
+| `s2.sub` | The big picture, from Grade 9 through to A-Level | الصورة الكاملة، من الصف التاسع حتى A-Level |
+| `s2.lead` | Grades 9 and 10 are not two separate years. They form a single continuous IGCSE programme, and the subjects chosen at the start of Grade 9 carry all the way through to the external examinations at the end of Grade 10. | الصفان 9 و10 ليسا عامين منفصلين، بل هما برنامج IGCSE واحد متصل، والمواد التي تُختار في بداية الصف 9 تستمر مع الطالب حتى الاختبارات الخارجية في نهاية الصف 10. |
+| `s2.step1.g` | Start · Grade 9 | البداية · الصف التاسع |
+| `s2.step1.h` | IGCSE begins | بداية برنامج IGCSE |
+| `s2.step1.p` | Subject options are selected and the two-year syllabus starts. | تُختار المواد ويبدأ المقرر الدراسي الممتد على عامين. |
+| `s2.step2.g` | Journey · Grade 10 | الرحلة · الصف العاشر |
+| `s2.step2.h` | The programme completes | اكتمال البرنامج |
+| `s2.step2.p` | Students sit their external IGCSE examinations, carrying the critical thinking, creativity and collaboration that matter beyond the exam hall. | يؤدي الطلاب اختبارات IGCSE الخارجية، ومعهم ما اكتسبوه من تفكير ناقد وإبداع وتعاون، وهي مهارات تتجاوز أهميتها قاعة الاختبار. |
+| `s2.step3.g` | Goal · Grades 11 and 12 | الهدف · الصفان 11 و12 |
+| `s2.step3.h` | A-Levels and beyond | A-Level وما بعده |
+| `s2.step3.p` | AS then A2, built directly on the IGCSE subjects taken, and recognised by universities worldwide. | AS ثم A2، وهما مبنيان مباشرة على مواد IGCSE التي درسها الطالب، ومعترف بهما لدى الجامعات حول العالم. |
 
 ## doc
 
@@ -466,6 +527,12 @@ Written by `node tools/i18n.mjs pairs`. Do not edit by hand.
 
 | Key | English | Arabic |
 |---|---|---|
+| `updates.2026-10-10-midterm.title` | Mid-Term Tests run from 18 to 28 October | اختبارات منتصف الفصل من 18 إلى 28 أكتوبر |
+| `updates.2026-10-10-midterm.text` | Grades 9 to 12 sit the Semester One Mid-Term Tests in Zero Period, 7:55 to 8:55 AM, from Sunday 18 October to Wednesday 28 October. The day-by-day schedule for each grade, and the school day’s timings on a test day, are on the page. | يؤدي طلاب الصفوف من 9 إلى 12 اختبارات منتصف الفصل الدراسي الأول في الحصة الصفرية من 7:55 إلى 8:55 صباحاً، من الأحد 18 أكتوبر إلى الأربعاء 28 أكتوبر. وتجدون في الصفحة جدول كل صف يوماً بيوم، ومواعيد اليوم الدراسي في أيام الاختبارات. |
+| `updates.2026-10-10-midterm.label` | See the test schedule | عرض جدول الاختبارات |
+| `updates.2026-10-10-holiday.title` | No school on Sunday 25 October | لا دراسة يوم الأحد 25 أكتوبر |
+| `updates.2026-10-10-holiday.text` | Sunday 25 October is a holiday. Lessons resume on Monday 26 October as usual, with no test that day, and the Mid-Term Tests continue on Tuesday 27 October. | يوم الأحد 25 أكتوبر إجازة. وتُستأنف الدراسة يوم الاثنين 26 أكتوبر كالمعتاد من دون اختبار في ذلك اليوم، وتستمر اختبارات منتصف الفصل يوم الثلاثاء 27 أكتوبر. |
+| `updates.2026-10-10-holiday.label` | See the test schedule | عرض جدول الاختبارات |
 | `updates.2026-10-03-arabic.title` | The hub is now in Arabic too | البوابة متاحة الآن باللغة العربية |
 | `updates.2026-10-03-arabic.text` | Tap العربية at the top of the page to read everything in Arabic. Tap English to switch back. The documents themselves are still in English. | اضغطوا على «العربية» أعلى الصفحة لقراءة جميع المحتويات بالعربية، واضغطوا على English للعودة. أما المستندات نفسها فما زالت بالإنجليزية. |
 | `updates.2026-09-27-online-week.title` | Urgent: lessons are online this week, 27 September to 1 October | عاجل: الدراسة عن بُعد هذا الأسبوع، من 27 سبتمبر إلى 1 أكتوبر |

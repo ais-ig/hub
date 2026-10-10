@@ -21,6 +21,7 @@ Live at `https://ais-ig.github.io/hub/`, repository `ais-ig/hub`. This folder is
 - **PDFs live in `assets/`** and are linked relatively. Never link to Google Drive. Root-level PDFs are git-ignored.
 - Documents announced before they exist render as a muted, dashed "Available soon" card rather than a link that 404s. Do not announce a document nobody has committed to producing; the agenda card was removed for that reason.
 - **Updates reach parents through a bell, not push.** The `updatesData` array feeds a bell in the top bar (gold unread count, drop-down list), the strip under the banner (unread entries only) and `#changelog`. Unread means inside the 14-day New window and not yet opened. An entry's optional `newUntil` ends that window early; set it on an entry a later one supersedes and on event notices, and date every entry the day it goes live, never in the future. Read state is per browser in `localStorage` under `aisHub.updates`, keyed by each entry's `id`. Never change a live `id`. No push notifications and no service worker: a static page cannot send them, and the school's WhatsApp messages already do that job. Read items are restyled in place, never removed, because the strip sits above every section and removing an item mid-scroll moves the target.
+- **Tests and exams is one permanent section**, `#exams`, that carries the current round of tests or exams and is swapped each round, as `#schedule` is with the timetable. Between rounds it names the next round from the parents' calendar. It is not added and removed per round, so the anchor and the menu entry stay. See README, "Updating the exam schedule".
 - **The hero carries a countdown.** It reads `data-doors` and `data-end` off the hero element rather than a JS constant, so the machine-readable date sits beside the human-readable one in the banner. Three self-switching states: counting, "under way", "thank you". Hidden until JS validates both dates, so it never flashes empty cells. Do not move these dates into a constant, and do not let the attributes drift from the banner. Between events, delete the attributes and the block hides itself.
 
 ## Design direction
@@ -80,6 +81,7 @@ The Arabic follows the same rules and a few of its own. The full list and the gl
 | Section | Source |
 |---|---|
 | Class timetables | The aSc export `IG Classes.pdf`, published as `assets/class-timetables-boys.pdf`. Boys campus, 11 pages, one per class in a fixed order. Revised several times a term; superseded copies go to `assets/archive/`. |
+| Tests and exams (`#exams`) | The two `Mid-Term Test Schedule` sheets sent to parents on 5 October 2026, `Grades 9–10 (UK)` and `Grades 11–12 (UK) – Science Stream`, one Word page each, and `Zero Period- Mid Term Tests.docx`, the bell sheet for test days. All three also sit on the IT portal's school-wide page, `smartstudygrid.github.io/mid-term-2026/`, which is a cross-check, not a source, and is not linked: it is English only, in another design, and shows every section's grades. The sheets' headings end the window two days early, 26 and 25 October against last tests on 28 and 27 October, so they are not published; the section is the complete copy. The holiday on Sunday 25 October and the buffer day on Monday 26 October were confirmed by the Head of Section on 10 October 2026. |
 | Period times | `Daily Schedule (Summer) – British Section`, Grades 9 to 12, 2026/27. This is the authority for the times in the banner and in the `#schedule` note, **not** the aSc export. Homeroom 6:30, periods 1 to 8 from 6:45 to 12:35, break 9:25 to 9:55, Salah 12:35 to 13:05. Note it is the **Summer** schedule; a Winter one will need these swapped. |
 | Results, pathway, support, activities, behaviour | `Parents Meet and Greet 2026-2027.pptx.pdf`, the final 31-page 2026/27 deck, published as `assets/presentation-g9-g10.pdf`. This is the primary source and supersedes the 2025 deck and the earlier "(AIS template)" drafts. |
 | Homeroom mentors (`#mentors`) | `Homeroom Mentors 2026-2027.docx.pdf`, Mentorship Programme, British Section, issued 13 September 2026. Covers Grades 9 to 12, 11 classes, and supersedes slide 19 of the deck. Not published as a download. When it changes, add an `updatesData` entry linking `#mentors`. |
@@ -122,6 +124,18 @@ will be misled, as happened on 13 September 2026.
 sheet ran Homeroom 06:15 and Salah 12:20 to 12:50. When the 2026/27 Winter
 schedule is issued, the banner, the `#schedule` note and this asset all change
 together.
+
+**A fifth coupling was added on 10 October 2026, with Tests and exams.** The
+test window is stated in the section's subtitle and lead, in the hero
+button's `data-until` and in the `newUntil` of the notices that announce it,
+and all move together. On a test day the school day follows the Zero Period
+bell, not the Daily Schedule, so the two bell tables in `#exams` and the
+cross-reference line under the `#schedule` note are a pair: a new bell sheet
+changes both. Grade 9 follows the school's Grades 4 to 9 bell and Grades 10 to
+12 the Grades 10 to 12 bell, as the bell sheet and the IT portal's note both
+have it; the Section follows the Zero Period bell on each grade's own test
+days, confirmed by the user on 10 October 2026. The 6:30 row is written
+Homeroom, the Daily Schedule's word, where the bell sheet says Assembly.
 
 Changes already carried in for 2026/27, worth knowing: Grade 9 Islamic Studies moved 3 to 2 periods and Quran 2 to 3; several optional loads changed in both grades; Grade 9 gained an optional Hifdh Programme, which sits inside the existing three Quran periods and neither adds to the forty-period week nor replaces a subject.
 

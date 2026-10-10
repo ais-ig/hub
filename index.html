@@ -898,6 +898,16 @@ table.data tr.semtot td {
   color: var(--navy-deep);
   padding-block: 10px;
 }
+
+/* --- tests and exams --- */
+/* A day with nothing to sit, a holiday or a buffer day, is muted. */
+table.data tr.off td { color: var(--muted); }
+table.data tr.off td.s { color: var(--muted); font-weight: 400; }
+/* The day or period stays on one line; the subject column wraps instead. */
+table.data.plain td.s { white-space: nowrap; }
+/* The two Zero Period bells: stacked on a phone, side by side from 720px. */
+.bells { display: grid; gap: 12px; margin-top: 12px; }
+.bells h4 { margin-bottom: 6px; }
 table.data td.none { color: var(--muted); }
 
 /* --- choose-one pairs (Grade 9) --- */
@@ -1158,6 +1168,7 @@ footer .top:hover { color: var(--gold); border-color: var(--gold); }
   .two > .card { margin-bottom: 0; }
   .three { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; align-items: start; margin-bottom: 12px; }
   .three > .card { margin-bottom: 0; }
+  .bells { grid-template-columns: 1fr 1fr; align-items: start; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1262,6 +1273,9 @@ html[dir="rtl"] h4 { text-transform: none; }
    there with it: the last column always, and the middle one where it holds
    figures too. */
 html[dir="rtl"] table.data thead th:last-child { text-align: left; }
+/* A table of words, no column of figures (table.data.plain, in #exams):
+   the last heading stays at the start edge with its cells. */
+html[dir="rtl"] table.data.plain thead th:last-child { text-align: right; }
 /* On its own, because a browser without :has() drops the whole rule. */
 html[dir="rtl"] table.data:has(tbody td.num:nth-child(2)) thead th:nth-child(2) { text-align: left; }
 
@@ -1330,6 +1344,7 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
   <nav class="menu" id="menu" aria-label="Sections" data-i18n-attr="aria-label:menu.label">
     <div class="in">
       <a href="#schedule" data-i18n="menu.schedule">Class timetables</a>
+      <a href="#exams" data-i18n="menu.exams">Tests and exams</a>
       <a href="#results" data-i18n="menu.results">IGCSE results</a>
       <a href="#s2" data-i18n="menu.pathway">Your IG pathway</a>
       <a href="#s3" data-i18n="menu.options">Subject options</a>
@@ -1381,10 +1396,13 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
 
     <!-- A button with data-until starts hidden and is shown by script only
          before that moment, Riyadh time, so it retires itself at the deadline.
-         The Student Council button closes with applications, Wednesday
-         16 September 2026 at 11:59 PM. -->
+         The Student Council button closed with applications, Wednesday
+         16 September 2026 at 11:59 PM, and can be deleted at any edit. The
+         Mid-Term Tests button retires after the last test, Wednesday
+         28 October 2026; its date moves with the window in #exams. -->
     <div class="ctas">
       <a class="btn gold" href="https://forms.gle/WNYxBGu17yEsBJTp9" target="_blank" rel="noopener" data-until="2026-09-16T23:59:00+03:00" hidden data-i18n="hero.cta.council">Apply for Student Council</a>
+      <a class="btn gold" href="#exams" data-until="2026-10-28T23:59:00+03:00" hidden data-i18n="hero.cta.exams">Mid-Term Tests</a>
       <a class="btn gold" href="#schedule" data-i18n="hero.cta.timetables">Class timetables</a>
       <a class="btn line" href="https://docs.google.com/forms/d/e/1FAIpQLSe5bU8ruZOil2hbbXmYcrQNrXJu1IDsOPLj1kQ1FtgIGw69Ow/viewform" target="_blank" rel="noopener" data-i18n="hero.cta.ask">Ask a question</a>
     </div>
@@ -1416,6 +1434,32 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
      typo in a title is safe. tools/check.mjs enforces all of this. -->
 <script type="application/json" id="updatesData">
 [
+  {
+    "id": "2026-10-10-midterm",
+    "date": "2026-10-10",
+    "newUntil": "2026-10-28",
+    "title": "Mid-Term Tests run from 18 to 28 October",
+    "titleAr": "اختبارات منتصف الفصل من 18 إلى 28 أكتوبر",
+    "text": "Grades 9 to 12 sit the Semester One Mid-Term Tests in Zero Period, 7:55 to 8:55 AM, from Sunday 18 October to Wednesday 28 October. The day-by-day schedule for each grade, and the school day’s timings on a test day, are on the page.",
+    "textAr": "يؤدي طلاب الصفوف من 9 إلى 12 اختبارات منتصف الفصل الدراسي الأول في الحصة الصفرية من 7:55 إلى 8:55 صباحاً، من الأحد 18 أكتوبر إلى الأربعاء 28 أكتوبر. وتجدون في الصفحة جدول كل صف يوماً بيوم، ومواعيد اليوم الدراسي في أيام الاختبارات.",
+    "href": "#exams",
+    "label": "See the test schedule",
+    "labelAr": "عرض جدول الاختبارات",
+    "hAr": "fa992a8b"
+  },
+  {
+    "id": "2026-10-10-holiday",
+    "date": "2026-10-10",
+    "newUntil": "2026-10-25",
+    "title": "No school on Sunday 25 October",
+    "titleAr": "لا دراسة يوم الأحد 25 أكتوبر",
+    "text": "Sunday 25 October is a holiday. Lessons resume on Monday 26 October as usual, with no test that day, and the Mid-Term Tests continue on Tuesday 27 October.",
+    "textAr": "يوم الأحد 25 أكتوبر إجازة. وتُستأنف الدراسة يوم الاثنين 26 أكتوبر كالمعتاد من دون اختبار في ذلك اليوم، وتستمر اختبارات منتصف الفصل يوم الثلاثاء 27 أكتوبر.",
+    "href": "#exams",
+    "label": "See the test schedule",
+    "labelAr": "عرض جدول الاختبارات",
+    "hAr": "0442d12d"
+  },
   {
     "id": "2026-10-03-arabic",
     "date": "2026-10-03",
@@ -1618,6 +1662,7 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
     </div>
 
     <p class="tt-note" data-i18n="schedule.note">The week runs Sunday to Thursday. Homeroom is at 6:30 AM, periods 1 to 8 run from 6:45 AM to 12:35 PM with break from 9:25 to 9:55, and Salah is from 12:35 to 1:05 PM. Tap your child’s class to open their timetable.</p>
+    <p class="tt-note" data-i18n="schedule.exams">On a day with a test, the school day follows the Zero Period bell instead. See <a href="#exams">Tests and exams</a>.</p>
 
     <div class="tt-grp">
       <span class="lb" data-i18n="common.grade9">Grade 9</span>
@@ -1661,8 +1706,125 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
   </div>
 </section>
 
+<!-- ============ TESTS AND EXAMS ============ -->
+<!-- The current round of tests or exams, swapped each round; between rounds
+     it names the next one. See README, "Updating the exam schedule".
+     Sources: the two Mid-Term Test Schedule sheets issued 5 October 2026
+     (Grades 9 to 10, and Grades 11 to 12 Science stream) and the Zero
+     Period bell sheet, whose Grades 4 to 9 table is Grade 9 here and whose
+     Grades 10 to 12 table is Grades 10 to 12. The holiday on Sunday
+     25 October was confirmed by the Head of Section on 10 October 2026.
+     The window appears here, in the hero button's data-until and in the
+     notices' newUntil: move them together. -->
+<section class="sec alt" id="exams">
+  <div class="in">
+    <div class="st">
+      <h2 data-i18n="exams.title">Tests and exams</h2>
+      <p data-i18n="exams.sub">Mid-Term Tests · Semester One · Grades 9 to 12 · Sunday 18 to Wednesday 28 October 2026</p>
+      <div class="bar"></div>
+    </div>
+
+    <p class="lead" data-i18n="exams.lead">The Semester One Mid-Term Tests run from Sunday 18 October to Wednesday 28 October 2026. Every test is sat in Zero Period, 7:55 to 8:55 AM, and students should be in their seats by 7:50 AM. The tests cover the IGCSE and A-Level subjects. For Grades 9 and 10, each one is the Mid-Term Test that carries 10 marks of Quarter 1, as set out under <a href="#s4">How marks are built</a>.</p>
+
+    <div class="card">
+      <h3 data-i18n="exams.g910.h">Grades 9 and 10</h3>
+      <div class="scroll">
+        <table class="data plain">
+          <thead>
+            <tr><th scope="col" data-i18n="exams.th.day">Day</th><th scope="col" data-i18n="s3.th.subject">Subject</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="s" data-i18n="exams.d.1018">Sunday 18 October</td><td data-i18n="subj.biology">Biology</td></tr>
+            <tr><td class="s" data-i18n="exams.d.1019">Monday 19 October</td><td data-i18n="subj.english">English</td></tr>
+            <tr><td class="s" data-i18n="exams.d.1020">Tuesday 20 October</td><td data-i18n="subj.chemistry">Chemistry</td></tr>
+            <tr><td class="s" data-i18n="exams.d.1021">Wednesday 21 October</td><td data-i18n="exams.s.csict">Computer Science or ICT</td></tr>
+            <tr><td class="s" data-i18n="exams.d.1022">Thursday 22 October</td><td data-i18n="subj.physics">Physics</td></tr>
+            <tr class="off"><td class="s" data-i18n="exams.d.1025">Sunday 25 October</td><td data-i18n="exams.s.holiday">Holiday, no school</td></tr>
+            <tr class="off"><td class="s" data-i18n="exams.d.1026">Monday 26 October</td><td data-i18n="exams.s.notest">No test, lessons as usual</td></tr>
+            <tr><td class="s" data-i18n="exams.d.1027">Tuesday 27 October</td><td data-i18n="subj.maths">Mathematics</td></tr>
+            <tr><td class="s" data-i18n="exams.d.1028">Wednesday 28 October</td><td data-i18n="exams.s.arabicacc">Arabic or Accounting</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 data-i18n="exams.g1112.h">Grades 11 and 12, Science stream</h3>
+      <div class="scroll">
+        <table class="data plain">
+          <thead>
+            <tr><th scope="col" data-i18n="exams.th.day">Day</th><th scope="col" data-i18n="s3.th.subject">Subject</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="s" data-i18n="exams.d.1018">Sunday 18 October</td><td data-i18n="exams.s.biocs">Biology or Computer Science</td></tr>
+            <tr><td class="s" data-i18n="exams.d.1019">Monday 19 October</td><td data-i18n="subj.english">English</td></tr>
+            <tr><td class="s" data-i18n="exams.d.1020">Tuesday 20 October</td><td data-i18n="subj.chemistry">Chemistry</td></tr>
+            <tr><td class="s" data-i18n="exams.d.1021">Wednesday 21 October</td><td data-i18n="subj.arabic">Arabic</td></tr>
+            <tr><td class="s" data-i18n="exams.d.1022">Thursday 22 October</td><td data-i18n="subj.physics">Physics</td></tr>
+            <tr class="off"><td class="s" data-i18n="exams.d.1025">Sunday 25 October</td><td data-i18n="exams.s.holiday">Holiday, no school</td></tr>
+            <tr class="off"><td class="s" data-i18n="exams.d.1026">Monday 26 October</td><td data-i18n="exams.s.notest">No test, lessons as usual</td></tr>
+            <tr><td class="s" data-i18n="exams.d.1027">Tuesday 27 October</td><td data-i18n="subj.maths">Mathematics</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 data-i18n="exams.bell.h">The school day on a test day</h3>
+      <p class="small" data-i18n="exams.bell.p">On a day with a test, the school day follows the Zero Period bell below instead of the usual timetable: periods 1 and 2 are shorter, the test fills Zero Period, and lessons carry on afterwards until 1:05 PM. Grade 9 has one table and Grades 10 to 12 another, because their break falls at different times. On a day without a test, the usual timetable runs.</p>
+      <div class="bells">
+        <div>
+          <h4 data-i18n="common.grade9">Grade 9</h4>
+          <div class="scroll">
+            <table class="data plain">
+              <thead><tr><th scope="col" data-i18n="exams.th.period">Period</th><th scope="col" data-i18n="exams.th.time">Time</th></tr></thead>
+              <tbody>
+                <tr><td class="s" data-i18n="exams.l.hr">Homeroom</td><td data-i18n="exams.t.0630">6:30 – 6:45 AM</td></tr>
+                <tr><td class="s" data-i18n="exams.l.p1">Period 1</td><td data-i18n="exams.t.0645">6:45 – 7:20 AM</td></tr>
+                <tr><td class="s" data-i18n="exams.l.p2">Period 2</td><td data-i18n="exams.t.0720">7:20 – 7:55 AM</td></tr>
+                <tr class="grp"><td data-i18n="exams.l.zero">Zero Period, the test</td><td data-i18n="exams.t.0755">7:55 – 8:55 AM</td></tr>
+                <tr><td class="s" data-i18n="exams.l.break">Break</td><td data-i18n="exams.t.0855a">8:55 – 9:15 AM</td></tr>
+                <tr><td class="s" data-i18n="exams.l.p3">Period 3</td><td data-i18n="exams.t.0915">9:15 – 9:50 AM</td></tr>
+                <tr><td class="s" data-i18n="exams.l.p4">Period 4</td><td data-i18n="exams.t.0950">9:50 – 10:25 AM</td></tr>
+                <tr><td class="s" data-i18n="exams.l.p5">Period 5</td><td data-i18n="exams.t.1025">10:25 – 11:00 AM</td></tr>
+                <tr><td class="s" data-i18n="exams.l.p6">Period 6</td><td data-i18n="exams.t.1100">11:00 – 11:35 AM</td></tr>
+                <tr><td class="s" data-i18n="exams.l.p7">Period 7</td><td data-i18n="exams.t.1135">11:35 AM – 12:10 PM</td></tr>
+                <tr><td class="s" data-i18n="exams.l.break">Break</td><td data-i18n="exams.t.1210">12:10 – 12:30 PM</td></tr>
+                <tr><td class="s" data-i18n="exams.l.p8">Period 8</td><td data-i18n="exams.t.1230">12:30 – 1:05 PM</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div>
+          <h4 data-i18n="exams.bell.g1012">Grades 10 to 12</h4>
+          <div class="scroll">
+            <table class="data plain">
+              <thead><tr><th scope="col" data-i18n="exams.th.period">Period</th><th scope="col" data-i18n="exams.th.time">Time</th></tr></thead>
+              <tbody>
+                <tr><td class="s" data-i18n="exams.l.hr">Homeroom</td><td data-i18n="exams.t.0630">6:30 – 6:45 AM</td></tr>
+                <tr><td class="s" data-i18n="exams.l.p1">Period 1</td><td data-i18n="exams.t.0645">6:45 – 7:20 AM</td></tr>
+                <tr><td class="s" data-i18n="exams.l.p2">Period 2</td><td data-i18n="exams.t.0720">7:20 – 7:55 AM</td></tr>
+                <tr class="grp"><td data-i18n="exams.l.zero">Zero Period, the test</td><td data-i18n="exams.t.0755">7:55 – 8:55 AM</td></tr>
+                <tr><td class="s" data-i18n="exams.l.p3">Period 3</td><td data-i18n="exams.t.0855b">8:55 – 9:30 AM</td></tr>
+                <tr><td class="s" data-i18n="exams.l.p4">Period 4</td><td data-i18n="exams.t.0930">9:30 – 10:05 AM</td></tr>
+                <tr><td class="s" data-i18n="exams.l.break">Break</td><td data-i18n="exams.t.1005">10:05 – 10:25 AM</td></tr>
+                <tr><td class="s" data-i18n="exams.l.p5">Period 5</td><td data-i18n="exams.t.1025">10:25 – 11:00 AM</td></tr>
+                <tr><td class="s" data-i18n="exams.l.p6">Period 6</td><td data-i18n="exams.t.1100">11:00 – 11:35 AM</td></tr>
+                <tr><td class="s" data-i18n="exams.l.p7">Period 7</td><td data-i18n="exams.t.1135">11:35 AM – 12:10 PM</td></tr>
+                <tr><td class="s" data-i18n="exams.l.break">Break</td><td data-i18n="exams.t.1210">12:10 – 12:30 PM</td></tr>
+                <tr><td class="s" data-i18n="exams.l.p8">Period 8</td><td data-i18n="exams.t.1230">12:30 – 1:05 PM</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <p class="small" style="margin-top:12px" data-i18n="exams.bell.note">Phones, electronic devices and smartwatches are not allowed in the test room. See <a href="#s7">Policies</a>.</p>
+    </div>
+  </div>
+</section>
+
 <!-- ============ RESULTS ============ -->
-<section class="sec alt" id="results">
+<section class="sec" id="results">
   <div class="in">
     <div class="st">
       <h2 data-i18n="results.title">IGCSE results 2025/26</h2>
@@ -1684,7 +1846,7 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
 <div class="band" aria-hidden="true"><img src="assets/emblem.png" alt=""></div>
 
 <!-- ============ 02 · YOUR IG PATHWAY ============ -->
-<section class="sec" id="s2">
+<section class="sec alt" id="s2">
   <div class="in">
     <div class="st">
       <h2 data-i18n="s2.title">Two years, one programme</h2>
@@ -1724,7 +1886,7 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
 </section>
 
 <!-- ============ 03 · SUBJECT OPTIONS ============ -->
-<section class="sec alt" id="s3">
+<section class="sec" id="s3">
   <div class="in">
     <div class="st">
       <h2 data-i18n="s3.title">Choosing subjects</h2>
@@ -1929,7 +2091,7 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
 </section>
 
 <!-- ============ 04 · ASSESSMENT ============ -->
-<section class="sec" id="s4">
+<section class="sec alt" id="s4">
   <div class="in">
     <div class="st">
       <h2 data-i18n="s4.title">How marks are built</h2>
@@ -1984,7 +2146,7 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
 </section>
 
 <!-- ============ 05 · SUPPORT ============ -->
-<section class="sec alt" id="s5">
+<section class="sec" id="s5">
   <div class="in">
     <div class="st">
       <h2 data-i18n="s5.title">How we keep track of your child</h2>
@@ -2449,6 +2611,7 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
   "bar.menu": { "h": "57f5f5ef", "ar": "القائمة" },
   "menu.label": { "h": "7ff5a6da", "ar": "أقسام الصفحة" },
   "menu.schedule": { "h": "04cb0762", "ar": "الجداول الدراسية" },
+  "menu.exams": { "h": "77f40415", "ar": "الاختبارات" },
   "menu.results": { "h": "6b5c20fc", "ar": "نتائج IGCSE" },
   "menu.pathway": { "h": "14408ecc", "ar": "مسار ابنكم في IGCSE" },
   "menu.options": { "h": "7aeacdd5", "ar": "اختيار المواد" },
@@ -2474,6 +2637,7 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
   "hero.cd.min": { "h": "7eb0cee8", "ar": "دقيقة" },
   "hero.cd.sec": { "h": "1da305d6", "ar": "ثانية" },
   "hero.cta.council": { "h": "fda6b975", "ar": "الترشح لمجلس الطلاب" },
+  "hero.cta.exams": { "h": "c93b6096", "ar": "اختبارات منتصف الفصل" },
   "hero.cta.timetables": { "h": "04cb0762", "ar": "الجداول الدراسية" },
   "hero.cta.ask": { "h": "cf94bdf3", "ar": "اطرحوا سؤالاً" },
   "banner.days": { "h": "89f31e63", "ar": "📅 من الأحد إلى الخميس" },
@@ -2498,6 +2662,7 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
   "schedule.title": { "h": "04cb0762", "ar": "الجداول الدراسية" },
   "schedule.sub": { "h": "a05f539d", "ar": "الصفوف من 9 إلى 12 · مقر البنين · يُعمل بها اعتباراً من الأحد 27 سبتمبر 2026" },
   "schedule.note": { "h": "8e9b7ffc", "ar": "أسبوع الدراسة من الأحد إلى الخميس. حصة الريادة في 6:30 صباحاً، والحصص من 1 إلى 8 من 6:45 صباحاً إلى 12:35 ظهراً، وتتخللها الفسحة من 9:25 إلى 9:55 صباحاً، والصلاة من 12:35 إلى 1:05 ظهراً. اضغطوا على فصل ابنكم لفتح جدوله." },
+  "schedule.exams": { "h": "e3c522ca", "ar": "وفي اليوم الذي فيه اختبار، يسير اليوم الدراسي وفق جدول الحصة الصفرية بدلاً من ذلك. انظروا <a href=\"#exams\">الاختبارات</a>." },
   "common.grade9": { "h": "5059f121", "ar": "الصف التاسع" },
   "schedule.pill.9a": { "h": "fa64e5d4", "ar": "الجدول الدراسي للفصل 9A" },
   "schedule.pill.9b": { "h": "a6ee5bd2", "ar": "الجدول الدراسي للفصل 9B" },
@@ -2515,6 +2680,65 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
   "schedule.pill.12b": { "h": "1fd8d10a", "ar": "الجدول الدراسي للفصل 12B" },
   "schedule.full": { "h": "0a3ee81d", "ar": "فتح الجدول الدراسي الكامل" },
   "schedule.stamp": { "h": "25499a93", "ar": "جميع الفصول، 11 صفحة · صدر في 22 سبتمبر 2026" },
+  "exams.title": { "h": "77f40415", "ar": "الاختبارات" },
+  "exams.sub": { "h": "063034e0", "ar": "اختبارات منتصف الفصل · الفصل الدراسي الأول · الصفوف من 9 إلى 12 · من الأحد 18 إلى الأربعاء 28 أكتوبر 2026" },
+  "exams.lead": { "h": "cbdf5236", "ar": "تُعقد اختبارات منتصف الفصل الدراسي الأول من الأحد 18 أكتوبر إلى الأربعاء 28 أكتوبر 2026. ويُجرى كل اختبار في الحصة الصفرية من 7:55 إلى 8:55 صباحاً، وعلى الطلاب أن يكونوا في مقاعدهم بحلول 7:50 صباحاً. وتشمل الاختبارات مواد IGCSE و A-Level. وفي الصفين التاسع والعاشر، كل اختبار منها هو اختبار منتصف الفصل الذي يحمل 10 درجات من الربع الأول، كما هو مبيّن في <a href=\"#s4\">طريقة احتساب الدرجات</a>." },
+  "exams.g910.h": { "h": "f254174e", "ar": "الصفان التاسع والعاشر" },
+  "exams.th.day": { "h": "987b9ced", "ar": "اليوم" },
+  "s3.th.subject": { "h": "8d183dbd", "ar": "المادة" },
+  "exams.d.1018": { "h": "6eb220c5", "ar": "الأحد 18 أكتوبر" },
+  "subj.biology": { "h": "ffa48e0b", "ar": "الأحياء (Biology)" },
+  "exams.d.1019": { "h": "4b356e2e", "ar": "الاثنين 19 أكتوبر" },
+  "subj.english": { "h": "649df08a", "ar": "اللغة الإنجليزية (English)" },
+  "exams.d.1020": { "h": "5467edc7", "ar": "الثلاثاء 20 أكتوبر" },
+  "subj.chemistry": { "h": "d0a3c82b", "ar": "الكيمياء (Chemistry)" },
+  "exams.d.1021": { "h": "421f1344", "ar": "الأربعاء 21 أكتوبر" },
+  "exams.s.csict": { "h": "abcee75f", "ar": "علوم الحاسب <span dir=\"ltr\">(Computer Science)</span> أو تقنية المعلومات والاتصالات (ICT)" },
+  "exams.d.1022": { "h": "ccb77e1e", "ar": "الخميس 22 أكتوبر" },
+  "subj.physics": { "h": "96b61805", "ar": "الفيزياء (Physics)" },
+  "exams.d.1025": { "h": "7ca5e879", "ar": "الأحد 25 أكتوبر" },
+  "exams.s.holiday": { "h": "2237b817", "ar": "إجازة، لا دراسة" },
+  "exams.d.1026": { "h": "23e66296", "ar": "الاثنين 26 أكتوبر" },
+  "exams.s.notest": { "h": "05719ebe", "ar": "لا اختبار، والدراسة كالمعتاد" },
+  "exams.d.1027": { "h": "ed46062f", "ar": "الثلاثاء 27 أكتوبر" },
+  "subj.maths": { "h": "77e774ba", "ar": "الرياضيات (Mathematics)" },
+  "exams.d.1028": { "h": "df626a83", "ar": "الأربعاء 28 أكتوبر" },
+  "exams.s.arabicacc": { "h": "1e0e2099", "ar": "اللغة العربية (Arabic) أو المحاسبة (Accounting)" },
+  "exams.g1112.h": { "h": "0cbec277", "ar": "الصفان الحادي عشر والثاني عشر، المسار العلمي" },
+  "exams.s.biocs": { "h": "0984f71b", "ar": "الأحياء (Biology) أو علوم الحاسب <span dir=\"ltr\">(Computer Science)</span>" },
+  "subj.arabic": { "h": "af4f4762", "ar": "اللغة العربية (Arabic)" },
+  "exams.bell.h": { "h": "6fb7216b", "ar": "اليوم الدراسي في يوم الاختبار" },
+  "exams.bell.p": { "h": "76cf7886", "ar": "في اليوم الذي فيه اختبار، يسير اليوم الدراسي وفق جدول الحصة الصفرية أدناه بدلاً من الجدول المعتاد: تكون الحصتان الأولى والثانية أقصر، ويشغل الاختبار الحصة الصفرية، ثم تستمر الدراسة بعده حتى 1:05 ظهراً. وللصف التاسع جدول، وللصفوف من 10 إلى 12 جدول آخر، لأن موعد الفسحة يختلف بينهما. وفي اليوم الذي لا اختبار فيه، يسير الجدول المعتاد." },
+  "exams.th.period": { "h": "170a28a9", "ar": "الحصة" },
+  "exams.th.time": { "h": "6c82e6dd", "ar": "الوقت" },
+  "exams.l.hr": { "h": "71e499b3", "ar": "حصة الريادة" },
+  "exams.t.0630": { "h": "f77b8cd0", "ar": "من 6:30 إلى 6:45 صباحاً" },
+  "exams.l.p1": { "h": "880146de", "ar": "الحصة الأولى" },
+  "exams.t.0645": { "h": "99c8a8ad", "ar": "من 6:45 إلى 7:20 صباحاً" },
+  "exams.l.p2": { "h": "dd4aef26", "ar": "الحصة الثانية" },
+  "exams.t.0720": { "h": "745c8fd8", "ar": "من 7:20 إلى 7:55 صباحاً" },
+  "exams.l.zero": { "h": "4537ddf2", "ar": "الحصة الصفرية، الاختبار" },
+  "exams.t.0755": { "h": "7d530e6a", "ar": "من 7:55 إلى 8:55 صباحاً" },
+  "exams.l.break": { "h": "7c9d6bf3", "ar": "الفسحة" },
+  "exams.t.0855a": { "h": "9efa9be4", "ar": "من 8:55 إلى 9:15 صباحاً" },
+  "exams.l.p3": { "h": "c9d31edc", "ar": "الحصة الثالثة" },
+  "exams.t.0915": { "h": "9a947b3b", "ar": "من 9:15 إلى 9:50 صباحاً" },
+  "exams.l.p4": { "h": "748cf562", "ar": "الحصة الرابعة" },
+  "exams.t.0950": { "h": "33a7bc44", "ar": "من 9:50 إلى 10:25 صباحاً" },
+  "exams.l.p5": { "h": "a1708a6f", "ar": "الحصة الخامسة" },
+  "exams.t.1025": { "h": "5c28dd32", "ar": "من 10:25 إلى 11:00 صباحاً" },
+  "exams.l.p6": { "h": "054781c7", "ar": "الحصة السادسة" },
+  "exams.t.1100": { "h": "03d28b8b", "ar": "من 11:00 إلى 11:35 صباحاً" },
+  "exams.l.p7": { "h": "3ca9dabb", "ar": "الحصة السابعة" },
+  "exams.t.1135": { "h": "6b92a9d8", "ar": "من 11:35 صباحاً إلى 12:10 ظهراً" },
+  "exams.t.1210": { "h": "1bc1d988", "ar": "من 12:10 إلى 12:30 ظهراً" },
+  "exams.l.p8": { "h": "5088659c", "ar": "الحصة الثامنة" },
+  "exams.t.1230": { "h": "8c4dd99c", "ar": "من 12:30 إلى 1:05 ظهراً" },
+  "exams.bell.g1012": { "h": "606189b0", "ar": "الصفوف من 10 إلى 12" },
+  "exams.t.0855b": { "h": "034bcbea", "ar": "من 8:55 إلى 9:30 صباحاً" },
+  "exams.t.0930": { "h": "67fa8651", "ar": "من 9:30 إلى 10:05 صباحاً" },
+  "exams.t.1005": { "h": "3e4c1bb2", "ar": "من 10:05 إلى 10:25 صباحاً" },
+  "exams.bell.note": { "h": "8744f59b", "ar": "لا يُسمح بالجوالات ولا بالأجهزة الإلكترونية ولا بالساعات الذكية في قاعة الاختبار. انظروا <a href=\"#s7\">السياسات</a>." },
   "results.title": { "h": "0f05f636", "ar": "نتائج IGCSE للعام الدراسي <span dir=\"ltr\">2025/26</span>" },
   "results.sub": { "h": "dcb6ccb9", "ar": "718 نتيجة في 20 مادة، حققها 192 من الطلاب المتقدمين&nbsp;للاختبارات، لدى جميع هيئات الاختبارات مجتمعة" },
   "results.stat1": { "h": "d45240c0", "ar": "من النتائج بأعلى التقديرات: 9 أو 8 أو <span dir=\"ltr\">A*</span>" },
@@ -2540,19 +2764,13 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
   "s3.short": { "h": "cbd7ba22", "ar": "<b>باختصار</b> يدرس الجميع اللغة الإنجليزية والرياضيات والأحياء والكيمياء والفيزياء ودراسات الأعمال. وتختارون بين اللغة العربية والمحاسبة، وبين علوم الحاسب وتقنية المعلومات والاتصالات، وتختارون هيئة اختبار الرياضيات: Cambridge أو Edexcel. للصف التاسع فقط: برنامج تحفيظ القرآن الكريم، وهو اختياري." },
   "s3.tabs.label": { "h": "aecc49c1", "ar": "الصف" },
   "s3.compulsory": { "h": "694a7f44", "ar": "المواد الإلزامية" },
-  "s3.th.subject": { "h": "8d183dbd", "ar": "المادة" },
   "s3.th.curriculum": { "h": "23364909", "ar": "المنهج" },
   "s3.th.periods": { "h": "d65472b0", "ar": "الحصص" },
-  "subj.arabic": { "h": "af4f4762", "ar": "اللغة العربية (Arabic)" },
   "s3.cur.moe": { "h": "b4c89cb5", "ar": "وزارة التعليم" },
   "subj.islamic": { "h": "079ec1ed", "ar": "الدراسات الإسلامية <span dir=\"ltr\">(Islamic Studies)</span>" },
   "subj.quran": { "h": "f5df3972", "ar": "القرآن الكريم (Quran)" },
   "subj.social": { "h": "1a703618", "ar": "الدراسات الاجتماعية <span dir=\"ltr\">(Social Studies, KSAH)</span>" },
   "subj.pe": { "h": "3ddbb551", "ar": "التربية البدنية (PE)" },
-  "subj.english": { "h": "649df08a", "ar": "اللغة الإنجليزية (English)" },
-  "subj.physics": { "h": "96b61805", "ar": "الفيزياء (Physics)" },
-  "subj.chemistry": { "h": "d0a3c82b", "ar": "الكيمياء (Chemistry)" },
-  "subj.biology": { "h": "ffa48e0b", "ar": "الأحياء (Biology)" },
   "subj.business": { "h": "16fa7706", "ar": "دراسات الأعمال <span dir=\"ltr\">(Business Studies)</span>" },
   "s3.g9.compulsory.note": { "h": "9973c559", "ar": "عدد الحصص في الأسبوع. يدرس هذه المواد العشر كل طالب في الصف التاسع، ولا يمكن تغييرها." },
   "s3.optional": { "h": "b1583b5f", "ar": "المواد الاختيارية" },
