@@ -24,6 +24,7 @@ Settings, Responses tab:
 | Allow response editing | Off |
 | Limit to 1 response | Off |
 | Requires sign-in / Restrict to users in ais.sch.sa | Off |
+| Responses go to the linked sheet | Unchanged |
 
 Title: `British Section (Boys): Ask a Question`
 
@@ -44,7 +45,7 @@ asterisk means required.
 | 2 | Your Name * | Short answer | `اسمكم`. Rename from Parent Name. |
 | 3 | Student Name * | Short answer | `اسم الطالب`. Description: `If you are the student, write your own name. / إن كنتم الطالب فاكتبوا اسمكم.` |
 | 4 | Grade * | Dropdown | Unchanged. |
-| 5 | Email * | Google's own field | Appears once Responder input is on. Nothing to type. |
+| 5 | Email * | Google's own field | Appears once Responder input is on, and Google always places it at the top of the form. Nothing to type. |
 | 6 | Mobile Number | Short answer | `رقم الجوال`. Not required. Description: `Optional. / اختياري.` Rename from Email or Mobile Number. |
 | 7 | Topic * | Dropdown | Unchanged, Other last. |
 | 8 | Your Question * | Paragraph | `سؤالكم`. Rename from Your Questions. |
@@ -56,7 +57,7 @@ wall, and the Email box must sit at the top.
 
 ## 2. Install the script
 
-Signed in as the Head of School:
+Signed in as the Head of School, who must be an editor of the form (the form's owner shares it with him as Editor; a viewer cannot open Apps Script):
 
 1. On the form's edit page, open the three-dot menu, then **Apps Script**.
 2. Delete whatever is in the editor and paste the whole of `Code.gs`. Save.
@@ -64,8 +65,12 @@ Signed in as the Head of School:
    add `TEST_TO` with the address that should receive the test emails,
    and save.
 4. Back in the editor, choose `setup` in the function list and run it.
-   Google asks for permission once: the form, triggers, and "send email as
-   you". Approve. The log should include `TEST MODE: every email goes to
+   Google asks for permission once: the form, triggers, "see your email
+   address" and "send email as you". Approve. If a screen says Google has
+   not verified this app, choose Advanced and then the "Go to" link at the
+   bottom; that screen is normal for a script you installed yourself. If
+   the school's Workspace admin has blocked Apps Script, stop and tell
+   Mohamad. The log should include `TEST MODE: every email goes to
    <the test address>` and `Triggers installed: 1`.
 5. Still in the editor, open **Triggers** (the clock), edit the one
    trigger, and set failure notifications to **Notify me immediately**.
@@ -74,12 +79,15 @@ Signed in as the Head of School:
 
 1. Run `sendSample`. A `[TEST]` email with an Arabic question and a
    WhatsApp link arrives at the test address. Open it on a phone and tap
-   the link: WhatsApp opens on that number.
+   the link: WhatsApp opens. It may say the number is not on WhatsApp,
+   because the sample number is invented. Do not send a message.
 2. Submit the form from a private window with a real email address and a
    mobile. Two emails follow: Google's copy to the address typed, and the
    `[TEST]` notification to the test address with the table filled in.
 3. In the notification press Reply: the address must be the one typed into
-   the form, not the sender's own.
+   the form, not the sender's own. The gold "Reply to <name>" button under
+   the table opens a new message to that address with the question quoted,
+   whatever Reply does.
 4. Submit once with no mobile: the row reads `Not given`. Submit once with
    the mobile in Arabic digits: the link still opens the chat.
 
@@ -87,11 +95,15 @@ Signed in as the Head of School:
 
 1. Run `goLive`. The log says `LIVE: notifications go to <the Head's
    address>`.
-2. Submit the form once more. The notification must land unread in the
-   Head's **Inbox**, not only in Sent, and Reply must address the
-   respondent. If Gmail ever puts it in Sent only or Reply addresses the
-   Head himself, forward the email to the respondent instead, and say so
-   here.
+2. Submit the form once more and check two things. First, the notification
+   must land unread in the Head's **Inbox**, not only in Sent. If it does
+   not, open Project Settings, Script Properties, set `TO` to an address
+   the Head reads, and tell Mohamad. Second, press Reply: it must address
+   the respondent. If it addresses the Head himself, use the gold
+   "Reply to <name>" button instead, which always opens a message to the
+   respondent, and tell Mohamad so the footer line can be reworded.
+   Gmail's inbox list shows "me" as the sender of mail you sent yourself,
+   so look for the subject, which always starts `New question:`.
 3. A Gmail filter on subject `New question:` with a label keeps the
    questions together. One minute, optional.
 
