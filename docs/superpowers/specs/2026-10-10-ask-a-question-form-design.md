@@ -146,7 +146,12 @@ fonts. A plain-text part carries the same content.
   are converted for display because a run of Arabic-Indic digit groups
   reverses its order in a left-to-right line, as the sample render showed on
   10 October 2026: ٠٥٠ ١٢٣ ٤٥٦٧ came out as 4567 123 050.
-- Footer: `Press Reply to answer <name>; your reply goes to <email>.` A link
+- Footer: `Press Reply, or tap the button, to answer <name>; both go to
+  <email>.` Above it, when there is an email, a gold "Reply to <name>"
+  button, a `mailto:` link that opens a new message to the respondent with
+  `Re:` and the subject, and the question quoted in the body, so one tap
+  reaches them whatever Gmail does with Reply-To on a message the Head sent
+  to himself. Added after the final review on 10 October 2026. A link
   `Open the responses sheet` when the form has a linked sheet. Then: `Sent
   automatically by the form's script. Every submission is saved in the form
   whether or not this email arrives.`
@@ -163,14 +168,17 @@ as typed after step 1, so spacing is kept and the digits are Western.
 4. Ten digits starting `05`: replace the `0` with `966`.
 5. Nine digits starting `5`: prefix `966`.
 6. Twelve digits starting `966`: as is.
-7. Any other run of 8 to 15 digits not starting with `0`: as is, so a
+7. Thirteen digits starting `9660`: drop the `0` after the country code, a
+   common typo.
+8. Any other run of 8 to 15 digits not starting with `0`: as is, so a
    non-Saudi number typed with its country code still links.
-8. Anything else: no link.
+9. Anything else: no link.
 
 | Typed | Link digits |
 |---|---|
 | `050 855 1006` | `966508551006` |
 | `+966 50 855 1006` | `966508551006` |
+| `+966 050 855 1006` | `966508551006` |
 | `00966508551006` | `966508551006` |
 | `508551006` | `966508551006` |
 | `٠٥٠٨٥٥١٠٠٦` | `966508551006` |
@@ -210,7 +218,8 @@ Shell functions, each a few lines:
 - `onFormSubmit(e)`: reads `e.response`, builds the answers, sends with
   `MailApp.sendEmail({to, replyTo, subject, htmlBody, body, name})`. The
   rich build sits in a `try`; if it throws, a plain fallback email listing
-  every item title and answer is sent instead, so a formatting bug never
+  every item title and answer is sent instead, with no Reply-To, so a
+  rejected reply address cannot sink both sends, so a formatting bug never
   loses a question. If the fallback also throws, the error is rethrown so
   the trigger's failure notification reaches the owner.
 - `setup()`: run once by the installing account. Deletes this project's
@@ -261,8 +270,9 @@ workflow in CLAUDE.md.
   pointer, one line.
 
 Checks before the commit is called done: `node tools/check.mjs`,
-`node --test tools/`, `bash tools/render-check.sh` in both languages, and a
-look at the Arabic screenshot of `#ask`.
+`node --test tools/i18n.test.mjs`, `node --test tools/ask-a-question/code.test.mjs`,
+`bash tools/render-check.sh` in both languages, and a look at the Arabic
+screenshot of `#ask`.
 
 ## Testing
 
@@ -307,8 +317,9 @@ The user:
    as Mr. Farhan.
 3. With the script ready, sits with Mr. Farhan or signs in as him: opens the
    form's script editor, pastes `Code.gs`, runs `setup()`, approves the
-   permission, runs `enableTestMode('<the user's address>')`, submits the
-   manual tests, then runs `goLive()`.
+   permission, adds `TEST_TO` with the user's address under Project
+   Settings, Script Properties, submits the manual tests, then runs
+   `goLive()`.
 4. Says when to push.
 
 This work:
