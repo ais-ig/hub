@@ -1,6 +1,6 @@
 # Translation review · AIS Parent Hub
 
-434 strings · 0 missing Arabic
+437 strings · 0 missing Arabic
 
 Written by `node tools/i18n.mjs pairs`. Do not edit by hand.
 
@@ -527,6 +527,9 @@ Written by `node tools/i18n.mjs pairs`. Do not edit by hand.
 
 | Key | English | Arabic |
 |---|---|---|
+| `updates.2026-10-10-ask-form.title` | Ask a question any time, parents and students | اطرحوا أسئلتكم في أي وقت، أولياء الأمور والطلاب |
+| `updates.2026-10-10-ask-form.text` | The question form from the Meet & Greet now stays open all year, for parents and for students. Send any question at any time and we will come back to you. | نموذج الأسئلة الذي استُخدم في اللقاء التعريفي يبقى مفتوحاً طوال العام لأولياء الأمور والطلاب. أرسلوا أي سؤال في أي وقت وسنرد عليكم. |
+| `updates.2026-10-10-ask-form.label` | Open the form | فتح النموذج |
 | `updates.2026-10-10-midterm.title` | Mid-Term Tests run from 18 to 28 October | اختبارات منتصف الفصل من 18 إلى 28 أكتوبر |
 | `updates.2026-10-10-midterm.text` | For Grades 9 to 12, each test is from 7:55 to 8:55 AM, after periods 1 and 2. The school day still starts at 6:30 AM and ends at 1:05 PM. | لطلاب الصفوف من 9 إلى 12، يُجرى كل اختبار من 7:55 إلى 8:55 صباحاً بعد الحصتين الأولى والثانية. ويبقى اليوم الدراسي من 6:30 صباحاً إلى 1:05 ظهراً كالمعتاد. |
 | `updates.2026-10-10-midterm.label` | See the test schedule | عرض جدول الاختبارات |
