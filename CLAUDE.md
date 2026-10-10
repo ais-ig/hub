@@ -150,7 +150,7 @@ Assessment changed too, and the numbers on the page are the 2026/27 ones, not th
 
 The deck's agenda is three steps, 6:30 arrival, 6:45 presentation, 7:15 stalls with no fixed close. An earlier draft agenda in `~/Downloads` dated 1 September with different timings is superseded.
 
-"Ask a question" is the school's Google Form, linked from three places on the page; README lists them.
+"Ask a question" is the school's Google Form, linked from three places on the page; README lists them. Since October 2026 it is open all year to parents and students, Google emails them a copy of their answers, and a script bound to the form, `tools/ask-a-question/Code.gs`, emails the Head of School every submission. The script holds no addresses: the recipient and the test address are Script Properties. Its guide and the form checklist are `tools/ask-a-question/README.md`; the hub wording never mentions where a question goes or the copy.
 
 ## English and Arabic move together
 
