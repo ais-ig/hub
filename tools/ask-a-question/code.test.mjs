@@ -261,3 +261,148 @@ test('fallbackMessage lists every raw answer with the error', () => {
   assert.match(m.text, /Your Question: They have chemistry class scheduled but no link was sent/);
   assert.equal(fallbackMessage([], '', WHEN, true, 'plain string').subject, '[TEST] New question: see below');
 });
+
+/* Minimal stand-ins for the Google services the shells touch. `sent`
+   collects every MailApp.sendEmail call; `props` is the Script Properties
+   store; `triggers` collects trigger creations. */
+function fakeGoogle({ props = {}, destinationId = 'SHEET123', user = 'head@example.com', quota = 1500 } = {}) {
+  const sent = [];
+  const triggers = [];
+  const logs = [];
+  const globals = {
+    PropertiesService: { getScriptProperties: () => ({
+      getProperty: (k) => (k in props ? props[k] : null),
+      setProperty: (k, v) => { props[k] = v; },
+      deleteProperty: (k) => { delete props[k]; },
+    }) },
+    Session: { getEffectiveUser: () => ({ getEmail: () => user }) },
+    MailApp: { sendEmail: (opts) => { sent.push(opts); }, getRemainingDailyQuota: () => quota },
+    FormApp: { getActiveForm: () => ({
+      getDestinationId: () => { if (!destinationId) throw new Error('no destination'); return destinationId; },
+    }) },
+    ScriptApp: {
+      getProjectTriggers: () => triggers.slice(),
+      deleteTrigger: (t) => { triggers.splice(triggers.indexOf(t), 1); },
+      newTrigger: (fn) => ({ forForm: () => ({ onFormSubmit: () => ({ create: () => { triggers.push({ fn }); } }) }) }),
+    },
+    Logger: { log: (s) => { logs.push(String(s)); } },
+  };
+  return { globals, sent, props, triggers, logs };
+}
+
+function fakeEvent(items, email, when) {
+  return { response: {
+    getItemResponses: () => items.map(([title, answer]) => ({
+      getItem: () => ({ getTitle: () => title }),
+      getResponse: () => answer,
+    })),
+    getRespondentEmail: () => email,
+    getTimestamp: () => when,
+  } };
+}
+
+const RAW = FULL.map((i) => [i.title, i.answer]);
+
+test('config sends to TO when live and to TEST_TO in test mode', () => {
+  const live = fakeGoogle({ props: { TO: 'head@example.com' } });
+  assert.deepEqual(plain(load(live.globals).config()), { to: 'head@example.com', test: false });
+  const testing = fakeGoogle({ props: { TO: 'head@example.com', TEST_TO: ' me@example.com ' } });
+  assert.deepEqual(plain(load(testing.globals).config()), { to: 'me@example.com', test: true });
+  const unset = fakeGoogle({ user: 'who@example.com' });
+  assert.deepEqual(plain(load(unset.globals).config()), { to: 'who@example.com', test: false });
+});
+
+test('rawItems reads titles and answers and joins a list answer', () => {
+  const { rawItems } = load(fakeGoogle().globals);
+  const e = fakeEvent([['Your Name', 'Suzan'], ['Days', ['Sunday', 'Monday']], ['Blank', null]], '', WHEN);
+  assert.deepEqual(plain(rawItems(e.response)), [
+    { title: 'Your Name', answer: 'Suzan' },
+    { title: 'Days', answer: 'Sunday, Monday' },
+    { title: 'Blank', answer: '' },
+  ]);
+});
+
+test('sheetLink builds the sheet URL and is empty without a destination', () => {
+  assert.equal(load(fakeGoogle().globals).sheetLink(), 'https://docs.google.com/spreadsheets/d/SHEET123');
+  assert.equal(load(fakeGoogle({ destinationId: '' }).globals).sheetLink(), '');
+});
+
+test('onFormSubmit emails the Head with Reply-To set to the trimmed respondent', () => {
+  const g = fakeGoogle({ props: { TO: 'head@example.com' } });
+  load(g.globals).onFormSubmit(fakeEvent(RAW, '  Suzan@Gmail.com ', WHEN));
+  assert.equal(g.sent.length, 1);
+  const m = g.sent[0];
+  assert.equal(m.to, 'head@example.com');
+  assert.equal(m.replyTo, 'Suzan@Gmail.com');
+  assert.equal(m.name, 'Ask a Question form');
+  assert.equal(m.subject, 'New question: Attendance and Timetable, Grade 9, Suzan');
+  assert.match(m.htmlBody, /wa\.me\/966508551006/);
+  assert.match(m.htmlBody, /spreadsheets\/d\/SHEET123/);
+  assert.match(m.body, /Student: Awedelkareem/);
+});
+
+test('onFormSubmit goes to TEST_TO with a [TEST] subject in test mode', () => {
+  const g = fakeGoogle({ props: { TO: 'head@example.com', TEST_TO: 'me@example.com' } });
+  load(g.globals).onFormSubmit(fakeEvent(RAW, 'suzan@gmail.com', WHEN));
+  assert.equal(g.sent[0].to, 'me@example.com');
+  assert.match(g.sent[0].subject, /^\[TEST\] New question/);
+});
+
+test('onFormSubmit sets no Reply-To when the address is missing or not an address', () => {
+  const g = fakeGoogle({ props: { TO: 'head@example.com' } });
+  const ctx = load(g.globals);
+  ctx.onFormSubmit(fakeEvent(RAW, '', WHEN));
+  ctx.onFormSubmit(fakeEvent(RAW, 'not an email', WHEN));
+  assert.equal(g.sent.length, 2);
+  assert.equal('replyTo' in g.sent[0], false);
+  assert.equal('replyTo' in g.sent[1], false);
+});
+
+test('onFormSubmit falls back to a plain email when the rich one cannot be built', () => {
+  const g = fakeGoogle({ props: { TO: 'head@example.com' } });
+  const ctx = load(g.globals);
+  ctx.buildHtml = () => { throw new Error('boom'); };
+  ctx.onFormSubmit(fakeEvent(RAW, 'suzan@gmail.com', WHEN));
+  assert.equal(g.sent.length, 1);
+  assert.equal(g.sent[0].subject, 'New question: see below');
+  assert.equal('htmlBody' in g.sent[0], false);
+  assert.match(g.sent[0].body, /could not be built \(boom\)/);
+  assert.match(g.sent[0].body, /Your Question: They have chemistry class/);
+  assert.equal(g.sent[0].replyTo, 'suzan@gmail.com');
+});
+
+test('onFormSubmit rethrows when even the fallback cannot be sent', () => {
+  const g = fakeGoogle({ props: { TO: 'head@example.com' } });
+  g.globals.MailApp.sendEmail = () => { throw new Error('quota'); };
+  assert.throws(() => load(g.globals).onFormSubmit(fakeEvent(RAW, 'suzan@gmail.com', WHEN)), /quota/);
+});
+
+test('setup installs one trigger, replaces any old ones and records the installer as TO', () => {
+  const g = fakeGoogle({ user: 'head@example.com' });
+  g.triggers.push({ fn: 'stale' });
+  load(g.globals).setup();
+  assert.deepEqual(g.triggers, [{ fn: 'onFormSubmit' }]);
+  assert.equal(g.props.TO, 'head@example.com');
+  assert.ok(g.logs.some((l) => l.includes('head@example.com')));
+});
+
+test('goLive removes TEST_TO and status reports the mode', () => {
+  const g = fakeGoogle({ props: { TO: 'head@example.com', TEST_TO: 'me@example.com' } });
+  const ctx = load(g.globals);
+  ctx.status();
+  assert.ok(g.logs.some((l) => l.startsWith('TEST MODE')));
+  ctx.goLive();
+  assert.equal('TEST_TO' in g.props, false);
+  assert.ok(g.logs.some((l) => l.startsWith('LIVE')));
+  assert.ok(g.logs.some((l) => l.includes('Emails left today: 1500')));
+});
+
+test('sendSample sends a marked sample with an Arabic question and a linked mobile', () => {
+  const g = fakeGoogle({ props: { TO: 'head@example.com' } });
+  load(g.globals).sendSample();
+  assert.equal(g.sent.length, 1);
+  assert.equal(g.sent[0].to, 'head@example.com');
+  assert.match(g.sent[0].subject, /^\[TEST\] New question: Attendance and Timetable, Grade 9, Sample Parent$/);
+  assert.match(g.sent[0].htmlBody, /wa\.me\/9665/);
+  assert.match(g.sent[0].htmlBody, /[\u0600-\u06FF]/);
+});

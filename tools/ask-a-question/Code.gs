@@ -243,3 +243,105 @@ function fallbackMessage(items, email, timestamp, testMode, err) {
   });
   return { subject: (testMode ? '[TEST] ' : '') + SUBJECT_PREFIX + ': see below', html: '', text: lines.join('\n') };
 }
+
+/* ---------- Google shells ---------- */
+/* Everything below touches a Google service. Keep each one short; logic
+   belongs in the pure half above, where Node can test it. */
+
+/* Script Properties: TO is the address that gets the notifications, written
+   by setup() as the installing account. TEST_TO, when present, diverts every
+   email there and marks the subject [TEST]. Set TEST_TO in the editor under
+   Project Settings, Script Properties; goLive() removes it. */
+function config() {
+  var p = PropertiesService.getScriptProperties();
+  var testTo = String(p.getProperty('TEST_TO') || '').trim();
+  var to = testTo || String(p.getProperty('TO') || '').trim() || Session.getEffectiveUser().getEmail();
+  return { to: to, test: !!testTo };
+}
+
+function rawItems(response) {
+  return response.getItemResponses().map(function (ir) {
+    var r = ir.getResponse();
+    return {
+      title: ir.getItem().getTitle(),
+      answer: r == null ? '' : (Array.isArray(r) ? r.join(', ') : String(r))
+    };
+  });
+}
+
+/* The linked responses sheet, or '' when the form has none. Built from the
+   ID rather than opened, so no Sheets permission is asked for. */
+function sheetLink() {
+  try {
+    var id = FormApp.getActiveForm().getDestinationId();
+    return id ? 'https://docs.google.com/spreadsheets/d/' + id : '';
+  } catch (err) {
+    return '';
+  }
+}
+
+function send(to, msg, replyTo) {
+  var opts = { to: to, subject: msg.subject, body: msg.text, name: SENDER_NAME };
+  if (msg.html) opts.htmlBody = msg.html;
+  if (isEmail(replyTo)) opts.replyTo = String(replyTo).trim();
+  MailApp.sendEmail(opts);
+}
+
+/* The installable on-form-submit trigger calls this with e.response, the
+   FormResponse just saved. The rich email is tried first; if building or
+   sending it throws, a plain fallback with every raw answer goes instead.
+   If that throws too, the error is rethrown so Google's failure
+   notification reaches the trigger's owner. */
+function onFormSubmit(e) {
+  var cfg = config();
+  var response = e.response;
+  var items = rawItems(response);
+  var email = response.getRespondentEmail() || '';
+  var when = response.getTimestamp();
+  try {
+    send(cfg.to, buildMessage(parseAnswers(items, email, when), sheetLink(), cfg.test), email);
+  } catch (err) {
+    send(cfg.to, fallbackMessage(items, email, when, cfg.test, err), email);
+  }
+}
+
+/* Run once from the editor, signed in as the account that should receive
+   the notifications. Replaces any trigger this project already has. */
+function setup() {
+  var form = FormApp.getActiveForm();
+  ScriptApp.getProjectTriggers().forEach(function (t) { ScriptApp.deleteTrigger(t); });
+  ScriptApp.newTrigger('onFormSubmit').forForm(form).onFormSubmit().create();
+  var me = Session.getEffectiveUser().getEmail();
+  PropertiesService.getScriptProperties().setProperty('TO', me);
+  Logger.log('Trigger installed. Notifications go to ' + me + '.');
+  status();
+}
+
+function goLive() {
+  PropertiesService.getScriptProperties().deleteProperty('TEST_TO');
+  status();
+}
+
+/* Sends one made-up submission so the layout can be checked in a real
+   inbox before any parent uses the form. Always marked [TEST]. */
+function sendSample() {
+  var cfg = config();
+  var sample = parseAnswers([
+    { title: 'I am a', answer: 'Parent / ولي أمر' },
+    { title: 'Your Name', answer: 'Sample Parent' },
+    { title: 'Student Name', answer: 'Sample Student' },
+    { title: 'Grade', answer: 'Grade 9 / الصف التاسع' },
+    { title: 'Mobile Number', answer: '٠٥٠ ١٢٣ ٤٥٦٧' },
+    { title: 'Topic', answer: 'Attendance and Timetable / الحضور والجدول الدراسي' },
+    { title: 'Your Question', answer: 'هل يمكن تأكيد موعد الحصة الأولى يوم الأحد؟\nShukran.' }
+  ], 'sample.parent@example.com', new Date());
+  send(cfg.to, buildMessage(sample, sheetLink(), true), sample.email);
+  Logger.log('Sample sent to ' + cfg.to + '.');
+}
+
+function status() {
+  var cfg = config();
+  Logger.log((cfg.test ? 'TEST MODE: every email goes to ' : 'LIVE: notifications go to ') + cfg.to + '.');
+  Logger.log('Triggers installed: ' + ScriptApp.getProjectTriggers().length +
+    '. Emails left today: ' + MailApp.getRemainingDailyQuota() + '.');
+}
