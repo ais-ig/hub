@@ -173,3 +173,37 @@ a later round may need them, and a glossary row costs nothing.
 `node tools/check.mjs` all passed. `bash tools/render-check.sh` all passed
 in both languages. The section was captured again at 380px and 800px in both
 languages and looked at.
+
+## Fourth pass, 10 October 2026: the four pre-push questions, answered
+
+The user answered the "before pushing" list.
+
+1. **The holiday.** Fine to publish. While checking the marks claim I found
+   the school's own Parent Assessment Guide page, which `#s4` links, lists
+   "Additional Holiday on Sunday, Oct 25" in its calendar, so the school had
+   already published it.
+2. **The Grade 9 bell.** Follow the school's bell as issued: the split is
+   deliberate, since Grade 9 is itself split into IG and SAT tracks. D7
+   stands and is closed. Recorded in CLAUDE.md, which had wrongly credited
+   the Head of Section with confirming it; it was the user.
+3. **The reminder notice.** Set up now, so nobody comes back on the day.
+   That needed a mechanism (D19) and a notice (D20).
+4. **The 12:10 to 12:30 break.** Stays "Break", unnamed, as on the bell sheet.
+
+| # | Decision | Why | To reverse |
+|---|---|---|---|
+| D19 | A notice dated after today is held back everywhere, bell, strip and change log, until that day, then is new for 14 days from it. One line in the renderer, `if (age < 0) return;`, with its comment. `tools/check.mjs` names each scheduled entry in its notes. The README rule "never date an entry in the future" is rewritten as "a future date schedules an entry"; CLAUDE.md and the comment above `updatesData` say the same. | Before this a future-dated entry sat at the top of the bell list and in the change log with its future date and no badge, which is why the rule existed. The user asked for the reminder to be set up now and not revisited. | Delete the guard line and the check's note, restore the README paragraph, and date the reminder by hand on the day. |
+| D20 | The reminder, `2026-10-24-midterm-resume`, dated Saturday 24 October, new until 28 October: "Mid-Term Tests resume on Tuesday 27 October", Mathematics on the 27th for Grades 9 to 12, Arabic or Accounting for Grades 9 and 10 on the 28th, Monday 26 October a normal day with no test. Arabic written and stamped. | The two 10 October notices stop being new on 24 October; this one takes over for the holiday weekend and the last two test days, overlapping them by one day. | Delete the entry. If the push slips so far that the originals outlive it, move its date. |
+
+Tested by rendering a copy of the page with the renderer's clock set to
+23 October and to 24 October, in English and Arabic: on the 23rd the
+reminder appears nowhere but the JSON; on the 24th it is in the bell, the
+strip and the change log, and the strip at 380px shows it at the top with the
+two earlier notices below it. `node tools/check.mjs` passes and lists the
+scheduled entry; `bash tools/render-check.sh` passes in both languages.
+
+### Still open
+
+Nothing with the school. Before pushing: if the push is not on 10 October,
+set the two 10 October notices' `date` to the push day. The reminder's date
+stays 24 October.

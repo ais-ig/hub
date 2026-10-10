@@ -20,7 +20,7 @@ Live at `https://ais-ig.github.io/hub/`, repository `ais-ig/hub`. This folder is
 - **No Google Sheets hydration.** All content is static. The old hub's CSV layer was deliberately dropped: nothing on this page is volatile enough to justify the failure surface.
 - **PDFs live in `assets/`** and are linked relatively. Never link to Google Drive. Root-level PDFs are git-ignored.
 - Documents announced before they exist render as a muted, dashed "Available soon" card rather than a link that 404s. Do not announce a document nobody has committed to producing; the agenda card was removed for that reason.
-- **Updates reach parents through a bell, not push.** The `updatesData` array feeds a bell in the top bar (gold unread count, drop-down list), the strip under the banner (unread entries only) and `#changelog`. Unread means inside the 14-day New window and not yet opened. An entry's optional `newUntil` ends that window early; set it on an entry a later one supersedes and on event notices, and date every entry the day it goes live, never in the future. Read state is per browser in `localStorage` under `aisHub.updates`, keyed by each entry's `id`. Never change a live `id`. No push notifications and no service worker: a static page cannot send them, and the school's WhatsApp messages already do that job. Read items are restyled in place, never removed, because the strip sits above every section and removing an item mid-scroll moves the target.
+- **Updates reach parents through a bell, not push.** The `updatesData` array feeds a bell in the top bar (gold unread count, drop-down list), the strip under the banner (unread entries only) and `#changelog`. Unread means inside the 14-day New window and not yet opened. An entry's optional `newUntil` ends that window early; set it on an entry a later one supersedes and on event notices, and date every entry the day it goes live. A later date schedules it: the renderer holds the entry back from the bell, the strip and the change log until that day, then it is new for 14 days from it. Added 10 October 2026 so a reminder inside a long test round ships with the round; `tools/check.mjs` names every scheduled entry. Read state is per browser in `localStorage` under `aisHub.updates`, keyed by each entry's `id`. Never change a live `id`. No push notifications and no service worker: a static page cannot send them, and the school's WhatsApp messages already do that job. Read items are restyled in place, never removed, because the strip sits above every section and removing an item mid-scroll moves the target.
 - **Tests and exams is one permanent section**, `#exams`, that carries the current round of tests or exams and is swapped each round, as `#schedule` is with the timetable. Between rounds it names the next round from the parents' calendar. It is not added and removed per round, so the anchor and the menu entry stay. See README, "Updating the exam schedule".
 - **The hero carries a countdown.** It reads `data-doors` and `data-end` off the hero element rather than a JS constant, so the machine-readable date sits beside the human-readable one in the banner. Three self-switching states: counting, "under way", "thank you". Hidden until JS validates both dates, so it never flashes empty cells. Do not move these dates into a constant, and do not let the attributes drift from the banner. Between events, delete the attributes and the block hides itself.
 
@@ -136,8 +136,12 @@ together: a round with no Zero Period bell removes or rewords that line.
 Grade 9 follows the school's Grades 4 to 9 bell and Grades 10 to 12 the Grades
 10 to 12 bell, as the bell sheet and the IT portal's own note ("Grade 9
 follows Grades 4–9; Grade 10 follows Grades 10–12") both have it, and the
-Section follows the Zero Period bell on each grade's own test days, confirmed
-by the Head of Section on 10 October 2026. The 6:30 row is written Homeroom,
+Section follows the Zero Period bell on each grade's own test days, at the
+user's decision on 10 October 2026: the school's split is deliberate, since
+Grade 9 is itself split into IG and SAT tracks, so the page follows the
+school's bell as issued. A round longer than the 14-day New window carries
+a reminder notice scheduled with a later date; this one's is
+`2026-10-24-midterm-resume`. The 6:30 row is written Homeroom,
 the Daily Schedule's word, where the bell sheet says Assembly.
 
 Changes already carried in for 2026/27, worth knowing: Grade 9 Islamic Studies moved 3 to 2 periods and Quran 2 to 3; several optional loads changed in both grades; Grade 9 gained an optional Hifdh Programme, which sits inside the existing three Quran periods and neither adds to the forty-period week nor replaces a subject.

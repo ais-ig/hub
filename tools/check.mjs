@@ -67,6 +67,10 @@ if (!block) {
     /* Browsers remember read entries by id, so an id must exist, be unique,
        and stay stable once live. */
     const seenIds = new Set();
+    const now = new Date();
+    const todayISO = now.getFullYear() + '-' +
+      String(now.getMonth() + 1).padStart(2, '0') + '-' +
+      String(now.getDate()).padStart(2, '0');
     data.forEach((e, i) => {
       if (typeof e !== 'object' || e === null) {
         fail('updates', 'entry ' + i + ' is not an object');
@@ -81,6 +85,11 @@ if (!block) {
       }
       if (!/^\d{4}-\d{2}-\d{2}$/.test(e.date || '')) {
         fail('updates', 'entry ' + i + ' needs a YYYY-MM-DD date');
+      } else if (e.date > todayISO) {
+        /* The page holds a future-dated entry back until its day, so a
+           scheduled reminder is fine and a mistyped year is invisible.
+           Name each one, so the person pushing sees which it is. */
+        notes.push('entry ' + (e.id || i) + ' is scheduled for ' + e.date + ' and hidden until then');
       }
       /* newUntil is optional and ends the New window early. The page ignores
          one it cannot parse, which would leave a superseded entry badged, so

@@ -1,6 +1,6 @@
 # Translation review · AIS Parent Hub
 
-431 strings · 0 missing Arabic
+434 strings · 0 missing Arabic
 
 Written by `node tools/i18n.mjs pairs`. Do not edit by hand.
 
@@ -533,6 +533,9 @@ Written by `node tools/i18n.mjs pairs`. Do not edit by hand.
 | `updates.2026-10-10-holiday.title` | No school on Sunday 25 October | لا دراسة يوم الأحد 25 أكتوبر |
 | `updates.2026-10-10-holiday.text` | Sunday 25 October is a holiday. Monday 26 October is a normal school day with no test, and the Mid-Term Tests continue on Tuesday 27 October. | يوم الأحد 25 أكتوبر إجازة. ويوم الاثنين 26 أكتوبر يوم دراسي عادي بلا اختبار، وتستمر اختبارات منتصف الفصل يوم الثلاثاء 27 أكتوبر. |
 | `updates.2026-10-10-holiday.label` | See the test schedule | عرض جدول الاختبارات |
+| `updates.2026-10-24-midterm-resume.title` | Mid-Term Tests resume on Tuesday 27 October | تُستأنف اختبارات منتصف الفصل يوم الثلاثاء 27 أكتوبر |
+| `updates.2026-10-24-midterm-resume.text` | Mathematics on Tuesday 27 October for Grades 9 to 12, then Arabic or Accounting for Grades 9 and 10 on Wednesday 28 October. Monday 26 October is a normal school day with no test. | الرياضيات (Mathematics) يوم الثلاثاء 27 أكتوبر للصفوف من 9 إلى 12، ثم اللغة العربية (Arabic) أو المحاسبة (Accounting) للصفين 9 و10 يوم الأربعاء 28 أكتوبر. ويوم الاثنين 26 أكتوبر يوم دراسي عادي بلا اختبار. |
+| `updates.2026-10-24-midterm-resume.label` | See the test schedule | عرض جدول الاختبارات |
 | `updates.2026-10-03-arabic.title` | The hub is now in Arabic too | البوابة متاحة الآن باللغة العربية |
 | `updates.2026-10-03-arabic.text` | Tap العربية at the top of the page to read everything in Arabic. Tap English to switch back. The documents themselves are still in English. | اضغطوا على «العربية» أعلى الصفحة لقراءة جميع المحتويات بالعربية، واضغطوا على English للعودة. أما المستندات نفسها فما زالت بالإنجليزية. |
 | `updates.2026-09-27-online-week.title` | Urgent: lessons are online this week, 27 September to 1 October | عاجل: الدراسة عن بُعد هذا الأسبوع، من 27 سبتمبر إلى 1 أكتوبر |

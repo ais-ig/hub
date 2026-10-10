@@ -164,8 +164,11 @@ PM Riyadh time), and the title and text of the notice that announces the
 round. A notice's `newUntil` is not one of them: it only ends the 14-day New
 window early, so a notice dated 10 October stops counting as new on
 24 October whatever its `newUntil` says. For a round that runs longer than
-14 days from the notice, post a short reminder notice nearer the time, dated
-the day it goes live. The Zero Period bell has two tables because Grade 9
+14 days from the notice, add a short reminder notice dated the day it should
+appear: a future date holds an entry back until then (see "Recording a
+change"). The Semester One round has one, `2026-10-24-midterm-resume`, which
+takes over on the Saturday the first two notices stop being new. The Zero
+Period bell has two tables because Grade 9
 follows the school's Grades 4 to 9 bell and Grades 10 to 12 the Grades 10 to
 12 bell; their morning break falls at different times. The 6:30 row is
 written Homeroom, as the Daily Schedule and the timetable note call it, where
@@ -187,7 +190,8 @@ For the next round:
    text if the round has another name.
 3. Add one notice to `updatesData` announcing the round, with the window in
    its title, and one for any holiday inside the window. Date them the day
-   they go live. `newUntil` only shortens the New window (see above); set it
+   they go live, and a reminder the day it should appear. `newUntil` only
+   shortens the New window (see above); set it
    to the last test day all the same, so a notice posted late in a round
    stops being new when the round ends.
 4. Every changed string needs its Arabic and a stamp, and every new key a
@@ -225,14 +229,20 @@ into one shows as text. `date` must be `YYYY-MM-DD`. `id` is lowercase
 letters, digits and hyphens, conventionally the date and a word or two
 (`2026-09-13-mentors`), and must be unique.
 
-**Never date an entry in the future.** The "New" window runs forward from the
-date, so an entry dated tomorrow has a negative age, is not new, and is
-therefore not unread: no bell count, nothing in the strip, and only a quiet
-row in the change log. The guard is deliberate, so that a mistyped year
-cannot badge an entry for ever. Date an entry the day you publish it and let
-the text carry the future date ("takes effect on Sunday 20 September"). The
-id may still name the effective date; only `date` drives the window. This
-caught out the 20 September timetable entry, published on the 19th.
+**A future date schedules an entry.** The "New" window runs forward from
+`date`, and since 10 October 2026 an entry dated after today is held back
+entirely, from the bell, the strip and the change log, until that day
+arrives; then it appears and counts as new for 14 days. Use it for a reminder
+inside a long round, written and published with the round itself: the
+Semester One Mid-Term Tests carry one dated 24 October. For anything else,
+date an entry the day you publish it and let the text carry the effective
+date ("takes effect on Sunday 20 September"); the id may still name the
+effective date, and only `date` drives the window. A mistyped year now hides
+an entry instead of badging it for ever, so `node tools/check.mjs` names
+every scheduled entry in its notes: read that line before you push. Before
+this, a future date left a quiet, badge-less row at the top of the change
+log, which caught out the 20 September timetable entry, published on the
+19th.
 
 **End the New window early with `newUntil`.** Optional, `YYYY-MM-DD`, the
 last day the entry counts as new. Use it in two cases:

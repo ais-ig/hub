@@ -1430,7 +1430,10 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
      An optional "newUntil" (YYYY-MM-DD) ends the New window early: set it
      on an entry a later one supersedes, or on an event notice, to the last
      day it should count as new. The entry stays in the change log.
-     Date every entry the day it goes live, never in the future.
+     Date every entry the day it goes live. A later date schedules it: the
+     entry is held back from the bell, the strip and the change log until
+     that day, then counts as new for 14 days from it. tools/check.mjs
+     names every scheduled entry, so a mistyped year is seen.
      Every entry needs a unique "id" of lowercase letters, digits and
      hyphens, e.g. "2026-09-13-mentors". The browser remembers read entries
      by id, so never reuse or change an id once it has gone live; fixing a
@@ -1462,6 +1465,19 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
     "label": "See the test schedule",
     "labelAr": "عرض جدول الاختبارات",
     "hAr": "3425dad9"
+  },
+  {
+    "id": "2026-10-24-midterm-resume",
+    "date": "2026-10-24",
+    "newUntil": "2026-10-28",
+    "title": "Mid-Term Tests resume on Tuesday 27 October",
+    "titleAr": "تُستأنف اختبارات منتصف الفصل يوم الثلاثاء 27 أكتوبر",
+    "text": "Mathematics on Tuesday 27 October for Grades 9 to 12, then Arabic or Accounting for Grades 9 and 10 on Wednesday 28 October. Monday 26 October is a normal school day with no test.",
+    "textAr": "الرياضيات (Mathematics) يوم الثلاثاء 27 أكتوبر للصفوف من 9 إلى 12، ثم اللغة العربية (Arabic) أو المحاسبة (Accounting) للصفين 9 و10 يوم الأربعاء 28 أكتوبر. ويوم الاثنين 26 أكتوبر يوم دراسي عادي بلا اختبار.",
+    "href": "#exams",
+    "label": "See the test schedule",
+    "labelAr": "عرض جدول الاختبارات",
+    "hAr": "f5ae38eb"
   },
   {
     "id": "2026-10-03-arabic",
@@ -1724,8 +1740,9 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
      the school issued or the Head of Section forwarded goes to parents.
      The window is stated here, in the hero button's data-until and in the
      notices' title and text: move them together. A notice's newUntil only
-     ends the 14-day New window early, so a round longer than that needs a
-     later reminder notice, dated the day it goes live. -->
+     ends the 14-day New window early, so a round longer than that gets a
+     reminder notice scheduled with a later date and held back until then;
+     this round's is 2026-10-24-midterm-resume. -->
 <section class="sec alt" id="exams">
   <div class="in">
     <div class="st">
@@ -3309,18 +3326,23 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
 
       /* Age is rounded rather than floored, so a daylight-saving change
          between "today" and the entry date cannot shorten the span by an
-         hour and extend the window by a day. It must also be non-negative,
-         so a mistyped future date is not badged forever and pinned to the
-         top by the sort below. An optional newUntil date ends the window
-         early, for an entry that is superseded or whose event has passed;
-         the entry stays in the change log. One that does not parse is
-         ignored here, and tools/check.mjs stops one shipping. */
+         hour and extend the window by a day. A negative age is a future
+         date: the entry is scheduled, and held back from the bell, the
+         strip and the change log until that day, then new for NEW_DAYS
+         from it. So a reminder inside a long round ships with the round,
+         and a mistyped year hides an entry rather than badging it for
+         ever and pinning it to the top by the sort below; tools/check.mjs
+         names every scheduled entry. An optional newUntil date ends the
+         window early, for an entry that is superseded or whose event has
+         passed; the entry stays in the change log. One that does not
+         parse is ignored here, and tools/check.mjs stops one shipping. */
       var clean = [];
       var rowById = Object.create(null);
       updates.forEach(function (e) {
         var d = parseDay(e && e.date);
         if (!d || !e.title || !e.text) return;
         var age = Math.round((today - d) / 86400000);
+        if (age < 0) return; /* scheduled: not until its day */
         var until = e.newUntil ? parseDay(e.newUntil) : null;
         var row = {
           d: d,
