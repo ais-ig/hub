@@ -219,7 +219,7 @@ Shell functions, each a few lines:
   `MailApp.sendEmail({to, replyTo, subject, htmlBody, body, name})`. The
   rich build sits in a `try`; if it throws, a plain fallback email listing
   every item title and answer is sent instead, with no Reply-To, so a
-  rejected reply address cannot sink both sends, so a formatting bug never
+  rejected reply address cannot sink both sends and a formatting bug never
   loses a question. If the fallback also throws, the error is rethrown so
   the trigger's failure notification reaches the owner.
 - `setup()`: run once by the installing account. Deletes this project's
