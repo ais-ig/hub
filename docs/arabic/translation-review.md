@@ -1,6 +1,6 @@
 # Translation review · AIS Parent Hub
 
-435 strings · 0 missing Arabic
+431 strings · 0 missing Arabic
 
 Written by `node tools/i18n.mjs pairs`. Do not edit by hand.
 
@@ -129,8 +129,8 @@ Written by `node tools/i18n.mjs pairs`. Do not edit by hand.
 |---|---|---|
 | `exams.title` | Tests and exams | الاختبارات |
 | `exams.sub` | Mid-Term Tests · Semester One · Grades 9 to 12 · Sunday 18 to Wednesday 28 October 2026 | اختبارات منتصف الفصل · الفصل الدراسي الأول · الصفوف من 9 إلى 12 · من الأحد 18 إلى الأربعاء 28 أكتوبر 2026 |
-| `exams.lead` | The Semester One Mid-Term Tests run from Sunday 18 to Wednesday 28 October 2026. Each test is from 7:55 to 8:55 AM, after periods 1 and 2, so the school day still starts at 6:30 AM and ends at 1:05 PM as usual. In Grades 9 and 10, each test is worth 10 of the 20 marks for Quarter 1, as set out under How marks are built. | تُعقد اختبارات منتصف الفصل الدراسي الأول من الأحد 18 إلى الأربعاء 28 أكتوبر 2026. ويُجرى كل اختبار من 7:55 إلى 8:55 صباحاً بعد الحصتين الأولى والثانية، ولذلك يبدأ اليوم الدراسي في 6:30 صباحاً وينتهي في 1:05 ظهراً كالمعتاد. وفي الصفين 9 و10، تُخصَّص لكل اختبار 10 درجات من أصل 20 درجة للربع الأول، كما هو مبيّن في طريقة احتساب الدرجات. |
-| `exams.lead2` | Quran tests for every grade, and Arabic MoE tests for Grades 9 and 10, take place in class during the same two weeks. | وتُعقد اختبارات القرآن الكريم لجميع الصفوف، واختبارات اللغة العربية (وزارة التعليم) للصفين 9 و10، داخل الفصول خلال الأسبوعين نفسيهما. |
+| `exams.lead` | The Semester One Mid-Term Tests run from Sunday 18 to Wednesday 28 October 2026. Each test is from 7:55 to 8:55 AM, after periods 1 and 2, so the school day still starts at 6:30 AM and ends at 1:05 PM as usual. Each test is worth 10 of the 20 marks for Quarter 1, as set out under How marks are built. | تُعقد اختبارات منتصف الفصل الدراسي الأول من الأحد 18 إلى الأربعاء 28 أكتوبر 2026. ويُجرى كل اختبار من 7:55 إلى 8:55 صباحاً بعد الحصتين الأولى والثانية، ولذلك يبدأ اليوم الدراسي في 6:30 صباحاً وينتهي في 1:05 ظهراً كالمعتاد. وتُخصَّص لكل اختبار 10 درجات من أصل 20 درجة للربع الأول، كما هو مبيّن في طريقة احتساب الدرجات. |
+| `exams.lead2` | No phone, smartwatch or other electronic device is allowed in the test room. See Policies. | لا يُسمح بالجوال ولا بالساعة الذكية ولا بأي جهاز إلكتروني آخر في قاعة الاختبار. وللمزيد راجعوا قسم السياسات. |
 | `exams.g910.h` | Grades 9 and 10 | الصفان 9 و10 |
 | `exams.th.day` | Day | اليوم |
 | `exams.d.1018` | Sunday 18 October | الأحد 18 أكتوبر |
@@ -148,10 +148,6 @@ Written by `node tools/i18n.mjs pairs`. Do not edit by hand.
 | `exams.s.arabicacc` | Arabic or Accounting | اللغة العربية (Arabic) أو المحاسبة (Accounting) |
 | `exams.g1112.h` | Grades 11 and 12, Science stream | الصفان 11 و12، المسار العلمي |
 | `exams.s.biocs` | Biology or Computer Science | الأحياء (Biology) أو علوم الحاسب (Computer Science) |
-| `exams.prep.h` | Before a test | قبل الاختبار |
-| `exams.prep.li1` | Your son brings his own stationery and answers in blue pen. | يُحضر ابنكم أدواته الكتابية الخاصة، ويكتب إجاباته بالقلم الأزرق. |
-| `exams.prep.li2` | No phone, smartwatch or other electronic device is allowed in the test room. See Policies. | لا يُسمح بالجوال ولا بالساعة الذكية ولا بأي جهاز إلكتروني آخر في قاعة الاختبار. وللمزيد راجعوا قسم السياسات. |
-| `exams.prep.li3` | If he misses a test through illness, he can sit a make-up test once he brings a sick leave note from Sihati, within 3 days of the test. | وإذا تغيّب عن اختبار بسبب المرض، فيمكنه أداء الاختبار التعويضي بعد إحضار إجازة مرضية من تطبيق صحتي خلال 3 أيام من موعد الاختبار. |
 | `exams.bell.h` | The school day on a test day | اليوم الدراسي في أيام الاختبارات |
 | `exams.bell.p` | On a test day the school day follows the Zero Period bell below instead of the usual timetable: every period is 35 minutes instead of 40, the test fills Zero Period, and lessons carry on afterwards until 1:05 PM. Grade 9 has one table and Grades 10 to 12 another, because their morning break falls at different times. On a day without a test, the usual timetable runs. | في يوم الاختبار يسير اليوم الدراسي وفق جدول الحصة الصفرية أدناه بدلاً من الجدول الدراسي المعتاد: تصبح مدة كل حصة 35 دقيقة بدلاً من 40، ويشغل الاختبار الحصة الصفرية، ثم تستمر الدراسة بعده حتى 1:05 ظهراً. وللصف 9 جدول، وللصفوف من 10 إلى 12 جدول آخر، لأن موعد الفسحة الأولى يختلف بينهما. وفي الأيام التي لا اختبار فيها يُعمل بالجدول الدراسي المعتاد. |
 | `exams.th.period` | Period | الحصة |

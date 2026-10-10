@@ -179,8 +179,8 @@ For the next round:
    `i18nAr` every `exams.*` entry whose key has left the page; the check
    names them. Give a holiday or a buffer day a row of its own with
    `class="off"`, so a gap explains itself. Keep the Zero Period tables and
-   the "Before a test" card unless the school issues a new bell sheet or new
-   rules; a round that does not run in Zero Period, such as the Final
+   the device line (`exams.lead2`) unless the school issues a new bell sheet
+   or new rules; a round that does not run in Zero Period, such as the Final
    Examinations, replaces the bell card and rewords the `schedule.exams` line
    under the timetable note with it.
 2. Set the hero button's `data-until` to the last test day, and change its
@@ -202,8 +202,8 @@ separately, since Grades 11 and 12 sit their mock examinations a month before
 Grades 9 and 10 sit the Final Examination. The subtitle names the next round
 and its first date, the lead is one line saying the day-by-day schedule
 appears here once the school issues it, and the day-by-day tables come out.
-The "Before a test" card and the bell card stay, since the `schedule.exams`
-line under the timetable note points to the bell. Do not announce a schedule
+The device line and the bell card stay, since the `schedule.exams` line
+under the timetable note points to the bell. Do not announce a schedule
 nobody has committed to producing, and do not delete the section or its menu
 entry: `#exams` is a link parents keep.
 

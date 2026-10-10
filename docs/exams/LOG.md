@@ -131,3 +131,45 @@ fact on the page matched the sources. What changed in the second commit:
 in both languages. Captures of the revised section at 800px and 380px in both
 languages were looked at.
 
+
+## Third pass, 10 October 2026, after the user's review
+
+The user read the two lead paragraphs and asked where each came from.
+
+- **The marks sentence** had said "In Grades 9 and 10, each test is worth 10
+  of the 20 marks for Quarter 1". The restriction was mine: `#s4` is written
+  for Grades 9 and 10, so I kept to its scope. The source is not the mid-term
+  material at all but the Teachers' Guide assessment breakdown
+  (`~/Downloads/Assessment_Breakdown_Teachers_Guide_British_Section_2026-2027_TABLES.pdf`),
+  which is Section-wide, and the school's Parent Assessment Guide for Grades
+  9 to 12, linked from `#s4`, gives the same 10 of 20 in Quarters 1 and 3
+  for every subject. The sentence now names no grade, as the user asked.
+- **The Quran and Arabic MoE line** (D13) is gone. Its only source was the
+  Section's own student-facing sheet, and the user ruled that the Section's
+  internal files are not sources for the page: they were not shared with or
+  reviewed by the Head of Section, who said the school's own material is what
+  goes to parents. The same rule removed the "Before a test" card (D14):
+  stationery and blue pen, and the Sihati make-up rule, were on that sheet
+  alone. The device rule survives as the second lead paragraph, because the
+  IT portal's rules box, which the Head of Section forwarded, states it
+  ("Electronic devices and smartwatches are strictly prohibited in the exam
+  hall") and the hub's own phone policy backs it.
+- **D15 is moot.** With the Section's sheet out, the parents' sheet is the
+  only source for Grade 12's Monday test, and it says English.
+- **Source rule, for next time.** Only material the school issued to parents
+  or the Head of Section forwarded goes on the page. Recorded in CLAUDE.md,
+  in the Tests and exams row of the content sources.
+
+| # | Decision | Why | To reverse |
+|---|---|---|---|
+| D17 | The marks sentence names no grade. | Section-wide in the Teachers' Guide; Grades 9 to 12 in the Parent Assessment Guide. | Put "In Grades 9 and 10," back in both languages and stamp `exams.lead`. |
+| D18 | The device rule is the second lead paragraph, `exams.lead2`, not a card. | One rule does not fill a card, and the "Before a test" heading promised more than one. | Give it a card and a heading key again. |
+
+The glossary rows added for the card (make-up test, Sihati, test room) stay:
+a later round may need them, and a glossary row costs nothing.
+
+### Checks after the third pass
+
+`node tools/check.mjs` all passed. `bash tools/render-check.sh` all passed
+in both languages. The section was captured again at 380px and 800px in both
+languages and looked at.
