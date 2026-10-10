@@ -65,7 +65,7 @@ Signed in as the Head of School:
    and save.
 4. Back in the editor, choose `setup` in the function list and run it.
    Google asks for permission once: the form, triggers, and "send email as
-   you". Approve. The log should end with `TEST MODE: every email goes to
+   you". Approve. The log should include `TEST MODE: every email goes to
    <the test address>` and `Triggers installed: 1`.
 5. Still in the editor, open **Triggers** (the clock), edit the one
    trigger, and set failure notifications to **Notify me immediately**.
