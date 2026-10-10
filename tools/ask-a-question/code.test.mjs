@@ -158,3 +158,106 @@ test('parseAnswers survives null answers and no items', () => {
   assert.equal(a.received, '');
   assert.deepEqual(plain(parseAnswers(undefined, undefined, WHEN).extra), []);
 });
+
+const SHEET = 'https://docs.google.com/spreadsheets/d/SHEET123';
+
+function answers(over = {}) {
+  const { parseAnswers } = load();
+  return { ...parseAnswers(FULL, 'suzan@gmail.com', WHEN), ...over };
+}
+
+test('buildSubject joins the fixed prefix, topic, grade and name with a colon and commas', () => {
+  const { buildSubject } = load();
+  assert.equal(buildSubject(answers(), false), 'New question: Attendance and Timetable, Grade 9, Suzan');
+  assert.equal(buildSubject(answers(), true), '[TEST] New question: Attendance and Timetable, Grade 9, Suzan');
+  assert.equal(buildSubject(answers({ topic: '', name: '' }), false), 'New question: Grade 9');
+  assert.equal(buildSubject(answers({ topic: '', grade: '', name: '' }), false), 'New question');
+});
+
+test('buildHtml lays out every answer in a right-to-left-safe table', () => {
+  const { buildHtml } = load();
+  const html = buildHtml(answers(), SHEET);
+  assert.match(html, /New question from the Ask a Question form/);
+  assert.match(html, /Saturday 10 October 2026, 14:05/);
+  assert.match(html, /Suzan \(Parent\)/);
+  assert.match(html, /Awedelkareem/);
+  assert.match(html, /Grade 9 \/ الصف التاسع/);
+  assert.match(html, /href="mailto:suzan@gmail\.com"/);
+  assert.match(html, /href="https:\/\/wa\.me\/966508551006"[^>]*>Open in WhatsApp</);
+  assert.match(html, /050 855 1006/);
+  assert.match(html, /href="https:\/\/docs\.google\.com\/spreadsheets\/d\/SHEET123"/);
+  assert.match(html, /Press Reply to answer Suzan; your reply goes to suzan@gmail\.com\./);
+  assert.match(html, /Every submission is saved in the form/);
+  assert.equal((html.match(/dir="auto"/g) || []).length, 8, 'one dir="auto" per value cell');
+  assert.doesNotMatch(html, /<style/);
+  assert.match(html, /#0C2E54/);
+  assert.match(html, /#EDBA1D/);
+});
+
+test('buildHtml escapes markup in an answer and keeps the question\'s line breaks', () => {
+  const { buildHtml } = load();
+  const html = buildHtml(answers({ question: 'Why is <b>Maths</b> & Physics\nso early?' }), '');
+  assert.match(html, /Why is &lt;b&gt;Maths&lt;\/b&gt; &amp; Physics<br>so early\?/);
+  assert.doesNotMatch(html, /<b>Maths/);
+});
+
+test('buildHtml says Not given for a missing mobile and shows an odd one as typed', () => {
+  const { buildHtml } = load();
+  const none = buildHtml(answers({ mobile: '' }), '');
+  assert.match(none, /Not given/);
+  assert.doesNotMatch(none, /wa\.me/);
+  const odd = buildHtml(answers({ mobile: 'no' }), '');
+  assert.match(odd, />no</);
+  assert.doesNotMatch(odd, /wa\.me/);
+  const arabic = buildHtml(answers({ mobile: '٠٥٠ ٨٥٥ ١٠٠٦' }), '');
+  assert.match(arabic, /wa\.me\/966508551006/);
+  assert.match(arabic, />050 855 1006 /, 'shown in Western digits so the groups keep their order');
+  assert.doesNotMatch(arabic, /[\u0660-\u0669]/);
+});
+
+test('buildHtml lists an extra question, drops the sheet link without a sheet, and warns without an email', () => {
+  const { buildHtml } = load();
+  const html = buildHtml(answers({ email: '', extra: [{ title: 'Class', answer: '9A' }] }), '');
+  assert.match(html, /Class/);
+  assert.match(html, />9A</);
+  assert.doesNotMatch(html, /responses sheet/);
+  assert.match(html, /No email address was given, so Reply will not reach the sender\./);
+});
+
+test('buildText carries every field, the WhatsApp link and the sheet', () => {
+  const { buildText } = load();
+  assert.ok(buildText(answers({ mobile: '٠٥٠ ٨٥٥ ١٠٠٦' }), '').includes('Mobile: 050 855 1006 (WhatsApp: https://wa.me/966508551006)'));
+  const text = buildText(answers({ extra: [{ title: 'Class', answer: '9A' }] }), SHEET);
+  for (const line of [
+    'Received: Saturday 10 October 2026, 14:05',
+    'From: Suzan (Parent)',
+    'Student: Awedelkareem',
+    'Grade: Grade 9 / الصف التاسع',
+    'Topic: Attendance and Timetable / الحضور والجدول الدراسي',
+    'Question: They have chemistry class scheduled but no link was sent',
+    'Email: suzan@gmail.com',
+    'Mobile: 050 855 1006 (WhatsApp: https://wa.me/966508551006)',
+    'Class: 9A',
+    'Responses sheet: https://docs.google.com/spreadsheets/d/SHEET123',
+  ]) assert.ok(text.includes(line), 'missing: ' + line);
+});
+
+test('buildMessage bundles subject, html and text', () => {
+  const { buildMessage } = load();
+  const m = buildMessage(answers(), SHEET, true);
+  assert.equal(m.subject, '[TEST] New question: Attendance and Timetable, Grade 9, Suzan');
+  assert.match(m.html, /<table/);
+  assert.match(m.text, /^New question from the Ask a Question form/);
+});
+
+test('fallbackMessage lists every raw answer with the error', () => {
+  const { fallbackMessage } = load();
+  const m = fallbackMessage(FULL, 'suzan@gmail.com', WHEN, false, new Error('boom'));
+  assert.equal(m.subject, 'New question: see below');
+  assert.equal(m.html, '');
+  assert.match(m.text, /could not be built \(boom\)/);
+  assert.match(m.text, /Received: Saturday 10 October 2026, 14:05/);
+  assert.match(m.text, /Email: suzan@gmail\.com/);
+  assert.match(m.text, /Your Question: They have chemistry class scheduled but no link was sent/);
+  assert.equal(fallbackMessage([], '', WHEN, true, 'plain string').subject, '[TEST] New question: see below');
+});

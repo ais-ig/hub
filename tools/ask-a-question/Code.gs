@@ -133,3 +133,113 @@ function parseAnswers(items, email, timestamp) {
   a.who = englishHalf(a.who);
   return a;
 }
+
+/* ---------- Message ---------- */
+
+function buildSubject(a, testMode) {
+  var parts = [englishHalf(a.topic), englishHalf(a.grade), a.name]
+    .filter(function (p) { return p; });
+  return (testMode ? '[TEST] ' : '') + SUBJECT_PREFIX + (parts.length ? ': ' + parts.join(', ') : '');
+}
+
+function notGiven() {
+  return '<span style="color:#888;">Not given</span>';
+}
+
+/* One table row. The value cell takes its direction from its own text, so an
+   Arabic answer reads right to left and a Latin one left to right. */
+function row(label, valueHtml) {
+  return '<tr>' +
+    '<td style="padding:8px 12px;border-bottom:1px solid #e5e7eb;color:#555;font-weight:bold;' +
+    'white-space:nowrap;vertical-align:top;width:110px;">' + escapeHtml(label) + '</td>' +
+    '<td dir="auto" style="padding:8px 12px;border-bottom:1px solid #e5e7eb;color:#111;vertical-align:top;">' +
+    valueHtml + '</td></tr>';
+}
+
+function mobileHtml(mobile) {
+  if (!mobile) return notGiven();
+  var d = waDigits(mobile);
+  var text = escapeHtml(westernDigits(mobile));
+  if (!d) return text;
+  return text + ' &nbsp;&nbsp;<a href="https://wa.me/' + d + '" style="color:' + LINK + ';">Open in WhatsApp</a>';
+}
+
+function breakLines(s) {
+  return escapeHtml(s).replace(/\r?\n/g, '<br>');
+}
+
+function buildHtml(a, sheetUrl) {
+  var from = (a.name ? escapeHtml(a.name) : notGiven()) + (a.who ? ' (' + escapeHtml(a.who) + ')' : '');
+  var rows = [
+    row('Received', escapeHtml(a.received)),
+    row('From', from),
+    row('Student', a.student ? escapeHtml(a.student) : notGiven()),
+    row('Grade', a.grade ? escapeHtml(a.grade) : notGiven()),
+    row('Topic', a.topic ? escapeHtml(a.topic) : notGiven()),
+    row('Question', a.question ? breakLines(a.question) : notGiven()),
+    row('Email', a.email
+      ? '<a href="mailto:' + escapeHtml(a.email) + '" style="color:' + LINK + ';">' + escapeHtml(a.email) + '</a>'
+      : notGiven()),
+    row('Mobile', mobileHtml(a.mobile))
+  ];
+  (a.extra || []).forEach(function (x) { rows.push(row(x.title, breakLines(x.answer))); });
+  var reply = a.email
+    ? 'Press Reply to answer ' + escapeHtml(a.name || 'the sender') + '; your reply goes to ' + escapeHtml(a.email) + '.'
+    : 'No email address was given, so Reply will not reach the sender.';
+  var sheet = sheetUrl
+    ? ' <a href="' + escapeHtml(sheetUrl) + '" style="color:' + LINK + ';">Open the responses sheet</a>.'
+    : '';
+  return '<div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.5;color:#111;max-width:640px;">' +
+    '<div style="background:' + NAVY + ';color:#fff;padding:14px 16px;border-bottom:3px solid ' + GOLD + ';' +
+    'font-size:17px;font-weight:bold;">New question from the Ask a Question form</div>' +
+    '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse;width:100%;background:#fff;">' +
+    rows.join('') + '</table>' +
+    '<p style="margin:14px 0 4px;">' + reply + sheet + '</p>' +
+    '<p style="margin:4px 0 0;font-size:12px;color:#777;">Sent automatically by the form\'s script. ' +
+    'Every submission is saved in the form whether or not this email arrives.</p>' +
+    '</div>';
+}
+
+function buildText(a, sheetUrl) {
+  var wa = waDigits(a.mobile);
+  var lines = [
+    'New question from the Ask a Question form',
+    '',
+    'Received: ' + a.received,
+    'From: ' + (a.name || 'Not given') + (a.who ? ' (' + a.who + ')' : ''),
+    'Student: ' + (a.student || 'Not given'),
+    'Grade: ' + (a.grade || 'Not given'),
+    'Topic: ' + (a.topic || 'Not given'),
+    'Question: ' + (a.question || 'Not given'),
+    'Email: ' + (a.email || 'Not given'),
+    'Mobile: ' + (a.mobile ? westernDigits(a.mobile) + (wa ? ' (WhatsApp: https://wa.me/' + wa + ')' : '') : 'Not given')
+  ];
+  (a.extra || []).forEach(function (x) { lines.push(x.title + ': ' + x.answer); });
+  lines.push('');
+  lines.push(a.email
+    ? 'Press Reply to answer ' + (a.name || 'the sender') + '; your reply goes to ' + a.email + '.'
+    : 'No email address was given, so Reply will not reach the sender.');
+  if (sheetUrl) lines.push('Responses sheet: ' + sheetUrl);
+  lines.push('Sent automatically by the form\'s script. Every submission is saved in the form whether or not this email arrives.');
+  return lines.join('\n');
+}
+
+function buildMessage(a, sheetUrl, testMode) {
+  return { subject: buildSubject(a, testMode), html: buildHtml(a, sheetUrl), text: buildText(a, sheetUrl) };
+}
+
+/* Sent when the rich email cannot be built: every raw answer, as plain text,
+   so a formatting bug never loses a question. */
+function fallbackMessage(items, email, timestamp, testMode, err) {
+  var why = err && err.message ? err.message : String(err);
+  var lines = [
+    'A question arrived but the usual email could not be built (' + why + '). Every answer is listed below.',
+    '',
+    'Received: ' + formatRiyadh(timestamp),
+    'Email: ' + (email || 'Not given')
+  ];
+  (items || []).forEach(function (it) {
+    lines.push(String(it.title == null ? '' : it.title) + ': ' + String(it.answer == null ? '' : it.answer));
+  });
+  return { subject: (testMode ? '[TEST] ' : '') + SUBJECT_PREFIX + ': see below', html: '', text: lines.join('\n') };
+}
