@@ -212,8 +212,11 @@ Shell functions, each a few lines:
 - `setup()`: run once by the installing account. Deletes this project's
   existing triggers, creates the installable on-form-submit trigger for the
   form, stores `TO` as the effective user's address, and logs the result.
-- `enableTestMode(email)`: stores `TEST_TO`. Every email then goes there with
-  `[TEST] ` in the subject.
+- Test mode is switched on by adding `TEST_TO` under Project Settings, Script
+  Properties, in the editor. Every email then goes there with `[TEST] ` in the
+  subject. A function cannot take the address, because the editor runs
+  functions without arguments, and the address must not be typed into the
+  source.
 - `goLive()`: deletes `TEST_TO`.
 - `sendSample()`: sends a sample email built from made-up answers, including
   an Arabic question and a mobile in Arabic-Indic digits, so the layout can
