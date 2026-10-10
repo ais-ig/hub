@@ -126,7 +126,7 @@ no em dash, الصف for a grade, and the glossary terms (أولياء الأم�
 | From | The installing account, Mr. Farhan's. Sender name `Ask a Question form`, so it stands apart from his own mail in the inbox. |
 | To | The address stored in the `TO` property by `setup()`, which is the installing account. In test mode, the `TEST_TO` property instead. |
 | Reply-To | The respondent's email, when it looks like an address. |
-| Subject | `New question · <Topic> · <Grade> · <Name>`, English halves of the bilingual choices only, for example `New question · Attendance and Timetable · Grade 9 · Suzan`. The fixed opening words make a Gmail filter trivial. Test mode prefixes `[TEST] `. |
+| Subject | `New question: <Topic>, <Grade>, <Name>`, English halves of the bilingual choices only, for example `New question: Attendance and Timetable, Grade 9, Suzan`. The fixed opening words make a Gmail filter trivial. Test mode prefixes `[TEST] `. No middle dots anywhere in the email, by the user's global writing rule. |
 
 Body, HTML with inline styles only, Arial, a deep navy `#0C2E54` header strip
 and the gold `#EDBA1D` rule, since Gmail strips style blocks and loads no web
@@ -134,7 +134,7 @@ fonts. A plain-text part carries the same content.
 
 - Heading: `New question from the Ask a Question form`.
 - A two-column table: Received (Riyadh time, `Saturday 10 October 2026, 14:05`),
-  From (`<name> · Parent` or `· Student`), Student, Grade, Topic, Question,
+  From (`<name> (Parent)` or `(Student)`), Student, Grade, Topic, Question,
   Email as a `mailto:` link, Mobile.
 - Every answer is HTML-escaped and sits in a cell with `dir="auto"`, so an
   Arabic answer reads right to left and a Latin one left to right. The

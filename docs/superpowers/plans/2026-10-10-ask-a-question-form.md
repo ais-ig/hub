@@ -13,7 +13,7 @@
 ## Global Constraints
 
 - Work in the worktree `.claude/worktrees/ask-a-question` on branch `ask-a-question`. Never `cd` to the repository root, never touch branch `exams`.
-- No em dashes anywhere: content, code comments, commit messages. Middots `·` divide, en dashes `–` make English ranges.
+- No em dashes anywhere: content, code comments, commit messages. No middle dots as separators either, by the user's global instruction: a subject or a row joins its parts with a colon, a comma or brackets. En dashes `–` make English ranges.
 - "Grade", never "Year", for a school grade. Lowercase "year" for a calendar year is fine ("any time in the year").
 - Arabic: respectful plural (يمكنكم, أرسلوا), Western digits only, no Arabic-Indic digits, no tatweel, no dash in a range, الصف for a grade, glossary terms: أولياء الأمور (parents), مدير المدرسة (Head of School), القسم البريطاني (British Section), اللقاء التعريفي (Meet & Greet), اطرحوا سؤالاً (Ask a question).
 - Colours in the email: deep navy `#0C2E54`, navy `#1D5394`, gold `#EDBA1D`. Arial. All styles inline. No `<style>` block, no web fonts.
@@ -412,11 +412,12 @@ function answers(over = {}) {
   return { ...parseAnswers(FULL, 'suzan@gmail.com', WHEN), ...over };
 }
 
-test('buildSubject joins the fixed prefix, topic, grade and name with middots', () => {
+test('buildSubject joins the fixed prefix, topic, grade and name with a colon and commas', () => {
   const { buildSubject } = load();
-  assert.equal(buildSubject(answers(), false), 'New question · Attendance and Timetable · Grade 9 · Suzan');
-  assert.equal(buildSubject(answers(), true), '[TEST] New question · Attendance and Timetable · Grade 9 · Suzan');
-  assert.equal(buildSubject(answers({ topic: '', name: '' }), false), 'New question · Grade 9');
+  assert.equal(buildSubject(answers(), false), 'New question: Attendance and Timetable, Grade 9, Suzan');
+  assert.equal(buildSubject(answers(), true), '[TEST] New question: Attendance and Timetable, Grade 9, Suzan');
+  assert.equal(buildSubject(answers({ topic: '', name: '' }), false), 'New question: Grade 9');
+  assert.equal(buildSubject(answers({ topic: '', grade: '', name: '' }), false), 'New question');
 });
 
 test('buildHtml lays out every answer in a right-to-left-safe table', () => {
@@ -424,7 +425,7 @@ test('buildHtml lays out every answer in a right-to-left-safe table', () => {
   const html = buildHtml(answers(), SHEET);
   assert.match(html, /New question from the Ask a Question form/);
   assert.match(html, /Saturday 10 October 2026, 14:05/);
-  assert.match(html, /Suzan · Parent/);
+  assert.match(html, /Suzan \(Parent\)/);
   assert.match(html, /Awedelkareem/);
   assert.match(html, /Grade 9 \/ الصف التاسع/);
   assert.match(html, /href="mailto:suzan@gmail\.com"/);
@@ -473,13 +474,13 @@ test('buildText carries every field, the WhatsApp link and the sheet', () => {
   const text = buildText(answers({ extra: [{ title: 'Class', answer: '9A' }] }), SHEET);
   for (const line of [
     'Received: Saturday 10 October 2026, 14:05',
-    'From: Suzan · Parent',
+    'From: Suzan (Parent)',
     'Student: Awedelkareem',
     'Grade: Grade 9 / الصف التاسع',
     'Topic: Attendance and Timetable / الحضور والجدول الدراسي',
     'Question: They have chemistry class scheduled but no link was sent',
     'Email: suzan@gmail.com',
-    'Mobile: 050 855 1006 · https://wa.me/966508551006',
+    'Mobile: 050 855 1006 (WhatsApp: https://wa.me/966508551006)',
     'Class: 9A',
     'Responses sheet: https://docs.google.com/spreadsheets/d/SHEET123',
   ]) assert.ok(text.includes(line), 'missing: ' + line);
@@ -488,7 +489,7 @@ test('buildText carries every field, the WhatsApp link and the sheet', () => {
 test('buildMessage bundles subject, html and text', () => {
   const { buildMessage } = load();
   const m = buildMessage(answers(), SHEET, true);
-  assert.equal(m.subject, '[TEST] New question · Attendance and Timetable · Grade 9 · Suzan');
+  assert.equal(m.subject, '[TEST] New question: Attendance and Timetable, Grade 9, Suzan');
   assert.match(m.html, /<table/);
   assert.match(m.text, /^New question from the Ask a Question form/);
 });
@@ -496,13 +497,13 @@ test('buildMessage bundles subject, html and text', () => {
 test('fallbackMessage lists every raw answer with the error', () => {
   const { fallbackMessage } = load();
   const m = fallbackMessage(FULL, 'suzan@gmail.com', WHEN, false, new Error('boom'));
-  assert.equal(m.subject, 'New question · see below');
+  assert.equal(m.subject, 'New question: see below');
   assert.equal(m.html, '');
   assert.match(m.text, /could not be built \(boom\)/);
   assert.match(m.text, /Received: Saturday 10 October 2026, 14:05/);
   assert.match(m.text, /Email: suzan@gmail\.com/);
   assert.match(m.text, /Your Question: They have chemistry class scheduled but no link was sent/);
-  assert.equal(fallbackMessage([], '', WHEN, true, 'plain string').subject, '[TEST] New question · see below');
+  assert.equal(fallbackMessage([], '', WHEN, true, 'plain string').subject, '[TEST] New question: see below');
 });
 ```
 
@@ -519,9 +520,9 @@ Append to `tools/ask-a-question/Code.gs`, after `parseAnswers`:
 /* ---------- Message ---------- */
 
 function buildSubject(a, testMode) {
-  var parts = [SUBJECT_PREFIX, englishHalf(a.topic), englishHalf(a.grade), a.name]
+  var parts = [englishHalf(a.topic), englishHalf(a.grade), a.name]
     .filter(function (p) { return p; });
-  return (testMode ? '[TEST] ' : '') + parts.join(' · ');
+  return (testMode ? '[TEST] ' : '') + SUBJECT_PREFIX + (parts.length ? ': ' + parts.join(', ') : '');
 }
 
 function notGiven() {
@@ -543,7 +544,7 @@ function mobileHtml(mobile) {
   var d = waDigits(mobile);
   var text = escapeHtml(mobile);
   if (!d) return text;
-  return text + ' &nbsp;·&nbsp; <a href="https://wa.me/' + d + '" style="color:' + LINK + ';">Open in WhatsApp</a>';
+  return text + ' &nbsp;&nbsp;<a href="https://wa.me/' + d + '" style="color:' + LINK + ';">Open in WhatsApp</a>';
 }
 
 function breakLines(s) {
@@ -551,7 +552,7 @@ function breakLines(s) {
 }
 
 function buildHtml(a, sheetUrl) {
-  var from = (a.name ? escapeHtml(a.name) : notGiven()) + (a.who ? ' · ' + escapeHtml(a.who) : '');
+  var from = (a.name ? escapeHtml(a.name) : notGiven()) + (a.who ? ' (' + escapeHtml(a.who) + ')' : '');
   var rows = [
     row('Received', escapeHtml(a.received)),
     row('From', from),
@@ -588,13 +589,13 @@ function buildText(a, sheetUrl) {
     'New question from the Ask a Question form',
     '',
     'Received: ' + a.received,
-    'From: ' + (a.name || 'Not given') + (a.who ? ' · ' + a.who : ''),
+    'From: ' + (a.name || 'Not given') + (a.who ? ' (' + a.who + ')' : ''),
     'Student: ' + (a.student || 'Not given'),
     'Grade: ' + (a.grade || 'Not given'),
     'Topic: ' + (a.topic || 'Not given'),
     'Question: ' + (a.question || 'Not given'),
     'Email: ' + (a.email || 'Not given'),
-    'Mobile: ' + (a.mobile ? a.mobile + (wa ? ' · https://wa.me/' + wa : '') : 'Not given')
+    'Mobile: ' + (a.mobile ? a.mobile + (wa ? ' (WhatsApp: https://wa.me/' + wa + ')' : '') : 'Not given')
   ];
   (a.extra || []).forEach(function (x) { lines.push(x.title + ': ' + x.answer); });
   lines.push('');
@@ -623,7 +624,7 @@ function fallbackMessage(items, email, timestamp, testMode, err) {
   (items || []).forEach(function (it) {
     lines.push(String(it.title == null ? '' : it.title) + ': ' + String(it.answer == null ? '' : it.answer));
   });
-  return { subject: (testMode ? '[TEST] ' : '') + SUBJECT_PREFIX + ' · see below', html: '', text: lines.join('\n') };
+  return { subject: (testMode ? '[TEST] ' : '') + SUBJECT_PREFIX + ': see below', html: '', text: lines.join('\n') };
 }
 ```
 
@@ -729,7 +730,7 @@ test('onFormSubmit emails the Head with Reply-To set to the trimmed respondent',
   assert.equal(m.to, 'head@example.com');
   assert.equal(m.replyTo, 'Suzan@Gmail.com');
   assert.equal(m.name, 'Ask a Question form');
-  assert.equal(m.subject, 'New question · Attendance and Timetable · Grade 9 · Suzan');
+  assert.equal(m.subject, 'New question: Attendance and Timetable, Grade 9, Suzan');
   assert.match(m.htmlBody, /wa\.me\/966508551006/);
   assert.match(m.htmlBody, /spreadsheets\/d\/SHEET123/);
   assert.match(m.body, /Student: Awedelkareem/);
@@ -758,7 +759,7 @@ test('onFormSubmit falls back to a plain email when the rich one cannot be built
   ctx.buildHtml = () => { throw new Error('boom'); };
   ctx.onFormSubmit(fakeEvent(RAW, 'suzan@gmail.com', WHEN));
   assert.equal(g.sent.length, 1);
-  assert.equal(g.sent[0].subject, 'New question · see below');
+  assert.equal(g.sent[0].subject, 'New question: see below');
   assert.equal('htmlBody' in g.sent[0], false);
   assert.match(g.sent[0].body, /could not be built \(boom\)/);
   assert.match(g.sent[0].body, /Your Question: They have chemistry class/);
@@ -796,7 +797,7 @@ test('sendSample sends a marked sample with an Arabic question and a linked mobi
   load(g.globals).sendSample();
   assert.equal(g.sent.length, 1);
   assert.equal(g.sent[0].to, 'head@example.com');
-  assert.match(g.sent[0].subject, /^\[TEST\] New question · Attendance and Timetable · Grade 9 · Sample Parent$/);
+  assert.match(g.sent[0].subject, /^\[TEST\] New question: Attendance and Timetable, Grade 9, Sample Parent$/);
   assert.match(g.sent[0].htmlBody, /wa\.me\/9665/);
   assert.match(g.sent[0].htmlBody, /[؀-ۿ]/);
 });
@@ -1049,7 +1050,7 @@ Signed in as the Head of School:
    respondent. If Gmail ever puts it in Sent only or Reply addresses the
    Head himself, forward the email to the respondent instead, and say so
    here.
-3. A Gmail filter on subject `New question ·` with a label keeps the
+3. A Gmail filter on subject `New question:` with a label keeps the
    questions together. One minute, optional.
 
 ## Day to day
