@@ -139,9 +139,13 @@ fonts. A plain-text part carries the same content.
 - Every answer is HTML-escaped and sits in a cell with `dir="auto"`, so an
   Arabic answer reads right to left and a Latin one left to right. The
   question cell keeps line breaks.
-- Mobile shows the number as typed and, when it normalises, a link `Open in
-  WhatsApp` to `https://wa.me/<digits>`. With no number the cell reads `Not
-  given`. A number that does not normalise shows as typed with no link.
+- Mobile shows the number as typed, with Arabic-Indic digits converted to
+  Western ones, and, when it normalises, a link `Open in WhatsApp` to
+  `https://wa.me/<digits>`. With no number the cell reads `Not given`. A
+  number that does not normalise shows the same way with no link. The digits
+  are converted for display because a run of Arabic-Indic digit groups
+  reverses its order in a left-to-right line, as the sample render showed on
+  10 October 2026: ٠٥٠ ١٢٣ ٤٥٦٧ came out as 4567 123 050.
 - Footer: `Press Reply to answer <name>; your reply goes to <email>.` A link
   `Open the responses sheet` when the form has a linked sheet. Then: `Sent
   automatically by the form's script. Every submission is saved in the form
@@ -149,8 +153,8 @@ fonts. A plain-text part carries the same content.
 
 ### Mobile number normalisation
 
-Applied before building the WhatsApp link. The displayed number is always the
-text as typed.
+Applied before building the WhatsApp link. The displayed number is the text
+as typed after step 1, so spacing is kept and the digits are Western.
 
 1. Convert Arabic-Indic digits (U+0660 to U+0669) and Eastern Arabic-Indic
    digits (U+06F0 to U+06F9) to Western digits.

@@ -27,7 +27,7 @@
 
 1. A respondent's email typed with capitals or surrounding spaces, `  Suzan@Gmail.com `: Reply-To must still be set, trimmed, so Mr. Farhan's Reply reaches them. Pinned in Task 4.
 2. A question answer containing markup or an ampersand, `Why is <b>Maths</b> & Physics...`: it must show as typed, never render or break the table. Pinned in Task 3.
-3. A mobile typed as `+966 50 855 1006`, in Arabic-Indic digits, or as the word `no`: the first two link to WhatsApp, the third shows as typed with no link and nothing throws. Pinned in Tasks 1 and 3.
+3. A mobile typed as `+966 50 855 1006`, in Arabic-Indic digits, or as the word `no`: the first two link to WhatsApp, the Arabic-Indic one is shown in Western digits so its groups keep their order in a left-to-right line, and the third shows as typed with no link and nothing throws. Pinned in Tasks 1 and 3.
 4. A question title edited in the form with a trailing colon or space, `Your Name: `: the answer still lands in the right row, not in the extras. Pinned in Task 2.
 5. A submission at 22:30 UTC: the Received line must say the next day in Riyadh, `Sunday 11 October 2026, 01:30`, not Saturday. Pinned in Task 1.
 
@@ -41,7 +41,7 @@
 
 **Interfaces:**
 - Consumes: nothing.
-- Produces: `englishHalf(s) -> string`, `escapeHtml(s) -> string`, `isEmail(s) -> boolean`, `waDigits(s) -> string` (digits for `wa.me`, or `''`), `formatRiyadh(date) -> string` (`Saturday 10 October 2026, 14:05`, or `''` for an invalid date). Globals `SENDER_NAME`, `SUBJECT_PREFIX`, `NAVY`, `LINK`, `GOLD`. The test file's `load(globals)` helper, which later tasks reuse.
+- Produces: `englishHalf(s) -> string`, `escapeHtml(s) -> string`, `isEmail(s) -> boolean`, `westernDigits(s) -> string` (Arabic-Indic digits converted, everything else kept), `waDigits(s) -> string` (digits for `wa.me`, or `''`), `formatRiyadh(date) -> string` (`Saturday 10 October 2026, 14:05`, or `''` for an invalid date). Globals `SENDER_NAME`, `SUBJECT_PREFIX`, `NAVY`, `LINK`, `GOLD`. The test file's `load(globals)` helper, which later tasks reuse.
 
 - [ ] **Step 1: Write the failing tests**
 
@@ -93,6 +93,14 @@ test('isEmail accepts a plain address and rejects the rest', () => {
   assert.equal(isEmail('suzan@'), false);
   assert.equal(isEmail(''), false);
   assert.equal(isEmail(null), false);
+});
+
+test('westernDigits converts Arabic-Indic digits and leaves the rest', () => {
+  const { westernDigits } = load();
+  assert.equal(westernDigits('٠٥٠ ١٢٣ ٤٥٦٧'), '050 123 4567');
+  assert.equal(westernDigits('۰۵۰'), '050');
+  assert.equal(westernDigits('050 123 4567'), '050 123 4567');
+  assert.equal(westernDigits(null), '');
 });
 
 test('waDigits normalises Saudi and international numbers', () => {
@@ -171,14 +179,21 @@ function isEmail(s) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(s == null ? '' : s).trim());
 }
 
-/* Digits for a wa.me link, or '' when the text is not a usable number.
-   Arabic-Indic and Eastern Arabic-Indic digits are converted first. A Saudi
-   mobile typed as 05x, 5x, +966 or 00966 becomes 966xxxxxxxxx; any other
-   8 to 15 digit run with a country code is kept as typed. */
+/* Arabic-Indic (U+0660 to U+0669) and Eastern Arabic-Indic (U+06F0 to U+06F9)
+   digits to Western ones. Used before a number is linked and before it is
+   shown: a run of Arabic-Indic digit groups reverses its order in a
+   left-to-right line, so the email never shows them. */
+function westernDigits(s) {
+  return String(s == null ? '' : s)
+    .replace(/[\u0660-\u0669]/g, function (c) { return String(c.charCodeAt(0) - 0x0660); })
+    .replace(/[\u06F0-\u06F9]/g, function (c) { return String(c.charCodeAt(0) - 0x06F0); });
+}
+
+/* Digits for a wa.me link, or '' when the text is not a usable number. A
+   Saudi mobile typed as 05x, 5x, +966 or 00966 becomes 966xxxxxxxxx; any
+   other 8 to 15 digit run with a country code is kept as typed. */
 function waDigits(s) {
-  var t = String(s == null ? '' : s).trim()
-    .replace(/[٠-٩]/g, function (c) { return String(c.charCodeAt(0) - 0x0660); })
-    .replace(/[۰-۹]/g, function (c) { return String(c.charCodeAt(0) - 0x06F0); });
+  var t = westernDigits(s).trim();
   var plus = t.charAt(0) === '+';
   var d = t.replace(/\D/g, '');
   if (!plus && d.indexOf('00') === 0) d = d.slice(2);
@@ -207,7 +222,7 @@ function formatRiyadh(date) {
 - [ ] **Step 4: Run the tests to verify they pass**
 
 Run: `node --test tools/ask-a-question/code.test.mjs`
-Expected: `# pass 5`, `# fail 0`.
+Expected: `# pass 6`, `# fail 0`.
 
 - [ ] **Step 5: Commit**
 
@@ -313,7 +328,7 @@ test('parseAnswers survives null answers and no items', () => {
 - [ ] **Step 2: Run the tests to verify they fail**
 
 Run: `node --test tools/ask-a-question/code.test.mjs`
-Expected: the six new tests FAIL with `parseAnswers is not a function`; the five from Task 1 still pass.
+Expected: the six new tests FAIL with `parseAnswers is not a function`; the six from Task 1 still pass.
 
 - [ ] **Step 3: Write parseAnswers**
 
@@ -379,7 +394,7 @@ function parseAnswers(items, email, timestamp) {
 - [ ] **Step 4: Run the tests to verify they pass**
 
 Run: `node --test tools/ask-a-question/code.test.mjs`
-Expected: `# pass 11`, `# fail 0`.
+Expected: `# pass 12`, `# fail 0`.
 
 - [ ] **Step 5: Commit**
 
@@ -397,7 +412,7 @@ git commit -m "Parse a form submission into named answers, forgiving title edits
 - Modify: `tools/ask-a-question/code.test.mjs` (append)
 
 **Interfaces:**
-- Consumes: `englishHalf`, `escapeHtml`, `waDigits`, `formatRiyadh`, `SUBJECT_PREFIX`, `NAVY`, `LINK`, `GOLD`, and the `answers` shape from Task 2.
+- Consumes: `englishHalf`, `escapeHtml`, `westernDigits`, `waDigits`, `formatRiyadh`, `SUBJECT_PREFIX`, `NAVY`, `LINK`, `GOLD`, and the `answers` shape from Task 2.
 - Produces: `buildSubject(a, testMode) -> string`, `buildHtml(a, sheetUrl) -> string`, `buildText(a, sheetUrl) -> string`, `buildMessage(a, sheetUrl, testMode) -> { subject, html, text }`, `fallbackMessage(items, email, timestamp, testMode, err) -> { subject, html: '', text }`. Helpers `row(label, valueHtml)`, `mobileHtml(mobile)`, `notGiven()`, `breakLines(s)`.
 
 - [ ] **Step 1: Write the failing tests**
@@ -455,9 +470,10 @@ test('buildHtml says Not given for a missing mobile and shows an odd one as type
   const odd = buildHtml(answers({ mobile: 'no' }), '');
   assert.match(odd, />no</);
   assert.doesNotMatch(odd, /wa\.me/);
-  const arabic = buildHtml(answers({ mobile: '٠٥٠٨٥٥١٠٠٦' }), '');
+  const arabic = buildHtml(answers({ mobile: '٠٥٠ ٨٥٥ ١٠٠٦' }), '');
   assert.match(arabic, /wa\.me\/966508551006/);
-  assert.match(arabic, /٠٥٠٨٥٥١٠٠٦/);
+  assert.match(arabic, />050 855 1006 /, 'shown in Western digits so the groups keep their order');
+  assert.doesNotMatch(arabic, /[\u0660-\u0669]/);
 });
 
 test('buildHtml lists an extra question, drops the sheet link without a sheet, and warns without an email', () => {
@@ -471,6 +487,7 @@ test('buildHtml lists an extra question, drops the sheet link without a sheet, a
 
 test('buildText carries every field, the WhatsApp link and the sheet', () => {
   const { buildText } = load();
+  assert.ok(buildText(answers({ mobile: '٠٥٠ ٨٥٥ ١٠٠٦' }), '').includes('Mobile: 050 855 1006 (WhatsApp: https://wa.me/966508551006)'));
   const text = buildText(answers({ extra: [{ title: 'Class', answer: '9A' }] }), SHEET);
   for (const line of [
     'Received: Saturday 10 October 2026, 14:05',
@@ -510,7 +527,7 @@ test('fallbackMessage lists every raw answer with the error', () => {
 - [ ] **Step 2: Run the tests to verify they fail**
 
 Run: `node --test tools/ask-a-question/code.test.mjs`
-Expected: the eight new tests FAIL with `buildSubject is not a function` and the like; the eleven earlier ones pass.
+Expected: the eight new tests FAIL with `buildSubject is not a function` and the like; the twelve earlier ones pass.
 
 - [ ] **Step 3: Write the message builders**
 
@@ -542,7 +559,7 @@ function row(label, valueHtml) {
 function mobileHtml(mobile) {
   if (!mobile) return notGiven();
   var d = waDigits(mobile);
-  var text = escapeHtml(mobile);
+  var text = escapeHtml(westernDigits(mobile));
   if (!d) return text;
   return text + ' &nbsp;&nbsp;<a href="https://wa.me/' + d + '" style="color:' + LINK + ';">Open in WhatsApp</a>';
 }
@@ -595,7 +612,7 @@ function buildText(a, sheetUrl) {
     'Topic: ' + (a.topic || 'Not given'),
     'Question: ' + (a.question || 'Not given'),
     'Email: ' + (a.email || 'Not given'),
-    'Mobile: ' + (a.mobile ? a.mobile + (wa ? ' (WhatsApp: https://wa.me/' + wa + ')' : '') : 'Not given')
+    'Mobile: ' + (a.mobile ? westernDigits(a.mobile) + (wa ? ' (WhatsApp: https://wa.me/' + wa + ')' : '') : 'Not given')
   ];
   (a.extra || []).forEach(function (x) { lines.push(x.title + ': ' + x.answer); });
   lines.push('');
@@ -631,7 +648,7 @@ function fallbackMessage(items, email, timestamp, testMode, err) {
 - [ ] **Step 4: Run the tests to verify they pass**
 
 Run: `node --test tools/ask-a-question/code.test.mjs`
-Expected: `# pass 19`, `# fail 0`.
+Expected: `# pass 20`, `# fail 0`.
 
 - [ ] **Step 5: Commit**
 
@@ -799,14 +816,14 @@ test('sendSample sends a marked sample with an Arabic question and a linked mobi
   assert.equal(g.sent[0].to, 'head@example.com');
   assert.match(g.sent[0].subject, /^\[TEST\] New question: Attendance and Timetable, Grade 9, Sample Parent$/);
   assert.match(g.sent[0].htmlBody, /wa\.me\/9665/);
-  assert.match(g.sent[0].htmlBody, /[؀-ۿ]/);
+  assert.match(g.sent[0].htmlBody, /[\u0600-\u06FF]/);
 });
 ```
 
 - [ ] **Step 2: Run the tests to verify they fail**
 
 Run: `node --test tools/ask-a-question/code.test.mjs`
-Expected: the eleven new tests FAIL (`config is not a function`, `onFormSubmit is not a function`, and so on); the nineteen earlier ones pass.
+Expected: the eleven new tests FAIL (`config is not a function`, `onFormSubmit is not a function`, and so on); the twenty earlier ones pass.
 
 - [ ] **Step 3: Write the shells**
 
@@ -919,7 +936,7 @@ function status() {
 - [ ] **Step 4: Run the tests to verify they pass**
 
 Run: `node --test tools/ask-a-question/code.test.mjs`
-Expected: `# pass 30`, `# fail 0`.
+Expected: `# pass 31`, `# fail 0`.
 
 - [ ] **Step 5: Check the file holds no address and no ID, and no banned syntax**
 
@@ -1122,7 +1139,7 @@ reps = [
    '<p data-i18n="start.ask.d">Parents and students can send us a question about anything, any time through the year.</p>'),
   ('<p class="lead" data-i18n="ask.lead">Send it through the form and we will come back to you by email.</p>',
    '<p class="lead" data-i18n="ask.lead">Send it through the form at any time in the year and we will come back to you by email.</p>'),
-  ('<p class="note" data-i18n="ask.note">The form opens in a new tab and takes under a minute. Please include your child’s grade and class. Prefer email? <a href=',
+  ('<p class="note" data-i18n="ask.note">The form opens in a new tab and takes under a minute. Please include your child\u2019s grade and class. Prefer email? <a href=',
    '<p class="note" data-i18n="ask.note">The form is for parents and students, opens in a new tab and takes under a minute. Prefer email? <a href='),
 ]
 for a, b in reps:
