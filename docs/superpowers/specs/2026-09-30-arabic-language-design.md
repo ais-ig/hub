@@ -159,12 +159,21 @@ Translators and reviewers use these and nothing else for these terms.
 | Beyond the books | خارج الصف |
 | Apply for Student Council | الترشح لمجلس الطلاب |
 | in English (PDF tag) | بالإنجليزية |
+| Tests and exams (section), test | الاختبارات، اختبار |
+| Zero Period | الحصة الصفرية |
+| Test day, test room | يوم الاختبار، قاعة الاختبار |
+| Make-up test | الاختبار التعويضي |
+| Holiday (a day off) | إجازة |
+| Science stream | المسار العلمي |
+| Smartwatch | الساعة الذكية |
+| Sihati (the Ministry of Health app) | تطبيق صحتي |
 
 "Homeroom" and "Homeroom mentor" are the two terms most likely to need the
 school's own wording. They are flagged in the log for the user.
 
 The glossary was amended after the three reviews of 30 September 2026, to
-match what the page says. الجوال is the school's own word: the Arabic side of
+match what the page says, and again on 10 October 2026 with the terms of the
+Tests and exams section, from "Tests and exams" to "Sihati". الجوال is the school's own word: the Arabic side of
 its phone commitment form reads "وأتعهد بعدم استخدام الجوال بالمدرسة". The
 Semester 1 letter is titled as it prints itself in Arabic, الخطة الدراسية
 وتوقعاتنا من الطالب. The open questions for the school are listed in

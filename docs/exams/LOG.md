@@ -26,6 +26,7 @@ in both languages, and to defer the internal tool.
    announcement goes out, so the hub is not where a family first hears of it.
 6. The page says the tests cover the IGCSE and A-Level subjects, the parents'
    calendar's own words, and nothing about quizzes for the Ministry subjects.
+   **Changed after review, see D13 below.**
 
 ## Decisions I made for you
 
@@ -42,7 +43,7 @@ in both languages, and to defer the internal tool.
 | D9 | "Semester One", not "Semester 1", in the new English. | The assessment section already says Semester One, and it keeps the digit check out of the Arabic ordinal. | None needed. |
 | D10 | A one-line cross-reference under the timetable note: on a test day the school day follows the Zero Period bell. Permanent, not retired after the round. | The timetable note states period times that are wrong on a test day. | Delete the `schedule.exams` paragraph and its Arabic. |
 | D11 | Two notices rather than one: the tests, and the holiday. Both dated 10 October 2026. | A holiday deserves its own line in the bell. | Delete `2026-10-10-holiday`. If you push on a later day, change the two `date` fields only. |
-| D12 | The sections between the new one and the next emblem band had their cream and white swapped, so the alternation holds. | Inserting a section shifts the pattern. | Cosmetic; swap back if a different order is preferred. |
+| D12 | Five sections, IGCSE results, Your IG pathway, Subject options, How marks are built and Support, had their cream and white swapped, through the first emblem band up to the second, so the alternation holds after the new section. | Inserting a section shifts the pattern. | Cosmetic; swap back if a different order is preferred. |
 
 ## Open with the school
 
@@ -59,3 +60,74 @@ in both languages, and to defer the internal tool.
 English and Arabic, no overflow at 380px with the page and with the bell
 open, language switch restores the page. `node tools/i18n.mjs pairs`
 regenerated `docs/arabic/translation-review.*`.
+
+## Review, 10 October 2026
+
+Two Opus agents reviewed commit 7425d2e: an accuracy review against the
+sources (`docs/exams/reports/accuracy-review.md`, 17 findings) and a critique
+as a parent and editor (`docs/exams/reports/critique.md`, 14 points). Every
+fact on the page matched the sources. What changed in the second commit:
+
+- **The Section's own Quarter 1 sheet was a source I had not read.**
+  `~/Downloads/Midterm_Test_Schedule_Quarter_1_2026-2027_-_British_Section_(Boys).docx`,
+  issued to students on 5 October, in the Section's own template. Its grids
+  match the two parent sheets row for row. Its "Important Information" list
+  gave the page a "Before a test" card: stationery and blue pen, no electronic
+  devices, and the rule a parent has to act on, a Sihati sick leave note within
+  3 days to sit the make-up test.
+- **The lead was rewritten.** The portal's "seated by 7:50 AM" went: it is a
+  student instruction, it is in none of the Section's sheets, and beside the
+  bell table it read as an arrival time. In its place the lead says the day
+  still starts at 6:30 and ends at 1:05, and that each test is worth 10 of
+  the 20 marks of Quarter 1.
+- **The bell paragraph was wrong.** It said periods 1 and 2 are shorter; every
+  period is 35 minutes on a test day, against 40. Fixed, and "their break"
+  became "their morning break", the only one that differs.
+- **The test row** in the bell tables had borrowed the 10px group-heading
+  style. It now has its own `tr.test` rule at normal size, and reads "Test
+  (Zero Period)".
+- **Grades 11 and 12** gained a muted Wednesday 28 October row, since the
+  subtitle and the notice say the window runs to the 28th.
+- **Muted rows** moved from `--muted` (about 3.8:1 on white) to `--ink-soft`
+  (about 5.7:1), so the holiday row passes AA contrast.
+- **Both notices were shortened** to the one thing a parent needs.
+- **Arabic.** Grades listed together are digits, as the spec rules and the
+  page already does (الصفان 9 و10). Four strings that read as translations were
+  rewritten: the cross-reference under the timetable note, the bell
+  paragraph, the lead's marks sentence, and the bell card heading.
+- **The glossary** in the Arabic spec gained the new terms, which D8 had
+  promised and the first commit forgot.
+- **`newUntil` cannot extend the New window**, only shorten it. Both notices
+  are dated 10 October, so they stop counting as new on 24 October, before
+  the last tests on 27 and 28 October. The README, CLAUDE.md and the section
+  comment said the window lived in `newUntil`; they no longer do. The values
+  stay, since they are harmless and follow the house convention.
+- **README** now tells the next editor to delete orphaned `exams.*` Arabic
+  entries, keeps the bell card between rounds so the timetable cross-reference
+  still points at something, and no longer gives a next-round date that was
+  right for Grades 9 and 10 only.
+
+### More decisions I made for you
+
+| # | Decision | Why | To reverse |
+|---|---|---|---|
+| D13 | The page now says Quran tests for every grade, and Arabic MoE tests for Grades 9 and 10, take place in class during the same two weeks. This changes decision 6. | The Section's own sheet states it, to students, for this round. The earlier line, "the tests cover the IGCSE and A-Level subjects", came from the calendar and was contradicted by that sheet (Quran and Arabic MoE tests in class; Grade 12's English test is English MoE). | Delete the `exams.lead2` paragraph and its Arabic entry. |
+| D14 | The "Before a test" card carries the Sihati make-up rule, stationery and blue pen, and the device ban, from the Section's sheet. "Smartwatch" is named because the portal's rules box names it and a smartwatch is an electronic device. | A parent has to act on the Sihati rule within 3 days. | Delete the card and its three `exams.prep.*` entries. |
+| D15 | Grade 12's Monday test is written "English", as on the parents' sheet, though the Section's sheet says "English MoE". | The two grades share one table and the parents' sheet says English. | Split the row or add "(Grade 12: English MoE)". |
+| D16 | The bell card stays between rounds, and D10's cross-reference line with it. | The line points to the bell; removing one without the other leaves a dangling pointer. | Remove both together. |
+
+### Still open with the school, after review
+
+- Is the 12:10 to 12:30 break on a test day the Salah break? The bell sheet
+  has no Salah row; the page copies it and claims nothing.
+- A reminder notice near 24 October ("Mid-Term Tests resume Tuesday 27
+  October"), dated the day it goes live, if the tests notice should be back in
+  the strip for the last three test days.
+- The holiday gate (item 5 above) and D7 (the Grade 9 bell) stand.
+
+### Checks after the second commit
+
+`node tools/check.mjs` all passed. `bash tools/render-check.sh` all passed
+in both languages. Captures of the revised section at 800px and 380px in both
+languages were looked at.
+

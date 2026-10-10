@@ -81,7 +81,7 @@ The Arabic follows the same rules and a few of its own. The full list and the gl
 | Section | Source |
 |---|---|
 | Class timetables | The aSc export `IG Classes.pdf`, published as `assets/class-timetables-boys.pdf`. Boys campus, 11 pages, one per class in a fixed order. Revised several times a term; superseded copies go to `assets/archive/`. |
-| Tests and exams (`#exams`) | The two `Mid-Term Test Schedule` sheets sent to parents on 5 October 2026, `Grades 9–10 (UK)` and `Grades 11–12 (UK) – Science Stream`, one Word page each, and `Zero Period- Mid Term Tests.docx`, the bell sheet for test days. All three also sit on the IT portal's school-wide page, `smartstudygrid.github.io/mid-term-2026/`, which is a cross-check, not a source, and is not linked: it is English only, in another design, and shows every section's grades. The sheets' headings end the window two days early, 26 and 25 October against last tests on 28 and 27 October, so they are not published; the section is the complete copy. The holiday on Sunday 25 October and the buffer day on Monday 26 October were confirmed by the Head of Section on 10 October 2026. |
+| Tests and exams (`#exams`) | Three sheets. The Section's own `Midterm_Test_Schedule_Quarter_1_2026-2027_-_British_Section_(Boys).docx`, issued to students on 5 October 2026: one grid per grade (9IG, 10IG, 11AS Science, 12A2 Science) and an "Important Information" list, which is the source of the "Before a test" card (stationery and blue pen, no electronic devices, the Sihati sick leave note within 3 days for a make-up test) and of the line that Quran tests for all grades and Arabic MoE tests for Grades 9 and 10 run in class in the same weeks. The two `Mid-Term Test Schedule` sheets the school sent parents the same day, `Grades 9–10 (UK)` and `Grades 11–12 (UK) – Science Stream`, one Word page each, whose rows match the Section's sheet; their headings end the window two days early, 26 and 25 October against last tests on 28 and 27 October, so they are not published and the section is the complete copy. And `Zero Period- Mid Term Tests.docx`, the bell sheet for test days. The IT portal's school-wide page, `smartstudygrid.github.io/mid-term-2026/`, carries the same data and is a cross-check only, not linked: English only, another design, every section's grades. Its rules box is the one source for the word "smartwatch"; its "seated by 7:50" rule is not on the page. The Section's sheet lists Grade 12's Monday test as `English MoE`; the page writes it as English like Grade 11's. The holiday on Sunday 25 October and the buffer day on Monday 26 October were confirmed by the Head of Section on 10 October 2026. |
 | Period times | `Daily Schedule (Summer) – British Section`, Grades 9 to 12, 2026/27. This is the authority for the times in the banner and in the `#schedule` note, **not** the aSc export. Homeroom 6:30, periods 1 to 8 from 6:45 to 12:35, break 9:25 to 9:55, Salah 12:35 to 13:05. Note it is the **Summer** schedule; a Winter one will need these swapped. |
 | Results, pathway, support, activities, behaviour | `Parents Meet and Greet 2026-2027.pptx.pdf`, the final 31-page 2026/27 deck, published as `assets/presentation-g9-g10.pdf`. This is the primary source and supersedes the 2025 deck and the earlier "(AIS template)" drafts. |
 | Homeroom mentors (`#mentors`) | `Homeroom Mentors 2026-2027.docx.pdf`, Mentorship Programme, British Section, issued 13 September 2026. Covers Grades 9 to 12, 11 classes, and supersedes slide 19 of the deck. Not published as a download. When it changes, add an `updatesData` entry linking `#mentors`. |
@@ -127,15 +127,18 @@ together.
 
 **A fifth coupling was added on 10 October 2026, with Tests and exams.** The
 test window is stated in the section's subtitle and lead, in the hero
-button's `data-until` and in the `newUntil` of the notices that announce it,
-and all move together. On a test day the school day follows the Zero Period
-bell, not the Daily Schedule, so the two bell tables in `#exams` and the
-cross-reference line under the `#schedule` note are a pair: a new bell sheet
-changes both. Grade 9 follows the school's Grades 4 to 9 bell and Grades 10 to
-12 the Grades 10 to 12 bell, as the bell sheet and the IT portal's note both
-have it; the Section follows the Zero Period bell on each grade's own test
-days, confirmed by the user on 10 October 2026. The 6:30 row is written
-Homeroom, the Daily Schedule's word, where the bell sheet says Assembly.
+button's `data-until` and in the title and text of the notice that announces
+it, and all move together. A notice's `newUntil` is not part of this: it only
+ends the 14-day New window early, never extends it. On a test day the school
+day follows the Zero Period bell, not the Daily Schedule, so the bell tables
+in `#exams` and the cross-reference line under the `#schedule` note go
+together: a round with no Zero Period bell removes or rewords that line.
+Grade 9 follows the school's Grades 4 to 9 bell and Grades 10 to 12 the Grades
+10 to 12 bell, as the bell sheet and the IT portal's own note ("Grade 9
+follows Grades 4–9; Grade 10 follows Grades 10–12") both have it, and the
+Section follows the Zero Period bell on each grade's own test days, confirmed
+by the Head of Section on 10 October 2026. The 6:30 row is written Homeroom,
+the Daily Schedule's word, where the bell sheet says Assembly.
 
 Changes already carried in for 2026/27, worth knowing: Grade 9 Islamic Studies moved 3 to 2 periods and Quran 2 to 3; several optional loads changed in both grades; Grade 9 gained an optional Hifdh Programme, which sits inside the existing three Quran periods and neither adds to the forty-period week nor replaces a subject.
 

@@ -156,33 +156,40 @@ their copy.
 the way Class timetables carries the current timetable, and is swapped each
 round rather than added to. It went in on 10 October 2026 with the Semester
 One Mid-Term Tests, Sunday 18 to Wednesday 28 October 2026. The sources are
-the two Mid-Term Test Schedule sheets the school sent parents on 5 October
-2026, Grades 9 to 10 and Grades 11 to 12 Science stream, and the Zero Period
-bell sheet. The sheets' own headings end the window two days early, so they
-were not published; the section is the complete copy. The holiday on Sunday
-25 October, and Monday 26 October being a buffer day with no test, were
-confirmed by the Head of Section on 10 October 2026.
+listed in `CLAUDE.md`, "Content sources".
 
 The window is stated in four places that move together: the section's
 subtitle and lead, the hero button's `data-until` (the last test day, 11:59
-PM Riyadh time) and the `newUntil` of the two notices. The Zero Period bell
-has two tables because Grade 9 follows the school's Grades 4 to 9 bell and
-Grades 10 to 12 the Grades 10 to 12 bell; their break falls at different
-times. The 6:30 row is written Homeroom, as the Daily Schedule and the
-timetable note call it, where the bell sheet says Assembly.
+PM Riyadh time), and the title and text of the notice that announces the
+round. A notice's `newUntil` is not one of them: it only ends the 14-day New
+window early, so a notice dated 10 October stops counting as new on
+24 October whatever its `newUntil` says. For a round that runs longer than
+14 days from the notice, post a short reminder notice nearer the time, dated
+the day it goes live. The Zero Period bell has two tables because Grade 9
+follows the school's Grades 4 to 9 bell and Grades 10 to 12 the Grades 10 to
+12 bell; their morning break falls at different times. The 6:30 row is
+written Homeroom, as the Daily Schedule and the timetable note call it, where
+the bell sheet says Assembly.
 
 For the next round:
 
-1. Replace the subtitle, the lead and the day-by-day tables with the new
+1. Replace the subtitle, the leads and the day-by-day tables with the new
    round's dates and subjects. Reuse the `subj.*` keys for subject names and
-   the `exams.d.*` keys for dates, adding new ones as needed. Give a holiday
-   or a buffer day a row of its own with `class="off"`, so a gap explains
-   itself. Keep the Zero Period tables unless the school issues a new bell
-   sheet.
+   the `exams.d.*` keys for dates, adding new ones as needed, and delete from
+   `i18nAr` every `exams.*` entry whose key has left the page; the check
+   names them. Give a holiday or a buffer day a row of its own with
+   `class="off"`, so a gap explains itself. Keep the Zero Period tables and
+   the "Before a test" card unless the school issues a new bell sheet or new
+   rules; a round that does not run in Zero Period, such as the Final
+   Examinations, replaces the bell card and rewords the `schedule.exams` line
+   under the timetable note with it.
 2. Set the hero button's `data-until` to the last test day, and change its
    text if the round has another name.
-3. Add one notice to `updatesData` with `newUntil` on the last test day, and
-   one for any holiday inside the window. Date them the day they go live.
+3. Add one notice to `updatesData` announcing the round, with the window in
+   its title, and one for any holiday inside the window. Date them the day
+   they go live. `newUntil` only shortens the New window (see above); set it
+   to the last test day all the same, so a notice posted late in a round
+   stops being new when the round ends.
 4. Every changed string needs its Arabic and a stamp, and every new key a
    `merge`; see "Arabic".
 5. `node tools/check.mjs && bash tools/render-check.sh`, then look at the
@@ -190,12 +197,15 @@ For the next round:
    run longer than the English.
 
 Between rounds, once the window has passed, swap the round for the next one
-the parents' calendar names: the subtitle becomes "Next: Semester One
-Examinations, from Tuesday 29 December 2026", the lead one line saying the
-day-by-day schedule appears here once the school issues it, and the tables
-and the bell come out. Do not announce a schedule nobody has committed to
-producing, and do not delete the section or its menu entry: `#exams` is a
-link parents keep.
+the parents' calendar names, taking each grade group's date from the calendar
+separately, since Grades 11 and 12 sit their mock examinations a month before
+Grades 9 and 10 sit the Final Examination. The subtitle names the next round
+and its first date, the lead is one line saying the day-by-day schedule
+appears here once the school issues it, and the day-by-day tables come out.
+The "Before a test" card and the bell card stay, since the `schedule.exams`
+line under the timetable note points to the bell. Do not announce a schedule
+nobody has committed to producing, and do not delete the section or its menu
+entry: `#exams` is a link parents keep.
 
 ## Recording a change
 

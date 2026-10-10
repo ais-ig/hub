@@ -1,6 +1,6 @@
 # Translation review · AIS Parent Hub
 
-431 strings · 0 missing Arabic
+435 strings · 0 missing Arabic
 
 Written by `node tools/i18n.mjs pairs`. Do not edit by hand.
 
@@ -108,7 +108,7 @@ Written by `node tools/i18n.mjs pairs`. Do not edit by hand.
 | `schedule.title` | Class timetables | الجداول الدراسية |
 | `schedule.sub` | Grades 9 to 12 · boys campus · in effect from Sunday 27 September 2026 | الصفوف من 9 إلى 12 · مقر البنين · يُعمل بها اعتباراً من الأحد 27 سبتمبر 2026 |
 | `schedule.note` | The week runs Sunday to Thursday. Homeroom is at 6:30 AM, periods 1 to 8 run from 6:45 AM to 12:35 PM with break from 9:25 to 9:55, and Salah is from 12:35 to 1:05 PM. Tap your child’s class to open their timetable. | أسبوع الدراسة من الأحد إلى الخميس. حصة الريادة في 6:30 صباحاً، والحصص من 1 إلى 8 من 6:45 صباحاً إلى 12:35 ظهراً، وتتخللها الفسحة من 9:25 إلى 9:55 صباحاً، والصلاة من 12:35 إلى 1:05 ظهراً. اضغطوا على فصل ابنكم لفتح جدوله. |
-| `schedule.exams` | On a day with a test, the school day follows the Zero Period bell instead. See Tests and exams. | وفي اليوم الذي فيه اختبار، يسير اليوم الدراسي وفق جدول الحصة الصفرية بدلاً من ذلك. انظروا الاختبارات. |
+| `schedule.exams` | On a day with a test, the school day follows the Zero Period bell instead. See Tests and exams. | أما في أيام الاختبارات فيُطبَّق جدول الحصة الصفرية، وتجدونه في قسم الاختبارات. |
 | `schedule.pill.9a` | Grade 9A class timetable | الجدول الدراسي للفصل 9A |
 | `schedule.pill.9b` | Grade 9B class timetable | الجدول الدراسي للفصل 9B |
 | `schedule.pill.9c` | Grade 9C class timetable | الجدول الدراسي للفصل 9C |
@@ -129,8 +129,9 @@ Written by `node tools/i18n.mjs pairs`. Do not edit by hand.
 |---|---|---|
 | `exams.title` | Tests and exams | الاختبارات |
 | `exams.sub` | Mid-Term Tests · Semester One · Grades 9 to 12 · Sunday 18 to Wednesday 28 October 2026 | اختبارات منتصف الفصل · الفصل الدراسي الأول · الصفوف من 9 إلى 12 · من الأحد 18 إلى الأربعاء 28 أكتوبر 2026 |
-| `exams.lead` | The Semester One Mid-Term Tests run from Sunday 18 October to Wednesday 28 October 2026. Every test is sat in Zero Period, 7:55 to 8:55 AM, and students should be in their seats by 7:50 AM. The tests cover the IGCSE and A-Level subjects. For Grades 9 and 10, each one is the Mid-Term Test that carries 10 marks of Quarter 1, as set out under How marks are built. | تُعقد اختبارات منتصف الفصل الدراسي الأول من الأحد 18 أكتوبر إلى الأربعاء 28 أكتوبر 2026. ويُجرى كل اختبار في الحصة الصفرية من 7:55 إلى 8:55 صباحاً، وعلى الطلاب أن يكونوا في مقاعدهم بحلول 7:50 صباحاً. وتشمل الاختبارات مواد IGCSE و A-Level. وفي الصفين التاسع والعاشر، كل اختبار منها هو اختبار منتصف الفصل الذي يحمل 10 درجات من الربع الأول، كما هو مبيّن في طريقة احتساب الدرجات. |
-| `exams.g910.h` | Grades 9 and 10 | الصفان التاسع والعاشر |
+| `exams.lead` | The Semester One Mid-Term Tests run from Sunday 18 to Wednesday 28 October 2026. Each test is from 7:55 to 8:55 AM, after periods 1 and 2, so the school day still starts at 6:30 AM and ends at 1:05 PM as usual. In Grades 9 and 10, each test is worth 10 of the 20 marks for Quarter 1, as set out under How marks are built. | تُعقد اختبارات منتصف الفصل الدراسي الأول من الأحد 18 إلى الأربعاء 28 أكتوبر 2026. ويُجرى كل اختبار من 7:55 إلى 8:55 صباحاً بعد الحصتين الأولى والثانية، ولذلك يبدأ اليوم الدراسي في 6:30 صباحاً وينتهي في 1:05 ظهراً كالمعتاد. وفي الصفين 9 و10، تُخصَّص لكل اختبار 10 درجات من أصل 20 درجة للربع الأول، كما هو مبيّن في طريقة احتساب الدرجات. |
+| `exams.lead2` | Quran tests for every grade, and Arabic MoE tests for Grades 9 and 10, take place in class during the same two weeks. | وتُعقد اختبارات القرآن الكريم لجميع الصفوف، واختبارات اللغة العربية (وزارة التعليم) للصفين 9 و10، داخل الفصول خلال الأسبوعين نفسيهما. |
+| `exams.g910.h` | Grades 9 and 10 | الصفان 9 و10 |
 | `exams.th.day` | Day | اليوم |
 | `exams.d.1018` | Sunday 18 October | الأحد 18 أكتوبر |
 | `exams.d.1019` | Monday 19 October | الاثنين 19 أكتوبر |
@@ -145,10 +146,14 @@ Written by `node tools/i18n.mjs pairs`. Do not edit by hand.
 | `exams.d.1027` | Tuesday 27 October | الثلاثاء 27 أكتوبر |
 | `exams.d.1028` | Wednesday 28 October | الأربعاء 28 أكتوبر |
 | `exams.s.arabicacc` | Arabic or Accounting | اللغة العربية (Arabic) أو المحاسبة (Accounting) |
-| `exams.g1112.h` | Grades 11 and 12, Science stream | الصفان الحادي عشر والثاني عشر، المسار العلمي |
+| `exams.g1112.h` | Grades 11 and 12, Science stream | الصفان 11 و12، المسار العلمي |
 | `exams.s.biocs` | Biology or Computer Science | الأحياء (Biology) أو علوم الحاسب (Computer Science) |
-| `exams.bell.h` | The school day on a test day | اليوم الدراسي في يوم الاختبار |
-| `exams.bell.p` | On a day with a test, the school day follows the Zero Period bell below instead of the usual timetable: periods 1 and 2 are shorter, the test fills Zero Period, and lessons carry on afterwards until 1:05 PM. Grade 9 has one table and Grades 10 to 12 another, because their break falls at different times. On a day without a test, the usual timetable runs. | في اليوم الذي فيه اختبار، يسير اليوم الدراسي وفق جدول الحصة الصفرية أدناه بدلاً من الجدول المعتاد: تكون الحصتان الأولى والثانية أقصر، ويشغل الاختبار الحصة الصفرية، ثم تستمر الدراسة بعده حتى 1:05 ظهراً. وللصف التاسع جدول، وللصفوف من 10 إلى 12 جدول آخر، لأن موعد الفسحة يختلف بينهما. وفي اليوم الذي لا اختبار فيه، يسير الجدول المعتاد. |
+| `exams.prep.h` | Before a test | قبل الاختبار |
+| `exams.prep.li1` | Your son brings his own stationery and answers in blue pen. | يُحضر ابنكم أدواته الكتابية الخاصة، ويكتب إجاباته بالقلم الأزرق. |
+| `exams.prep.li2` | No phone, smartwatch or other electronic device is allowed in the test room. See Policies. | لا يُسمح بالجوال ولا بالساعة الذكية ولا بأي جهاز إلكتروني آخر في قاعة الاختبار. وللمزيد راجعوا قسم السياسات. |
+| `exams.prep.li3` | If he misses a test through illness, he can sit a make-up test once he brings a sick leave note from Sihati, within 3 days of the test. | وإذا تغيّب عن اختبار بسبب المرض، فيمكنه أداء الاختبار التعويضي بعد إحضار إجازة مرضية من تطبيق صحتي خلال 3 أيام من موعد الاختبار. |
+| `exams.bell.h` | The school day on a test day | اليوم الدراسي في أيام الاختبارات |
+| `exams.bell.p` | On a test day the school day follows the Zero Period bell below instead of the usual timetable: every period is 35 minutes instead of 40, the test fills Zero Period, and lessons carry on afterwards until 1:05 PM. Grade 9 has one table and Grades 10 to 12 another, because their morning break falls at different times. On a day without a test, the usual timetable runs. | في يوم الاختبار يسير اليوم الدراسي وفق جدول الحصة الصفرية أدناه بدلاً من الجدول الدراسي المعتاد: تصبح مدة كل حصة 35 دقيقة بدلاً من 40، ويشغل الاختبار الحصة الصفرية، ثم تستمر الدراسة بعده حتى 1:05 ظهراً. وللصف 9 جدول، وللصفوف من 10 إلى 12 جدول آخر، لأن موعد الفسحة الأولى يختلف بينهما. وفي الأيام التي لا اختبار فيها يُعمل بالجدول الدراسي المعتاد. |
 | `exams.th.period` | Period | الحصة |
 | `exams.th.time` | Time | الوقت |
 | `exams.l.hr` | Homeroom | حصة الريادة |
@@ -157,7 +162,7 @@ Written by `node tools/i18n.mjs pairs`. Do not edit by hand.
 | `exams.t.0645` | 6:45 – 7:20 AM | من 6:45 إلى 7:20 صباحاً |
 | `exams.l.p2` | Period 2 | الحصة الثانية |
 | `exams.t.0720` | 7:20 – 7:55 AM | من 7:20 إلى 7:55 صباحاً |
-| `exams.l.zero` | Zero Period, the test | الحصة الصفرية، الاختبار |
+| `exams.l.zero` | Test (Zero Period) | الاختبار (الحصة الصفرية) |
 | `exams.t.0755` | 7:55 – 8:55 AM | من 7:55 إلى 8:55 صباحاً |
 | `exams.l.break` | Break | الفسحة |
 | `exams.t.0855a` | 8:55 – 9:15 AM | من 8:55 إلى 9:15 صباحاً |
@@ -178,7 +183,6 @@ Written by `node tools/i18n.mjs pairs`. Do not edit by hand.
 | `exams.t.0855b` | 8:55 – 9:30 AM | من 8:55 إلى 9:30 صباحاً |
 | `exams.t.0930` | 9:30 – 10:05 AM | من 9:30 إلى 10:05 صباحاً |
 | `exams.t.1005` | 10:05 – 10:25 AM | من 10:05 إلى 10:25 صباحاً |
-| `exams.bell.note` | Phones, electronic devices and smartwatches are not allowed in the test room. See Policies. | لا يُسمح بالجوالات ولا بالأجهزة الإلكترونية ولا بالساعات الذكية في قاعة الاختبار. انظروا السياسات. |
 
 ## s3
 
@@ -528,10 +532,10 @@ Written by `node tools/i18n.mjs pairs`. Do not edit by hand.
 | Key | English | Arabic |
 |---|---|---|
 | `updates.2026-10-10-midterm.title` | Mid-Term Tests run from 18 to 28 October | اختبارات منتصف الفصل من 18 إلى 28 أكتوبر |
-| `updates.2026-10-10-midterm.text` | Grades 9 to 12 sit the Semester One Mid-Term Tests in Zero Period, 7:55 to 8:55 AM, from Sunday 18 October to Wednesday 28 October. The day-by-day schedule for each grade, and the school day’s timings on a test day, are on the page. | يؤدي طلاب الصفوف من 9 إلى 12 اختبارات منتصف الفصل الدراسي الأول في الحصة الصفرية من 7:55 إلى 8:55 صباحاً، من الأحد 18 أكتوبر إلى الأربعاء 28 أكتوبر. وتجدون في الصفحة جدول كل صف يوماً بيوم، ومواعيد اليوم الدراسي في أيام الاختبارات. |
+| `updates.2026-10-10-midterm.text` | For Grades 9 to 12, each test is from 7:55 to 8:55 AM, after periods 1 and 2. The school day still starts at 6:30 AM and ends at 1:05 PM. | لطلاب الصفوف من 9 إلى 12، يُجرى كل اختبار من 7:55 إلى 8:55 صباحاً بعد الحصتين الأولى والثانية. ويبقى اليوم الدراسي من 6:30 صباحاً إلى 1:05 ظهراً كالمعتاد. |
 | `updates.2026-10-10-midterm.label` | See the test schedule | عرض جدول الاختبارات |
 | `updates.2026-10-10-holiday.title` | No school on Sunday 25 October | لا دراسة يوم الأحد 25 أكتوبر |
-| `updates.2026-10-10-holiday.text` | Sunday 25 October is a holiday. Lessons resume on Monday 26 October as usual, with no test that day, and the Mid-Term Tests continue on Tuesday 27 October. | يوم الأحد 25 أكتوبر إجازة. وتُستأنف الدراسة يوم الاثنين 26 أكتوبر كالمعتاد من دون اختبار في ذلك اليوم، وتستمر اختبارات منتصف الفصل يوم الثلاثاء 27 أكتوبر. |
+| `updates.2026-10-10-holiday.text` | Sunday 25 October is a holiday. Monday 26 October is a normal school day with no test, and the Mid-Term Tests continue on Tuesday 27 October. | يوم الأحد 25 أكتوبر إجازة. ويوم الاثنين 26 أكتوبر يوم دراسي عادي بلا اختبار، وتستمر اختبارات منتصف الفصل يوم الثلاثاء 27 أكتوبر. |
 | `updates.2026-10-10-holiday.label` | See the test schedule | عرض جدول الاختبارات |
 | `updates.2026-10-03-arabic.title` | The hub is now in Arabic too | البوابة متاحة الآن باللغة العربية |
 | `updates.2026-10-03-arabic.text` | Tap العربية at the top of the page to read everything in Arabic. Tap English to switch back. The documents themselves are still in English. | اضغطوا على «العربية» أعلى الصفحة لقراءة جميع المحتويات بالعربية، واضغطوا على English للعودة. أما المستندات نفسها فما زالت بالإنجليزية. |
