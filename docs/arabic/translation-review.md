@@ -83,7 +83,7 @@ Written by `node tools/i18n.mjs pairs`. Do not edit by hand.
 | `start.guide.t` | 🗺️ · Parent Guide · Boys campus | 🗺️ · دليل أولياء الأمور · مقر البنين |
 | `start.guide.d` | Your child’s teachers by class, and staff contacts for the British Section. Grades 9 to 12. Includes the map from the evening of 9 September 2026. | معلمو ابنكم بحسب الفصل، وبيانات التواصل مع منسوبي القسم البريطاني. الصفوف من 9 إلى 12. يتضمن خريطة اللقاء الذي أقيم مساء 9 سبتمبر 2026. |
 | `start.ask.t` | 💬 · Ask a question | 💬 · اطرحوا سؤالاً |
-| `start.ask.d` | Send us a question about anything on this page, any time through the year. | أرسلوا إلينا سؤالكم عن أي شيء في هذه الصفحة، في أي وقت خلال العام. |
+| `start.ask.d` | Parents and students can send us a question about anything, any time through the year. | يمكن لأولياء الأمور والطلاب إرسال سؤال إلينا عن أي شيء، في أي وقت خلال العام. |
 | `start.ask.cta` | Open the form → | فتح النموذج ← |
 | `start.g9.t` | 📝 · Grade 9 IGCSE Options Form | 📝 · نموذج اختيار مواد IGCSE للصف التاسع |
 | `start.options.d` | Academic Year 2026-2027. Print, complete and sign. | العام الدراسي 2026/2027. اطبعوا النموذج واملؤوه ووقّعوه. |
@@ -463,9 +463,9 @@ Written by `node tools/i18n.mjs pairs`. Do not edit by hand.
 | Key | English | Arabic |
 |---|---|---|
 | `ask.title` | Have a question? | هل لديكم سؤال؟ |
-| `ask.lead` | Send it through the form and we will come back to you by email. | أرسلوه عبر النموذج وسنرد عليكم بالبريد الإلكتروني. |
+| `ask.lead` | Send it through the form at any time in the year and we will come back to you by email. | أرسلوه عبر النموذج في أي وقت خلال العام وسنرد عليكم بالبريد الإلكتروني. |
 | `ask.cta` | Ask a question | اطرحوا سؤالاً |
-| `ask.note` | The form opens in a new tab and takes under a minute. Please include your child’s grade and class. Prefer email? Write to the Head of School. | يُفتح النموذج في تبويب جديد ويستغرق أقل من دقيقة. نرجو ذكر صف ابنكم وفصله. وإن كنتم تفضّلون البريد الإلكتروني فراسلوا مدير المدرسة. |
+| `ask.note` | The form is for parents and students, opens in a new tab and takes under a minute. Prefer email? Write to the Head of School. | النموذج مخصص لأولياء الأمور والطلاب، ويُفتح في تبويب جديد ويستغرق أقل من دقيقة. وإن كنتم تفضّلون البريد الإلكتروني فراسلوا مدير المدرسة. |
 
 ## contacts
 
