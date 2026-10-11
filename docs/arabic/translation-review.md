@@ -1,6 +1,6 @@
 # Translation review · AIS Parent Hub
 
-437 strings · 0 missing Arabic
+436 strings · 0 missing Arabic
 
 Written by `node tools/i18n.mjs pairs`. Do not edit by hand.
 
@@ -393,7 +393,6 @@ Written by `node tools/i18n.mjs pairs`. Do not edit by hand.
 | `s6.sem1.title` | Activities: first semester | الأنشطة: الفصل الدراسي الأول |
 | `s6.sem1.li1` | Excellence Awards. Recognising top achievers and IGCSE distinctions. | جوائز التميّز. تكريم المتفوقين والحاصلين على تقدير الامتياز في IGCSE. |
 | `s6.sem1.li2` | Inter-School Cricket Match. Friendly against Pakistan International School. | مباراة الكريكيت بين المدارس. مباراة ودية مع المدرسة الباكستانية العالمية. |
-| `s6.sem1.li3` | Makkah Trip. Five-day educational and spiritual trip. | رحلة مكة المكرمة. رحلة تعليمية وإيمانية مدتها خمسة أيام. |
 | `s6.sem1.li4` | Global Health Exhibition. Off-site: healthcare innovation and careers. | ملتقى الصحة العالمي. خارج المدرسة: الابتكار في الرعاية الصحية ومجالاتها المهنية. |
 | `s6.sem1.li5` | Cityscape Global. Off-site: urban development and design careers. | سيتي سكيب العالمي. خارج المدرسة: المجالات المهنية في التطوير العمراني والتصميم. |
 | `s6.sem1.li6` | Black Hat MEA. Off-site: cybersecurity conference. | Black Hat MEA. خارج المدرسة: مؤتمر الأمن السيبراني. |
