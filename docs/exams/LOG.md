@@ -207,3 +207,84 @@ scheduled entry; `bash tools/render-check.sh` passes in both languages.
 Nothing with the school. Before pushing: if the push is not on 10 October,
 set the two 10 October notices' `date` to the push day. The reminder's date
 stays 24 October.
+
+## Fifth pass, 17 October 2026: the round is postponed
+
+On 15 October 2026 the school administration sent parents, on WhatsApp, a
+one-page bilingual letter, "Postponement of Mid-Semester Tests"
+(`~/Downloads/Mid Semester Tests Postponement - Q1 2026.2027.pdf`). The
+mid-semester tests due to start the next week are postponed, after the
+recent period of online learning: many students have not been able to
+revise as fully as they would like, and some still have their books at
+school. The school hopes to hold them the following week, but that depends
+on circumstances beyond its control; it will update parents as soon as it
+knows more; questions go to the school office. The letter names Arabic,
+English, Math and all Sciences as affected. On 17 October the user asked
+for the hub to reflect the postponement, the new dates being not yet
+official. Work done on `main`, uncommitted, nothing pushed.
+
+### What changed
+
+- `#exams` is in a "postponed" shape. The subtitle ends "Postponed, new
+  dates to follow". The lead states the postponement, the reason, the
+  school's hope to hold them the following week, and that the day-by-day
+  schedule appears here once the new dates are issued. The test time, the
+  school day and the marks sentence moved to a new paragraph,
+  `exams.marks`. The device line and the bell card stay. The two
+  day-by-day tables came out.
+- The hero button "Mid-Term Tests" stays and points to `#exams`, without
+  `data-until`.
+- Notices: `2026-10-17-midterm-postponed` added; `2026-10-10-midterm`
+  reworded to the past tense with `newUntil` 16 October;
+  `2026-10-10-holiday` cut back to the holiday; `2026-10-24-midterm-resume`
+  deleted before its day.
+- Arabic written for every changed string and merged, so every hash is
+  fresh. The Arabic of the 18 dictionary entries that left the page is
+  kept, merge-ready, in `docs/exams/i18n-ar-tables-2026-10.json`.
+  `docs/arabic/translation-review.*` regenerated.
+- README "Updating the exam schedule" gained "A postponed round", with
+  the recipe for the new window; CLAUDE.md's source row and coupling
+  paragraph say the same; the comments in `index.html` above the hero
+  buttons and the section describe the state.
+
+### Decisions made for you
+
+| # | Decision | Why | To reverse |
+|---|---|---|---|
+| D21 | A "postponed" shape rather than a struck-through schedule: the tables come out, the lead carries the postponement, the bell card and the device line stay. | A withdrawn schedule left in view is what a parent skimming on a phone still reads as the plan. The bell and the device rule are the school's standing arrangements for Mid-Term Tests, and README keeps them between rounds. | The tables as they stood are in `git show ec85f5a:index.html` under `#exams`; their Arabic is in `docs/exams/i18n-ar-tables-2026-10.json`. |
+| D22 | The lead and the notice say "the following week", the letter's own words, with no date. A first draft said "the week of 25 October"; the user asked on 17 October whether the letter said so, and it does not, so the date came out: the letter went to parents, and the page must not sharpen it. | The letter gives no date; "25 October" was an inference from its date. Sunday 25 October is also a holiday, which keeps its own notice. | Edit `exams.lead` and the notice in both languages, then `stamp`. |
+| D23 | The page does not list the affected subjects. | The letter's first sentence postpones "the mid-semester tests"; its list (Arabic, English, Math, all Sciences) reads as school-wide and leaves out the Section's Computer Science or ICT and Accounting tests. Listing it would imply those go ahead, which nobody has said. Open below. | Add a sentence to `exams.lead` in both languages and `stamp`. |
+| D24 | The hero button stays, labelled "Mid-Term Tests", with no `data-until`, so it shows until edited. | The section is where the postponement is explained, and a returning parent whose strip is already read has no other pointer. Any retire date would be a guess, and the old one, 28 October, would have hidden it mid-round. | Give it back `data-until` and `hidden`, set to the last test day of the new window, or delete the button. |
+| D25 | One new notice, `2026-10-17-midterm-postponed`, dated 17 October, no `newUntil`, label "See Tests and exams". | Dated the day it goes live, as the rule says. | If the push is later than 17 October, set `date` to the push day; the id can stay. When the new window is announced, give it a `newUntil` of the day before that notice. |
+| D26 | `2026-10-10-midterm` becomes "Mid-Term Tests were to run from 18 to 28 October", pointing to the later notice, `newUntil` 16 October. `2026-10-10-holiday` keeps the holiday and says the tests that were to follow it are postponed. Both labels now read "See Tests and exams". | README's rule for a superseded timetable notice: past tense, `newUntil` the day before, `stamp`. The ids stay, so read state carries. | Reword and `stamp`. |
+| D27 | `2026-10-24-midterm-resume` deleted. | Scheduled for 24 October and never shown, so no browser holds read state under its id. Left in place, it would have announced Mathematics on 27 October. | Its text is under D20 above and in `git show ec85f5a:index.html`. |
+| D28 | The letter is not published as a download. | The page is the copy, as it was for the schedule sheets (decision 3); every parent has the letter on WhatsApp. | Put the PDF in `assets/` and add a library row. It is bilingual, so no `data-pdf-en` on its link. |
+
+The Arabic follows the letter's own Arabic where it has the sentence (the
+reason, "circumstances beyond our control", "we will update you"), with
+the glossary's terms, اختبارات منتصف الفصل الدراسي الأول and إجازة, and
+the respectful plural, وستوافيكم.
+
+### Checks run
+
+`node tools/check.mjs` all passed. `bash tools/render-check.sh` all passed
+in both languages, including the 380px overflow check and the language
+round trip. The section, the hero, the open bell and the strip were
+captured at a true 380px viewport in English and Arabic and looked at: the
+new notice heads the bell and the strip with the unread bar, the reworded
+10 October schedule notice has lost it, the button reads "Mid-Term Tests"
+and اختبارات منتصف الفصل, and nothing wraps badly.
+
+### Open with the school, and for you
+
+1. **Which tests move.** The letter names Arabic, English, Math and all
+   Sciences. The Section's round also had Computer Science or ICT
+   (Grades 9 and 10, Wednesday 21), Biology or Computer Science (Grades
+   11 and 12, Sunday 18) and Arabic or Accounting (Grades 9 and 10,
+   Wednesday 28). The page says the round is postponed as a whole. Confirm
+   with the Head of Section that nothing from it goes ahead next week.
+2. **The holiday.** The page still says Sunday 25 October is a holiday; the
+   letter does not mention it. Confirm it stands.
+3. **The notice date.** Dated 17 October. Change it to the push day if that
+   is later.
+4. **The new window.** The recipe is README, "A postponed round".

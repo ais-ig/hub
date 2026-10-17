@@ -1401,11 +1401,14 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
          before that moment, Riyadh time, so it retires itself at the deadline.
          The Student Council button closed with applications, Wednesday
          16 September 2026 at 11:59 PM, and can be deleted at any edit. The
-         Mid-Term Tests button retires after the last test, Wednesday
-         28 October 2026; its date moves with the window in #exams. -->
+         Mid-Term Tests button carries no data-until while the round is
+         postponed (school letter of 15 October 2026) and no new dates are
+         known, so it shows until edited; when the school issues the new
+         window, give it back data-until and hidden, set to the last test
+         day at 11:59 PM, so it retires itself again. -->
     <div class="ctas">
       <a class="btn gold" href="https://forms.gle/WNYxBGu17yEsBJTp9" target="_blank" rel="noopener" data-until="2026-09-16T23:59:00+03:00" hidden data-i18n="hero.cta.council">Apply for Student Council</a>
-      <a class="btn gold" href="#exams" data-until="2026-10-28T23:59:00+03:00" hidden data-i18n="hero.cta.exams">Mid-Term Tests</a>
+      <a class="btn gold" href="#exams" data-i18n="hero.cta.exams">Mid-Term Tests</a>
       <a class="btn gold" href="#schedule" data-i18n="hero.cta.timetables">Class timetables</a>
       <a class="btn line" href="https://docs.google.com/forms/d/e/1FAIpQLSe5bU8ruZOil2hbbXmYcrQNrXJu1IDsOPLj1kQ1FtgIGw69Ow/viewform" target="_blank" rel="noopener" data-i18n="hero.cta.ask">Ask a question</a>
     </div>
@@ -1441,6 +1444,18 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
 <script type="application/json" id="updatesData">
 [
   {
+    "id": "2026-10-17-midterm-postponed",
+    "date": "2026-10-17",
+    "title": "Mid-Term Tests postponed, new dates to follow",
+    "titleAr": "تأجيل اختبارات منتصف الفصل، وستُعلن المواعيد الجديدة لاحقاً",
+    "text": "On 15 October the school postponed the Semester One Mid-Term Tests, which were due to start on Sunday 18 October, because of the recent period of online learning. It hopes to hold them the following week, but no new dates have been confirmed yet. The school will tell you as soon as it knows more, and the new schedule will appear here.",
+    "textAr": "في 15 أكتوبر قررت إدارة المدرسة تأجيل اختبارات منتصف الفصل الدراسي الأول، التي كان من المقرر أن تبدأ يوم الأحد 18 أكتوبر، بسبب الفترة الأخيرة من التعلم عن بُعد. وتأمل المدرسة أن تُعقد الاختبارات في الأسبوع الذي يليه، إلا أنه لم تُحدَّد مواعيد جديدة بعد. وستوافيكم المدرسة بالمستجدات فور توفر مزيد من المعلومات، وسيُنشر الجدول الجديد هنا.",
+    "href": "#exams",
+    "label": "See Tests and exams",
+    "labelAr": "عرض قسم الاختبارات",
+    "hAr": "ea1720b0"
+  },
+  {
     "id": "2026-10-10-ask-form",
     "date": "2026-10-10",
     "title": "Ask a question any time, parents and students",
@@ -1455,15 +1470,15 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
   {
     "id": "2026-10-10-midterm",
     "date": "2026-10-10",
-    "newUntil": "2026-10-28",
-    "title": "Mid-Term Tests run from 18 to 28 October",
-    "titleAr": "اختبارات منتصف الفصل من 18 إلى 28 أكتوبر",
-    "text": "For Grades 9 to 12, each test is from 7:55 to 8:55 AM, after periods 1 and 2. The school day still starts at 6:30 AM and ends at 1:05 PM.",
-    "textAr": "لطلاب الصفوف من 9 إلى 12، يُجرى كل اختبار من 7:55 إلى 8:55 صباحاً بعد الحصتين الأولى والثانية. ويبقى اليوم الدراسي من 6:30 صباحاً إلى 1:05 ظهراً كالمعتاد.",
+    "newUntil": "2026-10-16",
+    "title": "Mid-Term Tests were to run from 18 to 28 October",
+    "titleAr": "كان من المقرر أن تُعقد اختبارات منتصف الفصل من 18 إلى 28 أكتوبر",
+    "text": "This schedule was withdrawn when the school postponed the tests on 15 October. See the later notice, and Tests and exams, for what happens next.",
+    "textAr": "سُحب هذا الجدول عندما قررت المدرسة تأجيل الاختبارات في 15 أكتوبر. وللاطلاع على المستجدات راجعوا الإشعار اللاحق وقسم الاختبارات.",
     "href": "#exams",
-    "label": "See the test schedule",
-    "labelAr": "عرض جدول الاختبارات",
-    "hAr": "9d1057bd"
+    "label": "See Tests and exams",
+    "labelAr": "عرض قسم الاختبارات",
+    "hAr": "40e080da"
   },
   {
     "id": "2026-10-10-holiday",
@@ -1471,25 +1486,12 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
     "newUntil": "2026-10-25",
     "title": "No school on Sunday 25 October",
     "titleAr": "لا دراسة يوم الأحد 25 أكتوبر",
-    "text": "Sunday 25 October is a holiday. Monday 26 October is a normal school day with no test, and the Mid-Term Tests continue on Tuesday 27 October.",
-    "textAr": "يوم الأحد 25 أكتوبر إجازة. ويوم الاثنين 26 أكتوبر يوم دراسي عادي بلا اختبار، وتستمر اختبارات منتصف الفصل يوم الثلاثاء 27 أكتوبر.",
+    "text": "Sunday 25 October is a holiday, with no school. The Mid-Term Tests that were to continue after it have been postponed.",
+    "textAr": "يوم الأحد 25 أكتوبر إجازة، ولا دراسة فيه. أما اختبارات منتصف الفصل التي كان من المقرر أن تستمر بعده فقد أُجِّلت.",
     "href": "#exams",
-    "label": "See the test schedule",
-    "labelAr": "عرض جدول الاختبارات",
-    "hAr": "3425dad9"
-  },
-  {
-    "id": "2026-10-24-midterm-resume",
-    "date": "2026-10-24",
-    "newUntil": "2026-10-28",
-    "title": "Mid-Term Tests resume on Tuesday 27 October",
-    "titleAr": "تُستأنف اختبارات منتصف الفصل يوم الثلاثاء 27 أكتوبر",
-    "text": "Mathematics on Tuesday 27 October for Grades 9 to 12, then Arabic or Accounting for Grades 9 and 10 on Wednesday 28 October. Monday 26 October is a normal school day with no test.",
-    "textAr": "الرياضيات (Mathematics) يوم الثلاثاء 27 أكتوبر للصفوف من 9 إلى 12، ثم اللغة العربية (Arabic) أو المحاسبة (Accounting) للصفين 9 و10 يوم الأربعاء 28 أكتوبر. ويوم الاثنين 26 أكتوبر يوم دراسي عادي بلا اختبار.",
-    "href": "#exams",
-    "label": "See the test schedule",
-    "labelAr": "عرض جدول الاختبارات",
-    "hAr": "f5ae38eb"
+    "label": "See Tests and exams",
+    "labelAr": "عرض قسم الاختبارات",
+    "hAr": "b6d4aa32"
   },
   {
     "id": "2026-10-03-arabic",
@@ -1740,75 +1742,40 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
 <!-- ============ TESTS AND EXAMS ============ -->
 <!-- The current round of tests or exams, swapped each round; between rounds
      it names the next one. See README, "Updating the exam schedule".
-     Sources: the two Mid-Term Test Schedule sheets issued 5 October 2026
-     (Grades 9 to 10, and Grades 11 to 12 Science stream) and the Zero
-     Period bell sheet, whose Grades 4 to 9 table is Grade 9 here and whose
-     Grades 10 to 12 table is Grades 10 to 12. The device line is the IT
-     portal's rule (smartstudygrid.github.io/mid-term-2026/), forwarded by
-     the Head of Section; the marks sentence is the Teachers' Guide
-     assessment breakdown, the source of #s4. The holiday on Sunday
-     25 October was confirmed by the Head of Section on 10 October 2026.
-     The Section's own student-facing sheet is not a source: only material
-     the school issued or the Head of Section forwarded goes to parents.
-     The window is stated here, in the hero button's data-until and in the
-     notices' title and text: move them together. A notice's newUntil only
-     ends the 14-day New window early, so a round longer than that gets a
-     reminder notice scheduled with a later date and held back until then;
-     this round's is 2026-10-24-midterm-resume. -->
+     State since 17 October 2026: the Semester One Mid-Term Tests, Sunday 18
+     to Wednesday 28 October, were postponed by the school on 15 October
+     2026 ("Postponement of Mid-Semester Tests", the bilingual letter sent
+     to parents on WhatsApp), with no new dates. The day-by-day tables came
+     out; their Arabic is kept in docs/exams/i18n-ar-tables-2026-10.json,
+     ready for merge when the new window is issued. The round's sources
+     stand for its return: the two Mid-Term Test Schedule sheets issued
+     5 October 2026 (Grades 9 to 10, and Grades 11 to 12 Science stream)
+     and the Zero Period bell sheet, whose Grades 4 to 9 table is Grade 9
+     here and whose Grades 10 to 12 table is Grades 10 to 12. The device
+     line is the IT portal's rule (smartstudygrid.github.io/mid-term-2026/),
+     forwarded by the Head of Section; the marks sentence is the Teachers'
+     Guide assessment breakdown, the source of #s4. The holiday on Sunday
+     25 October was confirmed by the Head of Section on 10 October 2026 and
+     keeps its own notice. The Section's own student-facing sheet is not a
+     source: only material the school issued or the Head of Section
+     forwarded goes to parents.
+     The window, when there is one, is stated here, in the hero button's
+     data-until and in the notices' title and text: move them together. A
+     notice's newUntil only ends the 14-day New window early, so a round
+     longer than that gets a reminder notice scheduled with a later date and
+     held back until then; the postponed round's reminder was deleted on
+     17 October, before its day, so no parent saw it. -->
 <section class="sec alt" id="exams">
   <div class="in">
     <div class="st">
       <h2 data-i18n="exams.title">Tests and exams</h2>
-      <p data-i18n="exams.sub">Mid-Term Tests · Semester One · Grades 9 to 12 · Sunday 18 to Wednesday 28 October 2026</p>
+      <p data-i18n="exams.sub">Mid-Term Tests · Semester One · Grades 9 to 12 · Postponed, new dates to follow</p>
       <div class="bar"></div>
     </div>
 
-    <p class="lead" data-i18n="exams.lead">The Semester One Mid-Term Tests run from Sunday 18 to Wednesday 28 October 2026. Each test is from 7:55 to 8:55 AM, after periods 1 and 2, so the school day still starts at 6:30 AM and ends at 1:05 PM as usual. Each test is worth 10 of the 20 marks for Quarter 1, as set out under <a href="#s4">How marks are built</a>.</p>
+    <p class="lead" data-i18n="exams.lead">On 15 October 2026 the school postponed the Semester One Mid-Term Tests, which were due to start on Sunday 18 October. After the recent period of online learning, many students have not been able to revise as fully as they would like, and some still have their books at school. The school hopes to hold the tests the following week, but that depends on circumstances beyond its control, and no new dates have been confirmed. It will tell you as soon as it knows more, and the day-by-day schedule will appear here once the new dates are issued.</p>
+    <p class="lead" data-i18n="exams.marks">On a test day the test is from 7:55 to 8:55 AM, after periods 1 and 2, so the school day still starts at 6:30 AM and ends at 1:05 PM as usual. Each test is worth 10 of the 20 marks for Quarter 1, as set out under <a href="#s4">How marks are built</a>.</p>
     <p class="lead" data-i18n="exams.lead2">No phone, smartwatch or other electronic device is allowed in the test room. See <a href="#s7">Policies</a>.</p>
-
-    <div class="card">
-      <h3 data-i18n="exams.g910.h">Grades 9 and 10</h3>
-      <div class="scroll">
-        <table class="data plain">
-          <thead>
-            <tr><th scope="col" data-i18n="exams.th.day">Day</th><th scope="col" data-i18n="s3.th.subject">Subject</th></tr>
-          </thead>
-          <tbody>
-            <tr><td class="s" data-i18n="exams.d.1018">Sunday 18 October</td><td data-i18n="subj.biology">Biology</td></tr>
-            <tr><td class="s" data-i18n="exams.d.1019">Monday 19 October</td><td data-i18n="subj.english">English</td></tr>
-            <tr><td class="s" data-i18n="exams.d.1020">Tuesday 20 October</td><td data-i18n="subj.chemistry">Chemistry</td></tr>
-            <tr><td class="s" data-i18n="exams.d.1021">Wednesday 21 October</td><td data-i18n="exams.s.csict">Computer Science or ICT</td></tr>
-            <tr><td class="s" data-i18n="exams.d.1022">Thursday 22 October</td><td data-i18n="subj.physics">Physics</td></tr>
-            <tr class="off"><td class="s" data-i18n="exams.d.1025">Sunday 25 October</td><td data-i18n="exams.s.holiday">Holiday, no school</td></tr>
-            <tr class="off"><td class="s" data-i18n="exams.d.1026">Monday 26 October</td><td data-i18n="exams.s.notest">No test, lessons as usual</td></tr>
-            <tr><td class="s" data-i18n="exams.d.1027">Tuesday 27 October</td><td data-i18n="subj.maths">Mathematics</td></tr>
-            <tr><td class="s" data-i18n="exams.d.1028">Wednesday 28 October</td><td data-i18n="exams.s.arabicacc">Arabic or Accounting</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="card">
-      <h3 data-i18n="exams.g1112.h">Grades 11 and 12, Science stream</h3>
-      <div class="scroll">
-        <table class="data plain">
-          <thead>
-            <tr><th scope="col" data-i18n="exams.th.day">Day</th><th scope="col" data-i18n="s3.th.subject">Subject</th></tr>
-          </thead>
-          <tbody>
-            <tr><td class="s" data-i18n="exams.d.1018">Sunday 18 October</td><td data-i18n="exams.s.biocs">Biology or Computer Science</td></tr>
-            <tr><td class="s" data-i18n="exams.d.1019">Monday 19 October</td><td data-i18n="subj.english">English</td></tr>
-            <tr><td class="s" data-i18n="exams.d.1020">Tuesday 20 October</td><td data-i18n="subj.chemistry">Chemistry</td></tr>
-            <tr><td class="s" data-i18n="exams.d.1021">Wednesday 21 October</td><td data-i18n="subj.arabic">Arabic</td></tr>
-            <tr><td class="s" data-i18n="exams.d.1022">Thursday 22 October</td><td data-i18n="subj.physics">Physics</td></tr>
-            <tr class="off"><td class="s" data-i18n="exams.d.1025">Sunday 25 October</td><td data-i18n="exams.s.holiday">Holiday, no school</td></tr>
-            <tr class="off"><td class="s" data-i18n="exams.d.1026">Monday 26 October</td><td data-i18n="exams.s.notest">No test, lessons as usual</td></tr>
-            <tr><td class="s" data-i18n="exams.d.1027">Tuesday 27 October</td><td data-i18n="subj.maths">Mathematics</td></tr>
-            <tr class="off"><td class="s" data-i18n="exams.d.1028">Wednesday 28 October</td><td data-i18n="exams.s.notest">No test, lessons as usual</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
 
     <div class="card">
       <h3 data-i18n="exams.bell.h">The school day on a test day</h3>
@@ -2720,33 +2687,10 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
   "schedule.full": { "h": "0a3ee81d", "ar": "فتح الجدول الدراسي الكامل" },
   "schedule.stamp": { "h": "25499a93", "ar": "جميع الفصول، 11 صفحة · صدر في 22 سبتمبر 2026" },
   "exams.title": { "h": "77f40415", "ar": "الاختبارات" },
-  "exams.sub": { "h": "063034e0", "ar": "اختبارات منتصف الفصل · الفصل الدراسي الأول · الصفوف من 9 إلى 12 · من الأحد 18 إلى الأربعاء 28 أكتوبر 2026" },
-  "exams.lead": { "h": "e9a2ae20", "ar": "تُعقد اختبارات منتصف الفصل الدراسي الأول من الأحد 18 إلى الأربعاء 28 أكتوبر 2026. ويُجرى كل اختبار من 7:55 إلى 8:55 صباحاً بعد الحصتين الأولى والثانية، ولذلك يبدأ اليوم الدراسي في 6:30 صباحاً وينتهي في 1:05 ظهراً كالمعتاد. وتُخصَّص لكل اختبار 10 درجات من أصل 20 درجة للربع الأول، كما هو مبيّن في <a href=\"#s4\">طريقة احتساب الدرجات</a>." },
+  "exams.sub": { "h": "d30fbd5d", "ar": "اختبارات منتصف الفصل · الفصل الدراسي الأول · الصفوف من 9 إلى 12 · مؤجلة، وستُعلن المواعيد الجديدة لاحقاً" },
+  "exams.lead": { "h": "4657fdf8", "ar": "في 15 أكتوبر 2026 قررت إدارة المدرسة تأجيل اختبارات منتصف الفصل الدراسي الأول، التي كان من المقرر أن تبدأ يوم الأحد 18 أكتوبر. فبسبب الفترة الأخيرة من التعلم عن بُعد، لم يتمكن كثير من الطلاب من المراجعة بالقدر الذي يرغبون فيه، ولا تزال كتب بعضهم في المدرسة. وتأمل المدرسة أن تُعقد الاختبارات في الأسبوع الذي يليه، إلا أن ذلك يعتمد على ظروف خارجة عن إرادتها، ولم تُحدَّد مواعيد جديدة بعد. وستوافيكم المدرسة بالمستجدات فور توفر مزيد من المعلومات، وسيُنشر الجدول اليومي هنا فور صدور المواعيد الجديدة." },
+  "exams.marks": { "h": "ae1057dc", "ar": "في يوم الاختبار يُجرى الاختبار من 7:55 إلى 8:55 صباحاً بعد الحصتين الأولى والثانية، ولذلك يبدأ اليوم الدراسي في 6:30 صباحاً وينتهي في 1:05 ظهراً كالمعتاد. وتُخصَّص لكل اختبار 10 درجات من أصل 20 درجة للربع الأول، كما هو مبيّن في <a href=\"#s4\">طريقة احتساب الدرجات</a>." },
   "exams.lead2": { "h": "2dcf695f", "ar": "لا يُسمح بالجوال ولا بالساعة الذكية ولا بأي جهاز إلكتروني آخر في قاعة الاختبار. وللمزيد راجعوا قسم <a href=\"#s7\">السياسات</a>." },
-  "exams.g910.h": { "h": "f254174e", "ar": "الصفان 9 و10" },
-  "exams.th.day": { "h": "987b9ced", "ar": "اليوم" },
-  "s3.th.subject": { "h": "8d183dbd", "ar": "المادة" },
-  "exams.d.1018": { "h": "6eb220c5", "ar": "الأحد 18 أكتوبر" },
-  "subj.biology": { "h": "ffa48e0b", "ar": "الأحياء (Biology)" },
-  "exams.d.1019": { "h": "4b356e2e", "ar": "الاثنين 19 أكتوبر" },
-  "subj.english": { "h": "649df08a", "ar": "اللغة الإنجليزية (English)" },
-  "exams.d.1020": { "h": "5467edc7", "ar": "الثلاثاء 20 أكتوبر" },
-  "subj.chemistry": { "h": "d0a3c82b", "ar": "الكيمياء (Chemistry)" },
-  "exams.d.1021": { "h": "421f1344", "ar": "الأربعاء 21 أكتوبر" },
-  "exams.s.csict": { "h": "abcee75f", "ar": "علوم الحاسب <span dir=\"ltr\">(Computer Science)</span> أو تقنية المعلومات والاتصالات (ICT)" },
-  "exams.d.1022": { "h": "ccb77e1e", "ar": "الخميس 22 أكتوبر" },
-  "subj.physics": { "h": "96b61805", "ar": "الفيزياء (Physics)" },
-  "exams.d.1025": { "h": "7ca5e879", "ar": "الأحد 25 أكتوبر" },
-  "exams.s.holiday": { "h": "2237b817", "ar": "إجازة، لا دراسة" },
-  "exams.d.1026": { "h": "23e66296", "ar": "الاثنين 26 أكتوبر" },
-  "exams.s.notest": { "h": "05719ebe", "ar": "لا اختبار، والدراسة كالمعتاد" },
-  "exams.d.1027": { "h": "ed46062f", "ar": "الثلاثاء 27 أكتوبر" },
-  "subj.maths": { "h": "77e774ba", "ar": "الرياضيات (Mathematics)" },
-  "exams.d.1028": { "h": "df626a83", "ar": "الأربعاء 28 أكتوبر" },
-  "exams.s.arabicacc": { "h": "1e0e2099", "ar": "اللغة العربية (Arabic) أو المحاسبة (Accounting)" },
-  "exams.g1112.h": { "h": "0cbec277", "ar": "الصفان 11 و12، المسار العلمي" },
-  "exams.s.biocs": { "h": "0984f71b", "ar": "الأحياء (Biology) أو علوم الحاسب <span dir=\"ltr\">(Computer Science)</span>" },
-  "subj.arabic": { "h": "af4f4762", "ar": "اللغة العربية (Arabic)" },
   "exams.bell.h": { "h": "6fb7216b", "ar": "اليوم الدراسي في أيام الاختبارات" },
   "exams.bell.p": { "h": "e80dd497", "ar": "في يوم الاختبار يسير اليوم الدراسي وفق جدول الحصة الصفرية أدناه بدلاً من الجدول الدراسي المعتاد: تصبح مدة كل حصة 35 دقيقة بدلاً من 40، ويشغل الاختبار الحصة الصفرية، ثم تستمر الدراسة بعده حتى 1:05 ظهراً. وللصف 9 جدول، وللصفوف من 10 إلى 12 جدول آخر، لأن موعد الفسحة الأولى يختلف بينهما. وفي الأيام التي لا اختبار فيها يُعمل بالجدول الدراسي المعتاد." },
   "exams.th.period": { "h": "170a28a9", "ar": "الحصة" },
@@ -2803,13 +2747,19 @@ html[lang="ar"] a[data-pdf-en]:not(.mcard):not(.doc)::after {
   "s3.short": { "h": "cbd7ba22", "ar": "<b>باختصار</b> يدرس الجميع اللغة الإنجليزية والرياضيات والأحياء والكيمياء والفيزياء ودراسات الأعمال. وتختارون بين اللغة العربية والمحاسبة، وبين علوم الحاسب وتقنية المعلومات والاتصالات، وتختارون هيئة اختبار الرياضيات: Cambridge أو Edexcel. للصف التاسع فقط: برنامج تحفيظ القرآن الكريم، وهو اختياري." },
   "s3.tabs.label": { "h": "aecc49c1", "ar": "الصف" },
   "s3.compulsory": { "h": "694a7f44", "ar": "المواد الإلزامية" },
+  "s3.th.subject": { "h": "8d183dbd", "ar": "المادة" },
   "s3.th.curriculum": { "h": "23364909", "ar": "المنهج" },
   "s3.th.periods": { "h": "d65472b0", "ar": "الحصص" },
+  "subj.arabic": { "h": "af4f4762", "ar": "اللغة العربية (Arabic)" },
   "s3.cur.moe": { "h": "b4c89cb5", "ar": "وزارة التعليم" },
   "subj.islamic": { "h": "079ec1ed", "ar": "الدراسات الإسلامية <span dir=\"ltr\">(Islamic Studies)</span>" },
   "subj.quran": { "h": "f5df3972", "ar": "القرآن الكريم (Quran)" },
   "subj.social": { "h": "1a703618", "ar": "الدراسات الاجتماعية <span dir=\"ltr\">(Social Studies, KSAH)</span>" },
   "subj.pe": { "h": "3ddbb551", "ar": "التربية البدنية (PE)" },
+  "subj.english": { "h": "649df08a", "ar": "اللغة الإنجليزية (English)" },
+  "subj.physics": { "h": "96b61805", "ar": "الفيزياء (Physics)" },
+  "subj.chemistry": { "h": "d0a3c82b", "ar": "الكيمياء (Chemistry)" },
+  "subj.biology": { "h": "ffa48e0b", "ar": "الأحياء (Biology)" },
   "subj.business": { "h": "16fa7706", "ar": "دراسات الأعمال <span dir=\"ltr\">(Business Studies)</span>" },
   "s3.g9.compulsory.note": { "h": "9973c559", "ar": "عدد الحصص في الأسبوع. يدرس هذه المواد العشر كل طالب في الصف التاسع، ولا يمكن تغييرها." },
   "s3.optional": { "h": "b1583b5f", "ar": "المواد الاختيارية" },

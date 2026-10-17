@@ -1,0 +1,20 @@
+{
+  "exams.g910.h": "الصفان 9 و10",
+  "exams.th.day": "اليوم",
+  "exams.d.1018": "الأحد 18 أكتوبر",
+  "exams.d.1019": "الاثنين 19 أكتوبر",
+  "exams.d.1020": "الثلاثاء 20 أكتوبر",
+  "exams.d.1021": "الأربعاء 21 أكتوبر",
+  "exams.d.1022": "الخميس 22 أكتوبر",
+  "exams.d.1025": "الأحد 25 أكتوبر",
+  "exams.d.1026": "الاثنين 26 أكتوبر",
+  "exams.d.1027": "الثلاثاء 27 أكتوبر",
+  "exams.d.1028": "الأربعاء 28 أكتوبر",
+  "exams.s.csict": "علوم الحاسب <span dir=\"ltr\">(Computer Science)</span> أو تقنية المعلومات والاتصالات (ICT)",
+  "exams.s.holiday": "إجازة، لا دراسة",
+  "exams.s.notest": "لا اختبار، والدراسة كالمعتاد",
+  "exams.s.arabicacc": "اللغة العربية (Arabic) أو المحاسبة (Accounting)",
+  "exams.g1112.h": "الصفان 11 و12، المسار العلمي",
+  "exams.s.biocs": "الأحياء (Biology) أو علوم الحاسب <span dir=\"ltr\">(Computer Science)</span>",
+  "subj.maths": "الرياضيات (Mathematics)"
+}

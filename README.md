@@ -200,6 +200,29 @@ For the next round:
    section in both languages at 380px: the Arabic day names and subject pairs
    run longer than the English.
 
+**A postponed round.** On 15 October 2026 the school postponed the Semester
+One round, two days before it began and with no new dates, in a one-page
+bilingual letter sent to parents on WhatsApp. The section then takes a third
+shape, between a current round and no round. The subtitle ends "Postponed,
+new dates to follow". The lead gives the postponement, the school's reason
+and its stated hope, and says the schedule appears here once the new dates
+are issued. The standing facts (test time, school day, marks) sit in
+`exams.marks`. The day-by-day tables come out; the bell card and the device
+line stay. The hero button stays without `data-until`, so it shows until
+edited. A notice announces the postponement, the round's own notices are
+reworded to the past tense with `newUntil` the day before it, and a
+scheduled reminder is deleted unseen. The Arabic of every key that left the
+page is kept, merge-ready, in `docs/exams/i18n-ar-tables-2026-10.json`; the
+tables as they stood are in `git show ec85f5a:index.html`. When the school
+issues the new window: put the tables back with the new dates, taking the
+`exams.s.*`, heading and `subj.maths` entries from that file with `merge`
+and adding the new `exams.d.*` keys; reword `exams.sub` and `exams.lead`
+back to the window (`exams.marks` can stay or fold back in); give the hero
+button back `data-until` and `hidden`, set to the last test day; add a
+notice with the window in its title and give the postponement notice a
+`newUntil` of the day before it; then step 5. The decisions are in
+`docs/exams/LOG.md`, fifth pass.
+
 Between rounds, once the window has passed, swap the round for the next one
 the parents' calendar names, taking each grade group's date from the calendar
 separately, since Grades 11 and 12 sit their mock examinations a month before

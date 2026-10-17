@@ -211,3 +211,9 @@ D1 to D12 are in the table at the top. D13 to D24 are in the timeline. The build
 - `arabic` was merged into `main` as a fast-forward, not squashed, so every commit hash named in this log stays valid. Checks run just before: `node tools/check.mjs` all passed, 105 tests passed, `bash tools/render-check.sh` passed in both languages.
 - You then asked for the "now in Arabic" notice. Published the same day as `2026-10-03-arabic`, from the draft in section 4 of "Left for you", unchanged, dated 3 October 2026, stamped. Checked at 380px in both languages: it heads the update strip, marked New.
 - The questions for the school and the English source issues above are still open.
+
+## 17 October 2026 · the Mid-Term Tests are postponed
+
+- The school postponed the Semester One round on 15 October 2026, in a bilingual letter to parents. `exams.sub`, `exams.lead` and a new `exams.marks` were written and merged, with the Arabic of three notices (`2026-10-17-midterm-postponed` new, `2026-10-10-midterm` and `2026-10-10-holiday` reworded); `2026-10-24-midterm-resume` was deleted. Where the letter had the sentence, its own Arabic was followed; terms per the glossary; the respectful plural throughout.
+- Eighteen entries left the dictionary with the day-by-day tables, `exams.d.*`, `exams.s.*`, the two table headings, `exams.th.day` and `subj.maths`. Their Arabic is kept, merge-ready, in `docs/exams/i18n-ar-tables-2026-10.json` for the new window. Details and decisions in `docs/exams/LOG.md`, fifth pass.
+- `node tools/check.mjs` and `bash tools/render-check.sh` pass in both languages; the section and the bell were looked at in Arabic at 380px.
